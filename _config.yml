@@ -1,1 +1,3 @@
+plugins: ['kramdown']
 theme: jekyll-theme-minimal
+exclude: ['config.ru', 'Gemfile', 'Gemfile.lock', 'vendor', 'Procfile', 'Rakefile']
