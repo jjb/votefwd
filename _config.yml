@@ -1,4 +1,10 @@
+# Site settings
+title: Vote Forward
+
+# Build settings
 plugins: ['kramdown']
-theme: jekyll-theme-minimal
+#theme: jekyll-theme-minimal
 exclude: ['config.ru', 'Gemfile', 'Gemfile.lock', 'vendor', 'Procfile', 'Rakefile']
 repository: sjforman/votefwd 
+sass:
+  style: compressed

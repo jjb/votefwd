@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="{{ site.description }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ site.title }}</title>
+  <link rel="stylesheet" href="css/main.css">
+{% include head.html %}
+</head>
+<body class="ma7">
+  <div class="container">
+    <h1 class='tc'>{{ site.title }}</h1>
+    <p>Vote Forward is a non-partisan project that seeks to revitalize American democracy by radically increasing voter turnout.</p>
+    <p>We think that individual citizens can accomplish this by mailing one another heartfelt hand-written "please vote" letters.</p>
+    <p>Sign up for the email list to find out more and send voter pleas when we launch in early 2018.</p>
+  </div>
+  <form id="emailform" action="https://docs.google.com/forms/u/1/d/e/1FAIpQLSedTCf2XUeJfyEnsxCXC633ognE9I98RlZOtUR_3IrbuDYCcQ/formResponse" target="no-target">
+    <label>Your email address:</label>
+    <input id="emailfield" type="text" placeholder="you@email.com" name="entry.1709092446" />
+    <input type="submit" value="submit" />
+    <span id="formerror"></span>
+  </form>
+  <div id="emailsubmitconfirmation"></div>
+  <iframe src="#" id="no-target" name ="no-target" style="visibility:hidden"></iframe>
+
+{% include scripts.html %}
+</body>
+</html>
