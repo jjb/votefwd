@@ -1,5 +1,6 @@
 # Site settings
 title: Vote Forward
+description: The non-partisan Vote Forward project seeks to revitalize American democracy by radically increasing voter turnout.
 
 # Build settings
 plugins: ['kramdown']

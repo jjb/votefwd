@@ -8,7 +8,7 @@
 $( "#emailform" ).submit(function(event) {
   if ( isValidEmailAddress($( "#emailform input" ).val())) {
     $( "#emailform" ).hide();
-    $( "#emailsubmitconfirmation" ).text("Thanks!");
+    $( "#emailsubmitconfirmation" ).text("Email submitted.");
     return;
   }
   $ ( "#formerror" ).text( "Please enter a valid email address.").show();
