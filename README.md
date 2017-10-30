@@ -1,6 +1,20 @@
-## Welcome to Vote Forward 
+# Welcome to Vote Forward 
 
-The non-partisan Vote Forward project works to increase voter turnout with a big
-distributed chain letter.
+The non-partisan Vote Forward project seeks to revitalize American democracy by dramatically boosting voter turnout.
 
-Voting pledges have consistently been shown to increase voter turnout. We enable citizens to make and elicit voting pledges through the US Mail.
+We provide the tools for individual citizens to mail one another heartfelt hand-written letters that encourage voting.
+
+If you're interested in helping by sending your own letters, or if you just want
+to stay informed, please sign up for the mailing list at http://votefwd.org.
+
+If you want to help with the software, read on. 
+
+## Contributing
+
+Right now, this is just a jekyll landing page. 
+
+Clone the repo, then `bundle install`.
+
+To run locally, `bundle exec jekyll serve --watch`.
+
+Pull requests welcome. 
