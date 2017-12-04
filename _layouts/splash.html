@@ -10,17 +10,19 @@
 {% include head.html %}
 </head>
 <body class="bg-light-blue">
-  <div class="container mw5 mw6-ns center pa2 ph4-ns mt5-ns mt4">
-    <h1 class='f2 f1-ns lh-title tc'>{{ site.title }}</h1>
+  <div class="mw5 mw6-ns center pa2 ph4-ns mt5-ns mt4 nl4 nl4-ns">
+      {% include logo.svg %}
+  </div>
+  <div class="mw5 mw6-ns center ph2-ns">
     <div id="explanation" class='f3-ns f4 lh-copy'>
       <p>The non-partisan Vote Forward project seeks to revitalize American democracy by dramatically boosting voter turnout.</p>
-      <p>We provide the tools for citizens to mail heartfelt, handwritten "please vote" letters to fellow citizens.</p>
+      <p>We provide the tools for folks to mail heartfelt, handwritten "please vote" letters to their fellow citizens.</p>
       <p>Sign up for the email list to stay informed and to send voter plea letters of your own in 2018.</p>
     </div>
   </div>
 
   <div class="pa4-l">
-  <form id="emailform" class="bg-light-gray mw5 mw6-ns center pa4 mh2 br2-ns ba b--black-10" action="https://docs.google.com/forms/u/1/d/e/1FAIpQLSedTCf2XUeJfyEnsxCXC633ognE9I98RlZOtUR_3IrbuDYCcQ/formResponse" target="no-target">
+  <form id="emailform" class="bg-yellow mw5 mw6-ns center pa4 mh2 br2-ns ba b--black-10" action="https://docs.google.com/forms/u/1/d/e/1FAIpQLSedTCf2XUeJfyEnsxCXC633ognE9I98RlZOtUR_3IrbuDYCcQ/formResponse" target="no-target">
     <fieldset class="cf bn ma0 pa0">
       <div class="cf">
         <label class="clip" for="email-address">Email Address</label>
@@ -32,7 +34,7 @@
   </form>
   <p class="f3 tc" id="emailsubmitconfirmation"></p>
   </div>
-  <iframe src="#" id="no-target" name ="no-target" style="visibility:hidden"></iframe>
+  <iframe src="#" class="dn" id="no-target" name="no-target" style="visibility:hidden"></iframe>
 
 <footer class="pv4 ph3 ph5-ns tc">
   <a class="link dim gray dib h2 w2 br-100 mr3 pa2 bg-near-white ba b--black-10" href="https://twitter.com/votefwd" title="" target="_blank">
@@ -44,7 +46,6 @@
   <p class="mid-gray">Copyright 2017 Vote Forward</p>
 </footer>
   
-
 {% include scripts.html %}
 </body>
 </html>
