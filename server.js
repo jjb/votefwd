@@ -15,13 +15,22 @@ var corsOption = {
   exposedHeaders: ['x-auth-token']
 }
 
-app.use(express.static(path.join(__dirname, 'build')));
+var voters = [
+  { id: 1, name: 'jim', state: 'CA'},
+  { id: 2, name: 'sally', state: 'PA'}
+]
+
+//app.use(express.static(path.join(__dirname, 'build')));
 app.use(cors(corsOption));
 
-router.route('/')
+router.get('/', function(req, res) {
+  res.json('API initialized.');
+});
+
+router.route('/voters')
   .get(function(req, res) {
-    res.json('hi');
-  })
+    res.json(voters);
+  });
 
 //Use router configuration at /api
 app.use('/api', router);
