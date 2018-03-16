@@ -5,9 +5,9 @@ import './App.css';
 class App extends Component {
   render() {
     return (
-      <div className="App tc mt6">
-        <img src={logo} className="App-logo w5" alt="logo" />
-        <h1 className="title">Vote Forward</h1>
+      <div className="App tc pt3 bg-light-gray">
+        <img src={logo} className="App-logo w3" alt="logo" />
+        <h1 className="title pb2 blue">Vote Forward</h1>
       </div>
     );
   }

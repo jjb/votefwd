@@ -1,9 +1,11 @@
 .App-logo {
-  animation: App-logo-spin infinite 20s linear;
+  animation: App-logo-gyrate infinite 3s linear;
+  animation-direction: alternate;
   height: 80px;
 }
 
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+@keyframes App-logo-gyrate {
+  0% { width: 125px; }
+  50% { width: 150px; }
+  100%{ width: 125px; }
 }
