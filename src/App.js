@@ -1,3 +1,5 @@
+// src/App.js
+
 import React, { Component } from 'react';
 import axios from 'axios';
 import logo from './logo.svg';
@@ -48,11 +50,39 @@ class VoterList extends Component {
 }
 
 class App extends Component {
+  goTo(route) {
+    this.props.history.replace(`/${route}`)
+  }
+
+  login() {
+    this.props.auth.login()
+  }
+
+  logout() {
+    this.props.auth.logout()
+  }
+
   render() {
+    const { isAuthenticated } = this.props.auth;
+    console.log(this.props.auth);
     return (
       <div>
         <Header />
         <VoterList url={process.env.REACT_APP_API_URL}/>
+        {
+          !isAuthenticated() && (
+            <button onClick={this.login.bind(this)}>
+              Log In
+            </button>
+          )
+        }
+        {
+          isAuthenticated() && (
+            <button onClick={this.logout.bind(this)}>
+              Log Out
+            </button>
+          )
+        }
       </div>
     );
   }
