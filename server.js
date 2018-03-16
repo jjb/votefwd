@@ -12,7 +12,6 @@ var corsOption = {
   origin: true,
   moethods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
   credentials: true,
-  exposedHeaders: ['x-auth-token']
 }
 
 var voters = [
