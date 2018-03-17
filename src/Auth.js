@@ -1,12 +1,13 @@
 // src/Auth.js
 
 import auth0 from 'auth0-js';
+import axios from 'axios';
 import history from './history';
 
 export default class Auth {
   auth0 = new auth0.WebAuth({
     domain: 'votefwd.auth0.com',
-    clientID: 'T0oLi22JFRtHPsx0595AAf8p573bxD4d',
+    clientID: process.env.REACT_APP_AUTH0_CLIENTID,
     redirectUri: 'http://localhost:3000/callback',
     audience: 'https://votefwd.auth0.com/userinfo',
     responseType: 'token id_token',
@@ -24,11 +25,24 @@ export default class Auth {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
+        this.persistUser(authResult);
         history.replace('/home');
       } else if (err) {
         history.replace('/home');
         console.log(err);
       }
+    });
+  }
+
+  persistUser(authResult) {
+    console.log(authResult.idTokenPayload.sub);
+    axios.post(`${process.env.REACT_APP_API_URL}/user`,
+      { auth0_id: authResult.idTokenPayload.sub })
+    .then(function(response) {
+      console.log(response)
+    })
+    .catch(function(error) {
+      console.error(error)
     });
   }
 
