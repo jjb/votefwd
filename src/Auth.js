@@ -35,11 +35,9 @@ export default class Auth {
   }
 
   persistUser(authResult) {
-    console.log(authResult.idTokenPayload.sub);
     axios.post(`${process.env.REACT_APP_API_URL}/user`,
       { auth0_id: authResult.idTokenPayload.sub })
     .then(function(response) {
-      console.log(response)
     })
     .catch(function(error) {
       console.error(error)
