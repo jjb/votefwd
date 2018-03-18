@@ -38,11 +38,25 @@ router.route('/voters')
 
 router.route('/user')
   .post(function(req, res) {
-    db('users').insert(
-      {auth0_id: req.body.auth0_id})
-      .then(function(result) {
-        res.json(result);
-      });
+    if (req.body.auth0_id) {
+      db('users').where('auth0_id', req.body.auth0_id)
+        .then(function(result) {
+          if (result.length != 0)
+          {
+            res.status(422).send('User already exists.');
+          }
+          else
+          {
+            db('users').insert({auth0_id: req.body.auth0_id})
+              .then(function(result) {
+              res.json(result);
+            });
+          }
+        });
+    }
+    else {
+      res.status(500).send('No auth0_id provided.');
+    }
   });
 
 //Use router configuration at /api
