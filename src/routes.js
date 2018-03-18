@@ -1,6 +1,7 @@
 import React from 'react';
 import { Route, Router } from 'react-router-dom';
 import App from './App';
+import Dashboard from './Dashboard';
 import Callback from './Callback';
 import Auth from './Auth';
 import history from './history';
@@ -22,6 +23,8 @@ export const makeMainRoutes = () => {
             handleAuthentication(props);
             return <Callback {...props} /> 
           }}/>
+          <Route path="/dashboard" render={(props) => <Dashboard {...props} />} />
+          }
         </div>
       </Router>
   );

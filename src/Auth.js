@@ -26,7 +26,7 @@ export default class Auth {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
         this.persistUser(authResult);
-        history.replace('/home');
+        history.replace('/dashboard');
       } else if (err) {
         history.replace('/home');
         console.log(err);

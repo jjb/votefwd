@@ -1,7 +1,6 @@
 // src/App.js
 
 import React, { Component } from 'react';
-import axios from 'axios';
 import logo from './logo.svg';
 import './App.css';
 
@@ -47,46 +46,11 @@ class Header extends Component {
   }
 }
 
-class VoterList extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      voters: []
-    }
-  }
-  
-  getVoters() {
-    axios.get(`${this.props.url}/voters`)
-      .then(res => {
-        let voters = res.data;
-        this.setState( {voters: voters} );
-      })
-      .catch(err => {
-        console.error(err)
-      });
-  }
-
-  componentWillMount(){
-    this.getVoters()
-  }
-
-  render() {
-    return (
-      <div className="pa2">
-        <h2 className="title tc">Your adopted voters</h2>
-        {this.state.voters.map(voter => <div className="ml5 h3 ba mt2" key={voter.id}> {voter.id} {voter.name} </div>)}
-      </div>
-    );
-  }
-}
-
 class App extends Component {
   render() {
     return (
       <div className="sans-serif">
         <Header auth={this.props.auth}/>
-        <VoterList url={process.env.REACT_APP_API_URL}/>
       </div>
     );
   }
