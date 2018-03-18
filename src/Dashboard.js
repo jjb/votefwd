@@ -5,20 +5,11 @@ import axios from 'axios';
 import { VoterList } from './VoterList';
 
 class OfferedVoter extends Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      offeredVoter: this.props.offeredVoter 
-    }
-  }
-
   render() {
-    console.log(this.state);
+    let voter = this.props.voter;
     return (
       <div>
-        <p>{this.state.offeredVoter.name}</p>
-        <p>hi</p>
+        <p>{voter.first_name} {voter.last_name} from {voter.state}</p>
       </div>
     )
   }
@@ -50,7 +41,7 @@ class Dashboard extends Component {
     return (
       <div>
         <button onClick={this.getVoter}>Adopt a voter</button>
-        <p>{this.state.offeredVoter.name}</p>
+        <OfferedVoter voter={this.state.offeredVoter} />
         <VoterList />
       </div>
     );

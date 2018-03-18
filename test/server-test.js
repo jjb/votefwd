@@ -47,3 +47,11 @@ it('Fails gracefully when user ID is missing', function(done) {
     done();
   });
 });
+
+it('Retrieves a list of voters', function(done) {
+  request.get({url: 'http://localhost:3001/api/voters'},
+    function(error, response, body) {
+      expect(response.statusCode).to.equal(200);
+    done();
+  });
+});

@@ -7,7 +7,6 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var db = require('./src/db');
 
-
 var app = express();
 var router = express.Router();
 var port = process.env.REACT_APP_API_PORT || 3001;
@@ -16,11 +15,6 @@ var corsOption = {
   moethods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
   credentials: true,
 }
-
-var voters = [
-  { id: 1, name: 'jim', state: 'CA'},
-  { id: 2, name: 'sally', state: 'PA'}
-]
 
 //app.use(express.static(path.join(__dirname, 'build')));
 app.use(cors(corsOption));
@@ -33,7 +27,10 @@ router.get('/', function(req, res) {
 
 router.route('/voters')
   .get(function(req, res) {
-    res.json(voters);
+    db.select().table('voters')
+      .then(function(result) {
+        res.json(result)
+      })
   });
 
 router.route('/user')

@@ -11,7 +11,7 @@ export class VoterList extends Component {
       voters: []
     }
   }
-  
+
   getVoters() {
     axios.get(`${process.env.REACT_APP_API_URL}/voters`)
       .then(res => {
@@ -31,7 +31,11 @@ export class VoterList extends Component {
     return (
       <div className="pa2">
         <h2 className="title tc">Your adopted voters</h2>
-        {this.state.voters.map(voter => <div className="ml5 h3 ba mt2" key={voter.id}> {voter.id} {voter.name} </div>)}
+        {this.state.voters.map(voter =>
+          <div className="ml5 h3 ba mt2"
+            key={voter.id}>
+             {voter.first_name} {voter.last_name} from {voter.state}
+          </div>)}
       </div>
     );
   }
