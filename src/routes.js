@@ -24,7 +24,6 @@ export const makeMainRoutes = () => {
             return <Callback {...props} /> 
           }}/>
           <Route path="/dashboard" render={(props) => <Dashboard {...props} />} />
-          }
         </div>
       </Router>
   );

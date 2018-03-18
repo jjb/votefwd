@@ -13,7 +13,7 @@ export class VoterList extends Component {
   }
   
   getVoters() {
-    axios.get(`${this.props.url}/voters`)
+    axios.get(`${process.env.REACT_APP_API_URL}/voters`)
       .then(res => {
         let voters = res.data;
         this.setState( {voters: voters} );
