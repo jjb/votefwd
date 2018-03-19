@@ -17,6 +17,7 @@ export class VoterOffer extends Component {
       .then(res => {
         let voter = res.data[Math.floor(Math.random() * res.data.length)];
         this.setState( {voter: voter} );
+        console.log(this.state.voter);
       })
       .catch(err => {
         console.error(err)
@@ -30,17 +31,18 @@ export class VoterOffer extends Component {
       data: { id: this.state.voter.id, adopterUserId: 'auth0|5aac2cd53092f503a3de2509'}
       })
       .then(res => {
-        console.log(res);
+        this.props.handleAccept(this.state.voter);
+        this.setState({voter: {}})
       })
       .catch(err => {
         console.error(err);
-      });
+    })
   }
 
   render() {
     let content;
-    let voter = this.state.voter;
-    if (voter) {
+    if (this.state.voter !== undefined && this.state.voter.id) {
+      let voter = this.state.voter;
       content = ( 
         <article className="mw5 center bg-white br3 pa3 pa4-ns mv3 ba b--black-10">
         <div className="tc">
