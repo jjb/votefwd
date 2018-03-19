@@ -42,7 +42,9 @@ router.route('/voters')
     db('voters')
       .where('id', req.body.id)
       .update({
-        adopter_user_id: req.body.adopterUserId
+        adopter_user_id: req.body.adopterUserId,
+        adoption_timestamp: db.fn.now(),
+        updated_at: db.fn.now()
       })
       .then(function(result) {
         res.json(result)
