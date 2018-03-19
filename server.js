@@ -27,11 +27,13 @@ router.get('/', function(req, res) {
 
 router.route('/voters')
   .get(function(req, res) {
-    db.select().table('voters')
-      .where('adopter_user_id', req.query.user_id)
-      .then(function(result) {
-        res.json(result)
-      })
+    var query = db.select().table('voters')
+    if (req.query.user_id) {
+      query.where('adopter_user_id', req.query.user_id)
+    }
+    query.then(function(result) {
+      res.json(result)
+    })
   })
   .put(function(req, res) {
     db('voters')
