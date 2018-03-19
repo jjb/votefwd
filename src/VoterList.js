@@ -7,16 +7,16 @@ export class VoterList extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      voters: []
-    }
+    this.state = { voters: [] }
   }
 
-  getVoters() {
-    axios.get(`${process.env.REACT_APP_API_URL}/voters`)
+  getAdoptedVoters() {
+    axios.get(`${process.env.REACT_APP_API_URL}/voters`,
+      {
+        params: { user_id: 'auth0|5aac2cd53092f503a3de2509' }
+      })
       .then(res => {
-        let voters = res.data;
-        this.setState( {voters: voters} );
+        this.setState( {voters: res.data} );
       })
       .catch(err => {
         console.error(err)
@@ -24,7 +24,7 @@ export class VoterList extends Component {
   }
 
   componentWillMount(){
-    this.getVoters()
+    this.getAdoptedVoters()
   }
 
   render() {

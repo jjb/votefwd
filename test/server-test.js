@@ -55,3 +55,11 @@ it('Retrieves a list of voters', function(done) {
     done();
   });
 });
+
+it('Marks a voter as adopted', function(done) {
+  request.post({url: 'http://localhost:3001/api/voters', form: {adopted: true}},
+    function(error, response, body) {
+      expect(response.statusCode).to.equal(200);
+    done();
+  });
+});

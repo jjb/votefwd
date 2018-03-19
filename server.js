@@ -28,6 +28,17 @@ router.get('/', function(req, res) {
 router.route('/voters')
   .get(function(req, res) {
     db.select().table('voters')
+      .where('adopter_user_id', req.query.user_id)
+      .then(function(result) {
+        res.json(result)
+      })
+  })
+  .put(function(req, res) {
+    db('voters')
+      .where('id', req.body.id)
+      .update({
+        adopter_user_id: req.body.adopterUserId
+      })
       .then(function(result) {
         res.json(result)
       })
