@@ -4,3 +4,4 @@ _site/
 node_modules/
 .env*
 build/
+voter_data/
