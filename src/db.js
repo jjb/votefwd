@@ -10,4 +10,4 @@ var knexClient = knex({
   }
 });
 
-module.exports = knexClient
+module.exports = knexClient;

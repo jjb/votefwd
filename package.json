@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "ajv": "^6.3.0",
     "auth0-js": "^9.3.3",
     "axios": "^0.18.0",
     "body-parser": "^1.18.2",
@@ -16,6 +17,7 @@
     "path": "^0.12.7",
     "pg": "^7.4.1",
     "react": "^16.2.0",
+    "react-avatar": "^2.5.1",
     "react-dom": "^16.2.0",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.1",

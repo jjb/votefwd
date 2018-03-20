@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
+import Avatar from 'react-avatar';
 
 export class VoterOffer extends Component {
   constructor(props) {
@@ -17,7 +18,6 @@ export class VoterOffer extends Component {
       .then(res => {
         let voter = res.data[Math.floor(Math.random() * res.data.length)];
         this.setState( {voter: voter} );
-        console.log(this.state.voter);
       })
       .catch(err => {
         console.error(err)
@@ -47,9 +47,7 @@ export class VoterOffer extends Component {
       content = ( 
         <article className="mw5 center bg-white br3 pa3 pa4-ns mv3 ba b--black-10">
         <div className="tc">
-            <img 
-              src="http://tachyons.io/img/avatar_1.jpg" 
-              className="br-100 h3 w3 dib" alt="Voter avatar" />
+            <Avatar size={50} round={true} name={voter.first_name + ' ' + voter.last_name}/>
             <h1 className="f4">{voter.first_name} {voter.last_name}</h1>
             <hr className="mw3 bb bw1 b--black-10"></hr>
           </div>
