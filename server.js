@@ -29,12 +29,15 @@ router.route('/voters')
   .get(function(req, res) {
     var query = db.select().table('voters')
     if (req.query.user_id) {
+      // get only the user's own adopted voters
       query.where('adopter_user_id', req.query.user_id)
     }
     else {
-      query.where('adopter_user_id', null)
+      // get a single not-yet-adopted voter
+      query.where('adopter_user_id', null).limit(1);
     }
     query.then(function(result) {
+      console.log(result);
       res.json(result)
     })
   })
