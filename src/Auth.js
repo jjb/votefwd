@@ -11,7 +11,7 @@ export default class Auth {
     redirectUri: 'http://localhost:3000/callback',
     audience: 'https://votefwd.auth0.com/userinfo',
     responseType: 'token id_token',
-    scope: 'openid'
+    scope: 'openid profile email'
   });
   
   constructor() {
@@ -37,8 +37,6 @@ export default class Auth {
   persistUser(authResult) {
     axios.post(`${process.env.REACT_APP_API_URL}/user`,
       { auth0_id: authResult.idTokenPayload.sub })
-    .then(function(response) {
-    })
     .catch(function(error) {
       console.error(error)
     });
@@ -50,6 +48,9 @@ export default class Auth {
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
     localStorage.setItem('user_id', authResult.idTokenPayload.sub);
+    this.auth0.client.userInfo(authResult.accessToken, (err, profile) => {
+      localStorage.setItem('picture_url', profile.picture);
+    })
     history.replace('/');
   }    
 
@@ -59,6 +60,7 @@ export default class Auth {
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
     localStorage.removeItem('user_id');
+    localStorage.removeItem('picture_url');
     // navigate to the home route
     history.replace('/');
   }
