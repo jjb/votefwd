@@ -19,6 +19,7 @@ class Header extends Component {
 
   render() {
     const { isAuthenticated } = this.props.auth;
+    let pictureUrl = localStorage.getItem('picture_url');
     return (
       <div className="tc">
         <div className="fl w-100 pa2">
@@ -35,9 +36,12 @@ class Header extends Component {
           }
           {
             isAuthenticated() && (
-              <button onClick={this.logout.bind(this)}>
-                Log Out
-              </button>
+              <div>
+                <button onClick={this.logout.bind(this)}>
+                  Log Out
+                </button>
+                <img className="br-100 h2 w2 dib pa2 v-mid" src={pictureUrl} alt="Current user's avatar"/>
+              </div>
             )
           }
         </div>
