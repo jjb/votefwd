@@ -14,9 +14,10 @@ class Dashboard extends Component {
   }
 
   getAdoptedVoters() {
+    let user_id = localStorage.getItem('user_id');
     axios.get(`${process.env.REACT_APP_API_URL}/voters`,
       {
-        params: { user_id: 'auth0|5aac2cd53092f503a3de2509' }
+        params: { user_id: user_id }
       })
       .then(res => {
         this.setState( {voters: res.data} );

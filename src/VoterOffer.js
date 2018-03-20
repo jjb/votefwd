@@ -25,10 +25,11 @@ export class VoterOffer extends Component {
   }
 
   acceptVoter() {
+    let user_id = localStorage.getItem('user_id');
     axios({
       method: 'PUT',
       url: `${process.env.REACT_APP_API_URL}/voters`,
-      data: { id: this.state.voter.id, adopterUserId: 'auth0|5aac2cd53092f503a3de2509'}
+      data: { id: this.state.voter.id, adopterUserId: user_id }
       })
       .then(res => {
         this.props.handleAccept(this.state.voter);
