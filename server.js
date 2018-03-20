@@ -47,7 +47,8 @@ router.route('/voters')
         updated_at: db.fn.now()
       })
       .then(function(result) {
-        res.json(result)
+        console.log(result);
+        res.status(200).json(result)
       })
   });
 
@@ -58,13 +59,13 @@ router.route('/user')
         .then(function(result) {
           if (result.length != 0)
           {
-            res.status(422).send('User already exists.');
+            res.status(200).send('User already exists.');
           }
           else
           {
             db('users').insert({auth0_id: req.body.auth0_id})
               .then(function(result) {
-              res.json(result);
+              res.status(201).send(result);
             });
           }
         });

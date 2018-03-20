@@ -22,7 +22,7 @@ it('Saves a new user', function(done) {
   request
     .post({url: 'http://localhost:3001/api/user', form: {auth0_id: randomId}},
     function(error, response, body) {
-      expect(response.statusCode).to.equal(200);
+      expect(response.statusCode).to.equal(201);
     done();
   });
 });
@@ -35,7 +35,8 @@ it('Saves a new user', function(done) {
 it('Recognizes an existing user', function(done) {
   request.post({url: 'http://localhost:3001/api/user', form: {auth0_id: randomId}},
     function(error, response, body) {
-      expect(response.statusCode).to.equal(422);
+      expect(response.statusCode).to.equal(200);
+      expect(response.body).to.equal('User already exists.');
     done();
   });
 });
@@ -50,14 +51,6 @@ it('Fails gracefully when user ID is missing', function(done) {
 
 it('Retrieves a list of unclaimed voters', function(done) {
   request.get({url: 'http://localhost:3001/api/voters'},
-    function(error, response, body) {
-      expect(response.statusCode).to.equal(200);
-    done();
-  });
-});
-
-it('Marks a voter as adopted by a user', function(done) {
-  request.post({url: 'http://localhost:3001/api/voters', form: {adopted: true}},
     function(error, response, body) {
       expect(response.statusCode).to.equal(200);
     done();
