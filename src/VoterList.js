@@ -1,14 +1,28 @@
 // src/VoterList.js
 
 import React, { Component } from 'react';
+import axios from 'axios';
 import Avatar from 'react-avatar';
-import fs from 'fs';
-import pdfkit from 'pdfkit'
+import download from './download';
 
 export class VoterList extends Component {
-  generatePDF() {
-    console.log('hi');
-    var doc = new pdfkit;
+  constructor(props) {
+    super(props);
+    this.generatePDF = this.generatePDF.bind(this);
+  }
+
+  generatePDF(event) {
+    event.preventDefault();
+    axios.get(`${process.env.REACT_APP_API_URL}/voter/10/letter`,
+      {
+        params: { voter: 'x' }
+      })
+      .then(res => {
+        download(res.data, 'voter_letter.pdf', 'application/pdf');
+      })
+      .catch(err => {
+        console.error(err)
+      });
   }
 
   render() {
@@ -27,7 +41,9 @@ export class VoterList extends Component {
                 {voter.city}, {voter.state} {voter.zip}
               </span>
             </div>
-            <button onClick={this.generatePDF}>Download letter</button>
+            <form onSubmit={this.generatePDF}>
+              <input type="submit" value="Download letter" />
+            </form>
           </li>
         )}
         </ul>

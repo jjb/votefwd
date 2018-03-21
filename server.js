@@ -7,6 +7,9 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var db = require('./src/db');
 
+var PDFDocument = require('pdfkit');
+var fs = require('fs');
+
 var app = express();
 var router = express.Router();
 var port = process.env.REACT_APP_API_PORT || 3001;
@@ -37,7 +40,6 @@ router.route('/voters')
       query.where('adopter_user_id', null).limit(1);
     }
     query.then(function(result) {
-      console.log(result);
       res.json(result)
     })
   })
@@ -50,10 +52,26 @@ router.route('/voters')
         updated_at: db.fn.now()
       })
       .then(function(result) {
-        console.log(result);
         res.status(200).json(result)
       })
   });
+
+router.route('/voter/:voter_id/letter')
+  .get(function(req, res) {
+    let filename = 'voter_letter.pdf'
+    let doc = new PDFDocument();
+    doc.text('Hello world');
+    doc.save()
+      .moveTo(100, 150)
+      .lineTo(100, 250)
+      .lineTo(200, 250)
+      .fill("#FF3300")
+    //doc.pipe(fs.createWriteStream('test.pdf'));
+    res.setHeader('Content-disposition', 'attachment; filename="' + filename + '"');
+    res.setHeader('Content-type', 'application/pdf');
+    doc.pipe(res);
+    doc.end();
+  })
 
 router.route('/user')
   .post(function(req, res) {
