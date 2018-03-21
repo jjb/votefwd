@@ -58,7 +58,7 @@
 
 
 		//go ahead and download dataURLs right away
-		if(/^data\:[\w+\-]+\/[\w+\-]+[,;]/.test(payload)){
+		if(/^data:[\w+-]+\/[\w+-]+[,;]/.test(payload)){
 		
 			if(payload.length > (1024*1024*1.999) && myBlob !== toString ){
 				payload=dataUrlToBlob(payload);
@@ -79,7 +79,7 @@
 		function dataUrlToBlob(strUrl) {
 			var parts= strUrl.split(/[:;,]/),
 			type= parts[1],
-			decoder= parts[2] == "base64" ? atob : decodeURIComponent,
+			decoder= parts[2] === "base64" ? atob : decodeURIComponent,
 			binData= decoder( parts.pop() ),
 			mx= binData.length,
 			i= 0,
@@ -109,7 +109,7 @@
 
 			// handle non-a[download] safari as best we can:
 			if(/(Version)\/(\d+)\.(\d+)(?:\.(\d+))?.*Safari\//.test(navigator.userAgent)) {
-				url=url.replace(/^data:([\w\/\-\+]+)/, defaultMime);
+				url=url.replace(/^data:([\w/\-+]+)/, defaultMime);
 				if(!window.open(url)){ // popup blocked, offer direct download:
 					if(this.confirm("Displaying New Document\n\nUse Save As... to download, then click back to return to this page.")){ this.location.href=url; }
 				}
@@ -121,7 +121,7 @@
 			document.body.appendChild(f);
 
 			if(!winMode){ // force a mime that will download:
-				url="data:"+url.replace(/^data:([\w\/\-\+]+)/, defaultMime);
+				url="data:"+url.replace(/^data:([\w/\-+]+)/, defaultMime);
 			}
 			f.src=url;
 			setTimeout(function(){ document.body.removeChild(f); }, 333);

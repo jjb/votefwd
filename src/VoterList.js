@@ -13,12 +13,10 @@ export class VoterList extends Component {
 
   generatePDF(event) {
     event.preventDefault();
-    axios.get(`${process.env.REACT_APP_API_URL}/voter/10/letter`,
-      {
-        params: { voter: 'x' }
-      })
+    axios.get(`${process.env.REACT_APP_API_URL}/voter/10/letter`)
       .then(res => {
-        download(res.data, 'voter_letter.pdf', 'application/pdf');
+        console.log(res);
+        //download(res.data, 'voter_letter.pdf', 'application/pdf');
       })
       .catch(err => {
         console.error(err)
