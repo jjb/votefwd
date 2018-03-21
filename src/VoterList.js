@@ -3,7 +3,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Avatar from 'react-avatar';
-import download from './download';
+//import download from './download';
 
 export class VoterList extends Component {
   constructor(props) {

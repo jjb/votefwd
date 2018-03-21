@@ -8,7 +8,6 @@ var bodyParser = require('body-parser');
 var db = require('./src/db');
 var PDFDocument = require('pdfkit');
 var fs = require('fs');
-var request = require('request');
 
 var app = express();
 var router = express.Router();
@@ -58,31 +57,15 @@ router.route('/voters')
 
 router.route('/voter/:voter_id/letter')
   .get(function(req, res) {
-    let filename = 'voter_letter.pdf'
     let doc = new PDFDocument();
-    res.writeHead(200, {
-        'Content-Type': 'application/pdf',
-        'Access-Control-Allow-Origin': '*',
-        'Content-Disposition': 'attachment; filename=vote_plea_letter.pdf'
-    });
-    //doc.pipe(fs.createWriteStream('test.pdf'));
-    doc.pipe(res);
-    request({
-      url: 'https://s.gravatar.com/avatar/a088ebf6a65f2423fb2a02528a63275e?s=480&r=pg&d=https%3A%2F%2Fcdn.auth0.com%2Favatars%2Fsj.png',
-      encoding: null
-    }, function(err, response, body) {
-      if (err) throw err;
-      doc.image(body); // `body` is a Buffer because we told Request null encoding
-      doc.text('Hello world');
-      doc.save()
-        .moveTo(100, 150)
-        .lineTo(100, 250)
-        .lineTo(200, 250)
-        .fill("#FF3300")
-      doc.end(); // Close document and, by extension, response
-      return;
-    });
-  })
+    doc.text('Hello world');
+    doc.save()
+      .moveTo(100, 150)
+      .lineTo(100, 250)
+      .lineTo(200, 250)
+      .fill("#FF3300")
+    doc.pipe(fs.createWriteStream('voter_letter.pdf'));
+  });
 
 router.route('/user')
   .post(function(req, res) {
