@@ -3,7 +3,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Avatar from 'react-avatar';
-//import download from './download';
 
 export class VoterList extends Component {
   constructor(props) {
@@ -15,11 +14,12 @@ export class VoterList extends Component {
     event.preventDefault();
     axios.get(`${process.env.REACT_APP_API_URL}/voter/10/letter`)
       .then(res => {
-        console.log(res);
-        //download(res.data, 'voter_letter.pdf', 'application/pdf');
+        const file = new File([res.data], 'voter_letter.pdf', { type: 'application/pdf' })
+        console.log(res.data);
+        console.log(file);
       })
       .catch(err => {
-        console.error(err)
+        console.error(err);
       });
   }
 

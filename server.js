@@ -6,8 +6,8 @@ var cors = require('cors');
 var path = require('path');
 var bodyParser = require('body-parser');
 var db = require('./src/db');
-var PDFDocument = require('pdfkit');
 var fs = require('fs');
+var pdf = require('html-pdf');
 
 var app = express();
 var router = express.Router();
@@ -57,14 +57,15 @@ router.route('/voters')
 
 router.route('/voter/:voter_id/letter')
   .get(function(req, res) {
-    let doc = new PDFDocument();
-    doc.text('Hello world');
-    doc.save()
-      .moveTo(100, 150)
-      .lineTo(100, 250)
-      .lineTo(200, 250)
-      .fill("#FF3300")
-    doc.pipe(fs.createWriteStream('voter_letter.pdf'));
+    var html = ('<h1>Hi</h1>');
+    var options = { format: 'Letter' };
+    pdf.create(html, options).toStream(function(err, stream) {
+      //if (err) return console.log(err);
+      //console.log(res); // { filename: '/app/businesscard.pdf' }
+      stream.pipe(res);
+      //res.end();
+    });
+    //doc.pipe(fs.createWriteStream('voter_letter.pdf'));
   });
 
 router.route('/user')
