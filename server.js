@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 var db = require('./src/db');
 var fs = require('fs');
 var pdf = require('html-pdf');
+var Storage = require('@google-cloud/storage');
 
 var app = express();
 var router = express.Router();
@@ -59,13 +60,33 @@ router.route('/voter/:voter_id/letter')
   .get(function(req, res) {
     var html = ('<h1>Hi</h1>');
     var options = { format: 'Letter' };
-    pdf.create(html, options).toStream(function(err, stream) {
-      //if (err) return console.log(err);
-      //console.log(res); // { filename: '/app/businesscard.pdf' }
-      stream.pipe(res);
-      //res.end();
+    const dirName = './generatedPDFs/'
+    const fileName = 'test2.pdf'
+    const filePath = dirName + fileName;
+    const bucketName = 'voteforward';
+    const storage = new Storage({
+      keyFilename: './googleappcreds.json'
+    })
+    pdf.create(html).toFile(filePath, function(err, response){
+      if(err) {
+        console.error('ERROR:', err)
+      }
+      else {
+        console.log(response.filename);
+        storage
+          .bucket(bucketName)
+          .upload(response.filename)
+          .then(() => {
+            console.log(`${response.filename} uploaded to ${bucketName}.`);
+          })
+          .then(() => {
+            res.send('http://storage.googleapis.com/' + bucketName + '/' + fileName);
+          })
+          .catch(err => {
+            console.error('ERROR:', err);
+          });
+      }
     });
-    //doc.pipe(fs.createWriteStream('voter_letter.pdf'));
   });
 
 router.route('/user')
