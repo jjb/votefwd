@@ -31,7 +31,10 @@ class Dashboard extends Component {
   generatePDF(voter) {
     axios.get(`${process.env.REACT_APP_API_URL}/voter/${voter.id}/letter`)
       .then(res => {
-        this.setState({letterUrl: res.data});
+        voter.plea_letter_url = res.data;
+        var voters = this.state.voters;
+        voters.splice(-1, 1, voter);
+        this.setState({ voters: voters });
       })
       .catch(err => {
         console.error(err);
@@ -39,8 +42,8 @@ class Dashboard extends Component {
   }
 
   handleAcceptedVoter(voter) {
-    this.generatePDF(voter);
     this.setState({ voters: this.state.voters.concat([voter])});
+    this.generatePDF(voter);
   }
 
   componentWillMount(){
