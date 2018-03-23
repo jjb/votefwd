@@ -9,7 +9,7 @@ var db = require('./src/db');
 var fs = require('fs');
 var pdf = require('html-pdf');
 var Storage = require('@google-cloud/storage');
-var prepMarkup = require('./letter.js');
+var Handlebars = require('handlebars');
 
 var app = express();
 var router = express.Router();
@@ -66,11 +66,15 @@ function timeStamp() {
   return DateString;
 }
 
+
 router.route('/voter/:voter_id/letter')
   .get(function(req, res) {
     var timestamp = timeStamp();
     var voterId = req.params.voter_id;
-    var html = prepMarkup(timestamp);
+    var template = fs.readFileSync('./letter.html', 'utf8');
+    var uncompiledTemplate = Handlebars.compile(template);
+    var context = {voter_id: voterId, timestamp: timestamp};
+    var html = uncompiledTemplate(context);
     var options = { format: 'Letter' };
     const dirName = './generatedPDFs/'
     const fileName = timestamp + '-' + voterId + '-letter.pdf'
