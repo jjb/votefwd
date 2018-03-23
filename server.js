@@ -7,6 +7,7 @@ var path = require('path');
 var bodyParser = require('body-parser');
 var db = require('./src/db');
 var fs = require('fs');
+var os = require('os');
 var pdf = require('html-pdf');
 var Storage = require('@google-cloud/storage');
 var Handlebars = require('handlebars');
@@ -66,7 +67,6 @@ function timeStamp() {
   return DateString;
 }
 
-
 router.route('/voter/:voter_id/letter')
   .get(function(req, res) {
     var timestamp = timeStamp();
@@ -76,9 +76,9 @@ router.route('/voter/:voter_id/letter')
     var context = {voter_id: voterId, timestamp: timestamp};
     var html = uncompiledTemplate(context);
     var options = { format: 'Letter' };
-    const dirName = './generatedPDFs/'
+    const tmpdir = os.tmpdir();
     const fileName = timestamp + '-' + voterId + '-letter.pdf'
-    const filePath = dirName + fileName;
+    const filePath = tmpdir + '/' + fileName;
     const bucketName = 'voteforward';
     const storage = new Storage({
       keyFilename: './googleappcreds.json'
