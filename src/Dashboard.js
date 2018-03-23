@@ -10,6 +10,7 @@ class Dashboard extends Component {
     super(props);
 
     this.handleAcceptedVoter = this.handleAcceptedVoter.bind(this);
+    this.generatePDF = this.generatePDF.bind(this);
     this.state = { voters: [] }
   }
 
@@ -27,7 +28,18 @@ class Dashboard extends Component {
       });
   }
 
+  generatePDF(voter) {
+    axios.get(`${process.env.REACT_APP_API_URL}/voter/${voter.id}/letter`)
+      .then(res => {
+        this.setState({letterUrl: res.data});
+      })
+      .catch(err => {
+        console.error(err);
+      });
+  }
+
   handleAcceptedVoter(voter) {
+    this.generatePDF(voter);
     this.setState({ voters: this.state.voters.concat([voter])});
   }
 

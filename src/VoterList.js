@@ -1,32 +1,12 @@
 // src/VoterList.js
 
 import React, { Component } from 'react';
-import axios from 'axios';
 import Avatar from 'react-avatar';
 
 class VoterRecord extends Component {
-  constructor(props) {
-    super(props);
-    this.generatePDF = this.generatePDF.bind(this);
-
-    this.state = {}
-  }
-
-  generatePDF(event) {
-    event.preventDefault();
-    axios.get(`${process.env.REACT_APP_API_URL}/voter/10/letter`)
-      .then(res => {
-        console.log(res.data);
-        this.setState({letterUrl: res.data});
-      })
-      .catch(err => {
-        console.error(err);
-      });
-  }
-
   render() {
     let voter = this.props.voter;
-    console.log(this.state.letterUrl);
+    let filename = "VoteForward_PleaLetter_" + voter.last_name + '.pdf';
     return (
       <li className="flex items-center lh-copy pa3 ph0-l bb b--black-10" key={voter.id}>
         <Avatar size={50} round={true} name={voter.first_name + ' ' + voter.last_name}/>
@@ -38,12 +18,12 @@ class VoterRecord extends Component {
             {voter.city}, {voter.state} {voter.zip}
           </span>
         </div>
-        <form onSubmit={this.generatePDF}>
-          <input type="submit" value="Generate letter" />
-        </form>
-          {this.state.letterUrl &&
-            <a href={this.state.letterUrl}>Download letter</a>
-          }
+        <a className="link"
+          target="_blank"
+          download={filename}
+          href={voter.plea_letter_url}>
+            Download letter
+        </a>
       </li>
     )
   }

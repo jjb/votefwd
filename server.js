@@ -9,6 +9,7 @@ var db = require('./src/db');
 var fs = require('fs');
 var pdf = require('html-pdf');
 var Storage = require('@google-cloud/storage');
+var prepMarkup = require('./letter.js');
 
 var app = express();
 var router = express.Router();
@@ -56,12 +57,23 @@ router.route('/voters')
       })
   });
 
+function timeStamp() {
+  var newDate = new Date();
+  var DateString;
+  DateString = newDate.getFullYear()
+             + ('0' + (newDate.getMonth()+1)).slice(-2)
+             + ('0' + newDate.getDate()).slice(-2);
+  return DateString;
+}
+
 router.route('/voter/:voter_id/letter')
   .get(function(req, res) {
-    var html = ('<h1>Hi</h1>');
+    var timestamp = timeStamp();
+    var voterId = req.params.voter_id;
+    var html = prepMarkup(timestamp);
     var options = { format: 'Letter' };
     const dirName = './generatedPDFs/'
-    const fileName = 'test2.pdf'
+    const fileName = timestamp + '-' + voterId + '-letter.pdf'
     const filePath = dirName + fileName;
     const bucketName = 'voteforward';
     const storage = new Storage({
@@ -72,18 +84,21 @@ router.route('/voter/:voter_id/letter')
         console.error('ERROR:', err)
       }
       else {
-        console.log(response.filename);
         storage
           .bucket(bucketName)
           .upload(response.filename)
           .then(() => {
-            console.log(`${response.filename} uploaded to ${bucketName}.`);
-          })
-          .then(() => {
-            res.send('http://storage.googleapis.com/' + bucketName + '/' + fileName);
+            let pleaLetterUrl = 'http://storage.googleapis.com/' + bucketName + '/' + fileName;
+            res.send(pleaLetterUrl);
+            db('voters')
+              .where('id', voterId)
+              .update('plea_letter_url', pleaLetterUrl)
+              .catch(err=> {
+                console.error('ERROR: ', err);
+              });
           })
           .catch(err => {
-            console.error('ERROR:', err);
+            console.error('ERROR: ', err);
           });
       }
     });
