@@ -46,6 +46,21 @@ class Dashboard extends Component {
     this.generatePDF(voter);
   }
 
+  handleConfirmSend(voter) {
+    console.log('confirming send for...' + voter.first_name + ' ' + voter.last_name);
+    axios({
+      method: 'PUT',
+      url: `${process.env.REACT_APP_API_URL}/voters`,
+      data: { id: voter.id, sentOn: 'today' }
+      })
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        console.error(err);
+    })
+  }
+
   componentWillMount(){
     this.getAdoptedVoters()
   }
@@ -54,7 +69,7 @@ class Dashboard extends Component {
     return (
       <div className="tc">
         <VoterOffer handleAccept={this.handleAcceptedVoter}/>
-        <VoterList voters={this.state.voters}/>
+        <VoterList voters={this.state.voters} confirmSend={this.handleConfirmSend}/>
       </div>
     );
   }

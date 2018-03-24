@@ -46,16 +46,36 @@ router.route('/voters')
     })
   })
   .put(function(req, res) {
-    db('voters')
-      .where('id', req.body.id)
-      .update({
-        adopter_user_id: req.body.adopterUserId,
-        adoption_timestamp: db.fn.now(),
-        updated_at: db.fn.now()
-      })
-      .then(function(result) {
-        res.status(200).json(result)
-      })
+    // TODO: refactor this to not require the conditional. Just take a voter
+    // and update the fields that have changed.
+    console.log(req.body.sent);
+    if (req.body.adopterUserID) {
+      db('voters')
+        .where('id', req.body.id)
+        .update({
+          adopter_user_id: req.body.adopterUserId,
+          adoption_timestamp: db.fn.now(),
+          updated_at: db.fn.now()
+        })
+        .then(function(result) {
+          res.status(200).json(result)
+        });
+      }
+    else if (req.body.sentOn) {
+      console.log(req.body.sentOn);
+      db('voters')
+        .where('id', req.body.id)
+        .update({
+          plea_letter_sent_timestamp: db.fn.now(),
+          updated_at: db.fn.now()
+        })
+        .then(function(result) {
+          res.status(200).json(result)
+        });
+      }
+    else {
+      res.send('No action taken.')
+    }
   });
 
 function timeStamp() {

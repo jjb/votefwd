@@ -24,6 +24,7 @@ class VoterRecord extends Component {
           href={voter.plea_letter_url}>
             Download letter
         </a>
+        <button onClick={() => {this.props.confirmSend(voter)}}>Confirm</button>
       </li>
     )
   }
@@ -35,7 +36,12 @@ export class VoterList extends Component {
       <div>
         <h2 className="title tc">Your Voters</h2>
         <ul className="list pl0 mt0 measure center">
-          {this.props.voters.map(voter => <VoterRecord key={voter.id} voter={voter} />)}
+          {this.props.voters.map(voter => 
+            <VoterRecord
+              key={voter.id}
+              voter={voter}
+              confirmSend={this.props.confirmSend}
+            />)}
         </ul>
       </div>
     );
