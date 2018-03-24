@@ -47,9 +47,10 @@ router.route('/voters')
   })
   .put(function(req, res) {
     // TODO: refactor this to not require the conditional. Just take a voter
-    // and update the fields that have changed.
-    console.log(req.body.sent);
-    if (req.body.adopterUserID) {
+    // and update the fields that have changed?
+    let adopterUserId = req.body.adopterUserId;
+    if (adopterUserId != null) {
+      console.log('Updating adopter...');
       db('voters')
         .where('id', req.body.id)
         .update({
