@@ -11,6 +11,7 @@ var os = require('os');
 var pdf = require('html-pdf');
 var Storage = require('@google-cloud/storage');
 var Handlebars = require('handlebars');
+var voterService = require('./voterService');
 
 var app = express();
 var router = express.Router();
@@ -32,22 +33,21 @@ router.get('/', function(req, res) {
 
 router.route('/voters')
   .get(function(req, res) {
-    var query = db.select().table('voters')
+    // caller requested a specific user's adopted voters
     if (req.query.user_id) {
-      // get only the user's own adopted voters
-      query.where('adopter_user_id', req.query.user_id)
+      voterService.getUsersAdoptedVoters(req.query.user_id,
+        result => res.json(result));
     }
+    // caller requested a random voter
     else {
-      // get a single not-yet-adopted voter
-      query.where('adopter_user_id', null).limit(1);
+      voterService.getRandomVoter(
+        result => res.json(result));
     }
-    query.then(function(result) {
-      res.json(result)
-    })
   })
   .put(function(req, res) {
-    // TODO: refactor this to not require the conditional. Just take a voter
-    // and update the fields that have changed?
+    // TODO: refactor this to not require the conditional. Just take a complete voter
+    // object, and check to see which fields have changed, and only update
+    // those?
     let adopterUserId = req.body.adopterUserId;
     if (adopterUserId != null) {
       console.log('Updating adopter...');
