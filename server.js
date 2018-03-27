@@ -70,8 +70,8 @@ router.route('/voter/confirm-send')
   });
 
 router.route('/voter/pledge')
-  .put(function(req, res) {
-    voterService.makePledge(req.body.id, function(result) {
+  .post(function(req, res) {
+    voterService.makePledge(req.body.code, function(result) {
       res.json(result);
     });
   });

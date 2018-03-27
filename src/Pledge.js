@@ -1,6 +1,7 @@
 // src/Pledge.js
 
 import React, { Component } from 'react';
+import axios from 'axios';
 import { Header } from './Header';
 
 class PledgeForm extends Component {
@@ -10,6 +11,11 @@ class PledgeForm extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handlePledge = this.handlePledge.bind(this);
+  }
+
+  handlePledge() {
+    console.log('Pledge made.');
   }
 
   handleChange(event) {
@@ -17,8 +23,19 @@ class PledgeForm extends Component {
   }
 
   handleSubmit(event) {
-    alert('A code was submitted: ' + this.state.value);
+    console.log('A code was submitted: ' + this.state.value);
     event.preventDefault();
+    axios({
+      method: 'POST',
+      url: `${process.env.REACT_APP_API_URL}/voter/pledge`,
+      data: { code: this.state.value }
+    })
+    .then(res => {
+      this.handlePledge();
+    })
+    .catch(err => {
+      console.error(err);
+    });
   }
 
   render() {
