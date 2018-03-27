@@ -14,6 +14,7 @@ exports.up = function(knex, Promise) {
     table.timestamp('adopted_at');
     table.string('plea_letter_url', 1024);
     table.timestamp('confirmed_sent_at');
+    table.timestamp('pledge_made_at');
     table.timestamps(false, true);
   });
   

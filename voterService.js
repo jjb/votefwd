@@ -73,11 +73,26 @@ function confirmSend(voterId, callback) {
     });
 }
 
+function makePledge(voterId, callback) {
+  db('voters')
+    .where('id', voterId)
+    .update({
+      pledge_made_at: db.fn.now(),
+      updated_at: db.fn.now()
+    })
+    .then(function(result) {
+      callback(result);
+    })
+    .catch(err => {
+      console.error(err)
+    });
+}
 
 module.exports = {
   getVoterById,
   getUsersAdoptedVoters,
   getRandomVoter,
   adoptVoter,
-  confirmSend
+  confirmSend,
+  makePledge
 }

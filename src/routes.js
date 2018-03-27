@@ -4,6 +4,7 @@ import App from './App';
 import Dashboard from './Dashboard';
 import Callback from './Callback';
 import Auth from './Auth';
+import Pledge from './Pledge';
 import history from './history';
 
 const auth = new Auth();
@@ -24,6 +25,7 @@ export const makeMainRoutes = () => {
             return <Callback {...props} /> 
           }}/>
           <Route path="/dashboard" render={(props) => <Dashboard {...props} />} />
+          <Route path="/pledge" render={(props) => <Pledge {...props} />} />
         </div>
       </Router>
   );

@@ -63,6 +63,13 @@ router.route('/voter/confirm-send')
     });
   })
 
+router.route('/voter/pledge')
+  .put(function(req, res) {
+    voterService.makePledge(req.body.id, function(result) {
+      res.json(result);
+    });
+  })
+
 function timeStamp() {
   var newDate = new Date();
   var DateString;
