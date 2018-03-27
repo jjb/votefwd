@@ -25,9 +25,9 @@ class VoterRecord extends Component {
           href={voter.plea_letter_url}>
             Download letter
         </a>
-      { voter.plea_letter_sent_timestamp ? (
+      { voter.confirmed_sent_at ? (
         <div className="pa2">
-          <span>Confirmed sent on:</span> <Moment format="M/DD/YYYY">{voter.plea_letter_sent_timestamp}</Moment>
+          <span>Confirmed sent on:</span> <Moment format="M/DD/YYYY">{voter.confirmed_sent_at}</Moment>
         </div>
       ) : (
         <button className="pa2" onClick={() => {this.props.confirmSend(voter)}}>Confirm</button>

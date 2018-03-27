@@ -7,7 +7,7 @@ import { Header } from './Header';
 class PledgeForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {value: ''};
+    this.state = {value: '', pledgeStatus: false};
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -15,7 +15,7 @@ class PledgeForm extends Component {
   }
 
   handlePledge() {
-    console.log('Pledge made.');
+    this.setState({ pledgeStatus: true });
   }
 
   handleChange(event) {
@@ -23,7 +23,6 @@ class PledgeForm extends Component {
   }
 
   handleSubmit(event) {
-    console.log('A code was submitted: ' + this.state.value);
     event.preventDefault();
     axios({
       method: 'POST',
@@ -31,7 +30,12 @@ class PledgeForm extends Component {
       data: { code: this.state.value }
     })
     .then(res => {
-      this.handlePledge();
+      if (res.data === 0) {
+        alert('Code not recognized.')
+      }
+      else {
+        this.handlePledge();
+      }
     })
     .catch(err => {
       console.error(err);
@@ -39,17 +43,30 @@ class PledgeForm extends Component {
   }
 
   render() {
+    let content;
+    if (this.state.pledgeStatus) {
+      content = (
+        <p className="tc">Pledge received. Yay!</p>
+      )
+    }
+    else {
+      content = (
+        <div className="tc">
+          <form className="center db ma2" onSubmit={this.handleSubmit}>
+            <label>
+              Enter your voter pledge code here:
+              <input className="center db ma2" type="text" value={this.state.value} onChange={this.handleChange} />
+            </label>
+            <input className="center db ma2" type="submit" value="Pledge to be a voter." />
+          </form>
+        </div>
+      )
+    }
     return (
-      <div className="tc">
-        <form className="center db ma2" onSubmit={this.handleSubmit}>
-          <label>
-            Enter your voter pledge code here:
-            <input className="center db ma2" type="text" value={this.state.value} onChange={this.handleChange} />
-          </label>
-          <input className="center db ma2" type="submit" value="Pledge to be a voter." />
-        </form>
+      <div>
+        {content}
       </div>
-    );
+    )
   }
 }
 

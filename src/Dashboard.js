@@ -56,7 +56,7 @@ class Dashboard extends Component {
       data: { id: voter.id }
       })
       .then(res => {
-        voter.plea_letter_sent_timestamp = res.data[0].plea_letter_sent_timestamp;
+        voter.confirmed_sent_at = res.data[0].confirmed_sent_at;
         var voters = this.state.voters;
         // find the position of the voter in the voters array
         var index = voters.map(function(voter) {return voter.id}).indexOf(voter.id);

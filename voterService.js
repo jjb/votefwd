@@ -75,7 +75,7 @@ function confirmSend(voterId, callback) {
 
 function makePledge(code, callback) {
   db('voters')
-    .where('id', code)
+    .where('hashid', code)
     .update({
       pledge_made_at: db.fn.now(),
       updated_at: db.fn.now()
