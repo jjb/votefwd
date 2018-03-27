@@ -3,10 +3,14 @@
 
 var db = require('./src/db');
 
-function getVoterById(voterId) {
+function getVoterById(voterId, callback) {
   db.select().table('voters')
-    .query.where('id', voterId)
+    .where('id', voterId)
     .then(function(result) {
+      if (callback) {
+        callback(result);
+        return;
+      }
       return result;
     });
 }
@@ -24,9 +28,10 @@ function getUsersAdoptedVoters(userId, callback) {
 
 
 function getRandomVoter(callback) {
-  // TODO: make this actually random
   db('voters')
-    .where('adopter_user_id', null).limit(1)
+    .where('adopter_user_id', null)
+    .orderByRaw('RANDOM()')
+    .limit(1)
     .then(function(result) {
       callback(result);
     })
@@ -59,7 +64,9 @@ function confirmSend(voterId, callback) {
       updated_at: db.fn.now()
     })
     .then(function(result) {
-      callback(result);
+      getVoterById(voterId, function(voter) {
+        callback(voter);
+      })
     })
     .catch(err => {
       console.error(err)

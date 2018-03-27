@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import Avatar from 'react-avatar';
+import Moment from 'react-moment';
 
 class VoterRecord extends Component {
   render() {
@@ -24,7 +25,13 @@ class VoterRecord extends Component {
           href={voter.plea_letter_url}>
             Download letter
         </a>
-        <button onClick={() => {this.props.confirmSend(voter)}}>Confirm</button>
+      { voter.plea_letter_sent_timestamp ? (
+        <div className="pa2">
+          <span>Confirmed sent on:</span> <Moment format="M/DD/YYYY">{voter.plea_letter_sent_timestamp}</Moment>
+        </div>
+      ) : (
+        <button className="pa2" onClick={() => {this.props.confirmSend(voter)}}>Confirm</button>
+      )}
       </li>
     )
   }

@@ -11,6 +11,7 @@ class Dashboard extends Component {
 
     this.handleAcceptedVoter = this.handleAcceptedVoter.bind(this);
     this.generatePDF = this.generatePDF.bind(this);
+    this.handleConfirmSend = this.handleConfirmSend.bind(this);
     this.state = { voters: [] }
   }
 
@@ -53,7 +54,14 @@ class Dashboard extends Component {
       data: { id: voter.id }
       })
       .then(res => {
-        console.log(res);
+        voter.plea_letter_sent_timestamp = res.data[0].plea_letter_sent_timestamp;
+        var voters = this.state.voters;
+        // find the position of the voter in the voters array
+        var index = voters.map(function(voter) {return voter.id}).indexOf(voter.id);
+        if (index !== -1) {
+          voters[index] = voter;
+        }
+        this.setState({ voters: voters });
       })
       .catch(err => {
         console.error(err);
