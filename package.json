@@ -40,7 +40,8 @@
     "eject": "react-scripts eject",
     "css": "tachyons src/css/app.css > src/index.css --minify",
     "prestart": "npm run css",
-    "prebuild": "npm run css"
+    "prebuild": "npm run css",
+    "clear-claims": "psql -f bin/clear-claimed-voters.sql votefwd"
   },
   "devDependencies": {
     "chai": "^4.1.2",
