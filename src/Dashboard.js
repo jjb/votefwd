@@ -47,11 +47,10 @@ class Dashboard extends Component {
   }
 
   handleConfirmSend(voter) {
-    console.log('confirming send for...' + voter.first_name + ' ' + voter.last_name);
     axios({
       method: 'PUT',
-      url: `${process.env.REACT_APP_API_URL}/voters`,
-      data: { id: voter.id, sentOn: 'today' }
+      url: `${process.env.REACT_APP_API_URL}/voter/confirm-send`,
+      data: { id: voter.id }
       })
       .then(res => {
         console.log(res);

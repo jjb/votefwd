@@ -4,16 +4,16 @@
 var db = require('./src/db');
 
 function getVoterById(voterId) {
-  var query = db.select().table('voters');
-  query.where('id', voterId)
+  db.select().table('voters')
+    .query.where('id', voterId)
     .then(function(result) {
       return result;
     });
 }
 
 function getUsersAdoptedVoters(userId, callback) {
-  var query = db.select().table('voters')
-  query.where('adopter_user_id', userId)
+  db('voters')
+    .where('adopter_user_id', userId)
     .then(function(result) {
       callback(result);
     })
@@ -25,24 +25,52 @@ function getUsersAdoptedVoters(userId, callback) {
 
 function getRandomVoter(callback) {
   // TODO: make this actually random
-  var query = db.select().table('voters');
-  query.where('adopter_user_id', null).limit(1)
+  db('voters')
+    .where('adopter_user_id', null).limit(1)
     .then(function(result) {
       callback(result);
+    })
+    .catch(err => {
+      console.error(err);
     });
 }
 
-function updateVoter(voter) {
+function adoptVoter(voterId, adopterId, callback) {
+  db('voters')
+    .where('id', voterId)
+    .update({
+      adopter_user_id: adopterId,
+      adoption_timestamp: db.fn.now(),
+      updated_at: db.fn.now()
+    })
+    .then(function(result) {
+      callback(result);
+    })
+    .catch(err => {
+      console.error(err);
+    });
 }
 
-// 2. take a voter object 
-// validate it
-// compare it to the corresponding voter record in the db
-// update it if anything has changed
-// return it.
+function confirmSend(voterId, callback) {
+  db('voters')
+    .where('id', voterId)
+    .update({
+      plea_letter_sent_timestamp: db.fn.now(),
+      updated_at: db.fn.now()
+    })
+    .then(function(result) {
+      callback(result);
+    })
+    .catch(err => {
+      console.error(err)
+    });
+}
+
 
 module.exports = {
   getVoterById,
   getUsersAdoptedVoters,
-  getRandomVoter
+  getRandomVoter,
+  adoptVoter,
+  confirmSend
 }

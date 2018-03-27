@@ -16,7 +16,7 @@ export class VoterOffer extends Component {
   getVoter() {
     axios.get(`${process.env.REACT_APP_API_URL}/voters`)
       .then(res => {
-        let voter = res.data[Math.floor(Math.random() * res.data.length)];
+        let voter = res.data[0];
         this.setState( {voter: voter} );
       })
       .catch(err => {
@@ -24,12 +24,13 @@ export class VoterOffer extends Component {
       });
   }
 
-  acceptVoter() {
+  acceptVoter(voter) {
     let user_id = localStorage.getItem('user_id');
+    voter.adopter_user_id = user_id;
     axios({
       method: 'PUT',
-      url: `${process.env.REACT_APP_API_URL}/voters`,
-      data: { id: this.state.voter.id, adopterUserId: user_id }
+      url: `${process.env.REACT_APP_API_URL}/voter/adopt`,
+      data: { id: this.state.voter.id, adopterId: user_id }
       })
       .then(res => {
         this.props.handleAccept(this.state.voter);
@@ -54,7 +55,7 @@ export class VoterOffer extends Component {
           <p className="lh-copy measure center f6 black-70">
             {voter.state}
           </p>
-          <button onClick={this.acceptVoter}>Accept Voter</button>
+          <button onClick={() => this.acceptVoter(voter)}>Accept Voter</button>
         </article>
       )
     }
