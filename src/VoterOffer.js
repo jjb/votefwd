@@ -14,7 +14,7 @@ export class VoterOffer extends Component {
   }
 
   getVoter() {
-    axios.get(`${process.env.REACT_APP_API_URL}/voters`)
+    axios.get(`${process.env.REACT_APP_API_URL}/voter/random`)
       .then(res => {
         let voter = res.data[0];
         this.setState( {voter: voter} );
@@ -61,7 +61,7 @@ export class VoterOffer extends Component {
     }
     return (
       <div>
-        <button onClick={this.getVoter}>Voter Me Please</button>
+        <button onClick={() => this.getVoter()}>Voter Me Please</button>
         {content}
       </div>
     )

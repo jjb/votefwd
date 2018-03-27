@@ -4,6 +4,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { VoterList } from './VoterList';
 import { VoterOffer } from './VoterOffer';
+import { Header } from './Header';
+import { Login } from './Login';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -75,6 +77,8 @@ class Dashboard extends Component {
   render() {
     return (
       <div className="tc">
+        <Header />
+        <Login auth={this.props.auth} />
         <VoterOffer handleAccept={this.handleAcceptedVoter}/>
         <VoterList voters={this.state.voters} confirmSend={this.handleConfirmSend}/>
       </div>

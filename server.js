@@ -33,42 +33,48 @@ router.get('/', function(req, res) {
 
 router.route('/voters')
   .get(function(req, res) {
-    // caller requested a specific user's adopted voters
-    if (req.query.user_id) {
-      voterService.getUsersAdoptedVoters(req.query.user_id,
-        function(result) {
-          res.json(result)
-        });
-    }
-    // caller requested a random voter
-    else {
-      voterService.getRandomVoter(
-        function(result) {
-          res.json(result)
-        });
-    }
-  })
+    voterService.getUsersAdoptedVoters(req.query.user_id,
+      function(result) {
+        res.json(result)
+      });
+  });
+
+router.route('/voter/random')
+  .get(function(req, res) {
+    voterService.getRandomVoter(
+      function(result) {
+        res.json(result)
+      });
+  });
+
+router.route('/voters')
+  .get(function(req, res) {
+  voterService.getRandomVoter(
+    function(result) {
+      res.json(result)
+    });
+  });
 
 router.route('/voter/adopt')
   .put(function(req, res) {
     voterService.adoptVoter(req.body.id, req.body.adopterId, function(result) {
       res.json(result);
     });
-  })
+  });
 
 router.route('/voter/confirm-send')
   .put(function(req, res) {
     voterService.confirmSend(req.body.id, function(result) {
       res.json(result);
     });
-  })
+  });
 
 router.route('/voter/pledge')
   .put(function(req, res) {
     voterService.makePledge(req.body.id, function(result) {
       res.json(result);
     });
-  })
+  });
 
 function timeStamp() {
   var newDate = new Date();
