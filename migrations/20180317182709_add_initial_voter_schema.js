@@ -3,13 +3,14 @@
 exports.up = function(knex, Promise) {
   return knex.schema.createTable('voters', function (table) {
     table.increments();
-    table.string('first_name', 1024);
-    table.string('last_name', 1024);
-    table.string('middle_name', 1024);
-    table.string('address', 1024);
-    table.string('city', 1024);
-    table.string('state', 128);
-    table.string('zip', 128);
+    table.string('hashid', 16).unique();
+    table.string('first_name', 256);
+    table.string('last_name', 256);
+    table.string('middle_name', 256);
+    table.string('address', 512);
+    table.string('city', 256);
+    table.string('state', 16);
+    table.string('zip', 16);
     table.string('adopter_user_id', 1024).references('auth0_id').inTable('users');
     table.timestamp('adopted_at');
     table.string('plea_letter_url', 1024);

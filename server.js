@@ -5,13 +5,15 @@ var express = require('express');
 var cors = require('cors');
 var path = require('path');
 var bodyParser = require('body-parser');
-var db = require('./src/db');
-var fs = require('fs');
-var os = require('os');
 var pdf = require('html-pdf');
 var Storage = require('@google-cloud/storage');
 var Handlebars = require('handlebars');
+var Hashids = require('hashids');
+
 var voterService = require('./voterService');
+var db = require('./src/db');
+var fs = require('fs');
+var os = require('os');
 
 var app = express();
 var router = express.Router();
@@ -21,6 +23,8 @@ var corsOption = {
   moethods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
   credentials: true,
 }
+
+var hashids = new Hashids('votefwd', 5, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ');
 
 //app.use(express.static(path.join(__dirname, 'build')));
 app.use(cors(corsOption));
@@ -115,6 +119,7 @@ router.route('/voter/:voter_id/letter')
             db('voters')
               .where('id', voterId)
               .update('plea_letter_url', pleaLetterUrl)
+              .update('hashid', hashids.encode(voterId))
               .catch(err=> {
                 console.error('ERROR: ', err);
               });
