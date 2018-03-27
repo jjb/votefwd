@@ -45,7 +45,7 @@ function adoptVoter(voterId, adopterId, callback) {
     .where('id', voterId)
     .update({
       adopter_user_id: adopterId,
-      adoption_timestamp: db.fn.now(),
+      adopted_at: db.fn.now(),
       updated_at: db.fn.now()
     })
     .then(function(result) {
@@ -60,7 +60,7 @@ function confirmSend(voterId, callback) {
   db('voters')
     .where('id', voterId)
     .update({
-      plea_letter_sent_timestamp: db.fn.now(),
+      confirmed_sent_at: db.fn.now(),
       updated_at: db.fn.now()
     })
     .then(function(result) {

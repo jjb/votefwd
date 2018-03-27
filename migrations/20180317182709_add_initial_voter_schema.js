@@ -11,9 +11,9 @@ exports.up = function(knex, Promise) {
     table.string('state', 128);
     table.string('zip', 128);
     table.string('adopter_user_id', 1024).references('auth0_id').inTable('users');
-    table.timestamp('adoption_timestamp');
+    table.timestamp('adopted_at');
     table.string('plea_letter_url', 1024);
-    table.timestamp('plea_letter_sent_timestamp');
+    table.timestamp('confirmed_sent_at');
     table.timestamps(false, true);
   });
   
