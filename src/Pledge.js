@@ -46,7 +46,13 @@ class PledgeForm extends Component {
     let content;
     if (this.state.pledgeStatus) {
       content = (
-        <p className="tc">Pledge received. Yay!</p>
+        <div className="tc">
+          <p>You just pledged to be a voter in the mid-term election on Tuesday, November 6, 2018. Thank you!</p>
+          <a href="#" className="link underline blue hover-orange">Share your pledge on Twitter.</a>
+          <a href="#" className="pl2 link underline blue hover-orange">Share your pledge on Facebook.</a>
+          <p>Do you want to send letters like the one you received to others to encourage *them* to vote?</p>
+          <a href="/dashboard" className="pl2 link underline blue hover-orange">Send letters</a>
+        </div>
       )
     }
     else {
