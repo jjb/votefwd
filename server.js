@@ -93,13 +93,20 @@ router.route('/voter/:voter_id/letter')
   .get(function(req, res) {
     var timestamp = timeStamp();
     var voterId = req.params.voter_id;
+    var hashId = hashids.encode(voterId);
+    var pledgeUrl = 'http://localhost:3000/pledge';
     var template = fs.readFileSync('./letter.html', 'utf8');
     var uncompiledTemplate = Handlebars.compile(template);
-    var context = {voter_id: voterId, timestamp: timestamp};
+    var context = {
+      voterId: voterId,
+      timestamp: timestamp,
+      hashId: hashId,
+      pledgeUrl: pledgeUrl
+      };
     var html = uncompiledTemplate(context);
     var options = { format: 'Letter' };
     const tmpdir = os.tmpdir();
-    const fileName = timestamp + '-' + voterId + '-letter.pdf'
+    const fileName = timestamp + '-' + hashId + '-letter.pdf'
     const filePath = tmpdir + '/' + fileName;
     const bucketName = 'voteforward';
     const storage = new Storage({
@@ -119,7 +126,7 @@ router.route('/voter/:voter_id/letter')
             db('voters')
               .where('id', voterId)
               .update('plea_letter_url', pleaLetterUrl)
-              .update('hashid', hashids.encode(voterId))
+              .update('hashid', hashId)
               .catch(err=> {
                 console.error('ERROR: ', err);
               });
