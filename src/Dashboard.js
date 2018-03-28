@@ -19,16 +19,18 @@ class Dashboard extends Component {
 
   getAdoptedVoters() {
     let user_id = localStorage.getItem('user_id');
-    axios.get(`${process.env.REACT_APP_API_URL}/voters`,
-      {
-        params: { user_id: user_id }
-      })
-      .then(res => {
-        this.setState( {voters: res.data} );
-      })
-      .catch(err => {
-        console.error(err)
-      });
+    if(user_id) {
+      axios.get(`${process.env.REACT_APP_API_URL}/voters`,
+        {
+          params: { user_id: user_id }
+        })
+        .then(res => {
+          this.setState( {voters: res.data} );
+        })
+        .catch(err => {
+          console.error(err)
+        });
+    }
   }
 
   generatePDF(voter) {
