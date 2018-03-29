@@ -1,6 +1,8 @@
-[Vote Forward](http://votefwd.org) increases U.S. voter turnout by providing tools for citizens to "adopt" fellow citizens and send them hand-written letters encouraging them to vote.
+[Vote Forward](http://votefwd.org) works to increase U.S. voter turnout using behavioral science and the U.S. Postal Service. We provide the tools for citizens to "adopt" registered but unlikely voters in swing states, and send them (partially) hand-written letters encouraging them to vote.
 
-It's a React app with a Node server and a Postgresql database. If you want to run it locally, here's how to do so on a Mac:
+If you want to send letters, visit the [actual website](http://votefwd.org). Thank you!
+
+If you want to help build the software, it's a React app with a Node server and a Postgres database.
 
 ### Getting Started
 
@@ -16,7 +18,7 @@ You'll need node, npm, and postgresql:
 	brew install node
 	brew install postgresql
 
-Follow the instructions in your terminal after installing postgres to get and keep it running (`launchctl` recommended).
+Follow the instructions in your terminal after installing postgres to get and keep it running (`launchctl` is recommended).
 
 #### Set up development environment
 
@@ -52,13 +54,15 @@ variables:
 
 #### Google Cloud Platform Storage
 
-We're currently using GCP to store the PDFs of the letters generated for voters. You'll need a file named `googleappcreds.json` in the root directory of the project. This file contains a private key granting you access to the voteforward in order to create and store PDFs. Email `sjforman@gmail.com` to request grant-of-access to the project. Once granted access, you  may or may not also have permission to create your own `service account key` in the [GCP console](https://console.cloud.google.com/apis/credentials?project=voteforward-198801&authuser=1). If you can, great. If not, you know who to email.
+We're currently using GCP to store PDFs of generated plea letters. You'll need a file named `googleappcreds.json` in the root directory to grant you access to the voteforward bucket to create and store PDFs.
+
+Email `sjforman@gmail.com` to request access to the project on GCP. Once granted access, you may or may not also have permission to create your own `service account key` in the [GCP console](https://console.cloud.google.com/apis/credentials?project=voteforward-198801&authuser=1). If you can, great. If not, you know who to email.
 
 #### Auth0
 
-We're currently using [Auth0](https://auth0.com/) for user authentication and management. You shouldn't need anything other than the (non-sensitive) `CLIENTID` in your `.env` file for authentication to work with your locally-running app. If you need access to the auth0 console, email `sjforman@gmail.com`.
+We're currently using [Auth0](https://auth0.com/) for user authentication and management. You shouldn't need anything other than the (non-sensitive) `CLIENTID` in your `.env` file to make authentication work with your locally-running app. If you need access to the auth0 console, email `sjforman@gmail.com`.
 
-#### Set up database
+#### Set up your database
 
 Run the migrations:
 
@@ -68,6 +72,8 @@ Run the migrations:
 
 	knex seed:run
 
+These voter records consist of randomized names and addresses. The voter file import process doesn't yet account for different formats from different states. That's a work-in-progress.
+
 #### Run client-side tests
 
 	npm test
@@ -76,7 +82,7 @@ Run the migrations:
 
 	npm run test-server
 
-(Note, currently, the server must be running for these server-side tests to succeed. I guess they're more like integration tests).
+Currently, the server must be running for these server-side tests, such as they are, to succeed. I guess they're more like integration tests.
 
 #### Start devloping
 
