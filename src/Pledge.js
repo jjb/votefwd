@@ -48,8 +48,8 @@ class PledgeForm extends Component {
       content = (
         <div className="tc">
           <p>You just pledged to be a voter in the mid-term election on Tuesday, November 6, 2018. Thank you!</p>
-          <a href="#" className="link underline blue hover-orange">Share your pledge on Twitter.</a>
-          <a href="#" className="pl2 link underline blue hover-orange">Share your pledge on Facebook.</a>
+          <a href="https://twitter.com" className="link underline blue hover-orange">Share your pledge on Twitter.</a>
+          <a href="https://facebook.com" className="pl2 link underline blue hover-orange">Share your pledge on Facebook.</a>
           <p>Do you want to send letters like the one you received to others to encourage *them* to vote?</p>
           <a href="/dashboard" className="pl2 link underline blue hover-orange">Send letters</a>
         </div>

@@ -16,14 +16,18 @@ export class Login extends Component {
   }
 
   render() {
+    let buttonText = 'Log In';
+    if (this.props.buttonText) {
+      buttonText = this.props.buttonText;
+    }
     const { isAuthenticated } = this.props.auth;
-    let pictureUrl = localStorage.getItem('picture_url');
+    const pictureUrl = localStorage.getItem('picture_url');
     return (
-        <div className="fr pa2">
+        <div className="pa2">
           {
             !isAuthenticated() && (
-              <button onClick={this.login.bind(this)}>
-                Log In
+              <button className="h3 pa2" onClick={this.login.bind(this)}>
+                {buttonText}
               </button>
             )
           }

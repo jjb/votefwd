@@ -80,9 +80,17 @@ class Dashboard extends Component {
     return (
       <div className="tc">
         <Header />
-        <Login auth={this.props.auth} />
-        <VoterOffer handleAccept={this.handleAcceptedVoter}/>
-        <VoterList voters={this.state.voters} confirmSend={this.handleConfirmSend}/>
+        { this.props.auth.isAuthenticated() ? (
+          <div>
+            <Login auth={this.props.auth} />
+            <VoterOffer handleAccept={this.handleAcceptedVoter}/>
+            <VoterList voters={this.state.voters} confirmSend={this.handleConfirmSend}/>
+          </div>
+        ) : (
+          <div>
+            <Login auth={this.props.auth} buttonText="Sign Up or Log In To Send Letters" />
+          </div>
+        )}
       </div>
     );
   }
