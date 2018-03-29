@@ -3,7 +3,7 @@
 const fs = require('fs');
 const parse = require('csv-parse/lib/sync')
 
-var filePath = '../voter_data/sample_voters-alabama.csv';
+var filePath = '../seed_data/seed-voters.csv';
 var file = fs.readFileSync(filePath, 'utf8');
 var records = parse(file, {columns: true});
 
@@ -19,4 +19,4 @@ var processedRecords = records.map(record =>
   })
 );
 
-fs.writeFileSync('../voter_data/sample_voters_alabama_processed.json', JSON.stringify(processedRecords, 'utf8'));
+fs.writeFileSync('../seed_data/seed-voters.json', JSON.stringify(processedRecords, 'utf8'));
