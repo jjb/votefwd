@@ -102,7 +102,7 @@ function getSignedUrlForGCPFile(gcpFileObject) {
       expires: expDate,
   }
 
-  var signedUrl = gcpFileObject.getSignedUrl(config, function(err, url) {
+  gcpFileObject.getSignedUrl(config, function(err, url) {
     if (err) {
       console.error(err);
       return;
