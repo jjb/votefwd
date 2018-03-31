@@ -6,6 +6,7 @@ import { VoterList } from './VoterList';
 import { VoterOffer } from './VoterOffer';
 import { Header } from './Header';
 import { Login } from './Login';
+import { Qualify } from './Qualify';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -80,6 +81,7 @@ class Dashboard extends Component {
     return (
       <div className="tc">
         <Header />
+        <Qualify />
         { this.props.auth.isAuthenticated() ? (
           <div>
             <Login auth={this.props.auth} />
