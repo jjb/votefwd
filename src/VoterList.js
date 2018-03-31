@@ -20,7 +20,6 @@ class VoterRecord extends Component {
           </span>
         </div>
         <a className="link"
-          target="_blank"
           download={filename}
           href={voter.plea_letter_url}>
             Download letter

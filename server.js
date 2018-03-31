@@ -9,6 +9,7 @@ var pdf = require('html-pdf');
 var Storage = require('@google-cloud/storage');
 var Handlebars = require('handlebars');
 var Hashids = require('hashids');
+var uuidv4 = require('uuid/v4');
 
 var voterService = require('./voterService');
 var db = require('./src/db');
@@ -87,6 +88,7 @@ router.route('/voter/:voter_id/letter')
     var timestamp = timeStamp();
     var voterId = req.params.voter_id;
     var hashId = hashids.encode(voterId);
+    var uuid = uuidv4();
     var pledgeUrl = 'http://localhost:3000/pledge';
     var template = fs.readFileSync('./letter.html', 'utf8');
     var uncompiledTemplate = Handlebars.compile(template);
@@ -99,12 +101,27 @@ router.route('/voter/:voter_id/letter')
     var html = uncompiledTemplate(context);
     var options = { format: 'Letter' };
     const tmpdir = os.tmpdir();
-    const fileName = timestamp + '-' + hashId + '-letter.pdf'
-    const filePath = tmpdir + '/' + fileName;
+    const remotefileName = timestamp + '-' + uuid + '-letter.pdf'
+    const downloadFileName = timestamp + '-VoteForward-letter.pdf' //TODO: add voter name
+    const filePath = tmpdir + '/' + remotefileName;
     const bucketName = 'voteforward';
     const storage = new Storage({
       keyFilename: './googleappcreds.json'
     })
+    const uploadOptions =
+                {
+                    gzip: true,
+                    contentType: 'application/pdf',
+                    contentDisposition: 'attachment',
+                    metadata: {
+                        contentType: 'application/pdf',
+                        contentDisposition: `attachment; filename='${downloadFileName}`,
+                    },
+                    headers: {
+                        contentType: 'application/pdf',
+                        contentDisposition: 'attachment',
+                    }
+                };
     pdf.create(html).toFile(filePath, function(err, response){
       if(err) {
         console.error('ERROR:', err)
@@ -112,9 +129,9 @@ router.route('/voter/:voter_id/letter')
       else {
         storage
           .bucket(bucketName)
-          .upload(response.filename)
+          .upload(response.filename, uploadOptions)
           .then(() => {
-            let pleaLetterUrl = 'http://storage.googleapis.com/' + bucketName + '/' + fileName;
+            let pleaLetterUrl = 'http://storage.googleapis.com/' + bucketName + '/' + remotefileName;
             res.send(pleaLetterUrl);
             db('voters')
               .where('id', voterId)
