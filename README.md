@@ -25,7 +25,7 @@ Follow the instructions in your terminal after installing postgres to get and ke
 Install git if necessary and clone the repo:
 
 	brew install git
-	git clone git@github.com:sjforman/votefwd.git
+	git clone https://github.com/sjforman/votefwd.git
 
 Install application dependencies using `npm`:
 
