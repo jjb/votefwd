@@ -69,7 +69,6 @@ class PledgeThanks extends Component {
   }
 }
 
-
 class Pledge extends Component {
   constructor(props) {
     super(props);
@@ -97,4 +96,5 @@ class Pledge extends Component {
     );
   }
 }
- export default Pledge
+
+export default Pledge
