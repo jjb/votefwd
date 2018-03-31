@@ -51,11 +51,12 @@ it('Retrieves a random unclaimed voter', function(done) {
   });
 });
 
-//Placeholder for test to use HTTPS.  Switch this once you upgrade :D
+// Placeholder for test to use HTTPS.  Switch this once you upgrade :D.
 it('Uses http', function(done) {
   request.get({url: 'http://localhost:3001/api/voter/random'},
     function(error, response, body) {
       expect(response['request']['uri']['protocol']).to.equal('http:');
     done();
   });
+
 });
