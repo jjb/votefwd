@@ -52,14 +52,6 @@ router.route('/voter/random')
       });
   });
 
-router.route('/voters')
-  .get(function(req, res) {
-  voterService.getRandomVoter(
-    function(result) {
-      res.json(result)
-    });
-  });
-
 router.route('/voter/adopt')
   .put(function(req, res) {
     voterService.adoptVoter(req.body.id, req.body.adopterId, function(result) {
