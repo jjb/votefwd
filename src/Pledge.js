@@ -7,15 +7,10 @@ import { Header } from './Header';
 class PledgeForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {value: '', pledgeStatus: false};
+    this.state = {value: '', pledgeError: false};
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.handlePledge = this.handlePledge.bind(this);
-  }
-
-  handlePledge() {
-    this.setState({ pledgeStatus: true });
   }
 
   handleChange(event) {
@@ -31,10 +26,10 @@ class PledgeForm extends Component {
     })
     .then(res => {
       if (res.data === 0) {
-        alert('Code not recognized.')
+        this.setState( {pledgeError: true});
       }
       else {
-        this.handlePledge();
+        this.props.handlePledge();
       }
     })
     .catch(err => {
@@ -43,47 +38,63 @@ class PledgeForm extends Component {
   }
 
   render() {
-    let content;
-    if (this.state.pledgeStatus) {
-      content = (
-        <div className="tc">
+    return (
+      <div className="tc">
+        <form className="center db ma2" onSubmit={this.handleSubmit}>
+          <label>
+            Enter your voter pledge code here:
+            <input className="center db ma2" type="text" value={this.state.value} onChange={this.handleChange} />
+          </label>
+          <input className="center db ma2" type="submit" value="Pledge to be a voter." />
+        </form>
+      { this.state.pledgeError &&
+        <p>We didn't recognize that code. Try again.</p>
+      }
+      </div>
+    )
+  }
+}
+
+class PledgeThanks extends Component {
+  render() {
+    return (
+        <div>
           <p>You just pledged to be a voter in the mid-term election on Tuesday, November 6, 2018. Thank you!</p>
           <a href="https://twitter.com" className="link underline blue hover-orange">Share your pledge on Twitter.</a>
           <a href="https://facebook.com" className="pl2 link underline blue hover-orange">Share your pledge on Facebook.</a>
           <p>Do you want to send letters like the one you received to others to encourage *them* to vote?</p>
           <a href="/dashboard" className="pl2 link underline blue hover-orange">Send letters</a>
         </div>
-      )
-    }
-    else {
-      content = (
-        <div className="tc">
-          <form className="center db ma2" onSubmit={this.handleSubmit}>
-            <label>
-              Enter your voter pledge code here:
-              <input className="center db ma2" type="text" value={this.state.value} onChange={this.handleChange} />
-            </label>
-            <input className="center db ma2" type="submit" value="Pledge to be a voter." />
-          </form>
-        </div>
-      )
-    }
-    return (
-      <div>
-        {content}
-      </div>
-    )
+    );
   }
 }
 
 class Pledge extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {pledgeStatus: false};
+
+    this.handlePledge = this.handlePledge.bind(this);
+  }
+
+  handlePledge() {
+    this.setState({ pledgeStatus: true });
+  }
+
   render() {
     return (
       <div>
         <Header />
-        <PledgeForm />
+        { !this.state.pledgeStatus ?
+          (
+            <PledgeForm handlePledge={this.handlePledge.bind(this)}/>
+          ) : (
+            <PledgeThanks />
+          )
+        }
       </div>
     );
   }
 }
- export default Pledge
+
+export default Pledge
