@@ -20,6 +20,11 @@ You'll need node, npm, and postgresql:
 
 Follow the instructions in your terminal after installing postgres to get and keep it running (`launchctl` is recommended).
 
+If you already have postgres installed via Homebrew but not configured, or not
+running via `launchctl`, you can see the post-install directions again with: 
+
+  brew info postgresql
+
 #### Set up development environment
 
 Install git if necessary and clone the repo:
@@ -59,9 +64,8 @@ variables:
 
 #### Google Cloud Platform Storage
 
-We're currently using GCP to store PDFs of generated plea letters. You'll need a file named `googleappcreds.json` in the root directory to grant you access to the voteforward bucket to create and store PDFs.
-
-Email `sjforman@gmail.com` to request access to the project on GCP. Once granted access, you may or may not also have permission to create your own `service account key` in the [GCP console](https://console.cloud.google.com/apis/credentials?project=voteforward-198801&authuser=1). If you can, great. If not, you know who to email.
+We're currently using GCP to store PDFs of generated plea letters. If you need
+to generate PDFs, email `sjforman@gmail.com` to request access to the project on GCP. Then visit the [GCP console](https://console.cloud.google.com/apis/credentials?project=voteforward-198801&authuser=1) and create a JSON `service account key`. Move this file to the root directory of your repo and rename it `googleappcreds.json`.
 
 #### Auth0
 
@@ -79,16 +83,16 @@ Run the migrations:
 
 These voter records consist of randomized names and addresses. The voter file import process doesn't yet account for different formats from different states. That's a work-in-progress.
 
+#### Start devloping
+
+	npm run start-dev
+
 #### Run client-side tests
 
 	npm test
 
 #### Run server-side tests
 
+Note: currently, the server must be already running for these server-side tests, such as they are, to succeed.
+
 	npm run test-server
-
-Currently, the server must be running for these server-side tests, such as they are, to succeed. I guess they're more like integration tests.
-
-#### Start devloping
-
-	npm run start-dev
