@@ -52,6 +52,11 @@ variables:
 	REACT_APP_DATABASE_DIALECT=postgres
 	REACT_APP_AUTH0_CLIENTID=T0oLi22JFRtHPsx0595AAf8p573bxD4d
 
+#### Optional Environment variables
+
+  REACT_APP_HASHID_SALT=<Any string, or blank>
+  REACT_APP_HASHID_DICTIONARY=<Char set from which to make hashids, or blank>
+
 #### Google Cloud Platform Storage
 
 We're currently using GCP to store PDFs of generated plea letters. You'll need a file named `googleappcreds.json` in the root directory to grant you access to the voteforward bucket to create and store PDFs.
