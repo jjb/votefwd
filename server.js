@@ -83,6 +83,36 @@ function timeStamp() {
   return DateString;
 }
 
+function getSignedUrlForGCPFile(gcpFileObject) {
+  /*
+  Takes a gcp file object and applies a static config to create a signed url.
+  Inputs:
+    gcpFileObject - an instance of  https://cloud.google.com/nodejs/docs/reference/storage/1.6.x/File
+  Returns:
+    A signed url https://cloud.google.com/nodejs/docs/reference/storage/1.6.x/File#getSignedUrl
+    or an error
+  */
+
+  // Set a date two days in a future
+  var expDate = new Date();
+  expDate.setDate(expDate.getDate() + 2);
+
+  var config = {
+      action: 'read',
+      expires: expDate,
+  }
+
+  gcpFileObject.getSignedUrl(config, function(err, url) {
+    if (err) {
+      console.error(err);
+      return;
+    };
+
+    let pleaLetterUrl = 'http://storage.googleapis.com/' + url;
+    return pleaLetterUrl;
+  });
+}
+
 router.route('/voter/:voter_id/letter')
   .get(function(req, res) {
     var timestamp = timeStamp();
