@@ -6,20 +6,30 @@ import { RecaptchaComponent } from './Recaptcha';
 export class Qualify extends Component {
   constructor(props) {
     super(props);
-    this.state = { passedCaptcha: false, agreedTerms: false }
-    this.toggleAgreeTerms= this.toggleAgreeTerms.bind(this);
+    this.state = {
+      passedCaptcha: false,
+      agreedCode: false,
+      isCitizen: false
+    }
   }
 
-  toggleAgreeTerms() {
-    this.setState({ agreedTerms: !this.state.agreedTerms});
+  toggleCode() {
+    this.setState({ agreedCode: !this.state.agreedCode});
   }
 
   handleCaptchaSuccess(value) {
     this.setState({ passedCaptcha: !this.state.passedCaptcha});
   }
 
+  toggleCitizen() {
+    this.setState({ isCitizen: !this.state.isCitizen});
+  }
+
   fullyAgreed() {
-    if (this.state.passedCaptcha && this.state.agreedTerms) {
+    if ( this.state.passedCaptcha &&
+         this.state.agreedCode &&
+         this.state.isCitizen
+    ) {
       return true
     }
     else {
@@ -28,17 +38,24 @@ export class Qualify extends Component {
   }
 
   render() {
-    return (
-      <div>
-        <p>First, we need to make sure you’re a human being...</p>
-        <RecaptchaComponent handleSuccess={this.handleCaptchaSuccess.bind(this)}/>
-        <p>As a user of Vote Forward, you will receive information about your fellow citizens, including their names, addresses and voting histories.</p>
-        <p>States make this data available to organizations and members of the public in the interest of transparency and facilitating political activity.</p>
-        <p>By proceeding, you are agreeing to our code of conduct: Be a good citizen. Take care to keep the data you receive private. And in your letters, be genuine and passionate, but most importantly be respectful.</p>
-        <p>We are confident that you will conduct yourself in an upstanding fashion, but we reserve the right to disable your account if you don’t.</p>
-        <label className="mr2">Yes, I agree to the code of conduct and <a href="/terms">terms of use</a>.</label> 
-        <input className="ph2" onClick={this.toggleAgreeTerms} type="checkbox" />
-      </div>
-    )
+    if (!this.fullyAgreed()) {
+      return (
+        <div className="w-50 center">
+          <p>First, we need to make sure of a few things...</p>
+          <p className="f4">1. Are you a robot?</p>
+            <div className="center dib">
+              <RecaptchaComponent handleSuccess={this.handleCaptchaSuccess.bind(this)}/>
+            </div>
+          <p className="f4">2. Are you a U.S. Citizen?</p>
+            <label className="mr2">Yes.</label>
+            <input className="ph2 " onClick={this.toggleCitizen.bind(this)} type="checkbox" />
+          <p className="f4">3. Do you agree to abide by our code of conduct?</p>
+            <p>Vote Forward is possible because states make certain voter data available to the public. You will be granted access to some of this data. Do you promise to be good steward of this information, and to always be respectful in the letters you write?</p>
+            <label className="mr2">Yes.</label>
+            <input className="ph2" onClick={this.toggleCode.bind(this)} type="checkbox" />
+        </div>
+      )
+    }
+    else return null
   }
 }

@@ -81,9 +81,9 @@ class Dashboard extends Component {
     return (
       <div className="tc">
         <Header />
-        <Qualify />
         { this.props.auth.isAuthenticated() ? (
           <div>
+            <Qualify />
             <Login auth={this.props.auth} />
             <VoterOffer handleAccept={this.handleAcceptedVoter}/>
             <VoterList voters={this.state.voters} confirmSend={this.handleConfirmSend}/>

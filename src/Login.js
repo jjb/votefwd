@@ -23,10 +23,10 @@ export class Login extends Component {
     const { isAuthenticated } = this.props.auth;
     const pictureUrl = localStorage.getItem('picture_url');
     return (
-        <div className="pa2">
+        <div className="pa2 tc">
           {
             !isAuthenticated() && (
-              <button className="h3 pa2" onClick={this.login.bind(this)}>
+              <button className="pa2 w-100 h3" onClick={this.login.bind(this)}>
                 {buttonText}
               </button>
             )
