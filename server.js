@@ -34,8 +34,6 @@ app.use(cors(corsOption));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-
-
 router.get('/', function(req, res) {
   res.json('API initialized.');
 });
@@ -70,13 +68,8 @@ router.route('/voter/confirm-send')
     });
   });
 
-function tester (req, res, next) {
-  console.log('if you see this you were not rate limited');
-  next()
-}
-
 router.route('/voter/pledge')
-  .post(rateLimits.makePledgeRateLimit, tester, function(req, res) {
+  .post(rateLimits.makePledgeRateLimit, function(req, res) {
     voterService.makePledge(req.body.code, function(result) {
       res.json(result);
     });
