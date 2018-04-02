@@ -6,6 +6,7 @@ import { VoterList } from './VoterList';
 import { VoterOffer } from './VoterOffer';
 import { Header } from './Header';
 import { Login } from './Login';
+import { Qualify } from './Qualify';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -82,6 +83,7 @@ class Dashboard extends Component {
         <Header />
         { this.props.auth.isAuthenticated() ? (
           <div>
+            <Qualify />
             <Login auth={this.props.auth} />
             <VoterOffer handleAccept={this.handleAcceptedVoter}/>
             <VoterList voters={this.state.voters} confirmSend={this.handleConfirmSend}/>
