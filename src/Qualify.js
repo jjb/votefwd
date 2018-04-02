@@ -46,11 +46,17 @@ export class Qualify extends Component {
             <div className="center dib">
               <RecaptchaComponent handleSuccess={this.handleCaptchaSuccess.bind(this)}/>
             </div>
-          <p className="f4">2. Are you a U.S. Citizen?</p>
+          <p className="f4">2. What’s your full name?</p>
+            <div className="center dib">
+              <input className="" type="textarea"/>
+            </div>
+          <p className="f4">3. Are you a U.S. Citizen?</p>
             <label className="mr2">Yes.</label>
             <input className="ph2 " onClick={this.toggleCitizen.bind(this)} type="checkbox" />
-          <p className="f4">3. Do you agree to abide by our code of conduct?</p>
-            <p>Vote Forward is possible because states make certain voter data available to the public. You will be granted access to some of this data. Do you promise to be good steward of this information, and to always be respectful in the letters you write?</p>
+          <p className="f4">4. What’s your ZIP code?</p>
+            <input className="" type="textarea"/>
+          <p className="f4">5. Do you agree to abide by our code of conduct?</p>
+            <p>It’s a short: be decent: kind, respectful, sincere, and neighborly.</p>
             <label className="mr2">Yes.</label>
             <input className="ph2" onClick={this.toggleCode.bind(this)} type="checkbox" />
         </div>
