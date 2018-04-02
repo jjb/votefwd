@@ -20,6 +20,7 @@
     "history": "^4.7.2",
     "html-pdf": "^2.2.0",
     "knex": "^0.14.4",
+    "knex-migrate": "^1.5.4",
     "moment": "^2.21.0",
     "nodemon": "^1.12.5",
     "path": "^0.12.7",
