@@ -11,6 +11,7 @@ var Handlebars = require('handlebars');
 var Hashids = require('hashids');
 var uuidv4 = require('uuid/v4');
 
+var rateLimits = require('./ratelimits')
 var voterService = require('./voterService');
 var db = require('./src/db');
 var fs = require('fs');
@@ -68,7 +69,7 @@ router.route('/voter/confirm-send')
   });
 
 router.route('/voter/pledge')
-  .post(function(req, res) {
+  .post(rateLimits.makePledgeRateLimit, function(req, res) {
     voterService.makePledge(req.body.code, function(result) {
       res.json(result);
     });
