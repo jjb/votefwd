@@ -11,6 +11,7 @@ var Handlebars = require('handlebars');
 var Hashids = require('hashids');
 var uuidv4 = require('uuid/v4');
 
+var rateLimits = require('./ratelimits')
 var voterService = require('./voterService');
 var db = require('./src/db');
 var fs = require('fs');
@@ -32,6 +33,8 @@ var hashids = new Hashids(process.env.REACT_APP_HASHID_SALT, 6,
 app.use(cors(corsOption));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+
 
 router.get('/', function(req, res) {
   res.json('API initialized.');
@@ -67,8 +70,13 @@ router.route('/voter/confirm-send')
     });
   });
 
+function tester (req, res, next) {
+  console.log('if you see this you were not rate limited');
+  next()
+}
+
 router.route('/voter/pledge')
-  .post(function(req, res) {
+  .post(rateLimits.makePledgeRateLimit, tester, function(req, res) {
     voterService.makePledge(req.body.code, function(result) {
       res.json(result);
     });
