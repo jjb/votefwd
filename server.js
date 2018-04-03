@@ -180,8 +180,18 @@ router.route('/voter/:voter_id/letter')
   });
 
 router.route('/user')
+  .get(function(req, res) {
+    db('users')
+      .where('auth0_id', req.query.auth0_id)
+      .then(function(result) {
+        res.json(result)
+      })
+    .catch(err => {
+      console.error(err);
+    })
+  })
   .post(function(req, res) {
-    if (req.body.auth0_id) {
+    if (req.body.auth0_id && !req.body.isHuman) {
       db('users').where('auth0_id', req.body.auth0_id)
         .then(function(result) {
           if (result.length != 0)
@@ -195,6 +205,14 @@ router.route('/user')
               res.status(201).send(result);
             });
           }
+        });
+    }
+    else if (req.body.isHuman) {
+      db('users')
+        .where('auth0_id', req.body.auth0_id)
+        .update('is_human_at', db.fn.now())
+        .catch(err=> {
+          console.error('ERROR: ', err);
         });
     }
     else {
