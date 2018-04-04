@@ -2,18 +2,17 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import { VoterList } from './VoterList';
-import { VoterOffer } from './VoterOffer';
+import { AdoptVoter } from './AdoptVoter';
 import { Header } from './Header';
 import { Login } from './Login';
 import { Qualify } from './Qualify';
+import { VoterList } from './VoterList';
 
 class Dashboard extends Component {
   constructor(props) {
     super(props);
 
-    this.handleAcceptedVoter = this.handleAcceptedVoter.bind(this);
-    this.generatePDF = this.generatePDF.bind(this);
+    this.handleAdoptedVoter = this.handleAdoptedVoter.bind(this);
     this.handleConfirmSend = this.handleConfirmSend.bind(this);
     this.state = { voters: [] }
   }
@@ -34,22 +33,9 @@ class Dashboard extends Component {
     }
   }
 
-  generatePDF(voter) {
-    axios.get(`${process.env.REACT_APP_API_URL}/voter/${voter.id}/letter`)
-      .then(res => {
-        voter.plea_letter_url = res.data;
-        var voters = this.state.voters;
-        voters.splice(-1, 1, voter);
-        this.setState({ voters: voters });
-      })
-      .catch(err => {
-        console.error(err);
-      });
-  }
-
-  handleAcceptedVoter(voter) {
+  handleAdoptedVoter(voter, pdfUrl) {
+    voter.plea_letter_url = pdfUrl;
     this.setState({ voters: this.state.voters.concat([voter])});
-    this.generatePDF(voter);
   }
 
   handleConfirmSend(voter) {
@@ -85,7 +71,7 @@ class Dashboard extends Component {
           <div>
             <Qualify />
             <Login auth={this.props.auth} />
-            <VoterOffer handleAccept={this.handleAcceptedVoter}/>
+            <AdoptVoter handleAdoptedVoter={this.handleAdoptedVoter}/>
             <VoterList voters={this.state.voters} confirmSend={this.handleConfirmSend}/>
           </div>
         ) : (
