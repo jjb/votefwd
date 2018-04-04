@@ -13,15 +13,61 @@ export class Qualify extends Component {
       isResident: false,
       agreedCode: false,
       zip: '',
-      fullName: ''
+      fullName: '',
+      nameFormVal: '',
+      zipFormVal: ''
     }
+
+    this.handleNameChange = this.handleNameChange.bind(this);
+    this.handleNameSubmit = this.handleNameSubmit.bind(this);
+    this.handleZipChange = this.handleZipChange.bind(this);
+    this.handleZipSubmit = this.handleZipSubmit.bind(this);
   }
 
-  handleCaptchaSuccess(value) {
+  handleCaptchaSuccess() {
+    this.updateUser('isHuman', true);
+    this.setState({ isHuman: true });
+  }
+
+  handleNameChange(event) {
+    this.setState({ nameFormVal: event.target.value });
+  }
+
+  handleNameSubmit(event) {
+    this.updateUser('fullName', this.state.nameFormVal);
+    this.setState({ fullName: this.state.nameFormVal });
+    event.preventDefault();
+  }
+
+  handleZipChange(event) {
+    this.setState({ zipFormVal: event.target.value });
+  }
+
+  handleZipSubmit(event) {
+    this.updateUser('zip', this.state.zipFormVal);
+    this.setState({ zip: this.state.zipFormVal });
+    event.preventDefault();
+  }
+
+  handleIsResident() {
+    this.updateUser('isResident', true);
+    this.setState({ isResident: true });
+  }
+
+  handleAgreedCode() {
+    this.updateUser('agreedCode', true);
+    this.setState({ agreedCode: true });
+  }
+
+  updateUser(key, value) {
+    console.log(`Updating ${key} to ${value}`);
+    let data = {}
+    data[key] = value;
+    data['auth0_id'] = 'auth0|5aac2cd53092f503a3de2509';
     axios({
       method: 'POST',
       url: `${process.env.REACT_APP_API_URL}/user`,
-      data: { auth0_id: 'auth0|5aac2cd53092f503a3de2509', isHuman: true }
+      data: data
     })
     .then(res => {
       console.log(res)
@@ -29,15 +75,6 @@ export class Qualify extends Component {
     .catch(err => {
       console.error(err);
     });
-    this.setState({ isHuman: true });
-  }
-
-  handleIsResident() {
-    this.setState({ isResident: true });
-  }
-
-  handleAgreedCode() {
-    this.setState({ agreedCode: true });
   }
 
   componentWillMount() {
@@ -48,12 +85,15 @@ export class Qualify extends Component {
       params: { auth0_id: 'auth0|5aac2cd53092f503a3de2509' }
     })
     .then(res => {
-      // write a function that updates all elements of state based on the
-      // response
-      this.setState({user: res.data[0]});
-      if(res.data[0].is_human_at) {
-        this.setState({ isHuman: true });
-      }
+      this.setState({user: res.data[0]}, () => {
+        this.setState({
+          isHuman: this.state.user.is_human_at,
+          isResident: this.state.user.is_resident_at,
+          agreedCode: this.state.user.accepted_code_at,
+          zip: this.state.user.zip,
+          fullName: this.state.user.full_name
+        })
+      });
     })
     .catch(err => {
       console.error(err);
@@ -87,12 +127,14 @@ export class Qualify extends Component {
     );
 
     let nameQ = (
-      <div>
+      <form onSubmit={this.handleNameSubmit}>
       <p className="f4">2. What’s your full name?</p>
-        <div className="center dib">
-          <input className="" type="textarea"/>
-        </div>
-      </div>
+          <input type="text"
+            value={this.state.nameFormVal}
+            onChange={this.handleNameChange}
+          />
+          <input type="submit" value="Submit" />
+      </form>
     );
 
     let residentQ = (
@@ -104,10 +146,14 @@ export class Qualify extends Component {
     )
 
     let zipQ = (
-      <div>
+      <form onSubmit={this.handleZipSubmit}>
         <p className="f4">4. What’s your ZIP code?</p>
-        <input className="" type="textarea"/>
-      </div>
+        <input type="text"
+          value={this.state.ZipFormVal}
+          onChange={this.handleZipChange}
+        />
+        <input type="submit" value="Submit" />
+      </form>
     )
 
     let codeQ = (
@@ -138,11 +184,15 @@ export class Qualify extends Component {
       formMarkup = null;
     }
 
-    return (
-      <div className="w-50 center">
-        <p>First, we need to make sure of a few things...</p>
-        {formMarkup}
-      </div>
-    )
+    if (!this.isQualified()) {
+      return (
+        <div className="w-50 center">
+          <p>First, we need to make sure of a few things...</p>
+          {formMarkup}
+        </div>
+      )
+    }
+    else
+      return null;
   }
 }

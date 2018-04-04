@@ -35,7 +35,7 @@ export default class Auth {
   }
 
   persistUser(authResult) {
-    axios.post(`${process.env.REACT_APP_API_URL}/user`,
+    axios.post(`${process.env.REACT_APP_API_URL}/user/new`,
       { auth0_id: authResult.idTokenPayload.sub })
     .catch(function(error) {
       console.error(error)

@@ -179,6 +179,25 @@ router.route('/voter/:voter_id/letter')
     });
   });
 
+router.route('/user/new')
+  .post(function(req, res) {
+    if (req.body.auth0_id) {
+      db('users').where('auth0_id', req.body.auth0_id)
+        .then(function(result) {
+          if (result.length != 0) {
+            res.status(200).send('User already exists.');
+          }
+          else {
+            db('users').insert({auth0_id: req.body.auth0_id})
+              .then(function(result) {
+              res.status(201).send(result);
+            });
+          }
+        })
+        .catch(err => {console.error(err)});
+    }
+  })
+
 router.route('/user')
   .get(function(req, res) {
     db('users')
@@ -186,37 +205,31 @@ router.route('/user')
       .then(function(result) {
         res.json(result)
       })
-    .catch(err => {
-      console.error(err);
-    })
+    .catch(err => {console.error(err);})
   })
   .post(function(req, res) {
-    if (req.body.auth0_id && !req.body.isHuman) {
-      db('users').where('auth0_id', req.body.auth0_id)
-        .then(function(result) {
-          if (result.length != 0)
-          {
-            res.status(200).send('User already exists.');
-          }
-          else
-          {
-            db('users').insert({auth0_id: req.body.auth0_id})
-              .then(function(result) {
-              res.status(201).send(result);
-            });
-          }
-        });
+    let query = db('users')
+      .where('auth0_id', req.body.auth0_id)
+      .update('updated_at', db.fn.now())
+    if (req.body.isHuman) {
+      query.update('is_human_at', db.fn.now())
+      .catch(err=> {console.error('ERROR: ', err)})
     }
-    else if (req.body.isHuman) {
-      db('users')
-        .where('auth0_id', req.body.auth0_id)
-        .update('is_human_at', db.fn.now())
-        .catch(err=> {
-          console.error('ERROR: ', err);
-        });
+    if (req.body.fullName) {
+      query.update('full_name', req.body.fullName)
+      .catch(err=> {console.error('ERROR: ', err)})
     }
-    else {
-      res.status(500).send('No auth0_id provided.');
+    if (req.body.isResident) {
+      query.update('is_resident_at', db.fn.now())
+      .catch(err=> {console.error('ERROR: ', err)})
+    }
+    if (req.body.zip) {
+      query.update('zip', req.body.zip)
+      .catch(err=> {console.error('ERROR: ', err)})
+    }
+    if (req.body.agreedCode) {
+      query.update('accepted_code_at', db.fn.now())
+      .catch(err=> {console.error('ERROR: ', err)})
     }
   });
 
