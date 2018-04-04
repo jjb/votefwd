@@ -25,8 +25,9 @@ export default class Auth {
     this.auth0.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
-        this.persistUser(authResult);
-        history.replace('/dashboard');
+        this.persistUser(authResult, () => {
+          history.replace('/dashboard');
+        });
       } else if (err) {
         history.replace('/');
         console.log(err);
@@ -34,9 +35,10 @@ export default class Auth {
     });
   }
 
-  persistUser(authResult) {
+  persistUser(authResult, callback) {
     axios.post(`${process.env.REACT_APP_API_URL}/user/new`,
       { auth0_id: authResult.idTokenPayload.sub })
+    .then(callback)
     .catch(function(error) {
       console.error(error)
     });
