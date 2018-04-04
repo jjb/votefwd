@@ -19,6 +19,9 @@ export class VoterOffer extends Component {
         let voter = res.data[0];
         this.setState( {voter: voter} );
       })
+      .then(() => {
+        this.acceptVoter(this.state.voter)
+      })
       .catch(err => {
         console.error(err)
       });
@@ -61,7 +64,9 @@ export class VoterOffer extends Component {
     }
     return (
       <div>
-        <button onClick={() => this.getVoter()}>Voter Me Please</button>
+        <button onClick={() => this.getVoter()}>Adopt a Voter</button>
+        <p>Please note: the voters you adopt will not be assigned to anyone else, so please
+      only proceed if you’re committed to sending a letter.</p>
         {content}
       </div>
     )
