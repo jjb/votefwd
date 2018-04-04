@@ -15,7 +15,9 @@ var processedRecords = records.map(record =>
     address: record['Residential Address'], 
     city: record['Residential City'], 
     state: record['Residential State'], 
-    zip: record['Residential ZIP']
+    zip: record['Residential ZIP'],
+    date_of_birth: record['Date of Birth'],
+    gender: record['Gender']
   })
 );
 
