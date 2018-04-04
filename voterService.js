@@ -2,6 +2,7 @@
 'use strict'
 
 var db = require('./src/db');
+var letterService = require('./letterService');
 
 function getVoterById(voterId, callback) {
   db.select().table('voters')
@@ -27,29 +28,35 @@ function getUsersAdoptedVoters(userId, callback) {
 }
 
 
-function getRandomVoter(callback) {
+function adoptRandomVoter(adopterId, callback) {
   db('voters')
+    // get a random voter
     .where('adopter_user_id', null)
     .orderByRaw('RANDOM()')
     .limit(1)
     .then(function(result) {
-      callback(result);
-    })
-    .catch(err => {
-      console.error(err);
-    });
-}
-
-function adoptVoter(voterId, adopterId, callback) {
-  db('voters')
-    .where('id', voterId)
-    .update({
-      adopter_user_id: adopterId,
-      adopted_at: db.fn.now(),
-      updated_at: db.fn.now()
-    })
-    .then(function(result) {
-      callback(result);
+      // update that voter
+      db('voters')
+        .where('id', result[0].id)
+        .update({
+          adopter_user_id: adopterId,
+          adopted_at: db.fn.now(),
+          updated_at: db.fn.now()
+        })
+        .returning('id')
+        .then(function(voterId) {
+          // generate a letter for the voter
+          letterService.generatePdfForVoter(voterId[0], function(pdfUrl) {
+            // get the voter again (can this be avoided by passing it down?)
+            getVoterById(voterId[0], function(voter) {
+              // send back the voter and the url
+              callback(voter, pdfUrl);
+            })
+          });
+        })
+      .catch(err => {
+        console.error(err);
+      });
     })
     .catch(err => {
       console.error(err);
@@ -91,8 +98,7 @@ function makePledge(code, callback) {
 module.exports = {
   getVoterById,
   getUsersAdoptedVoters,
-  getRandomVoter,
-  adoptVoter,
+  adoptRandomVoter,
   confirmSend,
   makePledge
 }

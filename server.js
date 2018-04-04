@@ -46,18 +46,13 @@ router.route('/voters')
       });
   });
 
-router.route('/voter/random')
-  .get(function(req, res) {
-    voterService.getRandomVoter(
-      function(result) {
-        res.json(result)
-      });
-  });
-
-router.route('/voter/adopt')
-  .put(function(req, res) {
-    voterService.adoptVoter(req.body.id, req.body.adopterId, function(result) {
-      res.json(result);
+router.route('/voter/adopt-random')
+  .post(function(req, res) {
+    voterService.adoptRandomVoter(req.body.adopterId, function(voter, pdfUrl) {
+      let response = {};
+      response.voter = voter;
+      response.pdfUrl = pdfUrl;
+      res.json(response);
     });
   });
 
@@ -75,130 +70,57 @@ router.route('/voter/pledge')
     });
   });
 
-function timeStamp() {
-  var newDate = new Date();
-  var DateString;
-  DateString = newDate.getFullYear()
-             + ('0' + (newDate.getMonth()+1)).slice(-2)
-             + ('0' + newDate.getDate()).slice(-2);
-  return DateString;
-}
-
-function getSignedUrlForGCPFile(gcpFileObject) {
-  /*
-  Takes a gcp file object and applies a static config to create a signed url.
-  Inputs:
-    gcpFileObject - an instance of  https://cloud.google.com/nodejs/docs/reference/storage/1.6.x/File
-  Returns:
-    A signed url https://cloud.google.com/nodejs/docs/reference/storage/1.6.x/File#getSignedUrl
-    or an error
-  */
-
-  // Set a date two days in a future
-  var expDate = new Date();
-  expDate.setDate(expDate.getDate() + 2);
-
-  var config = {
-      action: 'read',
-      expires: expDate,
-  }
-
-  gcpFileObject.getSignedUrl(config, function(err, url) {
-    if (err) {
-      console.error(err);
-      return;
-    };
-
-    let pleaLetterUrl = 'http://storage.googleapis.com/' + url;
-    return pleaLetterUrl;
-  });
-}
-
-router.route('/voter/:voter_id/letter')
-  .get(function(req, res) {
-    var timestamp = timeStamp();
-    var voterId = req.params.voter_id;
-    var hashId = hashids.encode(voterId);
-    var uuid = uuidv4();
-    var pledgeUrl = 'http://localhost:3000/pledge';
-    var template = fs.readFileSync('./letter.html', 'utf8');
-    var uncompiledTemplate = Handlebars.compile(template);
-    var context = {
-      voterId: voterId,
-      timestamp: timestamp,
-      hashId: hashId,
-      pledgeUrl: pledgeUrl
-      };
-    var html = uncompiledTemplate(context);
-    var options = { format: 'Letter' };
-    const tmpdir = os.tmpdir();
-    const remotefileName = timestamp + '-' + uuid + '-letter.pdf'
-    const downloadFileName = timestamp + '-VoteForward-letter.pdf' //TODO: add voter name
-    const filePath = tmpdir + '/' + remotefileName;
-    const bucketName = 'voteforward';
-    const storage = new Storage({
-      keyFilename: './googleappcreds.json'
-    })
-    const uploadOptions =
-                {
-                    gzip: true,
-                    contentType: 'application/pdf',
-                    contentDisposition: 'attachment',
-                    metadata: {
-                        contentType: 'application/pdf',
-                        contentDisposition: `attachment; filename='${downloadFileName}`,
-                    },
-                    headers: {
-                        contentType: 'application/pdf',
-                        contentDisposition: 'attachment',
-                    }
-                };
-    pdf.create(html).toFile(filePath, function(err, response){
-      if(err) {
-        console.error('ERROR:', err)
-      }
-      else {
-        storage
-          .bucket(bucketName)
-          .upload(response.filename, uploadOptions)
-          .then(() => {
-            let pleaLetterUrl = 'http://storage.googleapis.com/' + bucketName + '/' + remotefileName;
-            res.send(pleaLetterUrl);
-            db('voters')
-              .where('id', voterId)
-              .update('plea_letter_url', pleaLetterUrl)
-              .update('hashid', hashId)
-              .catch(err=> {
-                console.error('ERROR: ', err);
-              });
-          })
-          .catch(err => {
-            console.error('ERROR: ', err);
-          });
-      }
-    });
-  });
-
-router.route('/user')
+router.route('/user/new')
   .post(function(req, res) {
     if (req.body.auth0_id) {
       db('users').where('auth0_id', req.body.auth0_id)
         .then(function(result) {
-          if (result.length != 0)
-          {
+          if (result.length != 0) {
             res.status(200).send('User already exists.');
           }
-          else
-          {
+          else {
             db('users').insert({auth0_id: req.body.auth0_id})
               .then(function(result) {
               res.status(201).send(result);
             });
           }
-        });
+        })
+        .catch(err => {console.error(err)});
     }
-    else {
-      res.status(500).send('No auth0_id provided.');
+  })
+
+router.route('/user')
+  .get(function(req, res) {
+    db('users')
+      .where('auth0_id', req.query.auth0_id)
+      .then(function(result) {
+        res.json(result)
+      })
+    .catch(err => {console.error(err);})
+  })
+  .post(function(req, res) {
+    let query = db('users')
+      .where('auth0_id', req.body.auth0_id)
+      .update('updated_at', db.fn.now())
+    if (req.body.isHuman) {
+      query.update('is_human_at', db.fn.now())
+      .catch(err=> {console.error('ERROR: ', err)})
+    }
+    if (req.body.fullName) {
+      query.update('full_name', req.body.fullName)
+      .catch(err=> {console.error('ERROR: ', err)})
+    }
+    if (req.body.isResident) {
+      query.update('is_resident_at', db.fn.now())
+      .catch(err=> {console.error('ERROR: ', err)})
+    }
+    if (req.body.zip) {
+      query.update('zip', req.body.zip)
+      .catch(err=> {console.error('ERROR: ', err)})
+    }
+    if (req.body.agreedCode) {
+      query.update('accepted_code_at', db.fn.now())
+      .catch(err=> {console.error('ERROR: ', err)})
     }
   });
 
