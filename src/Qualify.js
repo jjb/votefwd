@@ -60,10 +60,9 @@ export class Qualify extends Component {
   }
 
   updateUser(key, value) {
-    console.log(`Updating ${key} to ${value}`);
     let data = {}
+    data['auth0_id'] = localStorage.getItem('user_id');
     data[key] = value;
-    data['auth0_id'] = 'auth0|5aac2cd53092f503a3de2509';
     axios({
       method: 'POST',
       url: `${process.env.REACT_APP_API_URL}/user`,
@@ -78,11 +77,11 @@ export class Qualify extends Component {
   }
 
   componentWillMount() {
+    let userId = localStorage.getItem('user_id');
     axios({
       method: 'GET',
       url: `${process.env.REACT_APP_API_URL}/user`,
-      // now get this from localStorage
-      params: { auth0_id: 'auth0|5aac2cd53092f503a3de2509' }
+      params: { auth0_id: userId }
     })
     .then(res => {
       this.setState({user: res.data[0]}, () => {
