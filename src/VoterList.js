@@ -1,10 +1,46 @@
 // src/VoterList.js
 
 import React, { Component } from 'react';
+import axios from 'axios';
 import Avatar from 'react-avatar';
 import Moment from 'react-moment';
 
 class VoterRecord extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = { signedUrl: ''}
+    this.getSignedUrl = this.getSignedUrl.bind(this);
+  }
+
+  getSignedUrl(rawUrl) {
+    axios({
+      method: 'GET',
+      url: `${process.env.REACT_APP_API_URL}/voter/signed-letter-url`,
+      params: { url: rawUrl }
+    })
+    .then(res => {
+      this.setState({ signedUrl: res.data });
+    })
+    .catch(err => {
+      console.error(err);
+    });
+  }
+
+  componentWillMount() {
+    // This is a kludge, a lame way of checking whether the url is signed
+    // yet. On initial adoption, it comes back already signed, but on
+    // subsequent page loads, it does not currently, so, check.
+    // TODO: change `getAdoptedVotersForUser` in voter service
+    // to always send back signed Urls.
+    if (this.props.voter.plea_letter_url.length > 150) {
+      this.setState({ signedUrl: this.props.voter.plea_letter_url })
+    }
+    else {
+      this.getSignedUrl(this.props.voter.plea_letter_url);
+    }
+  }
+
   render() {
     let voter = this.props.voter;
     let filename = "VoteForward_PleaLetter_" + voter.last_name + '.pdf';
@@ -21,7 +57,7 @@ class VoterRecord extends Component {
         </div>
         <a className="link"
           download={filename}
-          href={voter.plea_letter_url}>
+          href={this.state.signedUrl}>
             Download letter
         </a>
       { voter.confirmed_sent_at ? (

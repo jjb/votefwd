@@ -9,6 +9,14 @@ var Handlebars = require('handlebars');
 var uuidv4 = require('uuid/v4');
 var fs = require('fs');
 var os = require('os');
+var URL = require('url');
+
+// Google cloud storage setup needed for getting and storing files
+const storage = new Storage({
+  keyFilename: './googleappcreds.json'
+})
+const bucketName = 'voteforward';
+const voterBucket = storage.bucket(bucketName);
 
 function timeStamp() {
   var newDate = new Date();
@@ -19,13 +27,22 @@ function timeStamp() {
   return DateString;
 }
 
-function getSignedUrlForGCPFile(gcpFileObject) {
+function getSignedUrl(url, callback) {
+  let path = URL.parse(url).path
+  let fileName = path.substr(path.lastIndexOf('/') + 1);
+  let GCPFile = voterBucket.file(fileName);
+  getSignedUrlForGCPFile(GCPFile, function(signedUrl) {
+    callback(signedUrl)
+  })
+}
+
+function getSignedUrlForGCPFile(gcpFileObject, callback) {
   /*
   Takes a gcp file object and applies a static config to create a signed url.
   Inputs:
     gcpFileObject - an instance of  https://cloud.google.com/nodejs/docs/reference/storage/1.6.x/File
   Returns:
-    A signed url https://cloud.google.com/nodejs/docs/reference/storage/1.6.x/File#getSignedUrl
+    A callback with a signed url https://cloud.google.com/nodejs/docs/reference/storage/1.6.x/File#getSignedUrl
     or an error
   */
 
@@ -44,8 +61,7 @@ function getSignedUrlForGCPFile(gcpFileObject) {
       return;
     };
 
-    let pleaLetterUrl = 'http://storage.googleapis.com/' + url;
-    return pleaLetterUrl;
+    callback(url);
   });
 }
 
@@ -70,12 +86,9 @@ function generatePdfForVoter(voterId, callback) {
   var options = { format: 'Letter' };
   const tmpdir = os.tmpdir();
   const remotefileName = timestamp + '-' + uuid + '-letter.pdf'
-  const downloadFileName = timestamp + '-VoteForward-letter.pdf' //TODO: add voter name to file name
+  //TODO: add voter name to downloadable file name
+  const downloadFileName = timestamp + '-VoteForward-letter.pdf' 
   const filePath = tmpdir + '/' + remotefileName;
-  const bucketName = 'voteforward';
-  const storage = new Storage({
-    keyFilename: './googleappcreds.json'
-  })
   const uploadOptions =
               {
                   gzip: true,
@@ -98,6 +111,12 @@ function generatePdfForVoter(voterId, callback) {
       storage
         .bucket(bucketName)
         .upload(response.filename, uploadOptions)
+        .then((response) => {
+          var gcpFile = response[0];
+          getSignedUrlForGCPFile(gcpFile, function(signedUrl) {
+            callback(signedUrl);
+          });
+        })
         .then(() => {
           let pleaLetterUrl = 'http://storage.googleapis.com/' + bucketName + '/' + remotefileName;
           db('voters')
@@ -107,7 +126,6 @@ function generatePdfForVoter(voterId, callback) {
             .catch(err=> {
               console.error('ERROR: ', err);
             });
-          callback(pleaLetterUrl);
         })
         .catch(err => {
           console.error('ERROR: ', err);
@@ -117,5 +135,6 @@ function generatePdfForVoter(voterId, callback) {
 }
 
 module.exports = {
-  generatePdfForVoter
+  generatePdfForVoter,
+  getSignedUrl
 }
