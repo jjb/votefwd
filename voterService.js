@@ -28,36 +28,29 @@ function getUsersAdoptedVoters(userId, callback) {
     });
 }
 
-
 function adoptRandomVoter(adopterId, callback) {
   db('voters')
-    // get a random voter
     .where('adopter_user_id', null)
     .orderByRaw('RANDOM()')
     .limit(1)
     .then(function(result) {
-      // update that voter
+      let voter = result[0];
       db('voters')
-        .where('id', result[0].id)
+        .where('id', voter.id)
         .update({
           adopter_user_id: adopterId,
           adopted_at: db.fn.now(),
           updated_at: db.fn.now()
         })
-        .returning('id')
-        .then(function(voterId) {
-          // generate a letter for the voter
-          letterService.generatePdfForVoter(voterId[0], function(signedUrl) {
-            // get the voter again (can this be avoided by passing it down?)
-            getVoterById(voterId[0], function(voter) {
-              // send back the voter and the signed url
+        .then(function() {
+          console.log('Voter id: ' + voter.id);
+          letterService.generatePdfForVoter(voter, function(signedUrl) {
               callback(voter, signedUrl);
-            })
-          });
+            });
+          })
+        .catch(err => {
+          console.error(err);
         })
-      .catch(err => {
-        console.error(err);
-      });
     })
     .catch(err => {
       console.error(err);
