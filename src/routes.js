@@ -25,7 +25,7 @@ export const makeMainRoutes = () => {
             return <Callback {...props} /> 
           }}/>
           <Route exact path="/dashboard" render={(props) => <Dashboard auth={auth} {...props} />} />
-          <Route exact path="/pledge" render={(props) => <Pledge {...props} />} />
+          <Route exact path="/pledge" render={(props) => <Pledge auth={auth} {...props} />} />
         </div>
       </Router>
   );

@@ -84,7 +84,7 @@ class Pledge extends Component {
   render() {
     return (
       <div>
-        <Header />
+        <Header auth={this.props.auth}/>
         { !this.state.pledgeStatus ?
           (
             <PledgeForm handlePledge={this.handlePledge.bind(this)}/>
