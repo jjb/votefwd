@@ -104,7 +104,7 @@ router.route('/user')
       .then(function(result) {
         res.json(result)
       })
-    .catch(err => {console.error(err);})
+      .catch(err => {console.error(err);})
   })
   .post(function(req, res) {
     let query = db('users')

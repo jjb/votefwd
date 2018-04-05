@@ -14,7 +14,39 @@ class Dashboard extends Component {
 
     this.handleAdoptedVoter = this.handleAdoptedVoter.bind(this);
     this.handleConfirmSend = this.handleConfirmSend.bind(this);
-    this.state = { voters: [] }
+    this.state = { voters: [], user: {}, isQualified: true }
+  }
+
+  getUser() {
+    let user_id = localStorage.getItem('user_id');
+    axios.get(`${process.env.REACT_APP_API_URL}/user`,
+      {
+        params: { auth0_id: user_id }
+      })
+      .then(res => {
+        this.setState({ user: res.data[0] }, () => {
+          this.isUserQualified();
+        })
+      })
+      .catch(err => {
+        console.error(err)
+      });
+  }
+
+  isUserQualified() {
+    if (
+        this.state.user.is_human_at &&
+        this.state.user.accepted_code_at &&
+        this.state.user.is_resident_at &&
+        this.state.user.zip &&
+        this.state.user.full_name
+      )
+    {
+      this.setState({ isQualified: true })
+    }
+    else {
+      this.setState({ isQualified: false })
+    }
   }
 
   getAdoptedVoters() {
@@ -60,7 +92,8 @@ class Dashboard extends Component {
   }
 
   componentWillMount(){
-    this.getAdoptedVoters()
+    this.getUser();
+    this.getAdoptedVoters();
   }
 
   render() {
@@ -69,7 +102,7 @@ class Dashboard extends Component {
         <Header />
         { this.props.auth.isAuthenticated() ? (
           <div>
-            <Qualify />
+            <Qualify isQualified={this.state.isQualified} user={this.state.user} />
             <Login auth={this.props.auth} />
             <AdoptVoter handleAdoptedVoter={this.handleAdoptedVoter}/>
             <VoterList voters={this.state.voters} confirmSend={this.handleConfirmSend}/>
