@@ -10,7 +10,7 @@
       #salutation {margin-bottom: 3em;}
       #prompt {margin-bottom: 4em;}
       #closing {margin-bottom: 4em;}
-      #footer {font-size: 0.5em;}
+      #footer {font-size: 0.4em;}
     </style>
     <title>Voter Letter</title>
   </head>
@@ -36,6 +36,6 @@
     <p>I’d like to know if you received this and plan to vote, so please visit {{pledgeUrl}} and enter code {{hashId}} to commit to being a voter. And then, on November 6, cast your ballot and make your voice heard!</p>
     <p id="closing">Thank you,</p>
     <p>This letter was sent via Vote Forward, an independent organization that works to increase voter turnout. Visit http://votefwd.org to learn more.</p>
-    <p id="footer">{{timestamp}} {{hashId}}</p>
+    <p id="footer">Prepared for {{voterName}} at {{voterAddress}} on {{datestamp}}.</p>
   </body>
 </html>

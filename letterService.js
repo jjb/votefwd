@@ -18,11 +18,11 @@ const storage = new Storage({
 const bucketName = 'voteforward';
 const voterBucket = storage.bucket(bucketName);
 
-function timeStamp() {
+function dateStamp() {
   var newDate = new Date();
   var DateString;
-  DateString = newDate.getFullYear()
-             + ('0' + (newDate.getMonth()+1)).slice(-2)
+  DateString = newDate.getFullYear() + '-'
+             + ('0' + (newDate.getMonth()+1)).slice(-2) + '-'
              + ('0' + newDate.getDate()).slice(-2);
   return DateString;
 }
@@ -68,26 +68,30 @@ function getSignedUrlForGCPFile(gcpFileObject, callback) {
 var hashids = new Hashids(process.env.REACT_APP_HASHID_SALT, 6,
   process.env.REACT_APP_HASHID_DICTIONARY);
 
-function generatePdfForVoter(voterId, callback) {
-  var timestamp = timeStamp();
+function generatePdfForVoter(voter, callback) {
+  var voterId = voter.id;
+  var datestamp = dateStamp();
   var hashId = hashids.encode(voterId);
   var uuid = uuidv4();
   // TODO: make this configurable by environment
   var pledgeUrl = 'http://localhost:3000/pledge';
   var template = fs.readFileSync('./letter.html', 'utf8');
   var uncompiledTemplate = Handlebars.compile(template);
+  var fullName = voter.first_name + ' ' + voter.last_name;
+  var fullAddress = voter.address + ', ' + voter.city + ', ' + voter.state + ' ' + voter.zip;
   var context = {
     voterId: voterId,
-    timestamp: timestamp,
+    voterName: fullName,
+    voterAddress: fullAddress,
+    datestamp: datestamp,
     hashId: hashId,
     pledgeUrl: pledgeUrl
     };
   var html = uncompiledTemplate(context);
   var options = { format: 'Letter' };
   const tmpdir = os.tmpdir();
-  const remotefileName = timestamp + '-' + uuid + '-letter.pdf'
-  //TODO: add voter name to downloadable file name
-  const downloadFileName = timestamp + '-VoteForward-letter.pdf' 
+  const remotefileName = datestamp + '-' + uuid + '-letter.pdf'
+  const downloadFileName = datestamp + '-' + voter.last_name + '-VoteForward-letter.pdf';
   const filePath = tmpdir + '/' + remotefileName;
   const uploadOptions =
               {

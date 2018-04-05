@@ -33,7 +33,10 @@ class VoterRecord extends Component {
     // subsequent page loads, it does not currently, so, check.
     // TODO: change `getAdoptedVotersForUser` in voter service
     // to always send back signed Urls.
-    if (this.props.voter.plea_letter_url.length > 150) {
+    if ( !this.props.voter.plea_letter_url ) {
+      return;
+    }
+    else if (this.props.voter.plea_letter_url.length > 150) {
       this.setState({ signedUrl: this.props.voter.plea_letter_url })
     }
     else {

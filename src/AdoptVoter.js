@@ -21,7 +21,7 @@ export class AdoptVoter extends Component {
       })
       .then(res => {
         let encodedUri = encodeURI(res.data.pdfUrl);
-        this.props.handleAdoptedVoter(res.data.voter[0], encodedUri);
+        this.props.handleAdoptedVoter(res.data.voter, encodedUri);
         this.setState({adopting: false});
       })
       .catch(err => {
