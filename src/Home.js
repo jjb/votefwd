@@ -11,7 +11,7 @@ class Welcome extends Component {
       <div className="pa2 center w-50 tj">
       <h2>Let’s Take Back Our House</h2>
         <p>Democrats must retake the House of Representatives in November, 2018. We need a check on the chaos and corruption of the Trump administration.</p>
-        <p>We can do this. SwingLeft has identified 70 Swing districts. We need 24.</p>
+        <p>We can do this. SwingLeft has identified 70 swing districts. We only need to win 24 of them.</p>
         <p>But we’re going to need people who wouldn’t normally vote to turn out.</p>
         <p>Researchers have shown that social pressure from fellow citizens can dramatically boost turnout.</p>
         <p>In 2017, a Vote Forward pilot sent 1000 letters in a randomized trial, and achieved an 8% increase in turnout in the Alabama Special election.</p>
@@ -20,7 +20,14 @@ class Welcome extends Component {
         <p>If you’re an introvert who doesn’t like making phone calls or knocking on doors, you can send letters in the mail.</p>
         <p>We’ll help you ‘adopt’ some unlikely Democratic voters in swing districts and send them letters asking them to vote.</p>
         <p>Will you send 10 letters this week? Yes? Good!</p>
-        <Login auth={this.props.auth} buttonText="Sign Up To Send Letters" />
+        { this.props.auth.isAuthenticated() ?
+          (
+            <a className="button link dib mt4" href="/dashboard">You’re already logged in. Click here to send letters!</a>
+          ) :
+          (
+            <Login auth={this.props.auth} buttonText="Sign Up Or Log In To Send Letters" />
+          )
+        }
       </div>
     );
   }
@@ -30,24 +37,9 @@ class Home extends Component {
   render() {
     return (
       <div className="sans-serif tc">
-        <Header />
-        { !this.props.auth.isAuthenticated() ? (
-          <div>
-            <Welcome auth={this.props.auth} />
-          </div>
-        ) : (
-          <div>
-            <Login auth={this.props.auth} />
-            <a href="/dashboard">Go to dashboard and send letters.</a>
-          </div>
-        ) }
-        <div className="tc mv6 w-50 center">
-          <a className="link" href="/pledge">Did you receive a letter? Click here to make your voter pledge.</a>
-          <p>Do you have an account already?</p>
-          <div className="w-50 center">
-            <Login auth={this.props.auth} />
-          </div>
-        </div>
+        <Header auth={this.props.auth} />
+        <Welcome auth={this.props.auth} />
+        <a className="link tc mv6 w-50 center" href="/pledge">Received a letter? Click here to pledge.</a>
       </div>
     );
   }
