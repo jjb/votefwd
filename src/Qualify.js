@@ -8,7 +8,6 @@ export class Qualify extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: {},
       isHuman: false,
       isResident: false,
       agreedCode: false,
@@ -76,44 +75,21 @@ export class Qualify extends Component {
     });
   }
 
-  componentWillMount() {
-    let userId = localStorage.getItem('user_id');
-    axios({
-      method: 'GET',
-      url: `${process.env.REACT_APP_API_URL}/user`,
-      params: { auth0_id: userId }
-    })
-    .then(res => {
-      this.setState({user: res.data[0]}, () => {
-        this.setState({
-          isHuman: this.state.user.is_human_at,
-          isResident: this.state.user.is_resident_at,
-          agreedCode: this.state.user.accepted_code_at,
-          zip: this.state.user.zip,
-          fullName: this.state.user.full_name
-        })
-      });
-    })
-    .catch(err => {
-      console.error(err);
-    });
-  }
-
-  isQualified() {
-    if ( this.state.isHuman &&
-      this.state.agreedCode &&
-      this.state.isResident &&
-      this.state.zip &&
-      this.state.fullName
-    ) {
-      return true
-    }
-    else {
-      return false
+  componentWillReceiveProps(nextProps) {
+    let user = nextProps.user;
+    if (user) {
+      this.setState({
+        isHuman: user.is_human_at,
+        isResident: user.is_resident_at,
+        agreedCode: user.accepted_code_at,
+        zip: user.zip,
+        fullName: user.full_name
+      })
     }
   }
 
   render() {
+
     let formMarkup;
 
     let captchaQ = (
@@ -142,7 +118,7 @@ export class Qualify extends Component {
         <label className="mr2">Yes.</label>
         <input className="ph2 " onClick={this.handleIsResident.bind(this)} type="checkbox" />
       </div>
-    )
+    );
 
     let zipQ = (
       <form onSubmit={this.handleZipSubmit}>
@@ -153,7 +129,7 @@ export class Qualify extends Component {
         />
         <input type="submit" value="Submit" />
       </form>
-    )
+    );
 
     let codeQ = (
       <div>
@@ -162,7 +138,7 @@ export class Qualify extends Component {
         <label className="mr2">Yes.</label>
         <input className="ph2" onClick={this.handleAgreedCode.bind(this)} type="checkbox" />
       </div>
-    )
+    );
 
     if (!this.state.isHuman) {
       formMarkup = captchaQ;
@@ -183,7 +159,7 @@ export class Qualify extends Component {
       formMarkup = null;
     }
 
-    if (!this.isQualified()) {
+    if (!this.props.isQualified && formMarkup) {
       return (
         <div className="w-50 center">
           <p>First, we need to make sure of a few things...</p>

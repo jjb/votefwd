@@ -43,7 +43,6 @@ function adoptRandomVoter(adopterId, callback) {
           updated_at: db.fn.now()
         })
         .then(function() {
-          console.log('Voter id: ' + voter.id);
           letterService.generatePdfForVoter(voter, function(signedUrl) {
               callback(voter, signedUrl);
             });
