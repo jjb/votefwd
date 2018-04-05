@@ -20,6 +20,7 @@ function getUsersAdoptedVoters(userId, callback) {
   db('voters')
     .where('adopter_user_id', userId)
     .then(function(result) {
+      //TODO: process the voter array to return signed PDF urls
       callback(result);
     })
     .catch(err => {
@@ -46,11 +47,11 @@ function adoptRandomVoter(adopterId, callback) {
         .returning('id')
         .then(function(voterId) {
           // generate a letter for the voter
-          letterService.generatePdfForVoter(voterId[0], function(pdfUrl) {
+          letterService.generatePdfForVoter(voterId[0], function(signedUrl) {
             // get the voter again (can this be avoided by passing it down?)
             getVoterById(voterId[0], function(voter) {
-              // send back the voter and the url
-              callback(voter, pdfUrl);
+              // send back the voter and the signed url
+              callback(voter, signedUrl);
             })
           });
         })

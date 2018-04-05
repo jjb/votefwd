@@ -13,6 +13,7 @@ var uuidv4 = require('uuid/v4');
 
 var rateLimits = require('./ratelimits')
 var voterService = require('./voterService');
+var letterService = require('./letterService');
 var db = require('./src/db');
 var fs = require('fs');
 var os = require('os');
@@ -66,6 +67,13 @@ router.route('/voter/confirm-send')
 router.route('/voter/pledge')
   .post(rateLimits.makePledgeRateLimit, function(req, res) {
     voterService.makePledge(req.body.code, function(result) {
+      res.json(result);
+    });
+  });
+
+router.route('/voter/signed-letter-url')
+  .get(function(req, res) {
+    letterService.getSignedUrl(req.query.url, function(result) {
       res.json(result);
     });
   });
