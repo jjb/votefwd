@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
+import history from './history';
 import { AdoptVoter } from './AdoptVoter';
 import { Header } from './Header';
 import { Login } from './Login';
@@ -19,18 +20,24 @@ class Dashboard extends Component {
 
   getUser() {
     let user_id = localStorage.getItem('user_id');
-    axios.get(`${process.env.REACT_APP_API_URL}/user`,
-      {
-        params: { auth0_id: user_id }
-      })
-      .then(res => {
-        this.setState({ user: res.data[0] }, () => {
-          this.isUserQualified();
+    if (user_id) {
+      axios.get(`${process.env.REACT_APP_API_URL}/user`,
+        {
+          params: { auth0_id: user_id }
         })
-      })
-      .catch(err => {
-        console.error(err)
-      });
+        .then(res => {
+          this.setState({ user: res.data[0] }, () => {
+            this.isUserQualified();
+          })
+        })
+        .catch(err => {
+          console.error(err)
+        });
+      return true;
+    }
+    else {
+      return false;
+    }
   }
 
   isUserQualified() {
@@ -92,7 +99,9 @@ class Dashboard extends Component {
   }
 
   componentWillMount(){
-    this.getUser();
+    if (!this.getUser()) {
+      history.replace('/');
+    }
     this.getAdoptedVoters();
   }
 
