@@ -77,17 +77,28 @@ class VoterRecord extends Component {
 
 export class VoterList extends Component {
   render() {
+    let alreadySent = this.props.voters.filter(voter => voter.confirmed_sent_at);
+    let toSend = this.props.voters.filter(voter => !voter.confirmed_sent_at);
     return (
       <div>
-        <h2 className="title tc">Your Voters</h2>
-        <ul className="list pl0 mt0 measure center">
-          {this.props.voters.map(voter => 
-            <VoterRecord
-              key={voter.id}
-              voter={voter}
-              confirmSend={this.props.confirmSend}
-            />)}
-        </ul>
+        <h2 className="title tc">Letters to Send</h2>
+          <ul className="list pl0 mt0 measure center">
+            {toSend.map(voter =>
+              <VoterRecord
+                key={voter.id}
+                voter={voter}
+                confirmSend={this.props.confirmSend}
+              />)}
+          </ul>
+        <h2 className="title tc">Letters Already Sent</h2>
+          <ul className="list pl0 mt0 measure center">
+            {alreadySent.map(voter =>
+              <VoterRecord
+                key={voter.id}
+                voter={voter}
+                confirmSend={this.props.confirmSend}
+              />)}
+          </ul>
       </div>
     );
   }
