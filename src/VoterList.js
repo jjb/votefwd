@@ -51,7 +51,8 @@ class VoterRecord extends Component {
       <li className="flex items-center lh-copy pa3 ph0-l bb b--black-10" key={voter.id}>
         <Avatar size={50} round={true} name={voter.first_name + ' ' + voter.last_name}/>
         <div className="pl4 flex-auto">
-          <span className="tl f6 db black-70">{voter.first_name} {voter.last_name}
+          <span className="tl f6 db black-70">
+            {voter.first_name} {voter.middle_name} {voter.last_name} {voter.suffix}
             <br/>
             {voter.address}
             <br/>
