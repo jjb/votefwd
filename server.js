@@ -132,6 +132,18 @@ router.route('/user')
     }
   });
 
+
+// TODO: make sure to grant access to this route only to a (for now probably
+// just hard-coded) list of administrators
+router.route('/s/users')
+  .get(function(req, res) {
+    db('users')
+      .then(function(result) {
+        res.json(result)
+      })
+      .catch(err => {console.error(err);})
+  });
+
 //Use router configuration at /api
 app.use('/api', router);
 
