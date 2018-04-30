@@ -48,12 +48,9 @@ class UserListItem extends Component {
     return (
       <li className="flex items-center lh-copy pa3 ph0-l bb b--black-10" key={user.id}>
         <div className="pl4 flex-auto">
-          <span className="tl f6 db black-70">
-            {user.full_name}
-          </span>
-          <span className="tr f6 db black-70">
-            {this.state.voters.length}
-          </span>
+          <p>
+            {user.full_name}: {this.state.voters.length}
+          </p>
         </div>
       </li>
     )}
@@ -69,7 +66,7 @@ class Admin extends Component {
 
   getUsers() {
     axios({
-      method: 'GET', 
+      method: 'GET',
       url: `${process.env.REACT_APP_API_URL}/s/users`,
     })
     .then(res => {
