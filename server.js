@@ -134,7 +134,7 @@ router.route('/user')
 
 
 // TODO: make sure to grant access to this route only to a (for now probably
-// just hard-coded) list of administrators
+// just hard-coded) list of administrators (once we have a way to protect them)
 router.route('/s/users')
   .get(function(req, res) {
     db('users')
