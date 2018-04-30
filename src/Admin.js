@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
+import history from './history';
 import { Header } from './Header';
 
 class UserList extends Component {
@@ -56,15 +57,37 @@ class UserListItem extends Component {
     )}
 }
 
+
 class Admin extends Component {
   constructor(props) {
     super(props);
 
     this.state = { users: [] };
-    this.getUsers = this.getUsers.bind(this);
+    this.getAllUsers = this.getAllUsers.bind(this);
   }
 
-  getUsers() {
+  isAdmin(callback) {
+    let user_id = localStorage.getItem('user_id');
+    if (user_id) {
+      axios({
+        method: 'GET',
+        url: `${process.env.REACT_APP_API_URL}/user`,
+        params: { auth0_id: user_id }
+      })
+      .then(res => {
+        if (res.data[0].is_admin) {
+          callback(true);
+        }
+        else { callback(false) };
+      })
+      .catch(err => {
+        console.error(err);
+      });
+    }
+    else { callback(false) };
+  }
+
+  getAllUsers() {
     axios({
       method: 'GET',
       url: `${process.env.REACT_APP_API_URL}/s/users`,
@@ -78,7 +101,15 @@ class Admin extends Component {
   }
 
   componentWillMount() {
-    this.getUsers();
+    this.isAdmin(
+      isAdmin => {
+      if (!isAdmin) {
+        history.replace('/');
+      }
+      else {
+        this.getAllUsers();
+      }
+    });
   }
 
   render() {
