@@ -18,7 +18,7 @@ class Dashboard extends Component {
     this.state = { voters: [], user: {}, isQualified: true }
   }
 
-  getUser() {
+  getCurrentUser() {
     let user_id = localStorage.getItem('user_id');
     if (user_id) {
       axios.get(`${process.env.REACT_APP_API_URL}/user`,
@@ -99,7 +99,7 @@ class Dashboard extends Component {
   }
 
   componentWillMount(){
-    if (!this.getUser()) {
+    if (!this.getCurrentUser()) {
       history.replace('/');
     }
     this.getAdoptedVoters();
