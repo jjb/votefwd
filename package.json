@@ -2,6 +2,10 @@
   "name": "votefwd",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "^8.9.3" ,
+    "npm": "^5.8.0"
+  },
   "dependencies": {
     "@google-cloud/storage": "^1.6.0",
     "ajv": "^6.3.0",

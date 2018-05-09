@@ -30,7 +30,7 @@ var corsOption = {
 var hashids = new Hashids(process.env.REACT_APP_HASHID_SALT, 6,
   process.env.REACT_APP_HASHID_DICTIONARY);
 
-//app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static(path.join(__dirname, 'build')));
 app.use(cors(corsOption));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
