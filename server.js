@@ -31,6 +31,7 @@ var hashids = new Hashids(process.env.REACT_APP_HASHID_SALT, 6,
   process.env.REACT_APP_HASHID_DICTIONARY);
 
 app.use(express.static(path.join(__dirname, 'build')));
+
 app.use(cors(corsOption));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -102,7 +103,7 @@ router.route('/user')
     db('users')
       .where('auth0_id', req.query.auth0_id)
       .then(function(result) {
-        res.json(result)
+        res.json(result);
       })
       .catch(err => {console.error(err);})
   })
@@ -146,6 +147,10 @@ router.route('/s/users')
 
 //Use router configuration at /api
 app.use('/api', router);
+
+app.get('*', function (request, response){
+  response.sendFile(path.resolve(__dirname, 'build', 'index.html'))
+})
 
 //start server and listen for requests
 app.listen(port, function() {
