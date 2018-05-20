@@ -11,7 +11,7 @@ var Handlebars = require('handlebars');
 var Hashids = require('hashids');
 var uuidv4 = require('uuid/v4');
 
-var rateLimits = require('./ratelimits')
+var rateLimits = require('./rateLimits')
 var voterService = require('./voterService');
 var letterService = require('./letterService');
 var db = require('./src/db');
