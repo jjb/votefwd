@@ -76,7 +76,6 @@ function generatePdfForVoter(voter, callback) {
   var pledgeUrl = `${process.env.REACT_APP_URL}/pledge`;
   var template = fs.readFileSync('./letter.html', 'utf8');
   var uncompiledTemplate = Handlebars.compile(template);
-  console.log(pledgeUrl);
   var fullName = 
     voter.first_name + 
     ' ' +
