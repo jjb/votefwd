@@ -21,7 +21,7 @@ You'll need node, npm, and postgresql:
 Follow the instructions in your terminal after installing postgres to get and keep it running (`launchctl` is recommended).
 
 If you already have postgres installed via Homebrew but not configured, or not
-running via `launchctl`, you can see the post-install directions again with: 
+running via `launchctl`, you can see the post-install directions again with:
 
   brew info postgresql
 
@@ -57,19 +57,26 @@ variables:
 	REACT_APP_DATABASE_DIALECT=postgres
 	REACT_APP_AUTH0_CLIENTID=T0oLi22JFRtHPsx0595AAf8p573bxD4d
 
+  REACT_APP_SQL_USER=<YOURUSERNAME>
+  REACT_APP_SQL_PASSWORD=<YOURPASSWORD (optional)>
+  REACT_APP_SQL_DATABASE=votefwd
+  REACT_APP_DATABASE_DIALECT=postgres
+
 #### Optional Environment variables
+
+The node package that uses these has sensible defaults, but you can override
+them if you need to. (We do so in deployed environments).
 
   REACT_APP_HASHID_SALT=<Any string, or blank>
   REACT_APP_HASHID_DICTIONARY=<Char set from which to make hashids, or blank>
 
 #### Google Cloud Platform Storage
 
-We're currently using GCP to store PDFs of generated plea letters. If you need
-to generate PDFs, email `sjforman@gmail.com` to request access to the project on GCP. Then visit the [GCP console](https://console.cloud.google.com/apis/credentials?project=voteforward-198801&authuser=1) and create a JSON `service account key`. Move this file to the root directory of your repo and rename it `googleappcreds.json`.
+We use GCP to store PDFs of generated plea letters. Email `sjforman@gmail.com` to request access to the project on GCP. Then visit the [GCP console](https://console.cloud.google.com/apis/credentials?project=voteforward-198801) and create a JSON `service account key`. Move this file to the root directory of your repo and rename it `googleappcreds.json`.
 
 #### Auth0
 
-We're currently using [Auth0](https://auth0.com/) for user authentication and management. You shouldn't need anything other than the (non-sensitive) `CLIENTID` in your `.env` file to make authentication work with your locally-running app. If you need access to the auth0 console, email `sjforman@gmail.com`.
+We use [Auth0](https://auth0.com/) for user authentication and management. You shouldn't need anything other than the (non-sensitive) `CLIENTID` in your `.env` file to make authentication work with your locally-running app. If you need access to the auth0 console, email `sjforman@gmail.com`.
 
 #### Set up your database
 
@@ -81,7 +88,7 @@ Run the migrations:
 
 	knex seed:run
 
-These voter records consist of randomized names and addresses. The voter file import process doesn't yet account for different formats from different states. That's a work-in-progress.
+These voter records consist of randomized names and addresses.
 
 #### Start devloping
 
