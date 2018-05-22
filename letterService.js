@@ -73,8 +73,7 @@ function generatePdfForVoter(voter, callback) {
   var datestamp = dateStamp();
   var hashId = hashids.encode(voterId);
   var uuid = uuidv4();
-  // TODO: make this configurable by environment
-  var pledgeUrl = 'http://localhost:3000/pledge';
+  var pledgeUrl = `${process.env.REACT_APP_URL}/pledge`;
   var template = fs.readFileSync('./letter.html', 'utf8');
   var uncompiledTemplate = Handlebars.compile(template);
   var fullName = 

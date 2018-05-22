@@ -7,3 +7,5 @@ build/
 voter_data/
 googleappcreds.json
 .DS_Store
+cloud_sql_proxy
+app.yaml

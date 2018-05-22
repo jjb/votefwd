@@ -8,7 +8,7 @@ export default class Auth {
   auth0 = new auth0.WebAuth({
     domain: 'votefwd.auth0.com',
     clientID: process.env.REACT_APP_AUTH0_CLIENTID,
-    redirectUri: 'http://localhost:3000/callback',
+    redirectUri: `${process.env.REACT_APP_URL}/callback`,
     audience: 'https://votefwd.auth0.com/userinfo',
     responseType: 'token id_token',
     scope: 'openid profile email'
