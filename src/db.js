@@ -5,7 +5,7 @@ require('dotenv').config()
 const knex = require('knex');
 
 const config = {
-    user: process.env.SQL_USER,
+    user: process.env.REACT_APP_SQL_USER,
     password: process.env.REACT_APP_SQL_PASSWORD,
     database: process.env.REACT_APP_SQL_DATABASE
   }
