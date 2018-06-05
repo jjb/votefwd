@@ -8,3 +8,4 @@ cloud_sql_proxy
 node_modules
 voter_data
 .env*
+googleappcreds.json
