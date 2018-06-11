@@ -2,7 +2,7 @@ _site/
 .sass-cache/
 .jekyll-metadata
 node_modules/
-.env*
+*.env*
 build/
 voter_data/
 googleappcreds.json
