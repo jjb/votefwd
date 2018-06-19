@@ -56,18 +56,18 @@ variables:
 	REACT_APP_DATABASE_URL=postgres://<YOURUSERNAME>:@localhost:5432/votefwd
 	REACT_APP_DATABASE_DIALECT=postgres
 	REACT_APP_AUTH0_CLIENTID=T0oLi22JFRtHPsx0595AAf8p573bxD4d
-  REACT_APP_SQL_USER=<YOURUSERNAME>
-  REACT_APP_SQL_PASSWORD=<YOURPASSWORD>
-  REACT_APP_SQL_DATABASE=votefwd
-  REACT_APP_DATABASE_DIALECT=postgres
+  	REACT_APP_SQL_USER=<YOURUSERNAME>
+  	REACT_APP_SQL_PASSWORD=<YOURPASSWORD>
+  	REACT_APP_SQL_DATABASE=votefwd
+  	REACT_APP_DATABASE_DIALECT=postgres
 
 #### Optional Environment variables
 
-The node package that uses these has sensible defaults, but you can override
+The node package that uses these to generate unique pledge codes for each letter has sensible defaults, but you can override
 them if you need to. (We do so in deployed environments):
 
-  REACT_APP_HASHID_SALT=<ANY_STRING_OR_BLANK>
-  REACT_APP_HASHID_DICTIONARY=<CHARACTERSET>
+  	REACT_APP_HASHID_SALT=<ANY_STRING_OR_BLANK>
+  	REACT_APP_HASHID_DICTIONARY=<CHARACTER SET>
 
 #### Google Cloud Platform Storage
 
