@@ -1,13 +1,52 @@
+html, body {
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
 body {
   @include body-font;
 }
 
 h1,
-h2,
+h2 {
+  @include header-font;
+  font-weight: normal;
+  font-style: normal;
+}
+
 h3,
 h4,
 h5,
 h6 {
   @include body-font;
   font-weight: 700;
+}
+
+.col {
+  // border: 1px solid red;
+}
+
+// Bootstrap overrides
+
+.btn {
+  border: none;
+  font-weight: bold;
+  text-transform: uppercase;
+  border-radius: 0px;
+  transition: none;
+}
+
+.form-control {
+  border-radius: 0px;
+  border: none;
+  padding: 1rem;
+  &:focus {
+    // background: $vf-purple;
+    // color: white;
+    box-shadow: none;
+  }
+}
+.form-row>.col, .form-row>[class*=col-] {
+  padding: 1rem;
 }
