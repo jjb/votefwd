@@ -14,7 +14,8 @@ export class Qualify extends Component {
       zip: '',
       fullName: '',
       nameFormVal: '',
-      zipFormVal: ''
+      zipFormVal: '',
+      gRecaptchaResponse: ''
     }
 
     this.handleNameChange = this.handleNameChange.bind(this);
@@ -23,9 +24,28 @@ export class Qualify extends Component {
     this.handleZipSubmit = this.handleZipSubmit.bind(this);
   }
 
-  handleCaptchaSuccess() {
-    this.updateUser('isHuman', true);
-    this.setState({ isHuman: true });
+  handleCaptcha(response) {
+    axios({
+      method: 'POST',
+      url: `${process.env.REACT_APP_API_URL}/recaptcha`,
+      data: {
+        recaptchaResponse: response
+      }
+    })
+    .then(res => {
+      if (res.status === 200) {
+        this.updateUser('isHuman', true);
+        this.setState({
+          isHuman: true,
+          gRecaptchaResponse: response
+        });
+      } else {
+        console.error('Something went wrong with validation of humanness.');
+      }
+    })
+    .catch(err => {
+      console.error(err);
+    });
   }
 
   handleNameChange(event) {
@@ -67,9 +87,6 @@ export class Qualify extends Component {
       url: `${process.env.REACT_APP_API_URL}/user`,
       data: data
     })
-    .then(res => {
-      console.log(res)
-    })
     .catch(err => {
       console.error(err);
     });
@@ -96,7 +113,7 @@ export class Qualify extends Component {
       <div>
       <p className="f4">1. Are you a robot?</p>
         <div className="center dib">
-          <RecaptchaComponent handleSuccess={this.handleCaptchaSuccess.bind(this)}/>
+          <RecaptchaComponent handleSuccess={this.handleCaptcha.bind(this)}/>
         </div>
       </div>
     );
