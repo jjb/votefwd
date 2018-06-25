@@ -40,8 +40,6 @@ h6 {
 
 .form-control {
   border-radius: 0px;
-  border: none;
-  padding: 1rem;
 }
 
 .form-control:focus {
@@ -103,6 +101,8 @@ header.masthead .hero-form-wrapper {
 
 header.masthead .hero-form-wrapper input {
   font-size: 1.5rem;
+  border: none;
+  padding: 1rem;
 }
 
 header.masthead .hero-form-wrapper input::placeholder {
@@ -170,22 +170,6 @@ header.masthead h3 {
 
 .features-icons {
   padding: 6rem 0;
-}
-
-.features-icons .features-icons-item {
-  max-width: 20rem;
-}
-
-.features-icons .features-icons-item .features-icons-icon {
-  height: 7rem;
-}
-
-.features-icons .features-icons-item .features-icons-icon i {
-  font-size: 4.5rem;
-}
-
-.features-icons .features-icons-item:hover .features-icons-icon i {
-  font-size: 5rem;
 }
 
 .testimonials {

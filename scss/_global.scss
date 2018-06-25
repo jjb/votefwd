@@ -39,11 +39,7 @@ h6 {
 
 .form-control {
   border-radius: 0px;
-  border: none;
-  padding: 1rem;
   &:focus {
-    // background: $vf-purple;
-    // color: white;
     box-shadow: none;
   }
 }

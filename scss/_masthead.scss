@@ -41,6 +41,8 @@ header.masthead {
 
     input {
       font-size: 1.5rem;
+      border: none;
+      padding: 1rem;
       &::placeholder {
         color: $vf-blue;
       }
