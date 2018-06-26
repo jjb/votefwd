@@ -63,7 +63,7 @@ variables:
 	REACT_APP_RECAPTCHA_SITE_KEY=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
 	REACT_APP_RECAPTCHA_SECRET=6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
 	
-(you  might notice we have a REACT_APP_RECAPTCHA_SECRET but that is the (default google test one)[https://developers.google.com/recaptcha/docs/faq], so this is not actually sensitive)
+(you  might notice we have a REACT_APP_RECAPTCHA_SECRET but that is the [default google test one](https://developers.google.com/recaptcha/docs/faq), so this is not actually sensitive)
 
 #### Optional Environment variables
 
