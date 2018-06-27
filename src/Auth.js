@@ -5,13 +5,23 @@ import axios from 'axios';
 import history from './history';
 
 export default class Auth {
-  auth0 = new auth0.WebAuth({
+  webAuth = new auth0.WebAuth({
     domain: 'votefwd.auth0.com',
     clientID: process.env.REACT_APP_AUTH0_CLIENTID,
     redirectUri: `${process.env.REACT_APP_URL}/callback`,
     audience: 'https://votefwd.auth0.com/userinfo',
     responseType: 'token id_token',
     scope: 'openid profile email'
+  });
+
+  apiAuth = new auth0.WebAuth({
+    domain: 'votefwd.auth0.com',
+    clientID: process.env.REACT_APP_AUTH0_CLIENTID,
+    redirectUri: `${process.env.REACT_APP_URL}/callback`,
+    audience: 'https://votefwd.auth0.com/api',
+    responseType: 'token',
+    scope: 'read',
+    prompt: 'none'
   });
 
   constructor() {
@@ -22,28 +32,11 @@ export default class Auth {
   }
 
   handleAuthentication() {
-    this.auth0.parseHash((err, authResult) => {
+    this.webAuth.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
 
-        //This is trash and doesnt work, but is kinda part way there https://auth0.com/docs/api/authentication#implicit-grant
-        function reqListener () {
-          console.log(this.responseText);
-        }
-        var api_auth = new XMLHttpRequest();
-        api_auth.addEventListener("load", reqListener);
-        api_auth.open("GET",
-              'https://votefwd.auth0.com/authorize?' +
-              'audience=https://votefwd.auth0.com/api&' +
-              'scope=read&' +
-              'response_type=token&' +
-              'client_id=' + process.env.REACT_APP_AUTH0_CLIENTID +
-              'redirectUri=' + process.env.REACT_APP_URL + '/callback' + '&' +
-              'prompt=none'
-              // redirect_uri=http://localhost:3000&
-              // state=STATE& // probably should have this post mvp
-              // nonce=NONCE // this too
-        );
-        api_auth.send();
+        //this doesnt work either, copying what they do for the explore sample app ont his page https://auth0.com/docs/quickstart/spa/vanillajs/03-calling-an-api
+        this.apiAuth.authorize();
 
         this.setSession(authResult);
         this.persistUser(authResult, () => {
@@ -71,7 +64,7 @@ export default class Auth {
     localStorage.setItem('id_token', authResult.idToken);
     localStorage.setItem('expires_at', expiresAt);
     localStorage.setItem('user_id', authResult.idTokenPayload.sub);
-    this.auth0.client.userInfo(authResult.accessToken, (err, profile) => {
+    this.webAuth.client.userInfo(authResult.accessToken, (err, profile) => {
       localStorage.setItem('picture_url', profile.picture);
     })
     history.replace('/');
@@ -96,6 +89,6 @@ export default class Auth {
   }
 
   login() {
-    this.auth0.authorize();
+    this.webAuth.authorize();
   }
 }
