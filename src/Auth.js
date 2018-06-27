@@ -9,19 +9,9 @@ export default class Auth {
     domain: 'votefwd.auth0.com',
     clientID: process.env.REACT_APP_AUTH0_CLIENTID,
     redirectUri: `${process.env.REACT_APP_URL}/callback`,
-    audience: 'https://votefwd.auth0.com/userinfo',
+    audience: 'https://votefwd.org/api',
     responseType: 'token id_token',
-    scope: 'openid profile email'
-  });
-
-  apiAuth = new auth0.WebAuth({
-    domain: 'votefwd.auth0.com',
-    clientID: process.env.REACT_APP_AUTH0_CLIENTID,
-    redirectUri: `${process.env.REACT_APP_URL}/callback`,
-    audience: 'https://votefwd.auth0.com/api',
-    responseType: 'token',
-    scope: 'read',
-    prompt: 'none'
+    scope: 'openid profile email read:user'
   });
 
   constructor() {
@@ -34,10 +24,6 @@ export default class Auth {
   handleAuthentication() {
     this.webAuth.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
-
-        //this doesnt work either, copying what they do for the explore sample app ont his page https://auth0.com/docs/quickstart/spa/vanillajs/03-calling-an-api
-        this.apiAuth.authorize();
-
         this.setSession(authResult);
         this.persistUser(authResult, () => {
           history.replace('/dashboard');

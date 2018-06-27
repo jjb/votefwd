@@ -65,7 +65,6 @@ router.route('/voters')
   .get(checkJwt, function(req, res) {
     voterService.getUsersAdoptedVoters(req.query.user_id,
       function(result) {
-        // console.log(req)
         res.json(result)
       });
   });
