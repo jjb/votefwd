@@ -36,7 +36,7 @@ export class Login extends Component {
           {
             isAuthenticated() && (
               <div>
-                <img className="rounded-circle d-inline mr-2" src={pictureUrl} alt={username} />
+                <img className="profile-pic rounded-circle d-inline mr-2" src={pictureUrl} alt={username} />
                 <span className="text-muted p-2">{username}</span>
                 <button onClick={this.logout.bind(this)} className="btn btn-link">
                   Log Out

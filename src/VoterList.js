@@ -79,7 +79,7 @@ export class VoterList extends Component {
     return (
       <div className="row">
         <div className="col">
-          <h2>Letters to Prep</h2>
+          <h4>Letters to Prep</h4>
           <button className="f6 link dim ba ph3 pv2 mb2 dib black" onClick={() => {console.log("This button will download a bundle of all the not yet prepared letters.")}}>Download all</button>
           <button className="f6 link dim ba ph3 pv2 mb2 dib black" onClick={() => {console.log("This button will mark all the outstanding letters as ready to send.")}}>Mark all ready</button>
           <ul className="list pl0 mt0 w-60-ns w-90 center">
@@ -92,7 +92,7 @@ export class VoterList extends Component {
           </ul>
         </div>
         <div className="col">
-          <h2 className="title tc">Letters Prepared & Ready to Send</h2>
+          <h4>Letters Prepared & Ready to Send</h4>
           <ul className="list pl0 mt0 w-60-ns w-90 center">
             {alreadySent.map(voter =>
               <VoterRecord
