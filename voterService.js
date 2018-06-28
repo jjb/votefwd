@@ -57,7 +57,6 @@ function adoptRandomVoter(adopterId, numVoters, callback) {
               num_finished_calls += 1;
               voters_to_return.push(voter)
               if (num_finished_calls == voters.length){
-                // this is syncronous and slower to resolve than async, but faster to implement and lowers the risk of rate limiting from google because we are not hammering their signed url endpoint (not sure what our limits are).  If we want to do async the first response here has a in depth approach.  https://stackoverflow.com/questions/38426745/how-do-i-return-the-accumulated-results-of-multiple-parallel-asynchronous-func
                 callback(voters_to_return);
               }
             });
