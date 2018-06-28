@@ -1,1 +1,3 @@
-@import "tachyons";
+.logo {
+  width: 150px;
+}
