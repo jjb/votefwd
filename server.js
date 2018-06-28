@@ -51,8 +51,8 @@ const checkJwt = jwt({
   }),
 
   // Validate the audience and the issuer.
-  audience: process.env.AUTH0_AUDIENCE,
-  issuer: `https://${process.env.AUTH0_DOMAIN}/`,
+  audience: 'https://votefwd.org/api',
+  issuer: 'https://votefwd.auth0.com/',
   algorithms: ['RS256']
 });
 
