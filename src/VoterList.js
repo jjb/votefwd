@@ -56,7 +56,7 @@ class VoterRecord extends Component {
         <a className="f6 link dim ph3 pv2 mb2 dib black-70"
           download={filename}
           href={this.state.signedUrl}>
-            Download 
+            Download
         </a>
       { voter.confirmed_sent_at ? (
         <div className="pa2">
@@ -77,8 +77,9 @@ export class VoterList extends Component {
     let alreadySent = this.props.voters.filter(voter => voter.confirmed_sent_at);
     let toSend = this.props.voters.filter(voter => !voter.confirmed_sent_at);
     return (
-      <div>
-        <h2 className="title tc">Letters to Prep</h2>
+      <div className="row">
+        <div className="col">
+          <h2>Letters to Prep</h2>
           <button className="f6 link dim ba ph3 pv2 mb2 dib black" onClick={() => {console.log("This button will download a bundle of all the not yet prepared letters.")}}>Download all</button>
           <button className="f6 link dim ba ph3 pv2 mb2 dib black" onClick={() => {console.log("This button will mark all the outstanding letters as ready to send.")}}>Mark all ready</button>
           <ul className="list pl0 mt0 w-60-ns w-90 center">
@@ -89,7 +90,9 @@ export class VoterList extends Component {
                 confirmSend={this.props.confirmSend}
               />)}
           </ul>
-        <h2 className="title tc">Letters Prepared & Ready to Send</h2>
+        </div>
+        <div className="col">
+          <h2 className="title tc">Letters Prepared & Ready to Send</h2>
           <ul className="list pl0 mt0 w-60-ns w-90 center">
             {alreadySent.map(voter =>
               <VoterRecord
@@ -97,6 +100,7 @@ export class VoterList extends Component {
                 voter={voter}
               />)}
           </ul>
+        </div>
       </div>
     );
   }
