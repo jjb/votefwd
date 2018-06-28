@@ -3,6 +3,7 @@
 
 var db = require('./src/db');
 var letterService = require('./letterService');
+const allowedVoterBulkCount = [1, 2, 5, 15, 30, 60];
 
 function getVoterById(voterId, callback) {
   db.select().table('voters')
@@ -28,25 +29,40 @@ function getUsersAdoptedVoters(userId, callback) {
     });
 }
 
-function adoptRandomVoter(adopterId, callback) {
+function adoptRandomVoter(adopterId, numVoters, callback) {
+  if (allowedVoterBulkCount.includes(numVoters) !== true){
+    //user requested a weird number of voters, deny!
+    console.error("invalid number of voters requested");
+    return; //should we return a 500? idk
+  }
   db('voters')
     .where('adopter_user_id', null)
     .orderByRaw('RANDOM()')
-    .limit(1)
-    .then(function(result) {
-      let voter = result[0];
+    .limit(numVoters)
+    .then(function(voters) {
+      var ids = voters.map(voter => voter.id)
       db('voters')
-        .where('id', voter.id)
+        .whereIn('id', ids)
         .update({
           adopter_user_id: adopterId,
           adopted_at: db.fn.now(),
           updated_at: db.fn.now()
         })
         .then(function() {
-          letterService.generatePdfForVoter(voter, function(signedUrl) {
-              callback(voter, signedUrl);
+          var voters_to_return = [];
+          for (var i = 0; i < voters.length; i++){
+            var voter = voters[i];
+            var num_finished_calls = 0;
+            letterService.generatePdfForVoter(voter, function(voter) {
+              num_finished_calls += 1;
+              voters_to_return.push(voter)
+              if (num_finished_calls == voters.length){
+                // this is syncronous and slower to resolve than async, but faster to implement and lowers the risk of rate limiting from google because we are not hammering their signed url endpoint (not sure what our limits are).  If we want to do async the first response here has a in depth approach.  https://stackoverflow.com/questions/38426745/how-do-i-return-the-accumulated-results-of-multiple-parallel-asynchronous-func
+                callback(voters_to_return);
+              }
             });
-          })
+          }
+        })
         .catch(err => {
           console.error(err);
         })
