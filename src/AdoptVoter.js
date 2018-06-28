@@ -11,8 +11,7 @@ export class AdoptVoter extends Component {
     this.state = { adopting: false };
   }
 
-  adoptVoter() {
-    var numVoters = 1; //TODO: figure out how to get picker on dashboard.js
+  adoptVoter(numVoters) {
     this.setState({adopting: true});
     let user_id = localStorage.getItem('user_id');
     axios({
@@ -36,14 +35,17 @@ export class AdoptVoter extends Component {
     let content;
     if (this.state.adopting) {
       content = (
-        <p className="f4 red">Finding a voter for you to adopt...</p>
+        <p className="f4 red">Assigning voters to you...this may take a minute.</p>
       )
     }
     return (
       <div>
-        <button onClick={() => this.adoptVoter()}>Adopt a Voter</button>
-        <p className="tc w-50 center">Voters you adopt will not be assigned to anyone else!</p>
-        <p>Please proceed only if you’re committed to sending a letter.</p>
+        <h1 className="tc">Adopt Voters</h1>
+        <p className="tc w-50 center">Once you adopt a voter, that voter is yours, and will not be assigned to anyone else.</p>
+        <p>That means that, by adopting a voter, you’re committing to sending a letter. We’re counting on you!</p>
+        <button onClick={() => this.adoptVoter(1)}>1</button>
+        <button onClick={() => this.adoptVoter(5)}>5</button>
+        <button onClick={() => this.adoptVoter(15)}>15</button>
         {content}
       </div>
     )
