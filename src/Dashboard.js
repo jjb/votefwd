@@ -77,9 +77,11 @@ class Dashboard extends Component {
     }
   }
 
-  handleAdoptedVoter(voter, pdfUrl) {
-    voter.plea_letter_url = pdfUrl;
-    this.setState({ voters: this.state.voters.concat([voter])});
+  handleAdoptedVoter(voters) {
+    for (var i = 0; i < voters.length; i++){
+      var voter = voters[i];
+      this.setState({ voters: this.state.voters.concat([voter])});
+    }
   }
 
   handleConfirmSend(voter) {

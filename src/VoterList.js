@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import Avatar from 'react-avatar';
 import Moment from 'react-moment';
 
 class VoterRecord extends Component {
@@ -48,28 +47,23 @@ class VoterRecord extends Component {
     let voter = this.props.voter;
     let filename = "VoteForward_PleaLetter_" + voter.last_name + '.pdf';
     return (
-      <li className="flex items-center lh-copy pa3 ph0-l bb b--black-10" key={voter.id}>
-        <Avatar size={50} round={true} name={voter.first_name + ' ' + voter.last_name}/>
+      <li className="flex items-center lh-copy ph0-l bb b--black-10" key={voter.id}>
         <div className="pl4 flex-auto">
           <span className="tl f6 db black-70">
-            {voter.first_name} {voter.middle_name} {voter.last_name} {voter.suffix}
-            <br/>
-            {voter.address}
-            <br/>
-            {voter.city}, {voter.state} {voter.zip}
+            {voter.first_name} {voter.last_name} in {voter.city}, {voter.state}
           </span>
         </div>
-        <a className="link"
+        <a className="f6 link dim ph3 pv2 mb2 dib black-70"
           download={filename}
           href={this.state.signedUrl}>
-            Download letter
+            Download 
         </a>
       { voter.confirmed_sent_at ? (
         <div className="pa2">
-          <span>Confirmed sent on:</span> <Moment format="M/DD/YYYY">{voter.confirmed_sent_at}</Moment>
+          <span>Confirmed ready:</span> <Moment format="M/DD/YY">{voter.confirmed_sent_at}</Moment>
         </div>
       ) : (
-        <button className="pa2" onClick={() => {this.props.confirmSend(voter)}}>Confirm</button>
+        <button className="f6 link dim ba ph3 pv2 mb2 dib black" onClick={() => {this.props.confirmSend(voter)}}>Ready!</button>
       )}
       </li>
     )
@@ -82,8 +76,8 @@ export class VoterList extends Component {
     let toSend = this.props.voters.filter(voter => !voter.confirmed_sent_at);
     return (
       <div>
-        <h2 className="title tc">Letters to Send</h2>
-          <ul className="list pl0 mt0 measure center">
+        <h2 className="title tc">Letters to Prep</h2>
+          <ul className="list pl0 mt0 w-60-ns w-90 center">
             {toSend.map(voter =>
               <VoterRecord
                 key={voter.id}
@@ -91,13 +85,12 @@ export class VoterList extends Component {
                 confirmSend={this.props.confirmSend}
               />)}
           </ul>
-        <h2 className="title tc">Letters Already Sent</h2>
-          <ul className="list pl0 mt0 measure center">
+        <h2 className="title tc">Letters Ready to Send</h2>
+          <ul className="list pl0 mt0 w-60-ns w-90 center">
             {alreadySent.map(voter =>
               <VoterRecord
                 key={voter.id}
                 voter={voter}
-                confirmSend={this.props.confirmSend}
               />)}
           </ul>
       </div>
