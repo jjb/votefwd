@@ -59,9 +59,14 @@ class Dashboard extends Component {
   getAdoptedVoters() {
     let user_id = localStorage.getItem('user_id');
     if(user_id) {
-      axios.get(`${process.env.REACT_APP_API_URL}/voters`,
+      var headers = {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))};
+      axios.get(
+        `${process.env.REACT_APP_API_URL}/voters`,
         {
-          params: { user_id: user_id }
+          headers: headers,
+          params: {
+            user_id: user_id,
+          }
         })
         .then(res => {
           this.setState( {voters: res.data} );

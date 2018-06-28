@@ -20,6 +20,9 @@ var fs = require('fs');
 var os = require('os');
 
 var app = express();
+var jwt = require('express-jwt');
+var jwtAuthz = require('express-jwt-authz');
+var jwksRsa = require('jwks-rsa');
 var router = express.Router();
 var port = process.env.REACT_APP_API_PORT || 3001;
 var corsOption = {
@@ -37,12 +40,29 @@ app.use(cors(corsOption));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+
+const checkJwt = jwt({
+  // Dynamically provide a signing key based on the kid in the header and the signing keys provided by the JWKS endpoint.
+  secret: jwksRsa.expressJwtSecret({
+    cache: true,
+    rateLimit: true,
+    jwksRequestsPerMinute: 5,
+    jwksUri: 'https://votefwd.auth0.com/.well-known/jwks.json'
+  }),
+
+  // Validate the audience and the issuer.
+  audience: 'https://votefwd.org/api',
+  issuer: 'https://votefwd.auth0.com/',
+  algorithms: ['RS256']
+});
+
+
 router.get('/', function(req, res) {
   res.json('API initialized.');
 });
 
 router.route('/voters')
-  .get(function(req, res) {
+  .get(checkJwt, function(req, res) {
     voterService.getUsersAdoptedVoters(req.query.user_id,
       function(result) {
         res.json(result)

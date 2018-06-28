@@ -56,14 +56,14 @@ variables:
 	REACT_APP_DATABASE_URL=postgres://<YOURUSERNAME>:@localhost:5432/votefwd
 	REACT_APP_DATABASE_DIALECT=postgres
 	REACT_APP_AUTH0_CLIENTID=T0oLi22JFRtHPsx0595AAf8p573bxD4d
-  	REACT_APP_SQL_USER=<YOURUSERNAME>
-  	REACT_APP_SQL_PASSWORD=<YOURPASSWORD>
-  	REACT_APP_SQL_DATABASE=votefwd
-  	REACT_APP_DATABASE_DIALECT=postgres
+	REACT_APP_SQL_USER=<YOURUSERNAME>
+	REACT_APP_SQL_PASSWORD=<YOURPASSWORD>
+	REACT_APP_SQL_DATABASE=votefwd
+	REACT_APP_DATABASE_DIALECT=postgres
 	REACT_APP_RECAPTCHA_SITE_KEY=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
 	REACT_APP_RECAPTCHA_SECRET=6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
-	
-(you  might notice we have a REACT_APP_RECAPTCHA_SECRET but that is the [default google test one](https://developers.google.com/recaptcha/docs/faq), so this is not actually sensitive)
+
+(you might notice we have a REACT_APP_RECAPTCHA_SECRET but that is the [default google test one](https://developers.google.com/recaptcha/docs/faq), so this is not actually sensitive)
 
 #### Optional Environment variables
 
