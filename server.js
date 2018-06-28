@@ -51,10 +51,9 @@ router.route('/voters')
 
 router.route('/voter/adopt-random')
   .post(function(req, res) {
-    voterService.adoptRandomVoter(req.body.adopterId, function(voter, pdfUrl) {
+    voterService.adoptRandomVoter(req.body.adopterId, req.body.numVoters, function(voters) {
       let response = {};
-      response.voter = voter;
-      response.pdfUrl = pdfUrl;
+      response.voters = voters;
       res.json(response);
     });
   });
