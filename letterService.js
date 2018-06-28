@@ -31,8 +31,8 @@ function getSignedUrl(url, callback) {
   let path = URL.parse(url).path
   let fileName = path.substr(path.lastIndexOf('/') + 1);
   let GCPFile = voterBucket.file(fileName);
-  getSignedUrlForGCPFile(GCPFile, function(signedUrl) {
-    callback(signedUrl)
+  getSignedUrlForGCPFile(GCPFile, function(plea_letter_url) {
+    callback(plea_letter_url)
   })
 }
 
@@ -123,8 +123,9 @@ function generatePdfForVoter(voter, callback) {
         .upload(response.filename, uploadOptions)
         .then((response) => {
           var gcpFile = response[0];
-          getSignedUrlForGCPFile(gcpFile, function(signedUrl) {
-            callback(signedUrl);
+          getSignedUrlForGCPFile(gcpFile, function(plea_letter_url) {
+            voter['plea_letter_url'] = encodeURI(plea_letter_url);
+            callback(voter);
           });
         })
         .then(() => {
