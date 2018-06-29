@@ -21,9 +21,11 @@ class Dashboard extends Component {
   getCurrentUser() {
     let user_id = localStorage.getItem('user_id');
     if (user_id) {
-      axios.get(`${process.env.REACT_APP_API_URL}/user`,
-        {
-          params: { auth0_id: user_id }
+      axios({
+        method: 'GET',
+        headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
+        url: `${process.env.REACT_APP_API_URL}/user`,
+        params: { auth0_id: user_id }
         })
         .then(res => {
           this.setState({ user: res.data[0] }, () => {
@@ -87,6 +89,7 @@ class Dashboard extends Component {
   handleConfirmSend(voter) {
     axios({
       method: 'PUT',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
       url: `${process.env.REACT_APP_API_URL}/voter/confirm-send`,
       data: { id: voter.id }
       })

@@ -14,6 +14,7 @@ class VoterRecord extends Component {
 
   getSignedUrl(rawUrl) {
     axios({
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
       method: 'GET',
       url: `${process.env.REACT_APP_API_URL}/voter/signed-letter-url`,
       params: { url: rawUrl }

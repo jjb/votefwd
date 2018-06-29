@@ -15,6 +15,7 @@ export class AdoptVoter extends Component {
     this.setState({adopting: true});
     let user_id = localStorage.getItem('user_id');
     axios({
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
       method: 'POST',
       url: `${process.env.REACT_APP_API_URL}/voter/adopt-random`,
       data: {

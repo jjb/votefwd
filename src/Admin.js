@@ -29,6 +29,7 @@ class UserListItem extends Component {
   getVoters() {
     axios({
       method: 'GET',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
       url: `${process.env.REACT_APP_API_URL}/voters`,
       params: { user_id: this.props.user.auth0_id }
     })
@@ -70,6 +71,7 @@ class Admin extends Component {
     let user_id = localStorage.getItem('user_id');
     if (user_id) {
       axios({
+        headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
         method: 'GET',
         url: `${process.env.REACT_APP_API_URL}/user`,
         params: { auth0_id: user_id }
@@ -90,6 +92,7 @@ class Admin extends Component {
   getAllUsers() {
     axios({
       method: 'GET',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
       url: `${process.env.REACT_APP_API_URL}/s/users`,
     })
     .then(res => {

@@ -36,12 +36,18 @@ export default class Auth {
   }
 
   persistUser(authResult, callback) {
-    axios.post(`${process.env.REACT_APP_API_URL}/user/new`,
-      { auth0_id: authResult.idTokenPayload.sub })
+    axios({
+      method: 'POST',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
+      url: `${process.env.REACT_APP_API_URL}/user/new`,
+      data: {
+        auth0_id: authResult.idTokenPayload.sub 
+      }
+    })
     .then(callback)
     .catch(function(error) {
       console.error(error)
-    });
+    })
   }
 
   setSession(authResult) {

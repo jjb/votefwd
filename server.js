@@ -70,7 +70,7 @@ router.route('/voters')
   });
 
 router.route('/voter/adopt-random')
-  .post(function(req, res) {
+  .post(checkJwt, function(req, res) {
     voterService.adoptRandomVoter(req.body.adopterId, req.body.numVoters, function(voters) {
       let response = {};
       response.voters = voters;
@@ -79,7 +79,7 @@ router.route('/voter/adopt-random')
   });
 
 router.route('/voter/confirm-send')
-  .put(function(req, res) {
+  .put(checkJwt, function(req, res) {
     voterService.confirmSend(req.body.id, function(result) {
       res.json(result);
     });
@@ -93,14 +93,14 @@ router.route('/voter/pledge')
   });
 
 router.route('/voter/signed-letter-url')
-  .get(function(req, res) {
+  .get(checkJwt, function(req, res) {
     letterService.getSignedUrl(req.query.url, function(result) {
       res.json(result);
     });
   });
 
 router.route('/user/new')
-  .post(function(req, res) {
+  .post(checkJwt, function(req, res) {
     if (req.body.auth0_id) {
       db('users').where('auth0_id', req.body.auth0_id)
         .then(function(result) {
@@ -142,7 +142,7 @@ function verifyHumanity(req, callback) {
 }
 
 router.route('/recaptcha')
-  .post(function(req, res) {
+  .post(checkJwt, function(req, res) {
     verifyHumanity(req, function(r) {
       if(r) {
         res.json(r);
@@ -156,7 +156,7 @@ router.route('/recaptcha')
   });
 
 router.route('/user')
-  .get(function(req, res) {
+  .get(checkJwt, function(req, res) {
     db('users')
       .where('auth0_id', req.query.auth0_id)
       .then(function(result) {
@@ -164,7 +164,7 @@ router.route('/user')
       })
       .catch(err => {console.error(err);})
   })
-  .post(function(req, res) {
+  .post(checkJwt, function(req, res) {
     let query = db('users')
       .where('auth0_id', req.body.auth0_id)
       .update('updated_at', db.fn.now())
