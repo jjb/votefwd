@@ -1,10 +1,16 @@
 'use strict';
 
-require('dotenv').config()
+require('dotenv').config();
 
-var config = {
+const connection = {
+    user: process.env.REACT_APP_SQL_USER,
+    password: process.env.REACT_APP_SQL_PASSWORD,
+    database: process.env.REACT_APP_SQL_DATABASE
+  }
+
+const config = {
   client: process.env.REACT_APP_DATABASE_DIALECT,
-  connection: process.env.REACT_APP_DATABASE_URL,
+  connection: connection,
   migrations: {
     tableName: 'knex_migrations'
   },
