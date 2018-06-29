@@ -1,1 +1,16 @@
-@import "tachyons";
+html, body {
+  font-family: 'Raleway', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+.logo {
+  width: 150px;
+}
+
+.profile-pic {
+  max-width: 35px;
+  height: auto;
+}
+
+.navbar {
+  background-color: #AFE5FF;
+}
