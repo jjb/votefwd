@@ -65,7 +65,7 @@ router.route('/voters')
   .get(checkJwt, function(req, res) {
     voterService.getUsersAdoptedVoters(req.query.user_id,
       function(result) {
-        res.json(result)
+          res.json(result)
       });
   });
 
@@ -77,6 +77,24 @@ router.route('/voter/adopt-random')
       res.json(response);
     });
   });
+
+router.route('/voters/downloadAllLetters')
+  .get(checkJwt, function(req, res) {
+    voterService.downloadAllLetters(req.query.user_id,
+      function(filepath, downloadFileName) {
+        res.header('Access-Control-Expose-Headers', "Filename");
+        res.header('Filename', downloadFileName);
+        res.download(filepath, downloadFileName, function (err) {
+           if (err) {
+              console.log("Error downloading all letters.");
+              console.log(err);
+           } else {
+              console.log("Success downloading all letters.");
+           }
+        });
+      });
+  });
+
 
 router.route('/voter/confirm-send')
   .put(function(req, res) {

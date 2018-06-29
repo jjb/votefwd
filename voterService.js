@@ -53,7 +53,7 @@ function adoptRandomVoter(adopterId, numVoters, callback) {
           for (var i = 0; i < voters.length; i++){
             var voter = voters[i];
             var num_finished_calls = 0;
-            letterService.generatePdfForVoter(voter, function(voter) {
+            letterService.generateAndStorePdfForVoter(voter, function(voter) {
               num_finished_calls += 1;
               voters_to_return.push(voter)
               if (num_finished_calls == voters.length){
@@ -71,6 +71,18 @@ function adoptRandomVoter(adopterId, numVoters, callback) {
     });
 }
 
+function downloadAllLetters(userId, callback) {
+  db('voters')
+    .where('adopter_user_id', userId)
+    .where('confirmed_sent_at', null)
+    .then(function(voters) {
+      letterService.generateBulkPdfForVoters(voters, callback)
+    })
+    .catch(err => {
+      console.error(err);
+    });
+}
+
 function confirmSend(voterId, callback) {
   db('voters')
     .where('id', voterId)
@@ -80,6 +92,7 @@ function confirmSend(voterId, callback) {
     })
     .then(function(result) {
       getVoterById(voterId, function(voter) {
+
         callback(voter);
       })
     })
@@ -106,6 +119,7 @@ function makePledge(code, callback) {
 module.exports = {
   getVoterById,
   getUsersAdoptedVoters,
+  downloadAllLetters,
   adoptRandomVoter,
   confirmSend,
   makePledge
