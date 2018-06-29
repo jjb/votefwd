@@ -27,6 +27,7 @@ export class Qualify extends Component {
   handleCaptcha(response) {
     axios({
       method: 'POST',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
       url: `${process.env.REACT_APP_API_URL}/recaptcha`,
       data: {
         recaptchaResponse: response
@@ -84,6 +85,7 @@ export class Qualify extends Component {
     data[key] = value;
     axios({
       method: 'POST',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
       url: `${process.env.REACT_APP_API_URL}/user`,
       data: data
     })
