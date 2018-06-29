@@ -3,6 +3,7 @@
 
 var db = require('./src/db');
 var pdf = require('html-pdf');
+var merge = require('easy-pdf-merge');
 var Hashids = require('hashids');
 var Storage = require('@google-cloud/storage');
 var Handlebars = require('handlebars');
@@ -69,13 +70,43 @@ var hashids = new Hashids(process.env.REACT_APP_HASHID_SALT, 6,
   process.env.REACT_APP_HASHID_DICTIONARY);
 
 function generateAndStorePdfForVoter(voter, callback) {
+  // wrapper function to generate and store a pdf for a voter
   generatePdfForVoter(voter, function(response, voter, storageArgs){
     storePdfForVoter(response, voter, storageArgs, callback);
   });
 }
 
+function generateBulkPdfForVoters(voters, callback) {
+  // wrapper function to take a list of voters and make one pdf for all of them.
+  var pdf_filenames = [];
+  for (var i = 0; i < voters.length; i++){
+    generatePdfForVoter(voters[i], function(response, voter, storageArgs){
+      // some might fail and return nothing, insert an empty string as a place holder
+      var filename = response.filename ? response.filename : '';
+      pdf_filenames.push(filename);
+
+      if (pdf_filenames.length == voters.length){
+        // filter out any '' strings
+        var pdf_filenames_final = pdf_filenames.filter(file => file != '');
+        // make bulk args
+        var datestamp = dateStamp();
+        var uuid = uuidv4();
+        const tmpdir = os.tmpdir();
+        const remotefileName = datestamp + '-' + uuid + '-letter.pdf'
+        const downloadFileName = datestamp + '-bulk-VoteForward-letter.pdf';
+        const filePath = tmpdir + '/' + remotefileName;
+        merge(pdf_filenames_final, filePath, function(err){
+          if(err) {
+            return console.log(err);
+          }
+          callback(filePath);
+        });
+      }
+    });
+  }
+}
+
 function generatePdfForVoter(voter, callback) {
-  // takes
   var voterId = voter.id;
   var datestamp = dateStamp();
   var hashId = hashids.encode(voterId);
@@ -162,6 +193,7 @@ function storePdfForVoter(response, voter, storageArgs, callback){
 
 module.exports = {
   generateAndStorePdfForVoter,
+  generateBulkPdfForVoters,
   generatePdfForVoter,
   getSignedUrl
 }
