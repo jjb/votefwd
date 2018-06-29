@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import Moment from 'react-moment';
+import download from 'js-file-download';
 
 class VoterRecord extends Component {
   constructor(props) {
@@ -51,17 +52,19 @@ class VoterRecord extends Component {
         <div className="d-flex w-100 mb-1">
           <h6>{voter.first_name} {voter.last_name} <small>in {voter.city}, {voter.state}</small></h6>
         </div>
-        <a className="btn btn-secondary btn-sm mr-2"
-          download={filename}
-          href={this.state.signedUrl}>
-            Download
-        </a>
       { voter.confirmed_sent_at ? (
         <div className="text-success small mt-2">
           <span>Confirmed ready:</span> <Moment format="M/DD/YY">{voter.confirmed_sent_at}</Moment>
         </div>
       ) : (
+        <div>
+          <a className="btn btn-secondary btn-sm mr-2"
+            download={filename}
+            href={this.state.signedUrl}>
+              Download
+          </a>
         <button className="btn btn-success btn-sm" onClick={() => {this.props.confirmSend(voter)}}>Ready!</button>
+        </div>
       )}
       </li>
     )
@@ -69,6 +72,28 @@ class VoterRecord extends Component {
 }
 
 export class VoterList extends Component {
+  constructor(props) {
+    super(props)
+
+    this.downloadBundle = this.downloadBundle.bind(this);
+  }
+
+  downloadBundle() {
+    axios({
+      method: 'GET',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
+      url: `${process.env.REACT_APP_API_URL}/voters/downloadAllLetters`,
+      params: { user_id: localStorage.getItem('user_id')},
+      responseType: "blob"
+    })
+    .then(res => {
+      download(res.data, res.headers.filename);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+  }
+
   render() {
     // TODO: Those two buttons should probably appear only when there are more than
     // 1 letters outstanding to prepare.
@@ -83,7 +108,9 @@ export class VoterList extends Component {
             </div>
             <div className="col text-right">
               <div className="btn-group" role="group">
-                <button className="btn btn-secondary btn-sm" onClick={() => {console.log("This button will download a bundle of all the not yet prepared letters.")}}>Download all</button>
+                <button className="btn btn-secondary btn-sm" onClick={this.downloadBundle}>
+                  Download all
+                </button>
                 <button className="btn btn-secondary btn-sm" onClick={() => {console.log("This button will mark all the outstanding letters as ready to send.")}}>Mark all ready</button>
               </div>
             </div>

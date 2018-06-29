@@ -81,26 +81,17 @@ router.route('/voter/adopt-random')
 router.route('/voters/downloadAllLetters')
   .get(checkJwt, function(req, res) {
     voterService.downloadAllLetters(req.query.user_id,
-      function(filepath) {
-        // console.log(filepath) //go to your localmachine and you can find the file here
-        // res.download might be simpler, need a client handler for this
-        //https://stackoverflow.com/questions/7288814/download-a-file-from-nodejs-server-using-express
-        res.download(filepath, function (err) {
+      function(filepath, downloadFileName) {
+        res.header('Access-Control-Expose-Headers', "Filename");
+        res.header('Filename', downloadFileName);
+        res.download(filepath, downloadFileName, function (err) {
            if (err) {
-               console.log("Error");
-               console.log(err);
+              console.log("Error downloading all letters.");
+              console.log(err);
            } else {
-               console.log("Success");
+              console.log("Success downloading all letters.");
            }
         });
-        //  other way https://stackoverflow.com/questions/31105846/how-to-send-a-pdf-file-from-node-express-app-to-the-browser
-        // var file = fs.createReadStream(filepath);
-        // var stat = fs.statSync(filepath);
-        // res.setHeader('Content-Length', stat.size);
-        // res.setHeader('Content-Type', 'application/pdf');
-        // res.setHeader('Content-Disposition', `attachment; filename=${filepath}`);
-        // file.pipe(res);
-
       });
   });
 

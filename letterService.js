@@ -93,13 +93,13 @@ function generateBulkPdfForVoters(voters, callback) {
         var uuid = uuidv4();
         const tmpdir = os.tmpdir();
         const remotefileName = datestamp + '-' + uuid + '-letter.pdf'
-        const downloadFileName = datestamp + '-bulk-VoteForward-letter.pdf';
+        const downloadFileName = datestamp + '-bulk-VoteForward-' + voters.length + '-letters.pdf';
         const filePath = tmpdir + '/' + remotefileName;
         merge(pdf_filenames_final, filePath, function(err){
           if(err) {
             return console.log(err);
           }
-          callback(filePath);
+          callback(filePath, downloadFileName);
         });
       }
     });
