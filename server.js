@@ -65,7 +65,7 @@ router.route('/voters')
   .get(checkJwt, function(req, res) {
     voterService.getUsersAdoptedVoters(req.query.user_id,
       function(result) {
-        res.json(result)
+          res.json(result)
       });
   });
 
@@ -77,6 +77,33 @@ router.route('/voter/adopt-random')
       res.json(response);
     });
   });
+
+router.route('/voters/downloadAllLetters')
+  .get(checkJwt, function(req, res) {
+    voterService.downloadAllLetters(req.query.user_id,
+      function(filepath) {
+        // console.log(filepath) //go to your localmachine and you can find the file here
+        // res.download might be simpler, need a client handler for this
+        //https://stackoverflow.com/questions/7288814/download-a-file-from-nodejs-server-using-express
+        res.download(filepath, function (err) {
+           if (err) {
+               console.log("Error");
+               console.log(err);
+           } else {
+               console.log("Success");
+           }
+        });
+        //  other way https://stackoverflow.com/questions/31105846/how-to-send-a-pdf-file-from-node-express-app-to-the-browser
+        // var file = fs.createReadStream(filepath);
+        // var stat = fs.statSync(filepath);
+        // res.setHeader('Content-Length', stat.size);
+        // res.setHeader('Content-Type', 'application/pdf');
+        // res.setHeader('Content-Disposition', `attachment; filename=${filepath}`);
+        // file.pipe(res);
+
+      });
+  });
+
 
 router.route('/voter/confirm-send')
   .put(function(req, res) {
