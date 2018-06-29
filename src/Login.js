@@ -22,11 +22,13 @@ export class Login extends Component {
     }
     const { isAuthenticated } = this.props.auth;
     const pictureUrl = localStorage.getItem('picture_url');
+    const username = localStorage.getItem('uid');
+
     return (
         <div className="pa2 tc">
           {
             !isAuthenticated() && (
-              <button className="pa2 w-100 h3" onClick={this.login.bind(this)}>
+              <button className="btn btn-primary" onClick={this.login.bind(this)}>
                 {buttonText}
               </button>
             )
@@ -34,10 +36,11 @@ export class Login extends Component {
           {
             isAuthenticated() && (
               <div>
-                <button onClick={this.logout.bind(this)}>
+                <img className="profile-pic rounded-circle d-inline mr-2" src={pictureUrl} alt={username} />
+                <span className="text-muted p-2">{username}</span>
+                <button onClick={this.logout.bind(this)} className="btn btn-link">
                   Log Out
                 </button>
-                <img className="br-100 h2 w2 dib pa2 v-mid" src={pictureUrl} alt="Current user's avatar"/>
               </div>
             )
           }
