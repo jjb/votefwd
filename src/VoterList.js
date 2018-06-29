@@ -47,23 +47,21 @@ class VoterRecord extends Component {
     let voter = this.props.voter;
     let filename = "VoteForward_PleaLetter_" + voter.last_name + '.pdf';
     return (
-      <li className="flex items-center lh-copy ph0-l bb b--black-10" key={voter.id}>
-        <div className="pl4 flex-auto">
-          <span className="tl f6 db black-70">
-            {voter.first_name} {voter.last_name} in {voter.city}, {voter.state}
-          </span>
+      <li className="list-group-item" key={voter.id}>
+        <div className="d-flex w-100 mb-1">
+          <h6>{voter.first_name} {voter.last_name} <small>in {voter.city}, {voter.state}</small></h6>
         </div>
-        <a className="f6 link dim ph3 pv2 mb2 dib black-70"
+        <a className="btn btn-secondary btn-sm mr-2"
           download={filename}
           href={this.state.signedUrl}>
-            Download 
+            Download
         </a>
       { voter.confirmed_sent_at ? (
-        <div className="pa2">
+        <div className="text-success small mt-2">
           <span>Confirmed ready:</span> <Moment format="M/DD/YY">{voter.confirmed_sent_at}</Moment>
         </div>
       ) : (
-        <button className="f6 link dim ba ph3 pv2 mb2 dib black" onClick={() => {this.props.confirmSend(voter)}}>Ready!</button>
+        <button className="btn btn-success btn-sm" onClick={() => {this.props.confirmSend(voter)}}>Ready!</button>
       )}
       </li>
     )
@@ -77,11 +75,20 @@ export class VoterList extends Component {
     let alreadySent = this.props.voters.filter(voter => voter.confirmed_sent_at);
     let toSend = this.props.voters.filter(voter => !voter.confirmed_sent_at);
     return (
-      <div>
-        <h2 className="title tc">Letters to Prep</h2>
-          <button className="f6 link dim ba ph3 pv2 mb2 dib black" onClick={() => {console.log("This button will download a bundle of all the not yet prepared letters.")}}>Download all</button>
-          <button className="f6 link dim ba ph3 pv2 mb2 dib black" onClick={() => {console.log("This button will mark all the outstanding letters as ready to send.")}}>Mark all ready</button>
-          <ul className="list pl0 mt0 w-60-ns w-90 center">
+      <div className="row">
+        <div className="col mr-5">
+          <div className="row">
+            <div className="col">
+              <h4>Letters to Prep</h4>
+            </div>
+            <div className="col text-right">
+              <div className="btn-group" role="group">
+                <button className="btn btn-secondary btn-sm" onClick={() => {console.log("This button will download a bundle of all the not yet prepared letters.")}}>Download all</button>
+                <button className="btn btn-secondary btn-sm" onClick={() => {console.log("This button will mark all the outstanding letters as ready to send.")}}>Mark all ready</button>
+              </div>
+            </div>
+          </div>
+          <ul className="list-group">
             {toSend.map(voter =>
               <VoterRecord
                 key={voter.id}
@@ -89,14 +96,17 @@ export class VoterList extends Component {
                 confirmSend={this.props.confirmSend}
               />)}
           </ul>
-        <h2 className="title tc">Letters Prepared & Ready to Send</h2>
-          <ul className="list pl0 mt0 w-60-ns w-90 center">
+        </div>
+        <div className="col">
+          <h4>Letters Prepared & Ready to Send</h4>
+          <ul className="list-group">
             {alreadySent.map(voter =>
               <VoterRecord
                 key={voter.id}
                 voter={voter}
               />)}
           </ul>
+        </div>
       </div>
     );
   }

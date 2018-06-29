@@ -114,16 +114,16 @@ class Dashboard extends Component {
 
   render() {
     return (
-      <div className="tc">
+      <div>
         <Header auth={this.props.auth} />
         { this.props.auth.isAuthenticated() ? (
-          <div>
+          <div className="container pb-5">
             <Qualify isQualified={this.state.isQualified} user={this.state.user} />
             <AdoptVoter handleAdoptedVoter={this.handleAdoptedVoter}/>
             <VoterList voters={this.state.voters} confirmSend={this.handleConfirmSend}/>
           </div>
         ) : (
-          <div>
+          <div className="container">
             <Login auth={this.props.auth} buttonText="Sign Up or Log In To Send Letters" />
           </div>
         )}
