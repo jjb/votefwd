@@ -105,7 +105,7 @@ export class VoterList extends Component {
         <div className="col mr-5">
           <div className="row">
             <div className="col">
-              <h4>Letters to Prep</h4>
+              <h4>{toSend.length} Letters to Prep</h4>
             </div>
             <div className="col text-right">
               <div className="btn-group" role="group">
@@ -130,7 +130,7 @@ export class VoterList extends Component {
           </ul>
         </div>
         <div className="col">
-          <h4>Letters Prepared & Ready to Send</h4>
+          <h4>{alreadySent.length} Letters Prepared & Ready to Send</h4>
           <ul className="list-group">
             {alreadySent.map(voter =>
               <VoterRecord
