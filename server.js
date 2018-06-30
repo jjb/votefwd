@@ -191,6 +191,11 @@ router.route('/user')
       .then(res.status(201).send('Stored humanness timestamp.'))
       .catch(err=> {console.error('ERROR: ', err)})
     }
+    if (req.body.pledgedVote) {
+      query.update('pledged_vote_at', db.fn.now())
+      .then(res.status(201).send('Stored sender pledge to vote timestamp.'))
+      .catch(err=> {console.error('ERROR: ', err)})
+    }
     if (req.body.fullName) {
       query.update('full_name', req.body.fullName)
       .then(res.status(201).send('Stored full name.'))

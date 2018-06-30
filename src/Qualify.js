@@ -9,6 +9,7 @@ export class Qualify extends Component {
     super(props);
     this.state = {
       isHuman: false,
+      pledgedVote: false,
       isResident: false,
       agreedCode: false,
       zip: '',
@@ -69,6 +70,11 @@ export class Qualify extends Component {
     event.preventDefault();
   }
 
+  handlePledgedVote() {
+    this.updateUser('pledgedVote', true);
+    this.setState({ pledgedVote: true });
+  }
+
   handleIsResident() {
     this.updateUser('isResident', true);
     this.setState({ isResident: true });
@@ -99,6 +105,7 @@ export class Qualify extends Component {
     if (user) {
       this.setState({
         isHuman: user.is_human_at,
+        pledgedVote: user.pledged_vote_at,
         isResident: user.is_resident_at,
         agreedCode: user.accepted_code_at,
         zip: user.zip,
@@ -112,6 +119,7 @@ export class Qualify extends Component {
     if (user) {
       this.setState({
         isHuman: user.is_human_at,
+        pledgedVote: user.pledged_vote_at,
         isResident: user.is_resident_at,
         agreedCode: user.accepted_code_at,
         zip: user.zip,
@@ -126,16 +134,24 @@ export class Qualify extends Component {
 
     let captchaQ = (
       <div>
-      <p className="f4">1. Are you a robot?</p>
+      <p className="f4">1/6 Are you a robot?</p>
         <div className="center dib">
           <RecaptchaComponent handleSuccess={this.handleCaptcha.bind(this)}/>
         </div>
       </div>
     );
 
+    let pledgeQ = (
+      <div>
+      <p className="f4">2/6 Do you pledge to vote in every election you can?</p>
+        <label className="mr2">Yes.</label>
+        <input className="ph2 " onClick={this.handlePledgedVote.bind(this)} type="checkbox" />
+      </div>
+    );
+
     let nameQ = (
       <form onSubmit={this.handleNameSubmit}>
-      <p className="f4">2. What’s your full name?</p>
+      <p className="f4">3/6 What’s your full name?</p>
           <input type="text"
             value={this.state.nameFormVal}
             onChange={this.handleNameChange}
@@ -146,7 +162,7 @@ export class Qualify extends Component {
 
     let residentQ = (
       <div>
-        <p className="f4">3. Are you a U.S. Citizen or permanent resident?</p>
+        <p className="f4">4/6 Are you a U.S. Citizen or permanent resident?</p>
         <label className="mr2">Yes.</label>
         <input className="ph2 " onClick={this.handleIsResident.bind(this)} type="checkbox" />
       </div>
@@ -154,7 +170,7 @@ export class Qualify extends Component {
 
     let zipQ = (
       <form onSubmit={this.handleZipSubmit}>
-        <p className="f4">4. What’s your ZIP code?</p>
+        <p className="f4">5/6 What’s your ZIP code?</p>
         <input type="text"
           value={this.state.ZipFormVal}
           onChange={this.handleZipChange}
@@ -165,7 +181,7 @@ export class Qualify extends Component {
 
     let codeQ = (
       <div>
-        <p className="f4">5. Do you agree to abide by our code of conduct?</p>
+        <p className="f4">6/6 Do you agree to abide by our code of conduct?</p>
         <p>It’s short: be decent, i.e., kind, respectful, sincere, and neighborly.</p>
         <label className="mr2">Yes.</label>
         <input className="ph2" onClick={this.handleAgreedCode.bind(this)} type="checkbox" />
@@ -174,6 +190,9 @@ export class Qualify extends Component {
 
     if (!this.state.isHuman) {
       formMarkup = captchaQ;
+    }
+    else if (!this.state.pledgedVote) {
+      formMarkup = pledgeQ;
     }
     else if (!this.state.fullName) {
       formMarkup = nameQ;

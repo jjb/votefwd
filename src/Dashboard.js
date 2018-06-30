@@ -45,6 +45,7 @@ class Dashboard extends Component {
   isUserQualified() {
     if (
         this.state.user.is_human_at &&
+        this.state.user.pledged_vote_at &&
         this.state.user.accepted_code_at &&
         this.state.user.is_resident_at &&
         this.state.user.zip &&
