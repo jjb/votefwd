@@ -109,10 +109,14 @@ export class VoterList extends Component {
             </div>
             <div className="col text-right">
               <div className="btn-group" role="group">
-                <button className="btn btn-secondary btn-sm" onClick={this.downloadBundle}>
-                  Download all
-                </button>
-                <button className="btn btn-secondary btn-sm" onClick={() => {console.log("This button will mark all the outstanding letters as ready to send.")}}>Mark all ready</button>
+                {toSend.length > 1 &&
+                <div>
+                  <button className="btn btn-secondary btn-sm" onClick={this.downloadBundle}>
+                    Download all
+                  </button>
+                  <button className="btn btn-secondary btn-sm" onClick={() => {console.log("This button will mark all the outstanding letters as ready to send.")}}>Mark all ready</button>
+                </div>
+                }
               </div>
             </div>
           </div>
