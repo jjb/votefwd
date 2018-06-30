@@ -107,6 +107,19 @@ export class Qualify extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    let user = nextProps.user;
+    if (user) {
+      this.setState({
+        isHuman: user.is_human_at,
+        isResident: user.is_resident_at,
+        agreedCode: user.accepted_code_at,
+        zip: user.zip,
+        fullName: user.full_name
+      })
+    }
+  }
+
   render() {
 
     let formMarkup;
