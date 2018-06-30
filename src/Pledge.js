@@ -57,7 +57,7 @@ class PledgeForm extends Component {
 
 class PledgeThanks extends Component {
   render() {
-    let tweetIntentText = "A fellow citizen sent me a letter asking me to be a voter, so I'm pledging to vote this year.\n\n Want to help elect a responsible Congress? Visit http://votefwd.org and send some 'please vote' letters of your own."
+    let tweetIntentText = "A fellow citizen sent me a letter asking me to be a voter, so I’m pledging to vote this year.\n\nWant to help elect Democrats to Congress? Visit www.votefwd.org to send ‘please vote’ letters of your own. @votefwd"
     let encodedTweetIntentText = encodeURIComponent(tweetIntentText);
     return (
         <div className="tc">
