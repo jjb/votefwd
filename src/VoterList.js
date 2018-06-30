@@ -77,9 +77,11 @@ export class VoterList extends Component {
     super(props)
 
     this.downloadBundle = this.downloadBundle.bind(this);
+    this.state= { downloadingBundle: false };
   }
 
   downloadBundle() {
+    this.setState({downloadingBundle: true});
     axios({
       method: 'GET',
       headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
@@ -89,6 +91,7 @@ export class VoterList extends Component {
     })
     .then(res => {
       download(res.data, res.headers.filename);
+      this.setState({downloadingBundle: false});
     })
     .catch(err => {
       console.error(err);
@@ -96,10 +99,14 @@ export class VoterList extends Component {
   }
 
   render() {
-    // TODO: Those two buttons should probably appear only when there are more than
-    // 1 letters outstanding to prepare.
     let alreadySent = this.props.voters.filter(voter => voter.confirmed_sent_at);
     let toSend = this.props.voters.filter(voter => !voter.confirmed_sent_at);
+    let alertContent;
+    if (this.state.downloadingBundle) {
+      alertContent = (
+        <div className="alert alert-warning mt-3 mb-3 center" role="alert">Preparing batch to download...this may take a minute.</div>
+      );
+    }
     return (
       <div className="row">
         <div className="col mr-5">
@@ -119,6 +126,7 @@ export class VoterList extends Component {
                 }
               </div>
             </div>
+            {alertContent}
           </div>
           <ul className="list-group">
             {toSend.map(voter =>
