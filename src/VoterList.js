@@ -121,7 +121,6 @@ export class VoterList extends Component {
                   <button className="btn btn-secondary btn-sm" onClick={this.downloadBundle}>
                     Download all
                   </button>
-                  <button className="btn btn-secondary btn-sm" onClick={() => {console.log("This button will mark all the outstanding letters as ready to send.")}}>Mark all ready</button>
                 </div>
                 }
               </div>
