@@ -94,8 +94,8 @@ export class Qualify extends Component {
     });
   }
 
-  componentWillReceiveProps(nextProps) {
-    let user = nextProps.user;
+  componentWillMount() {
+    let user = this.props.user;
     if (user) {
       this.setState({
         isHuman: user.is_human_at,
