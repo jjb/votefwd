@@ -112,7 +112,7 @@ function generatePdfForVoter(voter, callback) {
   var hashId = hashids.encode(voterId);
   var uuid = uuidv4();
   var pledgeUrl = `${process.env.REACT_APP_URL}/pledge`;
-  var template = fs.readFileSync('./letter.html', 'utf8');
+  var template = fs.readFileSync('./templates/letter.html', 'utf8');
   var uncompiledTemplate = Handlebars.compile(template);
   var fullName = [voter.first_name, voter.middle_name, voter.last_name, voter.suffix].filter(Boolean).join(" ");
   var fullAddress = voter.address + ', ' + voter.city + ', ' + voter.state + ' ' + voter.zip;
