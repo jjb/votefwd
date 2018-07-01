@@ -28,14 +28,11 @@
             </g>
         </g>
     </svg>
-    <p id="salutation">Dear</p>
-    <p id="prompt">I have pledged to vote in every election, because</p>
-    <p>I’d like to ask you to do the same.</p>
-    <p class="bold">Will you commit to be a voter and cast your ballot in the special election for the U.S. House of Representatives on Tuesday, August 7, 2018?</p>
-    <p>I’m not asking you to vote for any particular candidate, only to be a voter.</p>
-    <p>I’d like to know if you received this and plan to vote, so please visit {{pledgeUrl}} and enter code {{hashId}} to commit to being a voter. And then on August 7, cast your ballot and make your voice heard!</p>
-    <p id="closing">Thank you,</p>
-    <p>This letter was sent via Vote Forward, an independent organization that works to increase voter turnout among Democrats. Visit www.votefwd.org to learn more.</p>
-    <p id="footer">Prepared for {{voterName}} at {{voterAddress}} on {{datestamp}}.</p>
+    <p id="salutation">Here is a list for voters in this bulk download. Have fun writing letters and flipping congress!</p>
+    <ul>
+      {{#each voters}}
+        <li>{{this.first_name}} {{this.last_name}} in {{this.voter}} {{this.state}}</li>
+      {{/each}}
+    </ul>
   </body>
 </html>

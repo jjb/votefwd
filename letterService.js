@@ -79,6 +79,7 @@ function generateAndStorePdfForVoter(voter, callback) {
 function generateBulkPdfForVoters(voters, callback) {
   // wrapper function to take a list of voters and make one pdf for all of them.
   var pdf_filenames = [];
+
   for (var i = 0; i < voters.length; i++){
     generatePdfForVoter(voters[i], function(response, voter, storageArgs){
       // some might fail and return nothing, insert an empty string as a place holder
@@ -86,24 +87,51 @@ function generateBulkPdfForVoters(voters, callback) {
       pdf_filenames.push(filename);
 
       if (pdf_filenames.length == voters.length){
-        // filter out any '' strings
-        var pdf_filenames_final = pdf_filenames.filter(file => file != '');
-        // make bulk args
-        var datestamp = dateStamp();
-        var uuid = uuidv4();
-        const tmpdir = os.tmpdir();
-        const remotefileName = datestamp + '-' + uuid + '-letter.pdf'
-        const downloadFileName = datestamp + '-bulk-VoteForward-' + voters.length + '-letters.pdf';
-        const filePath = tmpdir + '/' + remotefileName;
-        merge(pdf_filenames_final, filePath, function(err){
-          if(err) {
-            return console.log(err);
-          }
-          callback(filePath, downloadFileName);
+        generateCoverPageForVoters(voters, function(response){
+          var filename = response.filename ? response.filename : '';
+          pdf_filenames.unshift(filename);
+
+
+          // filter out any '' strings
+          var pdf_filenames_final = pdf_filenames.filter(file => file != '');
+          // make bulk args
+          var datestamp = dateStamp();
+          var uuid = uuidv4();
+          const tmpdir = os.tmpdir();
+          const remotefileName = datestamp + '-' + uuid + '-letter.pdf'
+          const downloadFileName = datestamp + '-bulk-VoteForward-' + voters.length + '-letters.pdf';
+          const filePath = tmpdir + '/' + remotefileName;
+          merge(pdf_filenames_final, filePath, function(err){
+            if(err) {
+              return console.log(err);
+            }
+            callback(filePath, downloadFileName);
+          });
         });
       }
     });
   }
+}
+
+function generateCoverPageForVoters(voters, callback) {
+  // given a list of voters from the db, make a cover page that has their name, city, and state.
+  var template = fs.readFileSync('./templates/coverpage.html', 'utf8');
+  var uncompiledTemplate = Handlebars.compile(template);
+  var context = {
+      voters: voters,
+    };
+  var html = uncompiledTemplate(context);
+  var options = { format: 'Letter' };
+  const tmpdir = os.tmpdir();
+  const uuid = uuidv4()
+  const remotefileName = dateStamp() + '-' + uuid + '-coverpage.pdf'
+  const filePath = tmpdir + '/' + remotefileName;
+  pdf.create(html).toFile(filePath, function(err, response){
+    if(err) {
+      console.error('ERROR:', err);
+    }
+    callback(response);
+  });
 }
 
 function generatePdfForVoter(voter, callback) {
