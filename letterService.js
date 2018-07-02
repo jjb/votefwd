@@ -114,7 +114,7 @@ function generateBulkPdfForVoters(voters, callback) {
 }
 
 function generateCoverPageForVoters(voters, callback) {
-  // given a list of voters from the db, make a cover page that has their name, city, and state.
+  // given a list of voters from the db, make a cover page that has their names and addresses.
   var template = fs.readFileSync('./templates/coverpage.html', 'utf8');
   var uncompiledTemplate = Handlebars.compile(template);
   var context = {
@@ -142,7 +142,13 @@ function generatePdfForVoter(voter, callback) {
   var pledgeUrl = `${process.env.REACT_APP_URL}/pledge`;
   var template = fs.readFileSync('./templates/letter.html', 'utf8');
   var uncompiledTemplate = Handlebars.compile(template);
-  var fullName = [voter.first_name, voter.middle_name, voter.last_name, voter.suffix].filter(Boolean).join(" ");
+  var salutation;
+  if (voter.gender === 'M') {
+    salutation = "Mr."
+  } else if (voter.gender === 'F') {
+    salutation = "Ms."
+  } else { salutation = null };
+  var fullName = [salutation, voter.first_name, voter.middle_name, voter.last_name, voter.suffix].filter(Boolean).join(" ");
   var fullAddress = voter.address + ', ' + voter.city + ', ' + voter.state + ' ' + voter.zip;
   var context = {
     voterId: voterId,

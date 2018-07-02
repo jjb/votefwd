@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans" rel="stylesheet">
     <style>
-      body { font-family: 'Merriweather Sans', sans-serif; margin-top: 2em; margin-left: 4em; margin-right: 4em;}
-      svg { width:20em; height:10em; margin-left:-3em; }
+      body { font-family: 'Merriweather Sans', sans-serif; margin-top: 2em; margin-left: 3em; margin-right: 3em;}
+      svg { width:16em; height:8em; margin-left:-3em; }
+      ul { font-size: .8em; }
+      li { list-style-type: none;  margin-left:-3em; margin-bottom: 0.2em; }
       .bold { font-weight: bold;}
-      #salutation {margin-bottom: 3em;}
-      #prompt {margin-bottom: 4em;}
-      #closing {margin-bottom: 4em;}
-      #footer {font-size: 0.4em;}
+      #salutation {margin-bottom: 2em;}
     </style>
     <title>Voter Letter</title>
   </head>
@@ -28,10 +27,12 @@
             </g>
         </g>
     </svg>
-    <p id="salutation">Here is a list for voters in this bulk download. Have fun writing letters and flipping congress!</p>
+    <p id="salutation">Here’s a list of all the voters in this bulk download. Thanks for writing letters to help flip Congress blue!</p>
     <ul>
       {{#each voters}}
-        <li>{{this.first_name}} {{this.last_name}} in {{this.voter}} {{this.state}}</li>
+      <li>
+        {{#if this.gender}}[{{this.gender}}]{{/if}} {{this.first_name}} {{this.last_name}}{{#if this.suffix}} {{this.suffix}}{{/if}},
+        {{this.address}}, {{this.city}}, {{this.state}} {{this.zip}}</li>
       {{/each}}
     </ul>
   </body>
