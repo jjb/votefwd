@@ -95,10 +95,16 @@ router.route('/voters/downloadAllLetters')
       });
   });
 
-
-router.route('/voter/confirm-send')
+router.route('/voter/confirm-prepped')
   .put(checkJwt, function(req, res) {
-    voterService.confirmSend(req.body.id, function(result) {
+    voterService.confirmPrepped(req.body.id, function(result) {
+      res.json(result);
+    });
+  });
+
+router.route('/voter/confirm-sent')
+  .put(checkJwt, function(req, res) {
+    voterService.confirmSent(req.body.id, function(result) {
       res.json(result);
     });
   });

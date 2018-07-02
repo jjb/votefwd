@@ -53,9 +53,9 @@ class VoterRecord extends Component {
         <div className="d-flex w-100 mb-1">
           <h6>{voter.first_name} {voter.last_name} <small>in {voter.city}, {voter.state}</small></h6>
         </div>
-      { voter.confirmed_sent_at ? (
+      { voter.confirmed_prepped_at ? (
         <div className="text-success small mt-2">
-          <span>Confirmed ready:</span> <Moment format="M/DD/YY">{voter.confirmed_sent_at}</Moment>
+          <span>Confirmed ready:</span> <Moment format="M/DD/YY">{voter.confirmed_prepped_at}</Moment>
         </div>
       ) : (
         <div>
@@ -64,7 +64,7 @@ class VoterRecord extends Component {
             href={this.state.signedUrl}>
               Download
           </a>
-        <button className="btn btn-success btn-sm" onClick={() => {this.props.confirmSend(voter)}}>Ready!</button>
+        <button className="btn btn-success btn-sm" onClick={() => {this.props.confirmPrepped(voter)}}>Ready!</button>
         </div>
       )}
       </li>
@@ -83,7 +83,7 @@ export class VoterList extends Component {
   downloadBundle() {
     this.setState({downloadingBundle: true});
     axios({
-      method: 'GET',
+     method: 'GET',
       headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
       url: `${process.env.REACT_APP_API_URL}/voters/downloadAllLetters`,
       params: { user_id: localStorage.getItem('user_id')},
@@ -99,8 +99,9 @@ export class VoterList extends Component {
   }
 
   render() {
+    let toPrep = this.props.voters.filter(voter => !voter.confirmed_prepped_at);
+    let toSend = this.props.voters.filter(voter => voter.confirmed_prepped_at && !voter.confirmed_sent_at);
     let alreadySent = this.props.voters.filter(voter => voter.confirmed_sent_at);
-    let toSend = this.props.voters.filter(voter => !voter.confirmed_sent_at);
     let alertContent;
     if (this.state.downloadingBundle) {
       alertContent = (
@@ -112,7 +113,7 @@ export class VoterList extends Component {
         <div className="col mr-5">
           <div className="row">
             <div className="col">
-              <h4>{toSend.length} Letters to Prep</h4>
+              <h4>{toPrep.length} to Prep</h4>
             </div>
             <div className="col text-right">
               <div className="btn-group" role="group">
@@ -128,23 +129,28 @@ export class VoterList extends Component {
             {alertContent}
           </div>
           <ul className="list-group">
-            {toSend.map(voter =>
+            {toPrep.map(voter =>
               <VoterRecord
                 key={voter.id}
                 voter={voter}
-                confirmSend={this.props.confirmSend}
+                confirmPrepped={this.props.confirmPrepped}
               />)}
           </ul>
         </div>
         <div className="col">
-          <h4>{alreadySent.length} Letters Prepared & Ready to Send</h4>
+          <h4>{toSend.length} to Send</h4>
+          <p>Send these on XXX</p>
           <ul className="list-group">
-            {alreadySent.map(voter =>
+            {toSend.map(voter =>
               <VoterRecord
                 key={voter.id}
                 voter={voter}
+                confirmSent={this.props.confirmSent}
               />)}
           </ul>
+        </div>
+        <div className="col">
+          <h4>{alreadySent.length} Sent</h4>
         </div>
       </div>
     );
