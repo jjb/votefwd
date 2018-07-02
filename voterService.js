@@ -83,7 +83,24 @@ function downloadAllLetters(userId, callback) {
     });
 }
 
-function confirmSend(voterId, callback) {
+function confirmPrepped(voterId, callback) {
+  db('voters')
+    .where('id', voterId)
+    .update({
+      confirmed_prepped_at: db.fn.now(),
+      updated_at: db.fn.now()
+    })
+    .then(function(result) {
+      getVoterById(voterId, function(voter) {
+        callback(voter);
+      })
+    })
+    .catch(err => {
+      console.error(err)
+    });
+}
+
+function confirmSent(voterId, callback) {
   db('voters')
     .where('id', voterId)
     .update({
@@ -92,7 +109,6 @@ function confirmSend(voterId, callback) {
     })
     .then(function(result) {
       getVoterById(voterId, function(voter) {
-
         callback(voter);
       })
     })
@@ -121,6 +137,7 @@ module.exports = {
   getUsersAdoptedVoters,
   downloadAllLetters,
   adoptRandomVoter,
-  confirmSend,
+  confirmSent,
+  confirmPrepped,
   makePledge
 }
