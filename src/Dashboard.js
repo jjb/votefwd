@@ -114,7 +114,7 @@ class Dashboard extends Component {
     axios({
       method: 'PUT',
       headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
-      url: `${process.env.REACT_APP_API_URL}/voter/confirm-send`,
+      url: `${process.env.REACT_APP_API_URL}/voter/confirm-sent`,
       data: { id: voter.id }
       })
       .then(res => {

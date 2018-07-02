@@ -48,25 +48,43 @@ class VoterRecord extends Component {
   render() {
     let voter = this.props.voter;
     let filename = "VoteForward_PleaLetter_" + voter.last_name + '.pdf';
+    let voterDisplay = (<p>hi</p>);
+    if (!voter.confirmed_prepped_at) {
+      voterDisplay = (
+        <div>
+          <div>
+            <a className="btn btn-secondary btn-sm mr-2"
+              download={filename}
+              href={this.state.signedUrl}>
+                Download
+            </a>
+          <button className="btn btn-success btn-sm" onClick={() => {this.props.confirmPrepped(voter)}}>Ready</button>
+          </div>
+        </div>
+      )
+    }
+    else if (voter.confirmed_prepped_at && !voter.confirmed_sent_at) {
+      voterDisplay = (
+        <div className="text-success small mt-2">
+          <span>Ready:</span> <Moment format="M/DD/YY">{voter.confirmed_prepped_at}</Moment>
+          <button className="btn btn-success btn-sm" onClick={() => {this.props.confirmSent(voter)}}>Sent</button>
+        </div>
+      )
+    }
+    else {
+      voterDisplay = (
+        <div className="text-success small mt-2">
+          <span>Confirmed sent:</span> <Moment format="M/DD/YY">{voter.confirmed_sent_at}</Moment>
+        </div>
+      )
+    }
+
     return (
       <li className="list-group-item" key={voter.id}>
         <div className="d-flex w-100 mb-1">
           <h6>{voter.first_name} {voter.last_name} <small>in {voter.city}, {voter.state}</small></h6>
+          {voterDisplay}
         </div>
-      { voter.confirmed_prepped_at ? (
-        <div className="text-success small mt-2">
-          <span>Confirmed ready:</span> <Moment format="M/DD/YY">{voter.confirmed_prepped_at}</Moment>
-        </div>
-      ) : (
-        <div>
-          <a className="btn btn-secondary btn-sm mr-2"
-            download={filename}
-            href={this.state.signedUrl}>
-              Download
-          </a>
-        <button className="btn btn-success btn-sm" onClick={() => {this.props.confirmPrepped(voter)}}>Ready!</button>
-        </div>
-      )}
       </li>
     )
   }
@@ -110,14 +128,14 @@ export class VoterList extends Component {
     }
     return (
       <div className="row">
-        <div className="col mr-5">
+        <div className="col mr-2">
           <div className="row">
             <div className="col">
-              <h4>{toPrep.length} to Prep</h4>
+              <h4>Letters to Prep: {toPrep.length}</h4>
             </div>
             <div className="col text-right">
               <div className="btn-group" role="group">
-                {toSend.length > 1 &&
+                {toPrep.length > 1 &&
                 <div>
                   <button className="btn btn-secondary btn-sm" onClick={this.downloadBundle}>
                     Download all
@@ -138,8 +156,8 @@ export class VoterList extends Component {
           </ul>
         </div>
         <div className="col">
-          <h4>{toSend.length} to Send</h4>
-          <p>Send these on XXX</p>
+          <h4>Letters to send: {toSend.length}</h4>
+          <p>Put these in the mail on Tuesday, July 31!</p>
           <ul className="list-group">
             {toSend.map(voter =>
               <VoterRecord
@@ -150,7 +168,12 @@ export class VoterList extends Component {
           </ul>
         </div>
         <div className="col">
-          <h4>{alreadySent.length} Sent</h4>
+          <h4>Letters sent: {alreadySent.length}</h4>
+            {alreadySent.map(voter =>
+              <VoterRecord
+                key={voter.id}
+                voter={voter}
+              />)}
         </div>
       </div>
     );
