@@ -134,7 +134,7 @@ export class Qualify extends Component {
 
     let captchaQ = (
       <div>
-      <p className="f4">1/6 Are you a robot?</p>
+        <p className="f4">1/6 Are you a robot?</p>
         <div className="center dib">
           <RecaptchaComponent handleSuccess={this.handleCaptcha.bind(this)}/>
         </div>
@@ -143,7 +143,8 @@ export class Qualify extends Component {
 
     let pledgeQ = (
       <div>
-      <p className="f4">2/6 Do you pledge to vote in every election you can?</p>
+        <p className="f4">2/6 Do you pledge to vote in every election?</p>
+        <p>The letters you send to unlikely voters will mention your commitment to voting, urging the recipient to follow your example.</p>
         <label className="mr2">Yes.</label>
         <input className="ph2 " onClick={this.handlePledgedVote.bind(this)} type="checkbox" />
       </div>
@@ -181,8 +182,7 @@ export class Qualify extends Component {
 
     let codeQ = (
       <div>
-        <p className="f4">6/6 Do you agree to abide by our code of conduct?</p>
-        <p>It’s short: be decent, i.e., kind, respectful, sincere, and neighborly.</p>
+        <p className="f4">6/6 Do you promise to be respectful at all times in your communications with fellow citizens through Vote Forward?</p>
         <label className="mr2">Yes.</label>
         <input className="ph2" onClick={this.handleAgreedCode.bind(this)} type="checkbox" />
       </div>
