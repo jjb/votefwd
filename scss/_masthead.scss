@@ -1,6 +1,6 @@
 header.masthead {
   display: flex;
-  min-height: 85%;
+  min-height: 80%;
   position: relative;
   background-color: $vf-purple;
   background-image: linear-gradient(-35deg, $vf-blue 50%, $vf-purple 50%);
@@ -35,29 +35,6 @@ header.masthead {
       }
     }
   }
-  .hero-form-wrapper {
-    padding: 1rem;
-    background: $vf-purple;
-
-    input {
-      font-size: 1.5rem;
-      border: none;
-      padding: 1rem;
-      &::placeholder {
-        color: $vf-blue;
-      }
-    }
-    input:focus {
-      background: white;
-      &::placeholder {
-        color: rgba($vf-blue, 0.25);
-      }
-    }
-
-    input:focus + .btn {
-
-    }
-  }
 
   h2 {
     color: white;
@@ -72,5 +49,27 @@ header.masthead {
     font-size: 2rem;
     @media (min-width: 768px) { font-size: 3rem; }
     @media (min-width: 992px) { font-size: 3.5rem; }
+  }
+}
+
+.hero-form-wrapper {
+  padding: 1rem;
+  background: $vf-purple;
+
+  input {
+    font-size: 1.2rem;
+    border: none;
+    padding: 1rem;
+    &::placeholder {
+      color: $vf-blue;
+    }
+
+    @media (min-width: 576px) { padding: 1.5rem; }
+  }
+  input:focus {
+    background: white;
+    &::placeholder {
+      color: rgba($vf-blue, 0.25);
+    }
   }
 }

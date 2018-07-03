@@ -1,6 +1,6 @@
 // Variables
 
-$vf-blue: #5591FF;
+$vf-blue: #2C74FF;
 $vf-lightblue: #00E6FF;
 $vf-red: #FF4B4B;
 $vf-purple: #262D7D;
@@ -30,11 +30,11 @@ $green: #28a745 !default;
 $teal: #20c997 !default;
 $cyan: #17a2b8 !default;
 
-$primary: $blue !default;
+$primary: $vf-blue !default;
 $secondary: $gray-600 !default;
 $success: $green !default;
 $info: $cyan !default;
 $warning: $yellow !default;
 $danger: $red !default;
 $light: $gray-100 !default;
-$dark: $vf-blue !default;
+$dark: $black !default;
