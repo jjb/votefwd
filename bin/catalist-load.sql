@@ -51,7 +51,7 @@ BEGIN
     likely_landline_assignment_score
   )
 
-  FROM '../voter_data/20180401_OHIO_CONGRESSIONAL_DISTRICT_12.csv'
+  FROM '/tmp/CATALIST_OH_Vote_Forward_Mailing_PHONE.csv'
   DELIMITER ','
   CSV HEADER;
 
