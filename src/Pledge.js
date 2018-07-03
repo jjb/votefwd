@@ -39,13 +39,13 @@ class PledgeForm extends Component {
 
   render() {
     return (
-      <div className="tc">
-        <form className="center db ma2" onSubmit={this.handleSubmit}>
+      <div className="text-center">
+        <form className="" onSubmit={this.handleSubmit}>
           <label>
             Enter your voter pledge code here:
-            <input className="center db ma2" type="text" value={this.state.value} onChange={this.handleChange} />
+            <input className="" type="text" value={this.state.value} onChange={this.handleChange} />
           </label>
-          <input className="center db ma2" type="submit" value="Pledge to be a voter." />
+          <input className="" type="submit" value="Pledge to be a voter." />
         </form>
       { this.state.pledgeError &&
         <p>We didn’t recognize that code. Please try again!</p>
@@ -60,9 +60,9 @@ class PledgeThanks extends Component {
     let tweetIntentText = "A fellow citizen sent me a letter asking me to be a voter, so I’m pledging to vote this year.\n\nWant to help elect Democrats to Congress? Visit www.votefwd.org to send ‘please vote’ letters of your own. @votefwd"
     let encodedTweetIntentText = encodeURIComponent(tweetIntentText);
     return (
-        <div className="tc">
+        <div className="text-center">
           <p>You just pledged to be a voter in the special election on Tuesday, August 7, 2018. Thank you!</p>
-          <a href={"https://twitter.com/intent/tweet?text=" + encodedTweetIntentText} target="blank" className="link underline blue hover-orange">Share your pledge on Twitter.</a>
+          <a href={"https://twitter.com/intent/tweet?text=" + encodedTweetIntentText} target="blank" className="link">Share your pledge on Twitter.</a>
           <p>Want to send letters like the one you received to encourage others to vote?</p>
           <a href="/dashboard" className="pl2 link underline blue hover-orange">Send letters</a>
         </div>
