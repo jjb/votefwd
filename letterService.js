@@ -117,8 +117,18 @@ function generateCoverPageForVoters(voters, callback) {
   // given a list of voters from the db, make a cover page that has their names and addresses.
   var template = fs.readFileSync('./templates/coverpage.html', 'utf8');
   var uncompiledTemplate = Handlebars.compile(template);
+  var processedVoters = [];
+  voters.forEach(function(voter) {
+    if (voter.gender == 'male') {
+      voter.salutation = 'Mr.';
+    }
+    else if (voter.gender == 'female') {
+      voter.salutation = 'Ms.';
+    }
+    processedVoters.push(voter);
+  });
   var context = {
-      voters: voters,
+      voters: processedVoters,
     };
   var html = uncompiledTemplate(context);
   var options = { format: 'Letter' };

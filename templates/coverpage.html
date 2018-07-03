@@ -6,12 +6,13 @@
     <style>
       body { font-family: 'Merriweather Sans', sans-serif; margin-top: 2em; margin-left: 3em; margin-right: 3em;}
       svg { width:16em; height:8em; margin-left:-3em; }
-      ul { font-size: .8em; }
+      ul { font-size: .7em; }
       li { list-style-type: none;  margin-left:-3em; margin-bottom: 0.2em; }
       .bold { font-weight: bold;}
       #salutation {margin-bottom: 2em;}
+      #return-address { float: right; }
     </style>
-    <title>Voter Letter</title>
+    <title>Voter Letters Cover Page</title>
   </head>
   <body>
     <svg width="3000px" height="1500px" viewBox="0 0 3000 1500" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -27,11 +28,12 @@
             </g>
         </g>
     </svg>
+    <p id="return-address">Return address for envelopes: <br/><br/>{your initials} </br>829 Bethel Rd. #137 </br> Columbus, OH 43214</p>
     <p id="salutation">Here’s a list of all the voters in this bulk download. Thanks for writing letters to help flip Congress blue!</p>
     <ul>
       {{#each voters}}
       <li>
-        {{#if this.gender}}[{{this.gender}}]{{/if}} {{this.first_name}} {{this.last_name}}{{#if this.suffix}} {{this.suffix}}{{/if}},
+        {{#if this.salutation}}[{{this.salutation}}]{{/if}} {{this.first_name}} {{this.last_name}}{{#if this.suffix}} {{this.suffix}}{{/if}},
         {{this.address}}, {{this.city}}, {{this.state}} {{this.zip}}</li>
       {{/each}}
     </ul>
