@@ -65,17 +65,21 @@ BEGIN
       address,
       city,
       state,
-      zip
+      zip,
+      age,
+      gender
     )
   SELECT dwid,
     first_name,
     middle_name,
     last_name,
     name_suffix,
-    mail_address_line_1 || ' ' || mail_address_line_2,
+    concat_ws(' ', mail_address_line_1, mail_address_line_2),
     mail_address_city,
     mail_address_state,
-    mail_address_zip
+    mail_address_zip,
+    age::text::int,
+    gender
   FROM catalist_raw
   JOIN experiment_voter
   ON experiment_voter.voter_id = catalist_raw.dwid
