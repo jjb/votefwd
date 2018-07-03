@@ -160,6 +160,7 @@ header.masthead h3 {
 .showcase .showcase-img {
   min-height: 30rem;
   background-size: cover;
+  background-position: center center;
 }
 
 @media (min-width: 768px) {
@@ -189,13 +190,13 @@ header.masthead h3 {
 .call-to-action {
   position: relative;
   background-color: #343a40;
-  background: url("../img/bg-masthead.jpg") no-repeat center center;
+  background: url("../img/bg-masthead.jpg") no-repeat bottom center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
-  padding-top: 7rem;
-  padding-bottom: 7rem;
+  padding-top: 10rem;
+  padding-bottom: 10rem;
 }
 
 .call-to-action .overlay {

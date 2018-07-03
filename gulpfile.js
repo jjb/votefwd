@@ -103,5 +103,6 @@ gulp.task('browserSync', function() {
 // Dev task
 gulp.task('dev', ['css', 'browserSync'], function() {
   gulp.watch('./scss/*.scss', ['css']);
+  gulp.watch(['img'], browserSync.reload);
   gulp.watch('./*.html', browserSync.reload);
 });
