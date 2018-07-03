@@ -137,7 +137,7 @@ export class VoterList extends Component {
               <div className="btn-group" role="group">
                 {toPrep.length > 1 &&
                 <div>
-                  <button className="btn btn-secondary btn-sm" onClick={this.downloadBundle}>
+                  <button disabled={this.state.downloadingBundle ? true : false} className="btn btn-secondary btn-sm" onClick={this.downloadBundle}>
                     Download all
                   </button>
                 </div>
