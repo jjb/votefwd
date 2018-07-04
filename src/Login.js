@@ -28,7 +28,7 @@ export class Login extends Component {
         <div className="pa2 tc">
           {
             !isAuthenticated() && (
-              <button className="btn btn-primary" onClick={this.login.bind(this)}>
+              <button className="btn btn-primary btn-lg" onClick={this.login.bind(this)}>
                 {buttonText}
               </button>
             )

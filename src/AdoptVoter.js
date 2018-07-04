@@ -36,18 +36,22 @@ export class AdoptVoter extends Component {
     let content;
     if (this.state.adopting) {
       content = (
-        <div className="alert alert-warning mt-3 mb-0" role="alert">Assigning voters to you...this may take a minute.</div>
+        <div className="alert alert-warning mt-3 mb-0" role="alert">Assigning 5 voters to you. This may take a moment.</div>
       )
     }
     return (
       <div className="jumbotron">
-        <h1>Adopt Voters</h1>
+        <h1>Send Letters to Ohio Voters</h1>
+        <p>Special election for U.S. House of Representatives | Ohio‘s 12th Congressional District | Tuesday, August 7, 2018</p>
         <hr className="my-4" />
-        <p>Click the button for the number of voters you’d like to adopt. We’ll generate letters for each one that you can download and print.</p>
-        <p>Voters you adopt are yours exclusively. They won’t be assigned to anyone else. By adopting a voter, you’re committing to sending a letter. We’re counting on you!</p>
-        <button onClick={() => this.adoptVoter(1)} className="btn btn-primary btn-lg mr-2">1</button>
-        <button onClick={() => this.adoptVoter(5)} className="btn btn-primary btn-lg mr-2">5</button>
-        <button onClick={() => this.adoptVoter(15)} className="btn btn-primary btn-lg mr-2">15</button>
+        <p>
+          We‘re writing letters to folks who voted in the last two presidential elections, but <strong>not in the 2014 midterm election</strong>
+          — people who need extra encouragement to vote.
+          Voters you "adopt" will not be assigned to anyone else. By adopting a voter, you’re committing to sending a letter. We’re counting on you!
+        </p>
+        <div className="text-center">
+          <button disabled={this.state.adopting ? true : false} onClick={() => this.adoptVoter(5)} className="btn btn-primary btn-lg mr-2">Adopt 5 Voters</button>
+        </div>
         {content}
       </div>
     )

@@ -2,7 +2,8 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import Moment from 'react-moment';
+import ReactMoment from 'react-moment';
+import moment from 'moment';
 import download from 'js-file-download';
 
 class VoterRecord extends Component {
@@ -48,7 +49,14 @@ class VoterRecord extends Component {
   render() {
     let voter = this.props.voter;
     let filename = "VoteForward_PleaLetter_" + voter.last_name + '.pdf';
-    let voterDisplay = (<p>hi</p>);
+    let voterDisplay;
+
+    let today = moment();
+    let electionDate = moment('2018-08-07');
+    let sendDate = electionDate.subtract(8, "days");
+    let readyToSend;
+    today < sendDate ? readyToSend = false : readyToSend = true;
+
     if (!voter.confirmed_prepped_at) {
       voterDisplay = (
         <div className="text-right">
@@ -66,15 +74,17 @@ class VoterRecord extends Component {
     else if (voter.confirmed_prepped_at && !voter.confirmed_sent_at) {
       voterDisplay = (
         <div className="text-success small mt-2">
-          <span>Ready:</span> <Moment format="M/DD/YY">{voter.confirmed_prepped_at}</Moment>
-          <button className="btn btn-success btn-sm" onClick={() => {this.props.confirmSent(voter)}}>Sent</button>
+          <span>Ready:</span> <ReactMoment format="M/DD/YY">{voter.confirmed_prepped_at}</ReactMoment>
+          <br/>
+          <span>Send on:</span> <ReactMoment format="M/DD/YY">{sendDate}</ReactMoment>
+          <button disabled={!readyToSend} className="btn btn-success btn-sm" onClick={() => {this.props.confirmSent(voter)}}>Sent</button>
         </div>
       )
     }
     else {
       voterDisplay = (
         <div className="text-success small mt-2">
-          <span>Confirmed sent:</span> <Moment format="M/DD/YY">{voter.confirmed_sent_at}</Moment>
+          <span>Confirmed sent:</span> <ReactMoment format="M/DD/YY">{voter.confirmed_sent_at}</ReactMoment>
         </div>
       )
     }
@@ -137,7 +147,7 @@ export class VoterList extends Component {
               <div className="btn-group" role="group">
                 {toPrep.length > 1 &&
                 <div>
-                  <button className="btn btn-light btn-sm" onClick={this.downloadBundle}>
+                  <button disabled={this.state.downloadingBundle ? true : false} className="btn btn-light btn-sm" onClick={this.downloadBundle}>
                     <i className="icon-arrow-down-circle icons"></i> Download all
                   </button>
                 </div>
@@ -156,7 +166,7 @@ export class VoterList extends Component {
           </ul>
         </div>
         <div className="col">
-          <h6><strong>Letters to send</strong> ({toSend.length}) <span className="badge badge-warning ml-2">Mail by Tuesday, July 31!</span></h6>
+          <h6><strong>Letters Prepared</strong> ({toSend.length}) <span className="badge badge-warning ml-2">Mail on Tuesday, July 31!</span></h6>
           <ul className="list-group">
             {toSend.map(voter =>
               <VoterRecord
