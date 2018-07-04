@@ -5,7 +5,8 @@ require('dotenv').config();
 const connection = {
     user: process.env.REACT_APP_SQL_USER,
     password: process.env.REACT_APP_SQL_PASSWORD,
-    database: process.env.REACT_APP_SQL_DATABASE
+    database: process.env.REACT_APP_SQL_DATABASE,
+    host: process.env.REACT_APP_SQL_HOST
   }
 
 const config = {
