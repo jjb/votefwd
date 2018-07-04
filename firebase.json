@@ -12,6 +12,13 @@
         "source": "**",
         "destination": "/index.html"
       }
+    ],
+    "redirects": [
+      {
+        "source" : "/pledge/*",
+        "destination" : "https://app.votefwd.org/pledge",
+        "type" : 302
+      }
     ]
   }
 }
