@@ -59,15 +59,15 @@ class VoterRecord extends Component {
 
     if (!voter.confirmed_prepped_at) {
       voterDisplay = (
-        <div>
-          <div>
-            <a className="btn btn-secondary btn-sm mr-2"
-              download={filename}
-              href={this.state.signedUrl}>
-                Download
-            </a>
-          <button className="btn btn-success btn-sm" onClick={() => {this.props.confirmPrepped(voter)}}>Ready</button>
-          </div>
+        <div className="text-right">
+          <a className="btn btn-light btn-sm mb-1"
+            download={filename}
+            href={this.state.signedUrl}>
+              <i className="icon-arrow-down-circle icons"></i> Download
+          </a>
+          <button className="btn btn-success btn-sm" onClick={() => {this.props.confirmPrepped(voter)}}>
+            <i className="icon-check icons"></i> Ready
+          </button>
         </div>
       )
     }
@@ -141,14 +141,14 @@ export class VoterList extends Component {
         <div className="col mr-2">
           <div className="row">
             <div className="col">
-              <h4>Letters to Prep: {toPrep.length}</h4>
+              <h6><strong>Letters to prep</strong> ({toPrep.length})</h6>
             </div>
-            <div className="col text-right">
+            <div className="col text-right mb-2">
               <div className="btn-group" role="group">
                 {toPrep.length > 1 &&
                 <div>
-                  <button disabled={this.state.downloadingBundle ? true : false} className="btn btn-secondary btn-sm" onClick={this.downloadBundle}>
-                    Download all
+                  <button disabled={this.state.downloadingBundle ? true : false} className="btn btn-light btn-sm" onClick={this.downloadBundle}>
+                    <i className="icon-arrow-down-circle icons"></i> Download all
                   </button>
                 </div>
                 }
@@ -166,8 +166,7 @@ export class VoterList extends Component {
           </ul>
         </div>
         <div className="col">
-          <h4>Letters Prepared: {toSend.length}</h4>
-          <p className="alert alert-danger">Don‘t mail these yet! For maximum impact, send them 7 days before the election, on <strong>Tuesday, July 31</strong>.</p>
+          <h6><strong>Letters Prepared</strong> ({toSend.length}) <span className="badge badge-warning ml-2">Mail on Tuesday, July 31!</span></h6>
           <ul className="list-group">
             {toSend.map(voter =>
               <VoterRecord
@@ -178,7 +177,7 @@ export class VoterList extends Component {
           </ul>
         </div>
         <div className="col">
-          <h4>Sent Letters: {alreadySent.length}</h4>
+          <h6><strong>Letters sent</strong> ({alreadySent.length})</h6>
             {alreadySent.map(voter =>
               <VoterRecord
                 key={voter.id}
