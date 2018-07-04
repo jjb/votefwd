@@ -16,7 +16,7 @@ var URL = require('url');
 const storage = new Storage({
   keyFilename: './googleappcreds.json'
 })
-const bucketName = 'voteforward';
+const bucketName = process.env.REACT_APP_CLOUD_STORAGE_BUCKET_NAME;
 const voterBucket = storage.bucket(bucketName);
 
 function dateStamp() {
