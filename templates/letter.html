@@ -6,8 +6,9 @@
     <style>
       body { font-family: 'Merriweather Sans', sans-serif; margin-top: 2em; margin-left: 4em; margin-right: 4em;}
       svg { width:20em; height:10em; margin-left:-3em; }
+      a { color: black; }
       .bold { font-weight: bold;}
-      #salutation {margin-bottom: 3em;}
+      #salutation {margin-bottom: 2em;}
       #prompt {margin-bottom: 4em;}
       #closing {margin-bottom: 4em;}
       #info {font-size: 0.6em;}
@@ -34,7 +35,7 @@
     <p>I’d like to ask you to do the same.</p>
     <p class="bold">Will you commit to be a voter and cast your ballot in the special election for the U.S. House of Representatives on Tuesday, August 7, 2018?</p>
     <p>I’m not asking you to vote for any particular candidate, only to be a voter.</p>
-    <p>I’d like to know if you received this and plan to vote, so please visit {{pledgeUrl}} and enter code {{hashId}} to commit to being a voter. And then on August 7, cast your ballot and make your voice heard!</p>
+    <p>I’d like to know if you received this and plan to vote, so please visit <a href="votefwd.org/pledge">votefwd.org/pledge</a> and enter code {{hashId}} to commit to being a voter. Then on August 7, cast your ballot and make your voice heard!</p>
     <p id="closing">Thank you,</p>
     <p id="info">This letter was sent via Vote Forward, an independent organization that works to increase voter turnout among Democrats. Visit www.votefwd.org to learn more.</p>
     <p id="footer">Prepared for {{voterName}} at {{voterAddress}} on {{datestamp}}.</p>
