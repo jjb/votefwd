@@ -1,0 +1,11 @@
+.call-to-action {
+  position: relative;
+  background: url('../img/bg-blue-wave.jpg') no-repeat bottom center;
+  @include background-cover;
+  padding-top: 10rem;
+  padding-bottom: 10rem;
+  h2 {
+    font-size: 2.2rem;
+    text-shadow: 2px 2px $vf-purple;
+  }
+}
