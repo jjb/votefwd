@@ -1,16 +1,86 @@
-html, body {
-  font-family: 'Raleway', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+:root {
+  --purple: #262D7D;
+  --blue: #2C74FF;
+  --lightblue: #77C3F4;
+  --red: #D44332;
 }
 
-.logo {
-  width: 150px;
+/*
+  Purple: #262D7D;
+  Blue: #2C74FF;
+  Light Blue: #77C3F4;
+  Red: #D44332;
+*/
+
+html, body {
+  font-family: 'Raleway', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  height: 100%;
+}
+
+#root {
+  height: 100%;
+}
+
+.logo, .logo > svg {
+  height: 60px;
 }
 
 .profile-pic {
+  border-radius: 50%;
   max-width: 35px;
   height: auto;
+  border: 3px solid white;
+  overflow: hidden;
 }
 
 .navbar {
-  background-color: #AFE5FF;
+  /* background: #2C74FF url(../images/bg-diagonal.png) -35px -5px no-repeat; */
+  /* background-size: 150px; */
+  background-color: rgb(44, 116, 255);
+  background-image: linear-gradient(-35deg, rgb(44, 116, 255) 50%, rgb(38, 45, 125) 50%);
+  background-size: 50%;
+  background-repeat: no-repeat;
+  min-height: 100px;
+}
+
+/* Buttons */
+
+.btn {
+  border-radius: 4px;
+  color: var(--blue);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 700;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: var(--blue);
+}
+
+/* Backgrounds */
+.bg-light {
+  background-color: #eee;
+}
+
+.bg-blue {
+  background-color: var(--blue);
+}
+
+.bg-lightblue {
+  background-color: var(--lightblue);
+}
+
+.bg-purple {
+  background-color: var(--purple);
+}
+
+/* Homepage */
+.home--action-container {
+  background-color: #eee;
+  background-image: linear-gradient(-35deg, #eee 50%, rgb(38, 45, 125) 50%);
+  background-size: 40% 10%;
+  background-repeat: no-repeat;
+  
 }
