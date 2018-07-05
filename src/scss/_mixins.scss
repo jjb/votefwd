@@ -1,0 +1,30 @@
+// Mixins
+// Background Cover Mixin
+@mixin background-cover {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+// Breakpoint Mixin
+// (xs: 0, sm: 576px, md: 768px, lg: 992px, xl: 1200px)
+
+// Font Mixins
+
+@font-face {
+  font-family: 'Cocogoose';
+  src: url('/css/fonts/Cocogoose.woff2') format('woff2'),
+       url('/css/fonts/Cocogoose.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@mixin body-font {
+  font-family: 'Raleway', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+@mixin header-font {
+  font-family: 'Cocogoose', Impact, Helvetica, sans-serif;
+}
+
