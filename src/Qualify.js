@@ -212,9 +212,26 @@ export class Qualify extends Component {
 
     if (!this.props.isQualified && formMarkup) {
       return (
-        <div className="w-50 center">
-          <p>First, we need to make sure of a few things...</p>
-          {formMarkup}
+        <div>
+          <div className="modal" tabIndex="-1" role="dialog" style={{display: 'block'}}>
+            <div className="modal-dialog" role="document">
+              <div className="modal-content">
+                <div className="modal-header">
+                  <h5 className="modal-title">
+                    First, we need to make sure of a few things...
+                  </h5>
+                </div>
+                <div className="modal-body">
+                  {formMarkup}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="modal-backdrop"
+            style={{
+              opacity: 0.9,
+              backgroundColor: 'white'
+            }}></div>
         </div>
       )
     }
