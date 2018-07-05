@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import { RecaptchaComponent } from './Recaptcha';
+import { ProgressIndicator } from './ProgressIndicator';
 import axios from 'axios';
 
 export class Qualify extends Component {
@@ -134,57 +135,94 @@ export class Qualify extends Component {
 
     let captchaQ = (
       <div>
-        <p className="f4">1/6 Are you a robot?</p>
-        <div className="center dib">
+        <p>Are you a robot?</p>
+        <div className="mb-3">
           <RecaptchaComponent handleSuccess={this.handleCaptcha.bind(this)}/>
         </div>
+        <ProgressIndicator current={1} max={6}></ProgressIndicator>
       </div>
     );
 
     let pledgeQ = (
       <div>
-        <p className="f4">2/6 Do you pledge to vote in every election?</p>
+        <p>Do you pledge to vote in every election?</p>
         <p>The letters you send to unlikely voters will mention your commitment to voting, urging the recipient to follow your example.</p>
-        <label className="mr2">Yes.</label>
-        <input className="ph2 " onClick={this.handlePledgedVote.bind(this)} type="checkbox" />
+        <div className="form-check mb-3">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            onClick={this.handlePledgedVote.bind(this)} />
+          <label className="form-check-label">
+            Yes
+          </label>
+        </div>
+        <ProgressIndicator current={2} max={6}></ProgressIndicator>
       </div>
     );
 
     let nameQ = (
       <form onSubmit={this.handleNameSubmit}>
-      <p className="f4">3/6 What’s your full name?</p>
+        <p>What’s your full name?</p>
+        <div className="input-group mb-3">
           <input type="text"
+            className="form-control"
+            placeholder="First and last name"
             value={this.state.nameFormVal}
-            onChange={this.handleNameChange}
-          />
-          <input type="submit" value="Submit" />
+            onChange={this.handleNameChange} />
+          <div className="input-group-append">
+            <button className="btn btn-outline-secondary" type="submit">Submit</button>
+          </div>
+        </div>
+        <ProgressIndicator current={3} max={6}></ProgressIndicator>
       </form>
     );
 
     let residentQ = (
       <div>
-        <p className="f4">4/6 Are you a U.S. Citizen or permanent resident?</p>
-        <label className="mr2">Yes.</label>
-        <input className="ph2 " onClick={this.handleIsResident.bind(this)} type="checkbox" />
+        <p>Are you a U.S. Citizen or permanent resident?</p>
+        <div className="form-check mb-3">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            onClick={this.handleIsResident.bind(this)} />
+          <label className="form-check-label">
+            Yes
+          </label>
+        </div>
+        <ProgressIndicator current={4} max={6}></ProgressIndicator>
       </div>
     );
 
     let zipQ = (
       <form onSubmit={this.handleZipSubmit}>
-        <p className="f4">5/6 What’s your ZIP code?</p>
-        <input type="text"
-          value={this.state.ZipFormVal}
-          onChange={this.handleZipChange}
-        />
-        <input type="submit" value="Submit" />
+        <p>What’s your ZIP code?</p>
+        <div className="input-group mb-3">
+          <input type="text"
+            className="form-control"
+            placeholder="00000"
+            value={this.state.ZipFormVal}
+            onChange={this.handleZipChange} />
+          <div className="input-group-append">
+            <button className="btn btn-outline-secondary" type="submit">Submit</button>
+          </div>
+        </div>
+        <ProgressIndicator current={5} max={6}></ProgressIndicator>
       </form>
     );
 
     let codeQ = (
       <div>
-        <p className="f4">6/6 Do you promise to be respectful at all times in your communications with fellow citizens through Vote Forward?</p>
-        <label className="mr2">Yes.</label>
-        <input className="ph2" onClick={this.handleAgreedCode.bind(this)} type="checkbox" />
+        <p className="f4">Do you promise to be respectful at all times in your communications with fellow citizens through Vote Forward?</p>
+        <div className="form-check mb-3">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            onClick={this.handleAgreedCode.bind(this)} />
+          <label className="form-check-label">
+            Yes
+          </label>
+        </div>
+        <ProgressIndicator current={6} max={6}></ProgressIndicator>
       </div>
     );
 
