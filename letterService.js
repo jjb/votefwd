@@ -111,6 +111,7 @@ function generateCoverPageHtmlForVoters(voters) {
 }
 
 function generateHtmlForVoter(voter) {
+  // takes a voter and makes a html template for them to be made into a pdf
   var voterId = voter.id;
   var datestamp = dateStamp();
   var hashId = hashids.encode(voterId);
@@ -138,6 +139,7 @@ function generateHtmlForVoter(voter) {
 }
 
 function generatePdfFromBulkHtml(html, callback) {
+  // takes a bunch of merged html tempaltes and makes them into a pdf
   var uuid = uuidv4();
   var datestamp = dateStamp();
 
