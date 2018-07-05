@@ -3,7 +3,6 @@
 
 var db = require('./src/db');
 var pdf = require('html-pdf');
-var merge = require('easy-pdf-merge');
 var Hashids = require('hashids');
 var Storage = require('@google-cloud/storage');
 var Handlebars = require('handlebars');
@@ -79,41 +78,19 @@ function generateAndStorePdfForVoter(voter, callback) {
 function generateBulkPdfForVoters(voters, callback) {
   // wrapper function to take a list of voters and make one pdf for all of them.
   var pdf_filenames = [];
-
+  var html = ''
+  html += generateCoverPageHtmlForVoters(voters);
   for (var i = 0; i < voters.length; i++){
-    generatePdfForVoter(voters[i], function(response, voter, storageArgs){
-      // some might fail and return nothing, insert an empty string as a place holder
-      var filename = response.filename ? response.filename : '';
-      pdf_filenames.push(filename);
-
-      if (pdf_filenames.length == voters.length){
-        generateCoverPageForVoters(voters, function(response){
-          var filename = response.filename ? response.filename : '';
-          pdf_filenames.unshift(filename);
-
-
-          // filter out any '' strings
-          var pdf_filenames_final = pdf_filenames.filter(file => file != '');
-          // make bulk args
-          var datestamp = dateStamp();
-          var uuid = uuidv4();
-          const tmpdir = os.tmpdir();
-          const remotefileName = datestamp + '-' + uuid + '-letter.pdf'
-          const downloadFileName = datestamp + '-bulk-VoteForward-' + voters.length + '-letters.pdf';
-          const filePath = tmpdir + '/' + remotefileName;
-          merge(pdf_filenames_final, filePath, function(err){
-            if(err) {
-              return console.log(err);
-            }
-            callback(filePath, downloadFileName);
-          });
-        });
-      }
-    });
+    html += generateHtmlForVoter(voters[i]);
   }
+  generatePdfFromBulkHtml(html, function(response, downloadFileName){
+      var filename = response.filename ? response.filename : '';
+      console.log(filename)
+      callback(filename, downloadFileName);
+  });
 }
 
-function generateCoverPageForVoters(voters, callback) {
+function generateCoverPageHtmlForVoters(voters) {
   // given a list of voters from the db, make a cover page that has their names and addresses.
   var template = fs.readFileSync('./templates/coverpage.html', 'utf8');
   var uncompiledTemplate = Handlebars.compile(template);
@@ -131,24 +108,13 @@ function generateCoverPageForVoters(voters, callback) {
       voters: processedVoters,
     };
   var html = uncompiledTemplate(context);
-  var options = { format: 'Letter' };
-  const tmpdir = os.tmpdir();
-  const uuid = uuidv4()
-  const remotefileName = dateStamp() + '-' + uuid + '-coverpage.pdf'
-  const filePath = tmpdir + '/' + remotefileName;
-  pdf.create(html).toFile(filePath, function(err, response){
-    if(err) {
-      console.error('ERROR:', err);
-    }
-    callback(response);
-  });
+  return html;
 }
 
-function generatePdfForVoter(voter, callback) {
+function generateHtmlForVoter(voter) {
   var voterId = voter.id;
   var datestamp = dateStamp();
   var hashId = hashids.encode(voterId);
-  var uuid = uuidv4();
   var pledgeUrl = `${process.env.REACT_APP_URL}/pledge`;
   var template = fs.readFileSync('./templates/letter.html', 'utf8');
   var uncompiledTemplate = Handlebars.compile(template);
@@ -169,6 +135,31 @@ function generatePdfForVoter(voter, callback) {
     pledgeUrl: pledgeUrl
     };
   var html = uncompiledTemplate(context);
+  return html;
+}
+
+function generatePdfFromBulkHtml(html, callback) {
+  var uuid = uuidv4();
+  var datestamp = dateStamp();
+
+  const tmpdir = os.tmpdir();
+  const remotefileName = datestamp + '-' + uuid + '-letter.pdf'
+  const downloadFileName = datestamp + '-' + uuid + '-VoteForward-letter.pdf';
+  const filePath = tmpdir + '/' + remotefileName;
+  pdf.create(html).toFile(filePath, function(err, response){
+    if(err) {
+      console.error('ERROR:', err);
+    }
+    callback(response, downloadFileName);
+  });
+}
+
+function generatePdfForVoter(voter, callback) {
+  var uuid = uuidv4();
+  var datestamp = dateStamp();
+  var hashId = hashids.encode(voter.id);
+  var html = generateHtmlForVoter(voter)
+
   var options = { format: 'Letter' };
   const tmpdir = os.tmpdir();
   const remotefileName = datestamp + '-' + uuid + '-letter.pdf'
