@@ -85,7 +85,6 @@ function generateBulkPdfForVoters(voters, callback) {
   }
   generatePdfFromBulkHtml(html, function(response, downloadFileName){
       var filename = response.filename ? response.filename : '';
-      console.log(filename)
       callback(filename, downloadFileName);
   });
 }
