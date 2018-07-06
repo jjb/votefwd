@@ -9,6 +9,7 @@
       ul { font-size: .7em; }
       li { list-style-type: none;  margin-left:-3em; margin-bottom: 0.2em; }
       .bold { font-weight: bold;}
+      .pagebreak { page-break-after: always; }
       #salutation {margin-bottom: 2em;}
       #return-address { float: right; }
     </style>
@@ -37,5 +38,6 @@
         {{this.address}}, {{this.city}}, {{this.state}} {{this.zip}}</li>
       {{/each}}
     </ul>
+    <div class="pagebreak"> </div>
   </body>
 </html>
