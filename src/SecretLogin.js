@@ -2,9 +2,6 @@
 
 import React, { Component } from 'react';
 import { Header } from './Header';
-import { LandingShowcase } from './LandingShowcase';
-import { CallToAction } from './CallToAction';
-import { Footer } from './Footer';
 import { Login } from './Login';
 
 class SecretLogin extends Component {

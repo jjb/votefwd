@@ -5,8 +5,6 @@ import { Header } from './Header';
 import { LandingShowcase } from './LandingShowcase';
 import { CallToAction } from './CallToAction';
 import { Footer } from './Footer';
-import { Login } from './Login';
-
 class Home extends Component {
     render() {
       return (
