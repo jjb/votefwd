@@ -16,7 +16,8 @@ class Dashboard extends Component {
     this.handleAdoptedVoter = this.handleAdoptedVoter.bind(this);
     this.handleConfirmSent = this.handleConfirmSent.bind(this);
     this.handleConfirmPrepped = this.handleConfirmPrepped.bind(this);
-    this.state = { voters: [], user: {}, isQualified: true }
+    this.updateUser = this.updateUser.bind(this);
+    this.state = { voters: [], user: {}}
   }
 
   getCurrentUser() {
@@ -29,9 +30,7 @@ class Dashboard extends Component {
         params: { auth0_id: user_id }
         })
         .then(res => {
-          this.setState({ user: res.data[0] }, () => {
-            this.isUserQualified();
-          })
+          this.setState({ user: res.data[0] })
         })
         .catch(err => {
           console.error(err)
@@ -40,23 +39,6 @@ class Dashboard extends Component {
     }
     else {
       return false;
-    }
-  }
-
-  isUserQualified() {
-    if (
-        this.state.user.is_human_at &&
-        this.state.user.pledged_vote_at &&
-        this.state.user.accepted_code_at &&
-        this.state.user.is_resident_at &&
-        this.state.user.zip &&
-        this.state.user.full_name
-      )
-    {
-      this.setState({ isQualified: true })
-    }
-    else {
-      this.setState({ isQualified: false })
     }
   }
 
@@ -132,11 +114,31 @@ class Dashboard extends Component {
     })
   }
 
+  updateUser(key, value) {
+    let data = {}
+    data['auth0_id'] = localStorage.getItem('user_id');
+    data[key] = value;
+    axios({
+      method: 'POST',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
+      url: `${process.env.REACT_APP_API_URL}/user`,
+      data: data
+    })
+    .catch(err => {
+      console.error(err);
+    });
+  }
+
   componentWillMount(){
+    this.getCurrentUser();
     if (!this.getCurrentUser()) {
       history.replace('/');
     }
     this.getAdoptedVoters();
+  }
+
+  componentWillUpdate(){
+    this.getCurrentUser();
   }
 
   render() {
@@ -145,7 +147,7 @@ class Dashboard extends Component {
         <Header auth={this.props.auth} />
         { this.props.auth.isAuthenticated() ? (
           <div className="container pb-5">
-            <Qualify isQualified={this.state.isQualified} user={this.state.user} />
+            <Qualify user={this.state.user} updateUser={this.updateUser}/>
             <AdoptVoter handleAdoptedVoter={this.handleAdoptedVoter}/>
             <VoterList
               voters={this.state.voters}

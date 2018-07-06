@@ -9,12 +9,6 @@ export class Qualify extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isHuman: false,
-      pledgedVote: false,
-      isResident: false,
-      agreedCode: false,
-      zip: '',
-      fullName: '',
       nameFormVal: '',
       zipFormVal: '',
       gRecaptchaResponse: ''
@@ -37,11 +31,7 @@ export class Qualify extends Component {
     })
     .then(res => {
       if (res.status === 200) {
-        this.updateUser('isHuman', true);
-        this.setState({
-          isHuman: true,
-          gRecaptchaResponse: response
-        });
+        this.props.updateUser('isHuman', true);
       } else {
         console.error('Something went wrong with validation of humanness.');
       }
@@ -56,8 +46,7 @@ export class Qualify extends Component {
   }
 
   handleNameSubmit(event) {
-    this.updateUser('fullName', this.state.nameFormVal);
-    this.setState({ fullName: this.state.nameFormVal });
+    this.props.updateUser('fullName', this.state.nameFormVal);
     event.preventDefault();
   }
 
@@ -66,67 +55,20 @@ export class Qualify extends Component {
   }
 
   handleZipSubmit(event) {
-    this.updateUser('zip', this.state.zipFormVal);
-    this.setState({ zip: this.state.zipFormVal });
+    this.props.updateUser('zip', this.state.zipFormVal);
     event.preventDefault();
   }
 
   handlePledgedVote() {
-    this.updateUser('pledgedVote', true);
-    this.setState({ pledgedVote: true });
+    this.props.updateUser('pledgedVote', true);
   }
 
   handleIsResident() {
-    this.updateUser('isResident', true);
-    this.setState({ isResident: true });
+    this.props.updateUser('isResident', true);
   }
 
   handleAgreedCode() {
-    this.updateUser('agreedCode', true);
-    this.setState({ agreedCode: true });
-  }
-
-  updateUser(key, value) {
-    let data = {}
-    data['auth0_id'] = localStorage.getItem('user_id');
-    data[key] = value;
-    axios({
-      method: 'POST',
-      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
-      url: `${process.env.REACT_APP_API_URL}/user`,
-      data: data
-    })
-    .catch(err => {
-      console.error(err);
-    });
-  }
-
-  componentWillMount() {
-    let user = this.props.user;
-    if (user) {
-      this.setState({
-        isHuman: user.is_human_at,
-        pledgedVote: user.pledged_vote_at,
-        isResident: user.is_resident_at,
-        agreedCode: user.accepted_code_at,
-        zip: user.zip,
-        fullName: user.full_name
-      })
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    let user = nextProps.user;
-    if (user) {
-      this.setState({
-        isHuman: user.is_human_at,
-        pledgedVote: user.pledged_vote_at,
-        isResident: user.is_resident_at,
-        agreedCode: user.accepted_code_at,
-        zip: user.zip,
-        fullName: user.full_name
-      })
-    }
+    this.props.updateUser('agreedCode', true);
   }
 
   render() {
@@ -209,22 +151,22 @@ export class Qualify extends Component {
       </div>
     );
 
-    if (!this.state.isHuman) {
+    if (!this.props.user.is_human_at) {
       formMarkup = captchaQ;
     }
-    else if (!this.state.pledgedVote) {
+    else if (!this.props.user.pledged_vote_at) {
       formMarkup = pledgeQ;
     }
-    else if (!this.state.fullName) {
+    else if (!this.props.user.full_name) {
       formMarkup = nameQ;
     }
-    else if (!this.state.isResident) {
+    else if (!this.props.user.is_resident_at) {
       formMarkup = residentQ;
     }
-    else if (!this.state.zip) {
+    else if (!this.props.user.zip) {
       formMarkup = zipQ;
     }
-    else if (!this.state.agreedCode) {
+    else if (!this.props.user.accepted_code_at) {
       formMarkup = codeQ;
     }
     else {
