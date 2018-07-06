@@ -16,7 +16,7 @@ class Welcome extends Component {
           ) :
           (
             <div className="text-center pt-5 pb-5">
-              <Login auth={this.props.auth} buttonText="Sign Up Or Log In To Send Letters" />
+              <Login auth={this.props.auth} buttonText="Sign Up Or Log In to send letters" />
             </div>
           )
         }
@@ -32,8 +32,8 @@ class Home extends Component {
         <Header auth={this.props.auth} />
         <Welcome auth={this.props.auth} />
         <div className="text-center">
-          <p>Received a letter? <a className="link" href="/pledge">Click here to pledge to vote</a>.</p>
-          <p>Not sure what this is? <a className="link" target="_blank" rel="noopener noreferrer" href="https://votefwd.org">Click here to learn more</a>.</p>
+          <p><a className="link" href="/pledge">Pledge to vote -></a></p>
+          <p><a className="link" target="_blank" rel="noopener noreferrer" href="https://votefwd.org">Learn about Vote Forward -></a></p>
         </div>
       </div>
     );
