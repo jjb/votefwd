@@ -26,38 +26,20 @@ class Welcome extends Component {
     );
   }
 }
-
-// class Home extends Component {
-//   render() {
-//     return (
-//       <div className="h-100">
-//         <Header auth={this.props.auth} />
-//         <div className="row h-100">
-//           <Welcome auth={this.props.auth} />
-//           <div className="col col-lg-6 p-4 bg-lightblue h-50">
-//             <p>Received a letter? <a className="link" href="/pledge">Click here to pledge to vote</a>.</p>
-//             <p>Not sure what this is? <a className="link" target="_blank" rel="noopener noreferrer" href="https://votefwd.org">Click here to learn more</a>.</p>
-//           </div>
-//         </div>
-//       </div>
-//     );
-//   }
-// }
 class Home extends Component {
     render() {
       return (
-        <div className="h-100">
+        <React.Fragment>
           <Header auth={this.props.auth} />
           <LandingShowcase />
           <CallToAction />
           <div className="row h-100">
             <Welcome auth={this.props.auth} />
             <div className="col col-lg-6 p-4 bg-lightblue h-50">
-              <p>Received a letter? <a className="link" href="/pledge">Click here to pledge to vote</a>.</p>
               <p>Not sure what this is? <a className="link" target="_blank" rel="noopener noreferrer" href="https://votefwd.org">Click here to learn more</a>.</p>
             </div>
           </div>
-        </div>
+        </React.Fragment>
       );
     }
   }
