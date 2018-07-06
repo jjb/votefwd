@@ -2,8 +2,8 @@
 
 import React, { Component } from 'react';
 import { Login } from './Login';
-
-export class Header extends Component {
+import { Masthead } from './Masthead';
+class Navbar extends Component {
   render() {
     return (
       <nav className="navbar">
@@ -18,9 +18,24 @@ export class Header extends Component {
               </g>
             </svg>
         </a>
-        { this.props.auth.isAuthenticated() && <Login auth={this.props.auth} />}
+        <Login auth={this.props.auth} />
       </nav>
-
+    );
+  }
+}
+export class Header extends Component {
+  render() {
+    return (
+      <React.Fragment>
+        { this.props.auth.isAuthenticated() ?
+          (
+            <Navbar />
+          ) :
+          (
+            <Masthead />
+          )
+        }
+      </React.Fragment>
     );
   }
 }
