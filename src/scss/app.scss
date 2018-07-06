@@ -27,6 +27,12 @@
   min-height: 100px;
 }
 
+.navbar .logo {
+  height: 60px;
+  width: inherit;
+  margin-left: 0.25em;
+}
+
 /* Buttons */
 
 // .btn {
@@ -58,12 +64,4 @@
 
 .bg-purple {
   background-color: $vf-purple;
-}
-
-/* Homepage */
-.home--action-container {
-  background-color: #eee;
-  background-image: linear-gradient(-35deg, #eee 50%, rgb(38, 45, 125) 50%);
-  background-size: 40% 10%;
-  background-repeat: no-repeat;
 }
