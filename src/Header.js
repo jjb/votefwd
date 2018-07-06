@@ -18,7 +18,9 @@ class Navbar extends Component {
               </g>
             </svg>
         </a>
-        <Login auth={this.props.auth} />
+        { this.props.auth.isAuthenticated() &&
+          <Login auth={this.props.auth} />
+        }
       </nav>
     );
   }
@@ -27,9 +29,9 @@ export class Header extends Component {
   render() {
     return (
       <React.Fragment>
-        { this.props.auth.isAuthenticated() ?
+        { !this.props.showMasthead ?
           (
-            <Navbar />
+            <Navbar {...this.props} />
           ) :
           (
             <Masthead />

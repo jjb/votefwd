@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Header } from './Header';
 import { LandingShowcase } from './LandingShowcase';
 import { CallToAction } from './CallToAction';
+import { Footer } from './Footer';
 import { Login } from './Login';
 
 class Welcome extends Component {
@@ -30,9 +31,10 @@ class Home extends Component {
     render() {
       return (
         <React.Fragment>
-          <Header auth={this.props.auth} />
+          <Header auth={this.props.auth} showMasthead />
           <LandingShowcase />
           <CallToAction />
+          <Footer />
           <div className="row h-100">
             <Welcome auth={this.props.auth} />
             <div className="col col-lg-6 p-4 bg-lightblue h-50">
