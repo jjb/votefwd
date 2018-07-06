@@ -3,6 +3,7 @@ import { Route, Router } from 'react-router-dom';
 import Home from './Home';
 import Dashboard from './Dashboard';
 import Callback from './Callback';
+import Login from './SecretLogin';
 import Auth from './Auth';
 import Pledge from './Pledge';
 import Admin from './Admin';
@@ -26,6 +27,7 @@ export const makeMainRoutes = () => {
             return <Callback {...props} /> 
           }}/>
           <Route exact path="/dashboard" render={(props) => <Dashboard auth={auth} {...props} />} />
+          <Route exact path="/secretlogin" render={(props) => <Login auth={auth} {...props} />} />
           <Route exact path="/pledge" render={(props) => <Pledge auth={auth} {...props} />} />
           <Route exact path="/admin" render={(props) => <Admin auth={auth} {...props} />} />
         </React.Fragment>
