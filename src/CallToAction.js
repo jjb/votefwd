@@ -22,7 +22,7 @@ export class CallToAction extends Component {
                     name="mc-embedded-subscribe-form"
                     className="validate"
                     target="_blank"
-                    novalidate
+                    noValidate
                 >
                   <div className="form-row m-0">
                     <input
@@ -40,12 +40,12 @@ export class CallToAction extends Component {
                   </div>
                   <div
                     className="u-offscreen"
-                    ariaHidden="true"
+                    aria-hidden="true"
                   >
                     <input
                       type="text"
                       name="b_2d49ba28099a6f9c850c21428_33e15c2ab0"
-                      tabindex="-1"
+                      tabIndex="-1"
                     />
                   </div>
                 </form>
