@@ -146,16 +146,10 @@ export class Qualify extends Component {
     let pledgeQ = (
       <div>
         <p>Do you pledge to vote in every election?</p>
-        <p>The letters you send to unlikely voters will mention your commitment to voting, urging the recipient to follow your example.</p>
-        <div className="form-check mb-3">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            onClick={this.handlePledgedVote.bind(this)} />
-          <label className="form-check-label">
-            Yes
-          </label>
+        <div className="text-center">
+          <button className="btn btn-outline-secondary mb-3" onClick={this.handlePledgedVote.bind(this)}>Yes</button>
         </div>
+        <p className="small">The letters you send will mention <strong>your</strong> commitment to voting, urging the recipient to follow your example.</p>
         <ProgressIndicator current={2} max={6}></ProgressIndicator>
       </div>
     );
@@ -180,14 +174,8 @@ export class Qualify extends Component {
     let residentQ = (
       <div>
         <p>Are you a U.S. Citizen or permanent resident?</p>
-        <div className="form-check mb-3">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            onClick={this.handleIsResident.bind(this)} />
-          <label className="form-check-label">
-            Yes
-          </label>
+        <div className="text-center">
+          <button className="btn btn-outline-secondary mb-3" onClick={this.handleIsResident.bind(this)}>Yes</button>
         </div>
         <ProgressIndicator current={4} max={6}></ProgressIndicator>
       </div>
@@ -213,14 +201,8 @@ export class Qualify extends Component {
     let codeQ = (
       <div>
         <p className="f4">Do you promise to be respectful at all times in your communications with fellow citizens through Vote Forward?</p>
-        <div className="form-check mb-3">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            onClick={this.handleAgreedCode.bind(this)} />
-          <label className="form-check-label">
-            Yes
-          </label>
+        <div className="text-center">
+          <button className="btn btn-outline-secondary mb-3" onClick={this.handleAgreedCode.bind(this)}>Yes</button>
         </div>
         <ProgressIndicator current={6} max={6}></ProgressIndicator>
       </div>
