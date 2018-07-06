@@ -107,3 +107,14 @@ These voter records consist of randomized names and addresses.
 Note: currently, the server must be already running for these server-side tests, such as they are, to succeed.
 
 	npm run test-server
+
+#### If you're updating SCSS files
+
+Make sure to update SCSS files and not the compiled CSS files. Note that building CSS requires node-sass to be installed on your machine:
+
+	npm install -g node-sass
+
+To compile, run this script in a second tab in your terminal:
+
+	npm run scss-compile
+

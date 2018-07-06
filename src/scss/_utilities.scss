@@ -1,0 +1,9 @@
+// Utility classes
+// ---
+// These should be prefixed with `u-` and are designed to be helper utility
+// classes for quickly styling HTML
+
+.u-offscreen {
+  position: absolute;
+  left: -5000px;
+}
