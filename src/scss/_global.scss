@@ -83,13 +83,12 @@ p {
 .text-lightblue {
   color: $vf-lightblue;
 }
+
 .text-purple {
   color: $vf-purple;
 }
+
 .text-white a {
   color: white;
   text-decoration: underline;
-}
-.text-white a:hover {
-  background: $vf-lightblue !important;
 }
