@@ -1,11 +1,11 @@
-html, body {
+@import "variables.scss";
+
+html, body, #root {
   padding: 0;
   margin: 0;
   height: 100%;
-}
-
-body {
   @include body-font;
+
 }
 
 h1,
@@ -85,4 +85,11 @@ p {
 }
 .text-purple {
   color: $vf-purple;
+}
+.text-white a {
+  color: white;
+  text-decoration: underline;
+}
+.text-white a:hover {
+  background: $vf-lightblue !important;
 }

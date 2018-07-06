@@ -19,7 +19,7 @@ const handleAuthentication = ({location}) => {
 export const makeMainRoutes = () => {
   return (
       <Router history={history}>
-        <div className="h-100">
+        <React.Fragment>
           <Route exact path="/" render={(props) => <Home auth={auth} {...props} />} />
           <Route exact path="/callback" render={(props) => {
             handleAuthentication(props);
@@ -28,7 +28,7 @@ export const makeMainRoutes = () => {
           <Route exact path="/dashboard" render={(props) => <Dashboard auth={auth} {...props} />} />
           <Route exact path="/pledge" render={(props) => <Pledge auth={auth} {...props} />} />
           <Route exact path="/admin" render={(props) => <Admin auth={auth} {...props} />} />
-        </div>
+        </React.Fragment>
       </Router>
   );
 }
