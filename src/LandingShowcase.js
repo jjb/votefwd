@@ -2,8 +2,6 @@
 // Landing Page Showcase Blocks
 
 import React, { Component } from 'react';
-import { ALPN_ENABLED } from 'constants';
-
 class LandingIcons extends Component {
 	render() {
 		return (
@@ -49,7 +47,6 @@ class LandingIcons extends Component {
 		);
 	}
 }
-
 class LandingCallouts extends Component {
   render() {
     return (
@@ -80,7 +77,9 @@ class LandingCallouts extends Component {
             />
             <div className="col-lg-6 my-auto showcase-text">
               <h2>You Can Help!</h2>
-              <p className="lead mb-0">Sending a Vote Forward letter is one of the easiest things you can do. It takes two minutes and one stamp, and meaningfully increases the odds that the recipient will vote. A concrete action you can take, no matter where you live, to get unlikely-to-vote registered Democrats to the polls in November.</p>
+              <p className="lead mb-0">
+                Sending a Vote Forward letter is one of the easiest things you can do. It takes two minutes and one stamp, and meaningfully increases the odds that the recipient will vote. A concrete action you can take, no matter where you live, to get unlikely-to-vote registered Democrats to the polls in November.
+              </p>
             </div>
           </div>
           <div className="row no-gutters bg-dark">
@@ -92,19 +91,24 @@ class LandingCallouts extends Component {
             />
             <div className="col-lg-6 order-lg-1 my-auto showcase-text">
               <h2>Proven in Alabama</h2>
-              <p className="lead mb-0">In a randomized controlled trial in the special election for U.S. Senate in Alabama in 2017, turnout among letter recipients was 3.9 percentage points higher than turnout in the control group. (3.4 percentage points after controlling for gender, age, and other factors). This is big! It appears to be one of the most effective known tactics to boost turnout.</p>
+              <p className="lead mb-0">
+                In a randomized controlled trial in the special election for U.S. Senate in Alabama in 2017, turnout among letter recipients was 3.9 percentage points higher than turnout in the control group. (3.4 percentage points after controlling for gender, age, and other factors). This is big! It appears to be one of the most effective known tactics to boost turnout.
+              </p>
             </div>
           </div>
           <div className="row no-gutters">
             <div
               className="col-lg-6 text-white showcase-img"
               style= {{
-                backgroundImage: 'url("/images/bg-showcase-4.jpg")'
+                backgroundImage: 'url("/images/bg-showcase-4.jpg")',
+                backgroundPosition: '0 0'
               }}
             />
             <div className="col-lg-6 my-auto showcase-text">
               <h2>Next Stop: Ohio</h2>
-              <p className="lead mb-0">We‘re currently writing letters to Ohio to boost turnout in the special election for the House of Representatives in the 12th district on August 7. A Democratic win will bring us one seat closer to winning the House. We need your help! Will you send some letters?</p>
+              <p className="lead mb-0">
+                We‘re currently writing letters to Ohio to boost turnout in the special election for the House of Representatives in the 12th district on August 7. A Democratic win will bring us one seat closer to winning the House. We need your help! Will you send some letters?
+              </p>
             </div>
           </div>
         </div>
@@ -116,12 +120,14 @@ class LandingCallouts extends Component {
 class LandingTestimonials extends Component {
 	render() {
 		return (
-      <section class="landing--testimonials text-center bg-light">
-        <div class="container">
-          <h2 class="mb-5">About Us</h2>
-          <div class="row">
-            <div class="col-8 mx-auto">
-              <p class="lead mb-4">Vote Forward was started in 2017 by a group of <a href="https://en.wikipedia.org/wiki/Opower">Opower</a> alumni. We believe our democracy depends on electing a Democratic congress in 2018, so we’re volunteering our time and expertise to achieve this goal. The most important thing you can do to help is to <strong>send letters</strong>, but you can also make a donation to help us build the campaign at <a href="https://secure.actblue.com/donate/vote-forward">secure.actblue.com/donate/vote-forward</a>. Thank you!</p>
+      <section className="landing--testimonials text-center bg-light">
+        <div className="container">
+          <h2 className="mb-5">About Us</h2>
+          <div className="row">
+            <div className="col-8 mx-auto">
+              <p className="lead mb-4">
+                Vote Forward was started in 2017 by a group of <a href="https://en.wikipedia.org/wiki/Opower">Opower</a> alumni. We believe our democracy depends on electing a Democratic congress in 2018, so we’re volunteering our time and expertise to achieve this goal. The most important thing you can do to help is to <strong>send letters</strong>, but you can also make a donation to help us build the campaign at <a href="https://secure.actblue.com/donate/vote-forward">secure.actblue.com/donate/vote-forward</a>. Thank you!
+              </p>
             </div>
           </div>
         </div>
