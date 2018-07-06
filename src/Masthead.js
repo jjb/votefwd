@@ -41,8 +41,8 @@ export class Masthead extends Component {
 						</form>
 						</div>
 						<p className="mt-3 text-white">
-							Received a letter? 
-							<Link href="/pledge" lightMode>
+							<span className="mr-1">Received a letter?</span>
+							<Link href="/pledge" hoverDark>
 								Click here to pledge to vote
 							</Link>.
 						</p>
