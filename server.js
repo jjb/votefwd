@@ -11,6 +11,7 @@ var Handlebars = require('handlebars');
 var Hashids = require('hashids');
 var uuidv4 = require('uuid/v4');
 var request = require('request');
+var compileSass = require('express-compile-sass');
 
 var rateLimits = require('./rateLimits')
 var voterService = require('./voterService');
@@ -35,6 +36,7 @@ var hashids = new Hashids(process.env.REACT_APP_HASHID_SALT, 6,
   process.env.REACT_APP_HASHID_DICTIONARY);
 
 app.use(express.static(path.join(__dirname, 'build')));
+app.use(express.static('public'));
 
 app.use(cors(corsOption));
 app.use(bodyParser.urlencoded({ extended: true }));
