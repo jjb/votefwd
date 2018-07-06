@@ -71,6 +71,10 @@ p {
 .text-purple {
   color: #262D7D; }
 
+.text-white a {
+  color: white;
+  text-decoration: underline; }
+
 .u-offscreen {
   position: absolute;
   left: -5000px; }
