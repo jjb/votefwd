@@ -139,7 +139,7 @@ export class Qualify extends Component {
         <div className="mb-3">
           <RecaptchaComponent handleSuccess={this.handleCaptcha.bind(this)}/>
         </div>
-        <ProgressIndicator current={1} max={6}></ProgressIndicator>
+        <ProgressIndicator current={0} max={6}></ProgressIndicator>
       </div>
     );
 
@@ -150,7 +150,7 @@ export class Qualify extends Component {
           <button className="btn btn-outline-secondary mb-3" onClick={this.handlePledgedVote.bind(this)}>Yes</button>
         </div>
         <p className="small">The letters you send will mention <strong>your</strong> commitment to voting, urging the recipient to follow your example.</p>
-        <ProgressIndicator current={2} max={6}></ProgressIndicator>
+        <ProgressIndicator current={1} max={6}></ProgressIndicator>
       </div>
     );
 
@@ -167,17 +167,18 @@ export class Qualify extends Component {
             <button className="btn btn-outline-secondary" type="submit">Submit</button>
           </div>
         </div>
-        <ProgressIndicator current={3} max={6}></ProgressIndicator>
+        <ProgressIndicator current={2} max={6}></ProgressIndicator>
       </form>
     );
 
     let residentQ = (
       <div>
-        <p>Are you a U.S. Citizen or permanent resident?</p>
+        <p>Are you a U.S. citizen or permanent resident?</p>
         <div className="text-center">
           <button className="btn btn-outline-secondary mb-3" onClick={this.handleIsResident.bind(this)}>Yes</button>
         </div>
-        <ProgressIndicator current={4} max={6}></ProgressIndicator>
+        <p className="small">In general, one must be a citizen or permanent resident to participate in election activities. There’s an exception for volunteering, but we’re erring on the side of caution.</p>
+        <ProgressIndicator current={3} max={6}></ProgressIndicator>
       </div>
     );
 
@@ -194,7 +195,7 @@ export class Qualify extends Component {
             <button className="btn btn-outline-secondary" type="submit">Submit</button>
           </div>
         </div>
-        <ProgressIndicator current={5} max={6}></ProgressIndicator>
+        <ProgressIndicator current={4} max={6}></ProgressIndicator>
       </form>
     );
 
@@ -204,7 +205,7 @@ export class Qualify extends Component {
         <div className="text-center">
           <button className="btn btn-outline-secondary mb-3" onClick={this.handleAgreedCode.bind(this)}>Yes</button>
         </div>
-        <ProgressIndicator current={6} max={6}></ProgressIndicator>
+        <ProgressIndicator current={5} max={6}></ProgressIndicator>
       </div>
     );
 
@@ -238,7 +239,7 @@ export class Qualify extends Component {
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title">
-                    First, we need to make sure of a few things...
+                    A few quick questions before you get started…
                   </h5>
                 </div>
                 <div className="modal-body">
