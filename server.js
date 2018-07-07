@@ -194,22 +194,22 @@ router.route('/user')
     let query = db('users')
       .where('auth0_id', req.body.auth0_id)
       .update('updated_at', db.fn.now())
-    if (req.body.isHuman) {
+    if (req.body.is_human_at) {
       query.update('is_human_at', db.fn.now())
       .then(res.status(201).send('Stored humanness timestamp.'))
       .catch(err=> {console.error('ERROR: ', err)})
     }
-    if (req.body.pledgedVote) {
+    if (req.body.pledged_vote_at) {
       query.update('pledged_vote_at', db.fn.now())
       .then(res.status(201).send('Stored sender pledge to vote timestamp.'))
       .catch(err=> {console.error('ERROR: ', err)})
     }
-    if (req.body.fullName) {
-      query.update('full_name', req.body.fullName)
+    if (req.body.full_name) {
+      query.update('full_name', req.body.full_name)
       .then(res.status(201).send('Stored full name.'))
       .catch(err=> {console.error('ERROR: ', err)})
     }
-    if (req.body.isResident) {
+    if (req.body.is_resident_at) {
       query.update('is_resident_at', db.fn.now())
       .then(res.status(201).send('Stored legal status.'))
       .catch(err=> {console.error('ERROR: ', err)})
@@ -219,7 +219,7 @@ router.route('/user')
       .then(res.status(201).send('Stored ZIP code.'))
       .catch(err=> {console.error('ERROR: ', err)})
     }
-    if (req.body.agreedCode) {
+    if (req.body.accepted_code_at) {
       query.update('accepted_code_at', db.fn.now())
       .then(res.status(201).send('Stored code agreement timestamp.'))
       .catch(err=> {console.error('ERROR: ', err)})

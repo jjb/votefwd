@@ -1,4 +1,4 @@
-// src/Qualify.js
+ //src/Qualify.js
 
 import React, { Component } from 'react';
 import { RecaptchaComponent } from './Recaptcha';
@@ -9,12 +9,6 @@ export class Qualify extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isHuman: false,
-      pledgedVote: false,
-      isResident: false,
-      agreedCode: false,
-      zip: '',
-      fullName: '',
       nameFormVal: '',
       zipFormVal: '',
       gRecaptchaResponse: ''
@@ -37,11 +31,7 @@ export class Qualify extends Component {
     })
     .then(res => {
       if (res.status === 200) {
-        this.updateUser('isHuman', true);
-        this.setState({
-          isHuman: true,
-          gRecaptchaResponse: response
-        });
+        this.props.updateUser('is_human_at', true);
       } else {
         console.error('Something went wrong with validation of humanness.');
       }
@@ -56,8 +46,7 @@ export class Qualify extends Component {
   }
 
   handleNameSubmit(event) {
-    this.updateUser('fullName', this.state.nameFormVal);
-    this.setState({ fullName: this.state.nameFormVal });
+    this.props.updateUser('full_name', this.state.nameFormVal);
     event.preventDefault();
   }
 
@@ -66,67 +55,20 @@ export class Qualify extends Component {
   }
 
   handleZipSubmit(event) {
-    this.updateUser('zip', this.state.zipFormVal);
-    this.setState({ zip: this.state.zipFormVal });
+    this.props.updateUser('zip', this.state.zipFormVal);
     event.preventDefault();
   }
 
   handlePledgedVote() {
-    this.updateUser('pledgedVote', true);
-    this.setState({ pledgedVote: true });
+    this.props.updateUser('pledged_vote_at', true);
   }
 
   handleIsResident() {
-    this.updateUser('isResident', true);
-    this.setState({ isResident: true });
+    this.props.updateUser('is_resident_at', true);
   }
 
   handleAgreedCode() {
-    this.updateUser('agreedCode', true);
-    this.setState({ agreedCode: true });
-  }
-
-  updateUser(key, value) {
-    let data = {}
-    data['auth0_id'] = localStorage.getItem('user_id');
-    data[key] = value;
-    axios({
-      method: 'POST',
-      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
-      url: `${process.env.REACT_APP_API_URL}/user`,
-      data: data
-    })
-    .catch(err => {
-      console.error(err);
-    });
-  }
-
-  componentWillMount() {
-    let user = this.props.user;
-    if (user) {
-      this.setState({
-        isHuman: user.is_human_at,
-        pledgedVote: user.pledged_vote_at,
-        isResident: user.is_resident_at,
-        agreedCode: user.accepted_code_at,
-        zip: user.zip,
-        fullName: user.full_name
-      })
-    }
-  }
-
-  componentWillReceiveProps(nextProps) {
-    let user = nextProps.user;
-    if (user) {
-      this.setState({
-        isHuman: user.is_human_at,
-        pledgedVote: user.pledged_vote_at,
-        isResident: user.is_resident_at,
-        agreedCode: user.accepted_code_at,
-        zip: user.zip,
-        fullName: user.full_name
-      })
-    }
+    this.props.updateUser('accepted_code_at', true);
   }
 
   render() {
@@ -139,24 +81,18 @@ export class Qualify extends Component {
         <div className="mb-3">
           <RecaptchaComponent handleSuccess={this.handleCaptcha.bind(this)}/>
         </div>
-        <ProgressIndicator current={1} max={6}></ProgressIndicator>
+        <ProgressIndicator current={0} max={6}></ProgressIndicator>
       </div>
     );
 
     let pledgeQ = (
       <div>
         <p>Do you pledge to vote in every election?</p>
-        <p>The letters you send to unlikely voters will mention your commitment to voting, urging the recipient to follow your example.</p>
-        <div className="form-check mb-3">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            onClick={this.handlePledgedVote.bind(this)} />
-          <label className="form-check-label">
-            Yes
-          </label>
+        <div className="text-center">
+          <button className="btn btn-outline-secondary mb-3" onClick={this.handlePledgedVote.bind(this)}>Yes</button>
         </div>
-        <ProgressIndicator current={2} max={6}></ProgressIndicator>
+        <p className="small">The letters you send will mention <strong>your</strong> commitment to voting, urging the recipient to follow your example.</p>
+        <ProgressIndicator current={1} max={6}></ProgressIndicator>
       </div>
     );
 
@@ -173,23 +109,18 @@ export class Qualify extends Component {
             <button className="btn btn-outline-secondary" type="submit">Submit</button>
           </div>
         </div>
-        <ProgressIndicator current={3} max={6}></ProgressIndicator>
+        <ProgressIndicator current={2} max={6}></ProgressIndicator>
       </form>
     );
 
     let residentQ = (
       <div>
-        <p>Are you a U.S. Citizen or permanent resident?</p>
-        <div className="form-check mb-3">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            onClick={this.handleIsResident.bind(this)} />
-          <label className="form-check-label">
-            Yes
-          </label>
+        <p>Are you a U.S. citizen or permanent resident?</p>
+        <div className="text-center">
+          <button className="btn btn-outline-secondary mb-3" onClick={this.handleIsResident.bind(this)}>Yes</button>
         </div>
-        <ProgressIndicator current={4} max={6}></ProgressIndicator>
+        <p className="small">In general, one must be a citizen or permanent resident to participate in election activities. There’s an exception for volunteering, but we’re erring on the side of caution.</p>
+        <ProgressIndicator current={3} max={6}></ProgressIndicator>
       </div>
     );
 
@@ -206,42 +137,36 @@ export class Qualify extends Component {
             <button className="btn btn-outline-secondary" type="submit">Submit</button>
           </div>
         </div>
-        <ProgressIndicator current={5} max={6}></ProgressIndicator>
+        <ProgressIndicator current={4} max={6}></ProgressIndicator>
       </form>
     );
 
     let codeQ = (
       <div>
         <p className="f4">Do you promise to be respectful at all times in your communications with fellow citizens through Vote Forward?</p>
-        <div className="form-check mb-3">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            onClick={this.handleAgreedCode.bind(this)} />
-          <label className="form-check-label">
-            Yes
-          </label>
+        <div className="text-center">
+          <button className="btn btn-outline-secondary mb-3" onClick={this.handleAgreedCode.bind(this)}>Yes</button>
         </div>
-        <ProgressIndicator current={6} max={6}></ProgressIndicator>
+        <ProgressIndicator current={5} max={6}></ProgressIndicator>
       </div>
     );
 
-    if (!this.state.isHuman) {
+    if (!this.props.user.is_human_at) {
       formMarkup = captchaQ;
     }
-    else if (!this.state.pledgedVote) {
+    else if (!this.props.user.pledged_vote_at) {
       formMarkup = pledgeQ;
     }
-    else if (!this.state.fullName) {
+    else if (!this.props.user.full_name) {
       formMarkup = nameQ;
     }
-    else if (!this.state.isResident) {
+    else if (!this.props.user.is_resident_at) {
       formMarkup = residentQ;
     }
-    else if (!this.state.zip) {
+    else if (!this.props.user.zip) {
       formMarkup = zipQ;
     }
-    else if (!this.state.agreedCode) {
+    else if (!this.props.user.accepted_code_at) {
       formMarkup = codeQ;
     }
     else {
@@ -256,7 +181,7 @@ export class Qualify extends Component {
               <div className="modal-content">
                 <div className="modal-header">
                   <h5 className="modal-title">
-                    First, we need to make sure of a few things...
+                    A few quick questions before you get started…
                   </h5>
                 </div>
                 <div className="modal-body">
