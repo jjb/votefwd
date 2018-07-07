@@ -1,4 +1,4 @@
-// src/Qualify.js
+ src/Qualify.js
 
 import React, { Component } from 'react';
 import { RecaptchaComponent } from './Recaptcha';

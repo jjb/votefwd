@@ -17,7 +17,7 @@ class Dashboard extends Component {
     this.handleConfirmSent = this.handleConfirmSent.bind(this);
     this.handleConfirmPrepped = this.handleConfirmPrepped.bind(this);
     this.updateUser = this.updateUser.bind(this);
-    this.state = { voters: [], user: {}}
+    this.state = { voters: [], user: {}, isQualified: true }
   }
 
   getCurrentUser() {
@@ -30,7 +30,11 @@ class Dashboard extends Component {
         params: { auth0_id: user_id }
         })
         .then(res => {
-          this.setState({ user: res.data[0] }, () => console.log(this.state.user))
+          let user = res.data[0];
+          if (!this.isQualified(user)) {
+            this.setState({ isQualified: false });
+          }
+          this.setState({ user: res.data[0] })
         })
         .catch(err => {
           console.error(err)
@@ -38,6 +42,15 @@ class Dashboard extends Component {
       return true;
     }
     else {
+      return false;
+    }
+  }
+
+  isQualified(user) {
+    if ( user.is_human_at && user.pledged_vote_at && user.is_resident_at &&
+      user.full_name && user.accepted_code_at && user.zip) {
+      return true;
+    } else {
       return false;
     }
   }
@@ -146,12 +159,14 @@ class Dashboard extends Component {
       <Header auth={this.props.auth} />
       { this.props.auth.isAuthenticated() ? (
         <div className="container pb-5">
-        <Qualify user={this.state.user} updateUser={this.updateUser}/>
-        <AdoptVoter handleAdoptedVoter={this.handleAdoptedVoter}/>
-        <VoterList
-        voters={this.state.voters}
-        confirmPrepped={this.handleConfirmPrepped}
-        confirmSent={this.handleConfirmSent}/>
+          { !this.state.isQualified &&
+          <Qualify user={this.state.user} updateUser={this.updateUser}/>
+          }
+          <AdoptVoter handleAdoptedVoter={this.handleAdoptedVoter}/>
+          <VoterList
+          voters={this.state.voters}
+          confirmPrepped={this.handleConfirmPrepped}
+          confirmSent={this.handleConfirmSent}/>
         </div>
       ) : (
         <div className="container">
