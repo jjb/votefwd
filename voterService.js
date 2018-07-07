@@ -74,7 +74,7 @@ function adoptRandomVoter(adopterId, numVoters, callback) {
 function downloadAllLetters(userId, callback) {
   db('voters')
     .where('adopter_user_id', userId)
-    .where('confirmed_sent_at', null)
+    .where('confirmed_prepped_at', null)
     .then(function(voters) {
       letterService.generateBulkPdfForVoters(voters, callback)
     })
