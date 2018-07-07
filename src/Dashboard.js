@@ -30,7 +30,7 @@ class Dashboard extends Component {
         params: { auth0_id: user_id }
         })
         .then(res => {
-          this.setState({ user: res.data[0] })
+          this.setState({ user: res.data[0] }, () => console.log(this.state.user))
         })
         .catch(err => {
           console.error(err)
@@ -124,6 +124,9 @@ class Dashboard extends Component {
       url: `${process.env.REACT_APP_API_URL}/user`,
       data: data
     })
+    .then(
+      this.setState({ user: {...this.state.user, [key]: value}})
+    )
     .catch(err => {
       console.error(err);
     });
@@ -137,26 +140,22 @@ class Dashboard extends Component {
     this.getAdoptedVoters();
   }
 
-  componentWillUpdate(){
-    this.getCurrentUser();
-  }
-
   render() {
     return (
       <div>
-        <Header auth={this.props.auth} />
-        { this.props.auth.isAuthenticated() ? (
-          <div className="container pb-5">
-            <Qualify user={this.state.user} updateUser={this.updateUser}/>
-            <AdoptVoter handleAdoptedVoter={this.handleAdoptedVoter}/>
-            <VoterList
-              voters={this.state.voters}
-              confirmPrepped={this.handleConfirmPrepped}
-              confirmSent={this.handleConfirmSent}/>
-          </div>
-        ) : (
-          <div className="container">
-            <Login auth={this.props.auth} buttonText="Sign Up or Log In To Send Letters" />
+      <Header auth={this.props.auth} />
+      { this.props.auth.isAuthenticated() ? (
+        <div className="container pb-5">
+        <Qualify user={this.state.user} updateUser={this.updateUser}/>
+        <AdoptVoter handleAdoptedVoter={this.handleAdoptedVoter}/>
+        <VoterList
+        voters={this.state.voters}
+        confirmPrepped={this.handleConfirmPrepped}
+        confirmSent={this.handleConfirmSent}/>
+        </div>
+      ) : (
+        <div className="container">
+        <Login auth={this.props.auth} buttonText="Sign Up or Log In To Send Letters" />
           </div>
         )}
       </div>

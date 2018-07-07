@@ -31,7 +31,7 @@ export class Qualify extends Component {
     })
     .then(res => {
       if (res.status === 200) {
-        this.props.updateUser('isHuman', true);
+        this.props.updateUser('is_human_at', true);
       } else {
         console.error('Something went wrong with validation of humanness.');
       }
@@ -46,7 +46,7 @@ export class Qualify extends Component {
   }
 
   handleNameSubmit(event) {
-    this.props.updateUser('fullName', this.state.nameFormVal);
+    this.props.updateUser('full_name', this.state.nameFormVal);
     event.preventDefault();
   }
 
@@ -60,15 +60,15 @@ export class Qualify extends Component {
   }
 
   handlePledgedVote() {
-    this.props.updateUser('pledgedVote', true);
+    this.props.updateUser('pledged_vote_at', true);
   }
 
   handleIsResident() {
-    this.props.updateUser('isResident', true);
+    this.props.updateUser('is_resident_at', true);
   }
 
   handleAgreedCode() {
-    this.props.updateUser('agreedCode', true);
+    this.props.updateUser('accepted_code_at', true);
   }
 
   render() {
