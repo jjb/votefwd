@@ -4,14 +4,11 @@
     <meta charset="UTF-8">
     <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans" rel="stylesheet">
     <style>
-      body { font-family: 'Merriweather Sans', sans-serif; margin-top: 2em; margin-left: 3em; margin-right: 3em;}
-      svg { width:16em; height:8em; margin-left:-3em; }
-      ul { font-size: .7em; }
+      body { font-family: 'Merriweather Sans', sans-serif; margin-top: 3em; margin-left: 1em; margin-right: 1em; }
+      svg { width: 10em; height: 5em; margin-left:-3em; }
+      ul { font-size: 0.7em; }
       li { list-style-type: none;  margin-left:-3em; margin-bottom: 0.2em; }
-      .bold { font-weight: bold;}
       .pagebreak { page-break-after: always; }
-      #salutation {margin-bottom: 2em;}
-      #return-address { float: right; }
     </style>
     <title>Voter Letters Cover Page</title>
   </head>
@@ -29,8 +26,10 @@
             </g>
         </g>
     </svg>
-    <p id="return-address">Return address for envelopes: <br/><br/>{your initials} </br>829 Bethel Rd. #137 </br> Columbus, OH 43214</p>
-    <p id="salutation">Here’s a list of all the voters in this bulk download. Thanks for writing letters to help flip Congress blue!</p>
+    <p>Thank you for writing letters to flip Congress blue!</p>
+    <p>Return address for envelopes:</p>
+    <p>{your initials} </br>829 Bethel Rd. #137 </br> Columbus, OH 43214</p>
+    <p>{{voters.length}} voters in this bulk download:</p>
     <ul>
       {{#each voters}}
       <li>
