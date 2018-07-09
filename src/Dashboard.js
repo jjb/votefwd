@@ -16,6 +16,7 @@ class Dashboard extends Component {
     this.handleAdoptedVoter = this.handleAdoptedVoter.bind(this);
     this.handleConfirmSent = this.handleConfirmSent.bind(this);
     this.handleConfirmPrepped = this.handleConfirmPrepped.bind(this);
+    this.updateUser = this.updateUser.bind(this);
     this.state = { voters: [], user: {}, isQualified: true }
   }
 
@@ -29,9 +30,11 @@ class Dashboard extends Component {
         params: { auth0_id: user_id }
         })
         .then(res => {
-          this.setState({ user: res.data[0] }, () => {
-            this.isUserQualified();
-          })
+          let user = res.data[0];
+          if (!this.isQualified(user)) {
+            this.setState({ isQualified: false });
+          }
+          this.setState({ user: res.data[0] })
         })
         .catch(err => {
           console.error(err)
@@ -43,20 +46,12 @@ class Dashboard extends Component {
     }
   }
 
-  isUserQualified() {
-    if (
-        this.state.user.is_human_at &&
-        this.state.user.pledged_vote_at &&
-        this.state.user.accepted_code_at &&
-        this.state.user.is_resident_at &&
-        this.state.user.zip &&
-        this.state.user.full_name
-      )
-    {
-      this.setState({ isQualified: true })
-    }
-    else {
-      this.setState({ isQualified: false })
+  isQualified(user) {
+    if ( user.is_human_at && user.pledged_vote_at && user.is_resident_at &&
+      user.full_name && user.accepted_code_at && user.zip) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -132,7 +127,26 @@ class Dashboard extends Component {
     })
   }
 
+  updateUser(key, value) {
+    let data = {}
+    data['auth0_id'] = localStorage.getItem('user_id');
+    data[key] = value;
+    axios({
+      method: 'POST',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
+      url: `${process.env.REACT_APP_API_URL}/user`,
+      data: data
+    })
+    .then(
+      this.setState({ user: {...this.state.user, [key]: value}})
+    )
+    .catch(err => {
+      console.error(err);
+    });
+  }
+
   componentWillMount(){
+    this.getCurrentUser();
     if (!this.getCurrentUser()) {
       history.replace('/');
     }
@@ -142,19 +156,21 @@ class Dashboard extends Component {
   render() {
     return (
       <div>
-        <Header auth={this.props.auth} />
-        { this.props.auth.isAuthenticated() ? (
-          <div className="container pb-5">
-            <Qualify isQualified={this.state.isQualified} user={this.state.user} />
-            <AdoptVoter handleAdoptedVoter={this.handleAdoptedVoter}/>
-            <VoterList
-              voters={this.state.voters}
-              confirmPrepped={this.handleConfirmPrepped}
-              confirmSent={this.handleConfirmSent}/>
-          </div>
-        ) : (
-          <div className="container">
-            <Login auth={this.props.auth} buttonText="Sign Up or Log In To Send Letters" />
+      <Header auth={this.props.auth} />
+      { this.props.auth.isAuthenticated() ? (
+        <div className="container pb-5">
+          { !this.state.isQualified &&
+          <Qualify user={this.state.user} updateUser={this.updateUser}/>
+          }
+          <AdoptVoter handleAdoptedVoter={this.handleAdoptedVoter}/>
+          <VoterList
+          voters={this.state.voters}
+          confirmPrepped={this.handleConfirmPrepped}
+          confirmSent={this.handleConfirmSent}/>
+        </div>
+      ) : (
+        <div className="container">
+        <Login auth={this.props.auth} buttonText="Sign Up or Log In To Send Letters" />
           </div>
         )}
       </div>
