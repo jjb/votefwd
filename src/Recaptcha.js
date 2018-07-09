@@ -10,7 +10,7 @@ export class RecaptchaComponent extends React.Component {
       <ReCAPTCHA
         ref="recaptcha"
         sitekey={process.env.REACT_APP_RECAPTCHA_SITE_KEY}
-        onChange={this.props.handleSuccess}
+        onChange={this.props.handleCaptchaResponse}
       />
     );
   }

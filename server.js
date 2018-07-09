@@ -177,16 +177,14 @@ function verifyHumanity(req, callback) {
 router.route('/recaptcha')
   .post(checkJwt, function(req, res) {
     verifyHumanity(req, function(r) {
-      res.json(true);
-      // TODO: MAKE THIS ACTUALLY WORK! CURRENTLY ALWAYS TRUE FOR ALPHA TESTING
-      //if(r) {
-        //res.json(r);
-      //} else {
-        //res.status(400);
-        //res.send({
-          //error: 'Please verify that you\'re human'
-        //})
-      //}
+      if(r) {
+        res.json(r);
+      } else {
+        res.status(400);
+        res.send({
+          error: 'Please verify that you\'re human'
+        })
+      }
     });
   });
 
