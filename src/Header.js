@@ -2,18 +2,35 @@
 
 import React, { Component } from 'react';
 import { Login } from './Login';
-import logo from './images/vote-forward-logo.svg';
-
+import { Logo } from './Logo';
+import { Masthead } from './Masthead';
+class Navbar extends Component {
+  render() {
+    return (
+      <nav className="navbar">
+        <a className="logo" href="/">
+            <Logo />
+        </a>
+        { this.props.auth.isAuthenticated() &&
+          <Login auth={this.props.auth} />
+        }
+      </nav>
+    );
+  }
+}
 export class Header extends Component {
   render() {
     return (
-      <nav className="navbar navbar-light mb-4">
-        <a className="navbar-brand" href="/">
-          <img src={logo} className="d-inline-block align-top logo" alt="Vote Forward" />
-        </a>
-        { this.props.auth.isAuthenticated() && <Login auth={this.props.auth} />}
-      </nav>
-
+      <React.Fragment>
+        { !this.props.showMasthead ?
+          (
+            <Navbar {...this.props} />
+          ) :
+          (
+            <Masthead />
+          )
+        }
+      </React.Fragment>
     );
   }
 }

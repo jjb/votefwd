@@ -1,0 +1,13 @@
+// Dashboard styles
+
+// Fancy mailbox graphic
+.dashboard--call-to-action {
+    background-color: $vf-purple;
+    background-image: 
+        url("/images/bg-masthead.png"),
+        url("/images/bg-bloom.png");
+    background-blend-mode: normal, color-burn;
+    background-size: 70%;
+    background-repeat: no-repeat, repeat;
+    background-position: center center;
+}

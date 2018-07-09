@@ -158,19 +158,22 @@ class Dashboard extends Component {
       <div>
       <Header auth={this.props.auth} />
       { this.props.auth.isAuthenticated() ? (
-        <div className="container pb-5">
+        <div>
           { !this.state.isQualified &&
-          <Qualify user={this.state.user} updateUser={this.updateUser}/>
+            <Qualify user={this.state.user} updateUser={this.updateUser}/>
           }
           <AdoptVoter handleAdoptedVoter={this.handleAdoptedVoter}/>
-          <VoterList
-          voters={this.state.voters}
-          confirmPrepped={this.handleConfirmPrepped}
-          confirmSent={this.handleConfirmSent}/>
+          <div class="container py-5">
+            <VoterList
+              voters={this.state.voters}
+              confirmPrepped={this.handleConfirmPrepped}
+              confirmSent={this.handleConfirmSent}
+            />
+          </div>
         </div>
       ) : (
-        <div className="container">
-        <Login auth={this.props.auth} buttonText="Sign Up or Log In To Send Letters" />
+          <div className="container">
+            <Login auth={this.props.auth} buttonText="Sign Up or Log In To Send Letters" />
           </div>
         )}
       </div>

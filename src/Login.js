@@ -28,7 +28,7 @@ export class Login extends Component {
         <div className="pa2 tc">
           {
             !isAuthenticated() && (
-              <button className="btn btn-primary btn-lg" onClick={this.login.bind(this)}>
+              <button onClick={this.login.bind(this)}>
                 {buttonText}
               </button>
             )
@@ -37,8 +37,8 @@ export class Login extends Component {
             isAuthenticated() && (
               <div>
                 <img className="profile-pic rounded-circle d-inline mr-2" src={pictureUrl} alt={username} />
-                <span className="text-muted p-2">{username}</span>
-                <button onClick={this.logout.bind(this)} className="btn btn-link">
+                <span className="p-2">{username}</span>
+                <button onClick={this.logout.bind(this)} className="btn">
                   Log Out
                 </button>
               </div>
