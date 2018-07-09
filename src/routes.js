@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Router } from 'react-router-dom';
+import { Route, Router, Redirect} from 'react-router-dom';
 import Home from './Home';
 import Dashboard from './Dashboard';
 import Callback from './Callback';
@@ -10,6 +10,7 @@ import Admin from './Admin';
 import history from './history';
 
 const auth = new Auth();
+const { isAuthenticated } = auth;
 
 const handleAuthentication = ({location}) => {
   if (/access_token|id_token|error/.test(location.hash)) {
@@ -21,7 +22,9 @@ export const makeMainRoutes = () => {
   return (
       <Router history={history}>
         <React.Fragment>
-          <Route exact path="/" render={(props) => <Home auth={auth} {...props} />} />
+          <Route exact path="/" render={
+            (props) => isAuthenticated() ? (<Dashboard auth={auth} {...props} />) : (<Home auth={auth} {...props} />)
+          } />
           <Route exact path="/callback" render={(props) => {
             handleAuthentication(props);
             return <Callback {...props} /> 
