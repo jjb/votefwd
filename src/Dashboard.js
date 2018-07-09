@@ -163,7 +163,7 @@ class Dashboard extends Component {
             <Qualify user={this.state.user} updateUser={this.updateUser}/>
           }
           <AdoptVoter handleAdoptedVoter={this.handleAdoptedVoter}/>
-          <div class="container py-5">
+          <div className="container py-5">
             <VoterList
               voters={this.state.voters}
               confirmPrepped={this.handleConfirmPrepped}
