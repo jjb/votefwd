@@ -145,7 +145,7 @@ function generatePdfFromBulkHtml(html, numvoters, callback) {
 
   const tmpdir = os.tmpdir();
   const remotefileName = datestamp + '-' + uuid + '-letter.pdf'
-  const downloadFileName = datestamp + '-votefwd-letters-batch-of-' + numvoters;
+  const downloadFileName = datestamp + '-votefwd-letters-batch-of-' + numvoters + '.pdf';
   const filePath = tmpdir + '/' + remotefileName;
   pdf.create(html, {timeout: '100000'}).toFile(filePath, function(err, response){
     if(err) {
