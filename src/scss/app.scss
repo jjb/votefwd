@@ -7,6 +7,7 @@
 @import "font-awesome.scss";
 // Components
 @import "landing-page.scss";
+@import "dashboard.scss";
 @import "footer.scss";
 
 .profile-pic {
@@ -31,37 +32,4 @@
   height: 60px;
   width: inherit;
   margin-left: 0.25em;
-}
-
-/* Buttons */
-
-// .btn {
-//   border-radius: 4px;
-//   color: $vf-blue;
-//   font-size: 0.8rem;
-//   text-transform: uppercase;
-//   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-//   font-weight: 700;
-// }
-
-.btn-primary {
-  color: #fff;
-  background-color: $vf-blue;
-}
-
-/* Backgrounds */
-.bg-light {
-  background-color: #eee;
-}
-
-.bg-blue {
-  background-color: $vf-blue;
-}
-
-.bg-lightblue {
-  background-color: $vf-lightblue;
-}
-
-.bg-purple {
-  background-color: $vf-purple;
 }
