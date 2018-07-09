@@ -83,7 +83,7 @@ function generateBulkPdfForVoters(voters, callback) {
   for (var i = 0; i < voters.length; i++){
     html += generateHtmlForVoter(voters[i]);
   }
-  generatePdfFromBulkHtml(html, function(response, downloadFileName){
+  generatePdfFromBulkHtml(html, voters.length, function(response, downloadFileName){
       var filename = response.filename ? response.filename : '';
       callback(filename, downloadFileName);
   });
@@ -138,14 +138,14 @@ function generateHtmlForVoter(voter) {
   return html;
 }
 
-function generatePdfFromBulkHtml(html, callback) {
-  // takes a bunch of merged html tempaltes and makes them into a pdf
+function generatePdfFromBulkHtml(html, numvoters, callback) {
+  // takes a bunch of merged html templates and makes them into a pdf
   var uuid = uuidv4();
   var datestamp = dateStamp();
 
   const tmpdir = os.tmpdir();
   const remotefileName = datestamp + '-' + uuid + '-letter.pdf'
-  const downloadFileName = datestamp + '-' + uuid + '-VoteForward-letter.pdf';
+  const downloadFileName = datestamp + '-votefwd-letters-batch-of-' + numvoters;
   const filePath = tmpdir + '/' + remotefileName;
   pdf.create(html, {timeout: '100000'}).toFile(filePath, function(err, response){
     if(err) {
