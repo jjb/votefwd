@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Router, Redirect} from 'react-router-dom';
+import { Route, Router } from 'react-router-dom';
 import Home from './Home';
 import Dashboard from './Dashboard';
 import Callback from './Callback';
