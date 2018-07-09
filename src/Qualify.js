@@ -79,7 +79,7 @@ export class Qualify extends Component {
       <div>
         <p>Are you a robot?</p>
         <div className="mb-3">
-          <RecaptchaComponent handleSuccess={this.handleCaptcha.bind(this)}/>
+          <RecaptchaComponent handleCaptchaResponse={this.handleCaptcha.bind(this)}/>
         </div>
         <ProgressIndicator current={0} max={6}></ProgressIndicator>
       </div>
