@@ -226,11 +226,40 @@ router.route('/user')
     }
   });
 
+/**
+ * Check that the logged in user is an admin.
+ */
+function checkAdmin(req, res, next) {
+  if (!req.user || !req.user.sub) {
+    next(new checkJwt.UnauthorizedError('credentials_required',
+      { message: 'No authorization token was found' }));
+    return;
+  }
 
-// TODO: make sure to grant access to this route only to a (for now probably
-// just hard-coded) list of administrators (once we have a way to protect them)
+  const auth0_id = req.user.sub;
+  db('users')
+    .first('is_admin')
+    .where({
+      'auth0_id': auth0_id,
+      'is_admin': true
+    })
+    .then(function(result) {
+      if (result && result.is_admin === true) {
+        next();
+        return;
+      }
+      // Normally, we would send back a 401 or a 403, but if we don't want to
+      // expose that this is a real route, then send back a 404.
+      res.status(404).send('Not found');
+    })
+    .catch(err => {
+      console.error(err);
+      next(new Error('Database error', err));
+    });
+}
+
 router.route('/s/users')
-  .get(function(req, res) {
+  .get(checkJwt, checkAdmin, function(req, res) {
     db('users')
       .then(function(result) {
         res.json(result)
