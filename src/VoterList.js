@@ -49,42 +49,44 @@ class VoterRecord extends Component {
   render() {
     let voter = this.props.voter;
     let filename = "VoteForward_PleaLetter_" + voter.last_name + '.pdf';
-    let voterDisplay;
+    let voterActions;
 
     let today = moment();
     let electionDate = moment('2018-08-07');
-    let sendDate = electionDate.subtract(8, "days");
+    let sendDate = electionDate.subtract(7, "days");
     let readyToSend;
     today < sendDate ? readyToSend = false : readyToSend = true;
 
     if (!voter.confirmed_prepped_at) {
-      voterDisplay = (
+      voterActions = (
         <div className="text-right">
+          <button className="btn btn-success btn-sm" onClick={() => {this.props.confirmPrepped(voter)}}>
+            Prepped <i className="icon-arrow-right icons"></i>
+          </button>
           <a className="btn btn-light btn-sm mb-1"
             download={filename}
             href={this.state.signedUrl}>
               <i className="icon-arrow-down-circle icons"></i> Download
           </a>
-          <button className="btn btn-success btn-sm" onClick={() => {this.props.confirmPrepped(voter)}}>
-            <i className="icon-check icons"></i> Ready
-          </button>
         </div>
       )
     }
     else if (voter.confirmed_prepped_at && !voter.confirmed_sent_at) {
-      voterDisplay = (
-        <div className="text-success small mt-2">
-          <span>Ready:</span> <ReactMoment format="M/DD/YY">{voter.confirmed_prepped_at}</ReactMoment>
-          <br/>
-          <span>Send on:</span> <ReactMoment format="M/DD/YY">{sendDate}</ReactMoment>
-          <button disabled={!readyToSend} className="btn btn-success btn-sm" onClick={() => {this.props.confirmSent(voter)}}>Sent</button>
+      voterActions = (
+        <div className="text-right w-75">
+          <button className="btn btn-success btn-sm" onClick={() => {this.props.undoConfirmPrepped(voter)}}>
+            <i className="icon-arrow-left icons"/>
+          </button>
+          <button disabled={!readyToSend} className="btn btn-success btn-sm" onClick={() => {this.props.confirmSent(voter)}}>
+            Sent <i className="icon-arrow-right icons"></i>   
+          </button>
         </div>
       )
     }
     else {
-      voterDisplay = (
-        <div className="text-success small mt-2">
-          <span>Confirmed sent:</span> <ReactMoment format="M/DD/YY">{voter.confirmed_sent_at}</ReactMoment>
+      voterActions = (
+        <div className="text-success small mt-2 text-right w-75">
+          <span>Sent on:</span> <ReactMoment format="M/DD/YY">{voter.confirmed_sent_at}</ReactMoment>
         </div>
       )
     }
@@ -92,8 +94,8 @@ class VoterRecord extends Component {
     return (
       <li className="list-group-item" key={voter.id}>
         <div className="d-flex w-100 mb-1">
-          <h6>{voter.first_name} {voter.last_name} <small>in {voter.city}, {voter.state}</small></h6>
-          {voterDisplay}
+          <h6>{voter.first_name} {voter.last_name}<br/><small>{voter.city}, {voter.state}</small></h6>
+          {voterActions}
         </div>
       </li>
     )
@@ -140,8 +142,9 @@ export class VoterList extends Component {
       <div className="row">
         <div className="col mr-2">
           <div className="row">
+
             <div className="col">
-              <h6><strong>Letters to prep</strong> ({toPrep.length})</h6>
+              <h6><strong>Letters to Prep</strong> ({toPrep.length})</h6>
             </div>
             <div className="col text-right mb-2">
               <div className="btn-group" role="group">
@@ -165,24 +168,29 @@ export class VoterList extends Component {
               />)}
           </ul>
         </div>
+
         <div className="col">
-          <h6><strong>Letters Prepared</strong> ({toSend.length}) <span className="badge badge-warning ml-2">Mail on Tuesday, July 31!</span></h6>
+          <h6><strong>Letters Prepped</strong> ({toSend.length}) <span className="badge badge-warning ml-2">Mail on Tuesday, July 31!</span></h6>
           <ul className="list-group">
             {toSend.map(voter =>
               <VoterRecord
                 key={voter.id}
                 voter={voter}
                 confirmSent={this.props.confirmSent}
+                undoConfirmPrepped={this.props.undoConfirmPrepped}
               />)}
           </ul>
         </div>
+
         <div className="col">
-          <h6><strong>Letters sent</strong> ({alreadySent.length})</h6>
+          <h6><strong>Letters Sent</strong> ({alreadySent.length})</h6>
+          <ul className="list-group">
             {alreadySent.map(voter =>
               <VoterRecord
                 key={voter.id}
                 voter={voter}
               />)}
+          </ul>
         </div>
       </div>
     );

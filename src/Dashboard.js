@@ -16,6 +16,7 @@ class Dashboard extends Component {
     this.handleAdoptedVoter = this.handleAdoptedVoter.bind(this);
     this.handleConfirmSent = this.handleConfirmSent.bind(this);
     this.handleConfirmPrepped = this.handleConfirmPrepped.bind(this);
+    this.handleUndoConfirmPrepped = this.handleUndoConfirmPrepped.bind(this);
     this.updateUser = this.updateUser.bind(this);
     this.state = { voters: [], user: {}, isQualified: true }
   }
@@ -105,6 +106,28 @@ class Dashboard extends Component {
     })
   }
 
+  handleUndoConfirmPrepped(voter) {
+    axios({
+      method: 'PUT',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
+      url: `${process.env.REACT_APP_API_URL}/voter/undo-confirm-prepped`,
+      data: { id: voter.id }
+      })
+      .then(res => {
+        voter.confirmed_prepped_at = null;
+        var voters = this.state.voters;
+         //find the position of the voter in the voters array
+        var index = voters.map(function(voter) {return voter.id}).indexOf(voter.id);
+        if (index !== -1) {
+          voters[index] = voter;
+        }
+        this.setState({ voters: voters });
+      })
+      .catch(err => {
+        console.error(err);
+    })
+  }
+
   handleConfirmSent(voter) {
     axios({
       method: 'PUT',
@@ -167,6 +190,7 @@ class Dashboard extends Component {
             <VoterList
               voters={this.state.voters}
               confirmPrepped={this.handleConfirmPrepped}
+              undoConfirmPrepped={this.handleUndoConfirmPrepped}
               confirmSent={this.handleConfirmSent}
             />
           </div>

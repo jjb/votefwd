@@ -100,6 +100,23 @@ function confirmPrepped(voterId, callback) {
     });
 }
 
+function undoConfirmPrepped(voterId, callback) {
+  db('voters')
+    .where('id', voterId)
+    .update({
+      confirmed_prepped_at: null,
+      updated_at: db.fn.now()
+    })
+    .then(function(result) {
+      getVoterById(voterId, function(voter) {
+        callback(voter);
+      })
+    })
+    .catch(err => {
+      console.error(err)
+    });
+}
+
 function confirmSent(voterId, callback) {
   db('voters')
     .where('id', voterId)
@@ -139,5 +156,6 @@ module.exports = {
   adoptRandomVoter,
   confirmSent,
   confirmPrepped,
+  undoConfirmPrepped,
   makePledge
 }

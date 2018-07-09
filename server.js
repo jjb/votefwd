@@ -104,6 +104,13 @@ router.route('/voter/confirm-prepped')
     });
   });
 
+router.route('/voter/undo-confirm-prepped')
+  .put(checkJwt, function(req, res) {
+    voterService.undoConfirmPrepped(req.body.id, function(result) {
+      res.json(result);
+    });
+  });
+
 router.route('/voter/confirm-sent')
   .put(checkJwt, function(req, res) {
     voterService.confirmSent(req.body.id, function(result) {
