@@ -2544,3 +2544,9 @@ p {
   height: 60px;
   width: inherit;
   margin-left: 0.25em; }
+
+.alert-progress {
+  border-radius: 0; }
+  .alert-progress img {
+    width: 35px;
+    height: auto; }
