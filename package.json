@@ -45,7 +45,7 @@
     "uuid": "^3.3.2"
   },
   "scripts": {
-    "start": "node server.js",
+    "start": "node server/server.js",
     "start-dev": "nf start -p 3000",
     "scss-compile": "node-sass -rw src/scss -o src/css",
     "build": "react-scripts build",

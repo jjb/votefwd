@@ -16,7 +16,7 @@ var compileSass = require('express-compile-sass');
 var rateLimits = require('./rateLimits')
 var voterService = require('./voterService');
 var letterService = require('./letterService');
-var db = require('./src/db');
+var db = require('./db');
 var fs = require('fs');
 var os = require('os');
 
@@ -35,8 +35,8 @@ var corsOption = {
 var hashids = new Hashids(process.env.REACT_APP_HASHID_SALT, 6,
   process.env.REACT_APP_HASHID_DICTIONARY);
 
-app.use(express.static(path.join(__dirname, 'build')));
-app.use(express.static('public'));
+app.use(express.static(path.resolve(__dirname, '..', 'build')));
+app.use(express.static(path.resolve(__dirname, '..', 'public')));
 
 app.use(cors(corsOption));
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -278,7 +278,7 @@ router.route('/s/users')
 app.use('/api', router);
 
 app.get('*', function (request, response){
-  response.sendFile(path.resolve(__dirname, 'build', 'index.html'))
+  response.sendFile(path.resolve(__dirname, '..', 'build', 'index.html'))
 })
 
 //start server and listen for requests
