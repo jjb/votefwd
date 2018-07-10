@@ -59,11 +59,11 @@ class VoterRecord extends Component {
 
     if (!voter.confirmed_prepped_at) {
       voterActions = (
-        <div className="text-right">
-          <button className="btn btn-success btn-sm" onClick={() => {this.props.confirmPrepped(voter)}}>
+        <div>
+          <button className="btn btn-success btn-sm mb-2" onClick={() => {this.props.confirmPrepped(voter)}}>
             Prepped <i className="icon-arrow-right icons"></i>
           </button>
-          <a className="btn btn-light btn-sm mb-1"
+          <a className="btn btn-light btn-sm"
             download={filename}
             href={this.state.signedUrl}>
               <i className="icon-arrow-down-circle icons"></i> Download
@@ -73,19 +73,19 @@ class VoterRecord extends Component {
     }
     else if (voter.confirmed_prepped_at && !voter.confirmed_sent_at) {
       voterActions = (
-        <div className="text-right w-75">
+        <div>
           <button className="btn btn-success btn-sm" onClick={() => {this.props.undoConfirmPrepped(voter)}}>
             <i className="icon-arrow-left icons"/>
           </button>
           <button disabled={!readyToSend} className="btn btn-success btn-sm" onClick={() => {this.props.confirmSent(voter)}}>
-            Sent <i className="icon-arrow-right icons"></i>   
+            Sent <i className="icon-arrow-right icons"></i>
           </button>
         </div>
       )
     }
     else {
       voterActions = (
-        <div className="text-success small mt-2 text-right w-75">
+        <div className="text-success small mt-2">
           <span>Sent on:</span> <ReactMoment format="M/DD/YY">{voter.confirmed_sent_at}</ReactMoment>
         </div>
       )
@@ -94,8 +94,10 @@ class VoterRecord extends Component {
     return (
       <li className="list-group-item" key={voter.id}>
         <div className="d-flex w-100 mb-1">
-          <h6>{voter.first_name} {voter.last_name}<br/><small>{voter.city}, {voter.state}</small></h6>
-          {voterActions}
+          <h6 className="w-50">{voter.first_name} {voter.last_name}<br/><small>{voter.city}, {voter.state}</small></h6>
+          <div className="w-50 text-right">
+            {voterActions}
+          </div>
         </div>
       </li>
     )
@@ -170,7 +172,9 @@ export class VoterList extends Component {
         </div>
 
         <div className="col">
-          <h6><strong>Letters Prepped</strong> ({toSend.length}) <span className="badge badge-warning ml-2">Mail on Tuesday, July 31!</span></h6>
+          <h6 className="mb-3">
+            <strong>Letters Prepped</strong> ({toSend.length}) <span className="badge badge-warning ml-2">Mail on Tuesday, July 31!</span>
+          </h6>
           <ul className="list-group">
             {toSend.map(voter =>
               <VoterRecord
