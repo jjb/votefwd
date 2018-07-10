@@ -14,6 +14,7 @@ var request = require('request');
 var compileSass = require('express-compile-sass');
 
 var rateLimits = require('./rateLimits')
+var userService = require('./userService');
 var voterService = require('./voterService');
 var letterService = require('./letterService');
 var db = require('./db');
@@ -244,25 +245,19 @@ function checkAdmin(req, res, next) {
   }
 
   const auth0_id = req.user.sub;
-  db('users')
-    .first('is_admin')
-    .where({
-      'auth0_id': auth0_id,
-      'is_admin': true
-    })
-    .then(function(result) {
-      if (result && result.is_admin === true) {
-        next();
-        return;
-      }
+  userService.isAdmin(auth0_id, function (error, isAdmin) {
+    if (error) {
+      next(error);
+      return;
+    }
+    if (!isAdmin) {
       // Normally, we would send back a 401 or a 403, but if we don't want to
       // expose that this is a real route, then send back a 404.
       res.status(404).send('Not found');
-    })
-    .catch(err => {
-      console.error(err);
-      next(new Error('Database error', err));
-    });
+      return;
+    }
+    next();
+  });
 }
 
 router.route('/s/users')
