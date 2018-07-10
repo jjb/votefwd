@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
+import loading from './loading.svg';
 
 export class AdoptVoter extends Component {
   constructor(props) {
@@ -36,7 +37,11 @@ export class AdoptVoter extends Component {
     let content;
     if (this.state.adopting) {
       content = (
-        <div className="alert alert-warning" role="alert">Assigning 5 voters to you. This may take a moment.</div>
+        <div
+          className="alert alert-success alert-progress pl-5"
+          role="alert">
+          <img src={loading} alt="loading" className="ml-5 mr-3" /> Assigning 5 voters to you. This may take a moment.
+        </div>
       )
     } else {
       content = (
