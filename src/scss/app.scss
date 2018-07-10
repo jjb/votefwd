@@ -33,3 +33,12 @@
   width: inherit;
   margin-left: 0.25em;
 }
+
+.alert-progress {
+  border-radius: 0;
+
+  img {
+    width: 35px;
+    height: auto;
+  }
+}
