@@ -93,6 +93,10 @@ p {
   background-color: #262D7D !important;
   color: #fff; }
 
+.bg-success,
+.bg-red {
+  background-color: #7DC937 !important; }
+
 .bg-danger,
 .bg-red {
   background-color: #FF4B4B !important; }
@@ -111,20 +115,42 @@ p {
   line-height: 1.6; }
 
 .btn-primary {
-  box-shadow: 0 3px 0 #0043c5; }
+  box-shadow: inset 0 -3px 0 #0043c5; }
+  .btn-primary:active {
+    box-shadow: inset 0 3px 0 #0043c5; }
+  .btn-primary:focus {
+    box-shadow: inset 0 -3px 0 #0043c5;
+    background: #1363ff; }
 
 input + .btn {
-  border-radius: 0 5px 5px 0; }
+  border-radius: 0 5px 5px 0;
+  border-left: 1px solid rgba(0, 0, 0, 0.1); }
 
 .form-control {
-  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.25);
   border-radius: 0px; }
+  .form-control::placeholder {
+    color: #2C74FF; }
+  .form-control:focus {
+    box-shadow: none; }
+    .form-control:focus::placeholder {
+      color: rgba(44, 116, 255, 0.25); }
 
-.form-control:focus {
-  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.5); }
+.form-control-lg {
+  outline: none; }
+  .form-control-lg:focus {
+    box-shadow: inset 0 -3px 0 rgba(0, 0, 0, 0.15); }
 
 .form-row > .col, .form-row > [class*=col-] {
   padding: 1rem; }
+
+.modal-content {
+  border-width: 3px; }
+
+.modal-title {
+  padding: 0.5rem 1rem; }
+
+.modal-body {
+  padding: 2rem; }
 
 .small, small {
   font-size: 100%; }
@@ -2557,18 +2583,13 @@ input + .btn {
   padding: 1rem;
   background: #262D7D; }
   .hero-form-wrapper input {
+    background: white;
     font-size: 1.2rem;
     border: none;
     padding: 1rem; }
-    .hero-form-wrapper input::placeholder {
-      color: #2C74FF; }
     @media (min-width: 576px) {
       .hero-form-wrapper input {
         padding: 1.5rem; } }
-  .hero-form-wrapper input:focus {
-    background: white; }
-    .hero-form-wrapper input:focus::placeholder {
-      color: rgba(44, 116, 255, 0.25); }
 
 .dashboard--call-to-action {
   background-color: #262D7D;

@@ -88,10 +88,8 @@ export class Qualify extends Component {
     let pledgeQ = (
       <div>
         <p>Do you pledge to vote in every election?</p>
-        <div className="text-center">
-          <button className="btn btn-outline-secondary mb-3" onClick={this.handlePledgedVote.bind(this)}>Yes</button>
-        </div>
-        <p className="small">The letters you send will mention <strong>your</strong> commitment to voting, urging the recipient to follow your example.</p>
+        <button className="btn btn-primary w-100" onClick={this.handlePledgedVote.bind(this)}>Yes</button>
+        <p className="small my-3">The letters you send will mention <strong>your</strong> commitment to voting, urging the recipient to follow your example.</p>
         <ProgressIndicator current={1} max={6}></ProgressIndicator>
       </div>
     );
@@ -105,9 +103,7 @@ export class Qualify extends Component {
             placeholder="First and last name"
             value={this.state.nameFormVal}
             onChange={this.handleNameChange} />
-          <div className="input-group-append">
-            <button className="btn btn-outline-secondary" type="submit">Submit</button>
-          </div>
+          <button className="btn btn-primary" type="submit">Submit</button>
         </div>
         <ProgressIndicator current={2} max={6}></ProgressIndicator>
       </form>
@@ -116,10 +112,8 @@ export class Qualify extends Component {
     let residentQ = (
       <div>
         <p>Are you a U.S. citizen or permanent resident?</p>
-        <div className="text-center">
-          <button className="btn btn-outline-secondary mb-3" onClick={this.handleIsResident.bind(this)}>Yes</button>
-        </div>
-        <p className="small">In general, one must be a citizen or permanent resident to participate in election activities. There’s an exception for volunteering, but we’re erring on the side of caution.</p>
+        <button className="btn btn-primary w-100" onClick={this.handleIsResident.bind(this)}>Yes</button>
+        <p className="small my-3">In general, one must be a citizen or permanent resident to participate in election activities. There’s an exception for volunteering, but we’re erring on the side of caution.</p>
         <ProgressIndicator current={3} max={6}></ProgressIndicator>
       </div>
     );
@@ -133,9 +127,7 @@ export class Qualify extends Component {
             placeholder="00000"
             value={this.state.ZipFormVal}
             onChange={this.handleZipChange} />
-          <div className="input-group-append">
-            <button className="btn btn-outline-secondary" type="submit">Submit</button>
-          </div>
+          <button className="btn btn-primary" type="submit">Submit</button>
         </div>
         <ProgressIndicator current={4} max={6}></ProgressIndicator>
       </form>
@@ -144,9 +136,7 @@ export class Qualify extends Component {
     let codeQ = (
       <div>
         <p className="f4">Do you promise to be respectful at all times in your communications with fellow citizens through Vote Forward?</p>
-        <div className="text-center">
-          <button className="btn btn-outline-secondary mb-3" onClick={this.handleAgreedCode.bind(this)}>Yes</button>
-        </div>
+        <button className="btn btn-primary w-100" onClick={this.handleAgreedCode.bind(this)}>Yes</button>
         <ProgressIndicator current={5} max={6}></ProgressIndicator>
       </div>
     );

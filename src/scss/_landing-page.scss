@@ -112,21 +112,14 @@
 .hero-form-wrapper {
     padding: 1rem;
     background: $vf-purple;
+
     input {
+        background: white;
         font-size: 1.2rem;
         border: none;
         padding: 1rem;
-        &::placeholder {
-            color: $vf-blue;
-        }
         @media (min-width: 576px) {
             padding: 1.5rem;
-        }
-    }
-    input:focus {
-        background: white;
-        &::placeholder {
-            color: rgba($vf-blue, 0.25);
         }
     }
 }
