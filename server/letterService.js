@@ -1,7 +1,7 @@
  //letterService.js
 'use strict'
 
-var db = require('./src/db');
+var db = require('./db');
 var pdf = require('html-pdf');
 var Hashids = require('hashids');
 var Storage = require('@google-cloud/storage');

@@ -1,7 +1,7 @@
  //voterService.js
 'use strict'
 
-var db = require('./src/db');
+var db = require('./db');
 var letterService = require('./letterService');
 const allowedVoterBulkCount = [1, 2, 5, 15, 30, 60];
 
