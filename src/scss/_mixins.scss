@@ -25,6 +25,54 @@
     font-style: normal
 }
 
+@font-face {
+    font-family: 'Raleway';
+    src: url('/fonts/Raleway/raleway-500.eot');
+    src: url('/fonts/Raleway/raleway-500.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/Raleway/raleway-500.woff2') format('woff2'),
+         url('/fonts/Raleway/raleway-500.woff') format('woff'),
+         url('/fonts/Raleway/raleway-.ttf') format('truetype'),
+         url('/fonts/Raleway/raleway-500.svg') format('svg');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Raleway';
+    src: url('/fonts/Raleway/raleway-500i.eot');
+    src: url('/fonts/Raleway/raleway-500i.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/Raleway/raleway-500i.woff2') format('woff2'),
+         url('/fonts/Raleway/raleway-500i.woff') format('woff'),
+         url('/fonts/Raleway/raleway-500i.ttf') format('truetype'),
+         url('/fonts/Raleway/raleway-500i.svg') format('svg');
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Raleway';
+    src: url('/fonts/Raleway/raleway-700.eot');
+    src: url('/fonts/Raleway/raleway-700.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/Raleway/raleway-700.woff2') format('woff2'),
+         url('/fonts/Raleway/raleway-700.woff') format('woff'),
+         url('/fonts/Raleway/raleway-700.ttf') format('truetype'),
+         url('/fonts/Raleway/raleway-700.svg') format('svg');
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Raleway';
+    src: url('/fonts/Raleway/raleway-700i.eot');
+    src: url('/fonts/Raleway/raleway-700i.eot?#iefix') format('embedded-opentype'),
+         url('/fonts/Raleway/raleway-700i.woff2') format('woff2'),
+         url('/fonts/Raleway/raleway-700i.woff') format('woff'),
+         url('/fonts/Raleway/raleway-700i.ttf') format('truetype'),
+         url('/fonts/Raleway/raleway-700i.svg') format('svg');
+    font-weight: 700;
+    font-style: italic;
+}
+
 @mixin body-font {
     font-family: 'Raleway', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }

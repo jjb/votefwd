@@ -58,8 +58,8 @@ export class AdoptVoter extends Component {
               <button
                 disabled={this.state.adopting ? true : false}
                 onClick={() => this.adoptVoter(5)}
-                className="btn btn-primary btn-lg">
-                  Adopt 5 Voters
+                className="btn btn-primary btn-lg w-100">
+                  Adopt <span className="reset-num">5</span> Voters
               </button>
             </div>
           </div>
