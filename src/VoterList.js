@@ -50,35 +50,41 @@ class VoterRecord extends Component {
     let voter = this.props.voter;
     let filename = "VoteForward_PleaLetter_" + voter.last_name + '.pdf';
     let voterActions;
+    let voterDownloadButton;
 
     let today = moment();
     let electionDate = moment('2018-08-07');
     let sendDate = electionDate.subtract(7, "days");
     let readyToSend;
-    today < sendDate ? readyToSend = false : readyToSend = true;
+    today < sendDate ? readyToSend = true : readyToSend = true;
 
     if (!voter.confirmed_prepped_at) {
+      voterDownloadButton = (
+        <a className="small"
+          download={filename}
+          href={this.state.signedUrl}>
+            <i className="icon-download icons"></i>
+            Download letter
+        </a>
+      );
       voterActions = (
         <div>
-          <button className="btn btn-success btn-sm mb-2" onClick={() => {this.props.confirmPrepped(voter)}}>
-            Prepped <i className="icon-arrow-right icons"></i>
+          <span className="small u-quiet mr-2">Prepared?</span>
+          <button className="btn btn-sm btn-success" onClick={() => {this.props.confirmPrepped(voter)}}>
+            <i className="fa fa-check" aria-hidden="true"></i>
           </button>
-          <a className="btn btn-light btn-sm"
-            download={filename}
-            href={this.state.signedUrl}>
-              <i className="icon-arrow-down-circle icons"></i> Download
-          </a>
         </div>
-      )
+      );
     }
     else if (voter.confirmed_prepped_at && !voter.confirmed_sent_at) {
       voterActions = (
-        <div>
+        <div className="btn-group">
           <button className="btn btn-success btn-sm" onClick={() => {this.props.undoConfirmPrepped(voter)}}>
-            <i className="icon-arrow-left icons"/>
+            <i className="fa fa-chevron-left" aria-hidden="true"></i>
           </button>
           <button disabled={!readyToSend} className="btn btn-success btn-sm" onClick={() => {this.props.confirmSent(voter)}}>
-            Sent <i className="icon-arrow-right icons"></i>
+            <span>Sent</span>
+            <i className="fa fa-chevron-right ml-2" aria-hidden="true"></i>
           </button>
         </div>
       )
@@ -94,8 +100,12 @@ class VoterRecord extends Component {
     return (
       <li className="list-group-item" key={voter.id}>
         <div className="d-flex w-100 mb-1">
-          <h6 className="w-50">{voter.first_name} {voter.last_name}<br/><small>{voter.city}, {voter.state}</small></h6>
-          <div className="w-50 text-right">
+          <div className="w-50">
+            <strong>{voter.first_name} {voter.last_name}</strong><br />
+            <small>{voter.city}, {voter.state}</small><br />
+            {voterDownloadButton}
+          </div>
+          <div className="w-50 d-flex justify-content-end align-items-center">
             {voterActions}
           </div>
         </div>
@@ -141,60 +151,74 @@ export class VoterList extends Component {
       );
     }
     return (
-      <div className="row">
-        <div className="col mr-2">
-          <div className="row">
-
-            <div className="col">
-              <h6><strong>Letters to Prep</strong> ({toPrep.length})</h6>
-            </div>
-            <div className="col text-right mb-2">
-              <div className="btn-group" role="group">
+      <div className="px-5 pb-5">
+        <h2 className="pt-2 mb-4">Your letters</h2>
+        <div className="row">
+          <div className="col">
+            <div>
+              <div className="d-flex justify-content-between align-items-center mb-3">
+                <span><strong>Letters to Prepare</strong> ({toPrep.length})</span>
                 {toPrep.length > 1 &&
-                <div>
                   <button disabled={this.state.downloadingBundle ? true : false} className="btn btn-light btn-sm" onClick={this.downloadBundle}>
                     <i className="icon-arrow-down-circle icons"></i> Download all
                   </button>
-                </div>
                 }
               </div>
+              {alertContent}
             </div>
-            {alertContent}
+            <ul className="list-group">
+              {toPrep.length < 1 &&
+                <li class="list-group-item disabled text-center py-5 bg-light">
+                  There are no letters to prepare.
+                </li>
+              }
+              {toPrep.map(voter =>
+                <VoterRecord
+                  key={voter.id}
+                  voter={voter}
+                  confirmPrepped={this.props.confirmPrepped}
+                />)}
+            </ul>
           </div>
-          <ul className="list-group">
-            {toPrep.map(voter =>
-              <VoterRecord
-                key={voter.id}
-                voter={voter}
-                confirmPrepped={this.props.confirmPrepped}
-              />)}
-          </ul>
-        </div>
 
-        <div className="col">
-          <h6 className="mb-3">
-            <strong>Letters Prepped</strong> ({toSend.length}) <span className="badge badge-warning ml-2">Mail on Tuesday, July 31!</span>
-          </h6>
-          <ul className="list-group">
-            {toSend.map(voter =>
-              <VoterRecord
-                key={voter.id}
-                voter={voter}
-                confirmSent={this.props.confirmSent}
-                undoConfirmPrepped={this.props.undoConfirmPrepped}
-              />)}
-          </ul>
-        </div>
+          <div className="col mx-2">
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <span><strong>Letters Prepared</strong> ({toSend.length})</span>
+              <span className="badge badge-warning ml-2">Mail on Tuesday, July 31!</span>
+            </div>
+            <ul className="list-group">
+              {toSend.length < 1 &&
+                <li class="list-group-item disabled text-center py-5 bg-light">
+                  There are no letters to send.
+                </li>
+              }
+              {toSend.map(voter =>
+                <VoterRecord
+                  key={voter.id}
+                  voter={voter}
+                  confirmSent={this.props.confirmSent}
+                  undoConfirmPrepped={this.props.undoConfirmPrepped}
+                />)}
+            </ul>
+          </div>
 
-        <div className="col">
-          <h6><strong>Letters Sent</strong> ({alreadySent.length})</h6>
-          <ul className="list-group">
-            {alreadySent.map(voter =>
-              <VoterRecord
-                key={voter.id}
-                voter={voter}
-              />)}
-          </ul>
+          <div className="col">
+            <div className="d-flex justify-content-between align-items-center mb-3">
+              <span><strong>Letters Sent</strong> ({alreadySent.length})</span>
+            </div>
+            <ul className="list-group">
+              {alreadySent.length < 1 &&
+                <li class="list-group-item disabled text-center py-5 bg-light">
+                  You haven't sent any letters yet.
+                </li>
+              }
+              {alreadySent.map(voter =>
+                <VoterRecord
+                  key={voter.id}
+                  voter={voter}
+                />)}
+            </ul>
+          </div>
         </div>
       </div>
     );
