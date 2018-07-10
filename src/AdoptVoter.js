@@ -36,7 +36,9 @@ export class AdoptVoter extends Component {
     let content;
     if (this.state.adopting) {
       content = (
-        <div className="alert alert-warning mt-3 mb-0" role="alert">Assigning 5 voters to you. This may take a moment.</div>
+        <div className="alert alert-warning rounded-0" role="alert">
+          Assigning 5 voters to you. This may take a moment.
+        </div>
       )
     }
     return (
