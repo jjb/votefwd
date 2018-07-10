@@ -46,11 +46,14 @@ export class AdoptVoter extends Component {
             <br />
           </div>
           <div className="col-lg-6 order-lg-1 showcase-text bg-light p-5">
-            <div className="p-5">
+            <div className="p-2 p-5-m">
               <h1>Send Letters to Ohio Voters</h1>
-              <p>Special election for U.S. House of Representatives | Ohio‘s 12th Congressional District | Tuesday, August 7, 2018</p>
-              <hr className="my-4" />
-              <p>
+              <p className="u-highlight mb-4">
+                Special election for U.S. House of Representatives
+                <br />Ohio‘s 12th Congressional District
+                <br />Tuesday, August 7, 2018
+              </p>
+              <p className="mb-5">
                 We‘re writing letters to folks who voted in the last two presidential elections, but <strong>not in the 2014 midterm election</strong>
                 — people who need extra encouragement to vote.
                 Voters you "adopt" will not be assigned to anyone else. By adopting a voter, you’re committing to sending a letter. We’re counting on you!

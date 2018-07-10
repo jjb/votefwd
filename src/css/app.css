@@ -109,6 +109,9 @@ input + .btn {
 .form-row > .col, .form-row > [class*=col-] {
   padding: 1rem; }
 
+.small, small {
+  font-size: 100%; }
+
 .text-lightblue {
   color: #00E6FF; }
 
@@ -122,6 +125,10 @@ input + .btn {
 .u-offscreen {
   position: absolute;
   left: -5000px; }
+
+.u-highlight {
+  border-left: 4px solid #FF4B4B;
+  padding-left: 1rem; }
 
 .fa {
   display: inline-block;

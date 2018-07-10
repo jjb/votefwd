@@ -104,6 +104,10 @@ input + .btn {
 
 // Text
 
+.small, small {
+  font-size: 100%;
+}
+
 .text-lightblue {
   color: $vf-lightblue;
 }
