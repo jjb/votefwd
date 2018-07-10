@@ -29,11 +29,29 @@ p {
 
 // ---------------------------------------------------------------------------
 // Bootstrap overrides
+//  - Alerts
 //  - Backgrounds
 //  - Buttons
 //  - Form Inputs
 //  - Text
 // ---------------------------------------------------------------------------
+
+// Alerts
+.alert {
+  background: white;
+  border-radius: 5px;
+  border: 2px solid white;
+  color: black;
+  margin-bottom: 0;
+  padding: .5rem 1.25rem 0.75rem;
+  text-align: center;
+}
+
+.alert-warning {
+  background: rgba($vf-blue, 0.1);
+  border: 2px solid $vf-blue;
+  color: $vf-blue;
+}
 
 // Backgrounds
 
@@ -77,6 +95,10 @@ p {
   font-weight: bold;
   text-transform: uppercase;
   transition: none;
+}
+
+.btn-lg {
+  line-height: 1.6;
 }
 
 .btn-primary {

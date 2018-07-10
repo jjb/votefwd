@@ -36,15 +36,24 @@ export class AdoptVoter extends Component {
     let content;
     if (this.state.adopting) {
       content = (
-        <div className="alert alert-warning mt-3 mb-0" role="alert">Assigning 5 voters to you. This may take a moment.</div>
+        <div className="alert alert-warning" role="alert">Assigning 5 voters to you. This may take a moment.</div>
+      )
+    } else {
+      content = (
+        <button
+          disabled={this.state.adopting ? true : false}
+          onClick={() => this.adoptVoter(5)}
+          className="btn btn-primary btn-lg w-100">
+            Adopt <span className="reset-num">5</span> Voters
+        </button>
       )
     }
     return (
       <div className="container-fluid p-0">
-        <div className="row no-gutters">
-          <div className="col-lg-6 order-lg-2 dashboard--call-to-action px-3 py-4">
-            <br />
+        <div className="row no-gutters position-relative">
+          <div className="col-12 fixed-top position-absolute">
           </div>
+          <div className="col-lg-6 order-lg-2 dashboard--call-to-action px-3 py-4" />
           <div className="col-lg-6 order-lg-1 showcase-text bg-light p-5">
             <div className="p-2 p-5-m">
               <h1>Send Letters to Ohio Voters</h1>
@@ -58,16 +67,11 @@ export class AdoptVoter extends Component {
                 — people who need extra encouragement to vote.
                 Voters you "adopt" will not be assigned to anyone else. By adopting a voter, you’re committing to sending a letter. We’re counting on you!
               </p>
-              <button
-                disabled={this.state.adopting ? true : false}
-                onClick={() => this.adoptVoter(5)}
-                className="btn btn-primary btn-lg w-100">
-                  Adopt <span className="reset-num">5</span> Voters
-              </button>
+              {content}
+
             </div>
           </div>
         </div>
-        {content}
       </div>
     )
   }
