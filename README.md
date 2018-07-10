@@ -61,7 +61,7 @@ variables:
 	REACT_APP_SQL_DATABASE=votefwd
 	REACT_APP_DATABASE_DIALECT=postgres
 	REACT_APP_RECAPTCHA_SITE_KEY=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
-	REACT_APP_RECAPTCHA_SECRET=6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
+	REACT_APP_RECAPTCHA_SECRET_KEY=6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
 	REACT_APP_CLOUD_STORAGE_BUCKET_NAME=voteforward
 
 (you might notice we have a REACT_APP_RECAPTCHA_SECRET but that is the [default google test one](https://developers.google.com/recaptcha/docs/faq), so this is not actually sensitive)
