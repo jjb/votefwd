@@ -56,7 +56,7 @@ class VoterRecord extends Component {
     let electionDate = moment('2018-08-07');
     let sendDate = electionDate.subtract(7, "days");
     let readyToSend;
-    today < sendDate ? readyToSend = true : readyToSend = true;
+    today < sendDate ? readyToSend = false : readyToSend = true;
 
     if (!voter.confirmed_prepped_at) {
       voterDownloadButton = (
@@ -168,7 +168,7 @@ export class VoterList extends Component {
             </div>
             <ul className="list-group">
               {toPrep.length < 1 &&
-                <li class="list-group-item disabled text-center py-5 bg-light">
+                <li className="list-group-item disabled text-center py-5 bg-light">
                   There are no letters to prepare.
                 </li>
               }
@@ -188,7 +188,7 @@ export class VoterList extends Component {
             </div>
             <ul className="list-group">
               {toSend.length < 1 &&
-                <li class="list-group-item disabled text-center py-5 bg-light">
+                <li className="list-group-item disabled text-center py-5 bg-light">
                   There are no letters to send.
                 </li>
               }
@@ -208,7 +208,7 @@ export class VoterList extends Component {
             </div>
             <ul className="list-group">
               {alreadySent.length < 1 &&
-                <li class="list-group-item disabled text-center py-5 bg-light">
+                <li className="list-group-item disabled text-center py-5 bg-light">
                   You haven't sent any letters yet.
                 </li>
               }
