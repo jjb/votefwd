@@ -8,6 +8,7 @@ import { Header } from './Header';
 import { Login } from './Login';
 import { Qualify } from './Qualify';
 import { VoterList } from './VoterList';
+import { Footer } from './Footer';
 
 class Dashboard extends Component {
   constructor(props) {
@@ -185,8 +186,8 @@ class Dashboard extends Component {
           { !this.state.isQualified &&
             <Qualify user={this.state.user} updateUser={this.updateUser}/>
           }
-          <AdoptVoter handleAdoptedVoter={this.handleAdoptedVoter}/>
-          <div className="container py-5">
+          <AdoptVoter handleAdoptedVoter={this.handleAdoptedVoter} />
+          <div className="container-fluid py-5">
             <VoterList
               voters={this.state.voters}
               confirmPrepped={this.handleConfirmPrepped}
@@ -200,6 +201,7 @@ class Dashboard extends Component {
             <Login auth={this.props.auth} buttonText="Sign Up or Log In To Send Letters" />
           </div>
         )}
+      <Footer />
       </div>
     );
   }

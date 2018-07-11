@@ -4,6 +4,7 @@ $vf-blue: #2C74FF;
 $vf-lightblue: #00E6FF;
 $vf-red: #FF4B4B;
 $vf-purple: #262D7D;
+$vf-green: #7DC937;
 
 // Restated Bootstrap Variables
 
@@ -26,7 +27,7 @@ $pink: #FF4B4B !default;
 $red: #FF4B4B !default;
 $orange: #fd7e14 !default;
 $yellow: #ffc107 !default;
-$green: #28a745 !default;
+$green: $vf-green !default;
 $teal: #20c997 !default;
 $cyan: #17a2b8 !default;
 

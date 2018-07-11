@@ -27,31 +27,35 @@ p {
   font-size: 1.2rem;
 }
 
+// ---------------------------------------------------------------------------
 // Bootstrap overrides
+//  - Alerts
+//  - Backgrounds
+//  - Badges
+//  - Buttons
+//  - Form Inputs
+//  - Modals
+//  - Text
+// ---------------------------------------------------------------------------
 
-.btn {
-  border: none;
+// Alerts
+.alert {
+  background: white;
   border-radius: 5px;
-  font-weight: bold;
-  text-transform: uppercase;
-  border-radius: 0px;
-  transition: none;
+  border: 2px solid white;
+  color: black;
+  margin-bottom: 0;
+  padding: .5rem 1.25rem 0.75rem;
+  text-align: center;
 }
 
-.form-control {
-  border-radius: 0px;
-  &:focus {
-    box-shadow: none;
-  }
-}
-.form-row>.col, .form-row>[class*=col-] {
-  padding: 1rem;
+.alert-warning {
+  background: rgba($vf-blue, 0.1);
+  border: 2px solid $vf-blue;
+  color: $vf-blue;
 }
 
 // Backgrounds
-
-
-/* Backgrounds */
 
 .bg-light {
   background-color: #eee;
@@ -76,6 +80,11 @@ p {
   color: $white;
 }
 
+.bg-success,
+.bg-red {
+  background-color: #7DC937 !important;
+}
+
 .bg-danger,
 .bg-red {
   background-color: $vf-red !important;
@@ -85,7 +94,123 @@ p {
   background-image: linear-gradient(-35deg, $vf-blue 50%, $vf-purple 50%);
 }
 
+// Badges
+.badge {
+  padding: 0.5rem 0.75rem;
+}
+
+// Buttons
+
+.btn {
+  border: none;
+  border-radius: 5px;
+  line-height: 1;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  transition: none;
+}
+
+.btn-lg {
+  padding: 1rem 1rem 1.25rem;
+}
+
+.btn-primary {
+  box-shadow: inset 0 -3px 0 darken($vf-blue, 20%);
+
+  &:active {
+    box-shadow: inset 0 3px 0 darken($vf-blue, 20%);
+  }
+  &:focus {
+    box-shadow: inset 0 -3px 0 darken($vf-blue, 20%);
+    background: darken($vf-blue, 5%);
+  }
+}
+
+.btn-success {
+  box-shadow: inset 0 -3px 0 darken($vf-green, 19%);
+
+  &:active {
+    box-shadow: inset 0 3px 0 darken($vf-green, 19%);
+  }
+  &:focus {
+    box-shadow: inset 0 -3px 0 darken($vf-green, 19%);
+    background: darken($vf-green, 5%);
+  }
+}
+
+.btn-check {
+  background: #efefef;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  color: #666;
+  padding: 0;
+  height: 36px;
+  width: 36px;
+
+  .fa {
+    display: inline-flex;
+  }
+
+  &:hover {
+    background: $vf-green;
+    border-color: darken($vf-green, 5%);
+    color: white;
+  }
+}
+
+input + .btn {
+  border-radius: 0 5px 5px 0;
+  border-left: 1px solid rgba(0,0,0,0.1);
+}
+
+.btn-group .btn + .btn {
+  border-left: 1px solid rgba(0,0,0,0.3);
+}
+
+// Form Inputs
+
+.form-control {
+  border-radius: 0px;
+  &::placeholder {
+    color: $vf-blue;
+  }
+  &:focus {
+    box-shadow: none;
+
+    &::placeholder {
+      color: rgba($vf-blue, 0.25);
+    }
+  }
+}
+
+.form-control-lg {
+  outline: none;
+  &:focus {
+    box-shadow: inset 0 -3px 0 rgba(0,0,0,0.15);
+  }
+}
+
+.form-row>.col, .form-row>[class*=col-] {
+  padding: 1rem;
+}
+
+// Modals
+
+.modal-content {
+  border-width: 3px;
+}
+.modal-title {
+  padding: 0.5rem 1rem;
+}
+.modal-body {
+  padding: 2rem;
+}
+
 // Text
+
+.small, small {
+  font-size: 90%;
+}
 
 .text-lightblue {
   color: $vf-lightblue;

@@ -43,33 +43,40 @@ export class AdoptVoter extends Component {
           <img src={loading} alt="loading" className="ml-5 mr-3" /> Assigning 5 voters to you. This may take a moment.
         </div>
       )
+    } else {
+      content = (
+        <button
+          disabled={this.state.adopting ? true : false}
+          onClick={() => this.adoptVoter(5)}
+          className="btn btn-primary btn-lg w-100">
+            Adopt <span className="reset-num">5</span> Voters
+        </button>
+      )
     }
     return (
       <div className="container-fluid p-0">
-        <div className="row no-gutters">
-          <div className="col-lg-6 order-lg-2 dashboard--call-to-action px-3 py-4">
-            <br />
+        <div className="row no-gutters position-relative">
+          <div className="col-12 fixed-top position-absolute">
           </div>
+          <div className="col-lg-6 order-lg-2 dashboard--call-to-action px-3 py-4" />
           <div className="col-lg-6 order-lg-1 showcase-text bg-light p-5">
-            <div className="p-5">
+            <div className="p-2 p-5-m">
               <h1>Send Letters to Ohio Voters</h1>
-              <p>Special election for U.S. House of Representatives | Ohio‘s 12th Congressional District | Tuesday, August 7, 2018</p>
-              <hr className="my-4" />
-              <p>
+              <p className="u-highlight mb-4">
+                Special election for U.S. House of Representatives
+                <br />Ohio‘s 12th Congressional District
+                <br />Tuesday, August 7, 2018
+              </p>
+              <p className="mb-5">
                 We‘re writing letters to folks who voted in the last two presidential elections, but <strong>not in the 2014 midterm election</strong>
                 — people who need extra encouragement to vote.
                 Voters you "adopt" will not be assigned to anyone else. By adopting a voter, you’re committing to sending a letter. We’re counting on you!
               </p>
-              <button
-                disabled={this.state.adopting ? true : false}
-                onClick={() => this.adoptVoter(5)}
-                className="btn btn-primary btn-lg">
-                  Adopt 5 Voters
-              </button>
+              {content}
+
             </div>
           </div>
         </div>
-        {content}
       </div>
     )
   }

@@ -9,7 +9,7 @@ export class ProgressIndicator extends Component {
 
   render() {
     return (
-      <div className="progress">
+      <div className="progress mt-5">
         <div className="progress-bar bg-success"
           role="progressbar"
           style={{width: this.setWidth()}}
