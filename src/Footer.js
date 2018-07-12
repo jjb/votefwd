@@ -10,7 +10,10 @@ export class Footer extends Component {
 				<div className="container">
 				<div className="row">
 					<div className="col-lg-6 h-100 text-center text-lg-left my-auto">
-					<p className="text-white small mb-4 mb-lg-0">&copy; Vote Forward PAC 2018. All Rights Reserved.</p>
+					<p className="text-white small mb-4 mb-lg-0">Copyright &copy; Vote Forward PAC 2018. All Rights Reserved.</p>
+			    <p className="text-white link small">
+            <a href="/privacy">Privacy Policy</a> &#9702; <a href="/terms-of-use">Terms of Use</a>
+          </p>
 					</div>
 					<div className="col-lg-6 h-100 text-center text-lg-right my-auto">
 					<ul className="list-inline mb-0">
