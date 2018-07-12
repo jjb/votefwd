@@ -12,7 +12,7 @@ function sendEmail(){
         //   /* more items */
         // ],
         ToAddresses: [
-          'sjforman@gmail.com',
+          'andrewjtimmons@gmail.com',
           /* more items */
         ]
       },
@@ -54,4 +54,8 @@ function sendEmail(){
 
 module.exports = {
   sendEmail
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> mvp email test saving work
