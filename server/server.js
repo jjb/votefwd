@@ -17,6 +17,8 @@ var rateLimits = require('./rateLimits')
 var userService = require('./userService');
 var voterService = require('./voterService');
 var letterService = require('./letterService');
+var slackService = require('./slackService');
+
 var db = require('./db');
 var fs = require('fs');
 var os = require('os');
@@ -42,7 +44,6 @@ app.use(express.static(path.resolve(__dirname, '..', 'public')));
 app.use(cors(corsOption));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
 
 const checkJwt = jwt({
   // Dynamically provide a signing key based on the kid in the header and the signing keys provided by the JWKS endpoint.
@@ -147,6 +148,9 @@ router.route('/user/new')
               res.status(201).send(result);
             });
           }
+        })
+        .then(function() {
+          slackService.publishToSlack('A new user signed up.');
         })
         .catch(err => {console.error(err)});
     }

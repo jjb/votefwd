@@ -63,8 +63,12 @@ variables:
 	REACT_APP_RECAPTCHA_SITE_KEY=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
 	REACT_APP_RECAPTCHA_SECRET_KEY=6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
 	REACT_APP_CLOUD_STORAGE_BUCKET_NAME=voteforward
+	REACT_APP_SLACK_WEBHOOK_URL=<LEAVEBLANK>
 
-(you might notice we have a REACT_APP_RECAPTCHA_SECRET but that is the [default google test one](https://developers.google.com/recaptcha/docs/faq), so this is not actually sensitive)
+You might notice we have a REACT_APP_RECAPTCHA_SECRET but that is the [default google test one](https://developers.google.com/recaptcha/docs/faq), so this is not actually sensitive.
+
+You can leave the slack webhook URL blank unless you are working on the Slack
+integration, in which case, contact Scott.
 
 #### Optional Environment variables
 
