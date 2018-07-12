@@ -7,6 +7,8 @@ import Login from './SecretLogin';
 import Auth from './Auth';
 import Pledge from './Pledge';
 import Admin from './Admin';
+import Privacy from './Privacy';
+import Terms from './Terms';
 import history from './history';
 
 const auth = new Auth();
@@ -33,6 +35,8 @@ export const makeMainRoutes = () => {
           <Route exact path="/secretlogin" render={(props) => <Login auth={auth} {...props} />} />
           <Route exact path="/pledge" render={(props) => <Pledge auth={auth} {...props} />} />
           <Route exact path="/admin" render={(props) => <Admin auth={auth} {...props} />} />
+          <Route exact path="/privacy-policy" render={(props) => <Privacy auth={auth} {...props} />} />
+          <Route exact path="/terms-of-use" render={(props) => <Terms auth={auth} {...props} />} />
         </React.Fragment>
       </Router>
   );
