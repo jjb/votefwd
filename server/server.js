@@ -229,7 +229,8 @@ router.route('/user')
     }
     if (req.body.accepted_code_at) {
       query.update('accepted_code_at', db.fn.now())
-      .then(res.status(201).send('Stored code agreement timestamp.'))
+      .then(query.update('accepted_terms_at', db.fn.now()))
+      .then(res.status(201).send('Stored code and terms agreement timestamps.'))
       .catch(err=> {console.error('ERROR: ', err)})
     }
   });

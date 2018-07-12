@@ -135,7 +135,7 @@ export class Qualify extends Component {
 
     let codeQ = (
       <div>
-        <p className="f4">Do you promise to be respectful at all times in your communications with fellow citizens through Vote Forward?</p>
+        <p className="f4">Do you agree to the <a href="/terms-of-use" target="_blank">Terms of Use</a> and <a href="privacy-policy" target="_blank">Privacy Policy</a>, and specifically, do you promise to be respectful at all times in your communications with fellow citizens via Vote Forward?</p>
         <button className="btn btn-primary w-100" onClick={this.handleAgreedCode.bind(this)}>Yes</button>
         <ProgressIndicator current={5} max={6}></ProgressIndicator>
       </div>
