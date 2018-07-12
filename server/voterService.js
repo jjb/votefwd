@@ -2,6 +2,8 @@
 'use strict'
 
 var db = require('./db');
+var emailService = require('./emailService');
+
 var letterService = require('./letterService');
 var slackService = require('./slackService');
 
@@ -178,21 +180,21 @@ function undoConfirmSent(voterId, callback) {
 }
 
 function makePledge(code, callback) {
-  db('voters')
-    .where('hashid', code)
-    .update({
-      pledge_made_at: db.fn.now(),
-      updated_at: db.fn.now()
-    })
-    .then(function(result) {
-      callback(result);
-    })
-    .then(function() {
-      slackService.publishToSlack('A recipient made a vote pledge.');
-    })
-    .catch(err => {
-      console.error(err)
-    });
+  console.log('hi')
+  emailService.sendEmail();
+  console.log('hi')
+  // db('voters')
+  //   .where('hashid', code)
+  //   .update({
+  //     pledge_made_at: db.fn.now(),
+  //     updated_at: db.fn.now()
+  //   })
+  //   .then(function(result) {
+  //     callback(result);
+  //   })
+  //   .catch(err => {
+  //     console.error(err)
+  //   });
 }
 
 module.exports = {
