@@ -146,11 +146,12 @@ router.route('/user/new')
             db('users').insert({auth0_id: req.body.auth0_id})
               .then(function(result) {
               res.status(201).send(result);
-            });
+            })
+            .then(function() {
+              slackService.publishToSlack('A new user signed up.');
+            })
+            .catch(err => {console.error(err)});
           }
-        })
-        .then(function() {
-          slackService.publishToSlack('A new user signed up.');
         })
         .catch(err => {console.error(err)});
     }
