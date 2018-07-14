@@ -5,6 +5,8 @@ var uuidv4 = require('uuid/v4');
 it('API status', function(done) {
   request('http://localhost:3001/api', function(error, response, body) {
     expect(response.statusCode).to.equal(200);
+    body = JSON.parse(body);
+    expect(body).to.eql('API initialized.');
     done();
   });
 });
