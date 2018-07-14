@@ -1,3 +1,5 @@
+'use strict';
+
 var expect = require('chai').expect;
 
 var db = require('../server/db');
@@ -24,7 +26,6 @@ describe('userService', function() {
 
   after(function() {
     if (users && users.length) {
-      console.log(`Deleting ${users.length} users`);
       return db('users')
         .whereIn('id', users.map(u => u.id))
         .del();
@@ -32,10 +33,6 @@ describe('userService', function() {
     return Promise.resolve(true);
   });
 
-  after(function() {
-    console.log('destroying db');
-    return db.destroy();
-  });
 
   describe('isAdmin', function() {
     it('should find a non-admin', function(done) {
