@@ -283,6 +283,8 @@ app.get('*', function (request, response){
 })
 
 //start server and listen for requests
-app.listen(port, function() {
+var server = app.listen(port, function() {
   console.log(`api running on port ${port}`);
 });
+
+module.exports = server;
