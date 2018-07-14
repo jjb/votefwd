@@ -7,7 +7,7 @@ var db = require('../server/db');
 // Starts up the server
 var server = require('../server/server');
 
-after('Shuttong down the server', function(done) {
+after('Shutting down the server', function(done) {
   server.close(function() {
     done();
   });
