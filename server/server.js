@@ -283,9 +283,7 @@ router.route('/s/isAdmin')
         res.status(500);
         return;
       }
-      setTimeout(function () {
-        res.json({ is_admin: isAdmin });
-      }, 2000);
+      res.json({ is_admin: isAdmin });
     });
   });
 

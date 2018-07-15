@@ -5,7 +5,6 @@ import ReactTable from 'react-table';
 import 'react-table/react-table.css';
 import axios from 'axios';
 import moment from 'moment';
-import history from './history';
 import { Header } from './Header';
 
 

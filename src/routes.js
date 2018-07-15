@@ -53,20 +53,13 @@ class AdminChecker extends React.Component {
         params: { auth0_id: user_id }
       })
       .then(res => {
-        console.log('res.data', res.data);
-        // if (!res.data.is_admin) {
-        //   history.replace('/');
-        // }
         this.setState({ loading: false, isAdmin: res.data.is_admin === true });
       })
       .catch(err => {
-        console.error(err);
-        // history.replace('/');
         this.setState({ loading: false, isAdmin: false });
       });
     }
     else {
-      // history.replace('/');
       this.setState({ loading: false, isAdmin: false });
     };
   }
