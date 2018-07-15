@@ -3,7 +3,7 @@ import React from 'react';
 import { Redirect, Route, Router } from 'react-router-dom';
 import Home from './Home';
 import Dashboard from './Dashboard';
-import Callback from './Callback';
+import Loading from './Loading';
 import Login from './SecretLogin';
 import Auth from './Auth';
 import Pledge from './Pledge';
@@ -66,7 +66,7 @@ class AdminChecker extends React.Component {
 
   render() {
     if (this.state.loading) {
-      return <Callback {...this.props} />;
+      return <Loading {...this.props} />;
     }
     else if (this.state.isAdmin === false) {
       return <Redirect to={{ pathname: '/' }} />;
@@ -91,7 +91,7 @@ export const makeMainRoutes = () => {
           } />
           <Route exact path="/callback" render={(props) => {
             handleAuthentication(props);
-            return <Callback {...props} /> 
+            return <Loading {...props} />;
           }}/>
           <LoggedInRoute exact path="/dashboard" component={Dashboard} />
           <Route exact path="/secretlogin" render={(props) => <Login auth={auth} {...props} />} />
