@@ -77,7 +77,6 @@ function generateAndStorePdfForVoter(voter, callback) {
 
 function generateBulkPdfForVoters(voters, callback) {
   // wrapper function to take a list of voters and make one pdf for all of them.
-  var pdf_filenames = [];
   var html = ''
   html += generateCoverPageHtmlForVoters(voters);
   for (var i = 0; i < voters.length; i++){
@@ -142,12 +141,20 @@ function generatePdfFromBulkHtml(html, numvoters, callback) {
   // takes a bunch of merged html templates and makes them into a pdf
   var uuid = uuidv4();
   var datestamp = dateStamp();
+  var config = {
+    "format" : "letter",
+    "border" : {
+      "top": "0.5in",
+      "bottom": "0.5in"
+    },
+    "timeout": "100000"
+  }
 
   const tmpdir = os.tmpdir();
   const remotefileName = datestamp + '-' + uuid + '-letter.pdf'
   const downloadFileName = datestamp + '-votefwd-letters-batch-of-' + numvoters + '.pdf';
   const filePath = tmpdir + '/' + remotefileName;
-  pdf.create(html, {timeout: '100000'}).toFile(filePath, function(err, response){
+  pdf.create(html, config).toFile(filePath, function(err, response){
     if(err) {
       console.error('ERROR:', err);
     }
