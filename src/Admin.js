@@ -163,37 +163,6 @@ class UserTable extends Component {
 }
 
 class Admin extends Component {
-  isAdmin(callback) {
-    let user_id = localStorage.getItem('user_id');
-    if (user_id) {
-      axios({
-        headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
-        method: 'GET',
-        url: `${process.env.REACT_APP_API_URL}/user`,
-        params: { auth0_id: user_id }
-      })
-      .then(res => {
-        if (res.data[0].is_admin) {
-          callback(true);
-        }
-        else { callback(false) };
-      })
-      .catch(err => {
-        console.error(err);
-      });
-    }
-    else { callback(false) };
-  }
-
-  componentWillMount() {
-    this.isAdmin(
-      isAdmin => {
-      if (!isAdmin) {
-        history.replace('/');
-      }
-    });
-  }
-
   render() {
     return (
       <div>

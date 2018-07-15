@@ -19,7 +19,6 @@ export default class Auth {
     this.logout = this.logout.bind(this);
     this.handleAuthentication = this.handleAuthentication.bind(this);
     this.isAuthenticated = this.isAuthenticated.bind(this);
-    this.isAdmin = this.isAdmin.bind(this);
   }
 
   handleAuthentication() {
@@ -46,14 +45,7 @@ export default class Auth {
       }
     })
     .then(function(res) {
-      // 200: user existed
-      // 201: user created
-      if (res.status === 200 || res.status === 201) {
-        localStorage.setItem('is_admin', res.data.is_admin === true);
-      }
-      else {
-        localStorage.setItem('is_admin', false);
-      }
+      callback(null, res.data);
     })
     .catch(function(error) {
       console.error(error)
@@ -79,7 +71,6 @@ export default class Auth {
     localStorage.removeItem('expires_at');
     localStorage.removeItem('user_id');
     localStorage.removeItem('picture_url');
-    localStorage.removeItem('is_admin');
     // navigate to the home route
     history.replace('/');
   }
@@ -89,13 +80,6 @@ export default class Auth {
     // Access Token's expiry time
     let expiresAt = JSON.parse(localStorage.getItem('expires_at'));
     return new Date().getTime() < expiresAt;
-  }
-
-  isAdmin() {
-    return (
-      this.isAuthenticated() &&
-      JSON.parse(localStorage.getItem('is_admin')) === true
-    );
   }
 
   login() {

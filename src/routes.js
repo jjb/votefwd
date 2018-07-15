@@ -1,3 +1,4 @@
+import axios from 'axios';
 import React from 'react';
 import { Redirect, Route, Router } from 'react-router-dom';
 import Home from './Home';
@@ -12,7 +13,7 @@ import Terms from './Terms';
 import history from './history';
 
 const auth = new Auth();
-const { isAuthenticated, isAdmin } = auth;
+const { isAuthenticated } = auth;
 
 const handleAuthentication = ({location}) => {
   if (/access_token|id_token|error/.test(location.hash)) {
@@ -33,11 +34,58 @@ const LoggedInRoute = ({ component: Component, ...rest }) => (
 );
 
 // Ensures the logged in user is an admin.  If not, redirects to /
+class AdminChecker extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: true,
+      isAdmin: false
+    };
+  }
+
+  componentDidMount() {
+    let user_id = localStorage.getItem('user_id');
+    if (user_id) {
+      axios({
+        headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
+        method: 'GET',
+        url: `${process.env.REACT_APP_API_URL}/s/isAdmin`,
+        params: { auth0_id: user_id }
+      })
+      .then(res => {
+        console.log('res.data', res.data);
+        // if (!res.data.is_admin) {
+        //   history.replace('/');
+        // }
+        this.setState({ loading: false, isAdmin: res.data.is_admin === true });
+      })
+      .catch(err => {
+        console.error(err);
+        // history.replace('/');
+        this.setState({ loading: false, isAdmin: false });
+      });
+    }
+    else {
+      // history.replace('/');
+      this.setState({ loading: false, isAdmin: false });
+    };
+  }
+
+  render() {
+    if (this.state.loading) {
+      return <Callback {...this.props} />;
+    }
+    else if (this.state.isAdmin === false) {
+      return <Redirect to={{ pathname: '/' }} />;
+    }
+    const Component = this.props.component;
+    return <Component {...this.props} />;
+  }
+}
+
 const AdminRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={(props) => (
-    isAdmin() === true
-      ? <Component auth={auth} {...props} />
-      : <Redirect to={{ pathname: '/' }} />
+    <AdminChecker component={Component} auth={auth} {...props} />
   )} />
 );
 
