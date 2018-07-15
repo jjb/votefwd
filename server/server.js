@@ -140,19 +140,17 @@ router.route('/user/new')
       db('users').where('auth0_id', req.body.auth0_id)
         .then(function(result) {
           if (result.length != 0) {
-            res.status(200).send(result[0]);
+            res.status(200).send('User already exists.');
           }
           else {
-            db('users')
-              .insert({auth0_id: req.body.auth0_id})
-              .returning('*')
-              .then(function(results) {
-                res.status(201).send(results[0]);
-              })
-              .then(function() {
-                slackService.publishToSlack('A new user signed up.');
-              })
-              .catch(err => {console.error(err)});
+            db('users').insert({auth0_id: req.body.auth0_id})
+              .then(function(result) {
+              res.status(201).send(result);
+            })
+            .then(function() {
+              slackService.publishToSlack('A new user signed up.');
+            })
+            .catch(err => {console.error(err)});
           }
         })
         .catch(err => {console.error(err)});

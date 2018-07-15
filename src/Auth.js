@@ -44,9 +44,7 @@ export default class Auth {
         auth0_id: authResult.idTokenPayload.sub 
       }
     })
-    .then(function(res) {
-      callback(null, res.data);
-    })
+    .then(callback)
     .catch(function(error) {
       console.error(error)
     })
