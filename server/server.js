@@ -275,6 +275,31 @@ router.route('/s/users')
       .catch(err => {console.error(err);})
   });
 
+router.route('/s/stats')
+  .get(checkJwt, checkAdmin, function(req, res) {
+    db('voters')
+      .then(function(result) {
+        let availableCount = result.length;
+        let totalCount = result.filter(voter =>
+          voter.adopted_at).length;
+        let adoptedCount = result.filter(voter =>
+          voter.adopted_at && !voter.confirmed_prepped_at && !voter.confirmed_sent_at).length;
+        let preppedCount = result.filter(voter =>
+          voter.adopted_at && voter.confirmed_prepped_at && !voter.confirmed_sent_at).length;
+        let sentCount = result.filter(voter =>
+          voter.adopted_at && voter.confirmed_prepped_at && voter.confirmed_sent_at).length;
+        let counts = {
+          available: availableCount,
+          adopted: adoptedCount,
+          prepped: preppedCount,
+          sent: sentCount,
+          total: totalCount
+        };
+        res.json(counts)
+      })
+      .catch(err => {console.error(err);})
+  });
+
 //Use router configuration at /api
 app.use('/api', router);
 
