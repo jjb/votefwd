@@ -146,9 +146,14 @@ class UserTable extends Component {
       accessor: 'total',
     }, {
       id: 'a',
-      Header: 'Admin',
+      Header: 'Admin?',
       accessor: a => {
-        return a.is_admin.toString()
+        if (a.is_admin) {
+          return 'admin';
+        }
+        else {
+          return null;
+        }
       }
     }]
 
