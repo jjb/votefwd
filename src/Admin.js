@@ -52,8 +52,8 @@ class Overview extends Component {
             <tr>
               <td>{this.state.available}</td>
               <td>{this.state.adopted}</td>
-              <td>{this.state.sent}</td>
               <td>{this.state.prepped}</td>
+              <td>{this.state.sent}</td>
               <td>{this.state.total}</td>
             </tr>
           </tbody>

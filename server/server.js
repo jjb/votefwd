@@ -280,14 +280,14 @@ router.route('/s/stats')
     db('voters')
       .then(function(result) {
         let availableCount = result.length;
-        let totalCount = result.filter(voter =>
-          voter.adopted_at).length;
         let adoptedCount = result.filter(voter =>
           voter.adopted_at && !voter.confirmed_prepped_at && !voter.confirmed_sent_at).length;
         let preppedCount = result.filter(voter =>
           voter.adopted_at && voter.confirmed_prepped_at && !voter.confirmed_sent_at).length;
         let sentCount = result.filter(voter =>
           voter.adopted_at && voter.confirmed_prepped_at && voter.confirmed_sent_at).length;
+        let totalCount = result.filter(voter =>
+          voter.adopted_at).length;
         let counts = {
           available: availableCount,
           adopted: adoptedCount,
