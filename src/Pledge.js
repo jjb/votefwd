@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Header } from './Header';
+import { Footer } from './Footer';
 
 class PledgeForm extends Component {
   constructor(props) {
@@ -39,14 +40,20 @@ class PledgeForm extends Component {
 
   render() {
     return (
-      <div className="text-center">
-        <form className="" onSubmit={this.handleSubmit}>
-          <label>
-            Enter your voter pledge code here:
-            <input className="" type="text" value={this.state.value} onChange={this.handleChange} />
-          </label>
-          <input className="" type="submit" value="Pledge to be a voter." />
-        </form>
+      <div className="w-50 mx-auto my-5">
+      <div className="form-group">
+        <label for="hashid" className="control-label">Enter the code from your letter to pledge that you will vote:</label>
+        <input
+          id="hashid"
+          type="text"
+          className="form-control"
+          placeholder="A1B2C3"
+          value={this.state.value}
+          onChange={this.handleChange} />
+      </div>
+      <div className="form-group">
+        <button className="btn btn-primary" type="submit">Pledge to be a voter.</button>
+      </div>
       { this.state.pledgeError &&
         <p>We didn’t recognize that code. Please try again!</p>
       }
@@ -93,6 +100,7 @@ class Pledge extends Component {
             <PledgeThanks />
           )
         }
+        <Footer />
       </div>
     );
   }
