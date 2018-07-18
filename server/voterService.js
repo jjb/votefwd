@@ -180,9 +180,9 @@ function undoConfirmSent(voterId, callback) {
 }
 
 function makePledge(code, callback) {
-  console.log('hi')
+  console.log('hi we are sending pledge email')
   emailService.sendEmail();
-  console.log('hi')
+  console.log('hi we are sending pledge email')
   // db('voters')
   //   .where('hashid', code)
   //   .update({
