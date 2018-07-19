@@ -1,7 +1,7 @@
 // Load the AWS SDK for Node.js
 var AWS = require('aws-sdk');
 // Set the region
-AWS.config.update({region: 'us-east-1'});
+AWS.config.update({region: 'us-west-2'});
 
 function sendEmail(){
     // Create sendEmail params
@@ -32,9 +32,9 @@ function sendEmail(){
           Data: 'Test email'
          }
         },
-      Source: 'scott@votefwd.org', /* required */
+      Source: 'andrewjtimmons@gmail.com', /* required */
       ReplyToAddresses: [
-          'scott@votefwd.org',
+          'andrewjtimmons@gmail.com',
         /* more items */
       ],
     };
