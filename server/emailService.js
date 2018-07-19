@@ -35,9 +35,9 @@ function sendEmail(){
           Data: 'Test email'
          }
         },
-      Source: 'scott@votefwd.org', /* required */
+      Source: 'andrewjtimmons@gmail.com', /* required */
       ReplyToAddresses: [
-          'scott@votefwd.org',
+          'andrewjtimmons@gmail.com',
         /* more items */
       ],
     };
