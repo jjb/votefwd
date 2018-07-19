@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import { Header } from './Header';
+import { Footer } from './Footer';
 import { Login } from './Login';
 
 class SecretLogin extends Component {
@@ -9,12 +10,17 @@ class SecretLogin extends Component {
       return (
         <React.Fragment>
           <Header auth={this.props.auth} />
-          <div className="">
+          <div className="text-center mt-5">
             { this.props.auth.isAuthenticated() ?
               (
-                <div className="">
-                  <a className="btn-lg" href="/dashboard">You’re signed in. Click here to send letters!</a>
-                </div>
+                <React.Fragment>
+                  <p>You‘re already signed in!</p>
+                  <a href="/dashboard">
+                    <button type="button" className="btn btn-success">
+                      Click here to send letters
+                    </button>
+                  </a>
+                </React.Fragment>
               ) :
               (
                 <div className="text-center p-4">
@@ -22,6 +28,9 @@ class SecretLogin extends Component {
                 </div>
               )
             }
+          </div>
+          <div className="fixed-bottom">
+            <Footer />
           </div>
         </React.Fragment>
       );

@@ -40,9 +40,11 @@ class PledgeForm extends Component {
 
   render() {
     return (
-      <div className="w-50 mx-auto my-5">
+      <div className="w-50 mx-auto mt-5">
+      <h1>Pledge To Be A Voter!</h1>
+      <p>To pledge to be a voter in the upcoming election, enter the code from the letter your received in the mail. Thank you!</p>
       <div className="form-group">
-        <label for="hashid" className="control-label">Enter the code from your letter to pledge that you will vote:</label>
+        <label for="hashid" className="control-label">Pledge code:</label>
         <input
           id="hashid"
           type="text"
@@ -52,7 +54,7 @@ class PledgeForm extends Component {
           onChange={this.handleChange} />
       </div>
       <div className="form-group">
-        <button className="btn btn-primary" type="submit">Pledge to be a voter.</button>
+        <button className="btn btn-primary" type="submit">Submit</button>
       </div>
       { this.state.pledgeError &&
         <p>We didn’t recognize that code. Please try again!</p>
@@ -100,7 +102,9 @@ class Pledge extends Component {
             <PledgeThanks />
           )
         }
-        <Footer />
+        <div className="fixed-bottom">
+          <Footer />
+        </div>
       </div>
     );
   }
