@@ -5,27 +5,28 @@ DECLARE
   experimentid integer := 1;
 
   populationtotal integer;
-  votercount integer := 100;
-  timestamp timestamp;
+  votercount integer := 10;
+  timestamp timestamp := now();
 
 BEGIN
 
-  -- GRAB <votercount> VOTERS AT RANDOM AND UPDATE THEIR DESIGNATIONS
+  -- GRAB <votercount> VOTERS WHO ARE CURRENTLY MARKED 'CONTROL'
+  -- AT RANDOM AND UPDATE THEIR DESIGNATIONS TO 'TEST'
 
   UPDATE experiment_voter
   SET cohort = 'TEST',
-      updated_at = now()
+      updated_at = timestamp
   WHERE experiment_voter.voter_id IN
   (
     SELECT voter_id FROM experiment_voter
     WHERE experiment_id = experimentid
+    AND cohort = 'CONTROL'
     ORDER BY RANDOM()
     LIMIT votercount
-  )
-  RETURNING updated_at into timestamp;
+  );
 
-  RAISE NOTICE 'Assigned % more voters to TEST group.', votercount;
   RAISE NOTICE 'Timestamp: %', timestamp;
+  RAISE NOTICE 'Assigned % more voters to TEST group.', votercount;
 
   -- POPULATE SELECTED TEST SUBJECTS INTO VOTERS TO MAKE ADOPTABLE
 
