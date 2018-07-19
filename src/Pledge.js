@@ -66,8 +66,9 @@ class PledgeThanks extends Component {
     let encodedTweetIntentText = encodeURIComponent(tweetIntentText);
     return (
         <div className="bg-white px-3 px-md-5 py-3 py-md-4 align-self-center">
+          <h1>Thank you!</h1>
           <p>
-            You just pledged to be a voter in the special election on Tuesday, August 7, 2018. Thank you!
+            You just pledged to be a voter in the special election on <strong>Tuesday, August 7, 2018</strong>.
           </p>
           <p>
             <a
@@ -79,12 +80,14 @@ class PledgeThanks extends Component {
             </a>
           </p>
           <p>Want to send letters like the one you received to encourage others to vote?</p>
-          <a
-            href="/dashboard"
-            className="pl2 link underline blue"
-          >
-            Send letters
-          </a>
+          <p>
+            <a
+              href="/dashboard"
+              className="pl2 link underline blue"
+            >
+              Send letters
+            </a>
+          </p>
         </div>
     );
   }
@@ -108,7 +111,7 @@ class Pledge extends Component {
       <Header auth={this.props.auth} />
       <div className="container-fluid h-75 bg-pattern d-flex justify-content-center">
         <div className="d-flex">
-        { this.state.pledgeStatus ?
+        { !this.state.pledgeStatus ?
           (
             <PledgeForm handlePledge={this.handlePledge.bind(this)}/>
           ) : (
