@@ -1,4 +1,3 @@
-import axios from 'axios';
 import React from 'react';
 import { Redirect, Route, Router } from 'react-router-dom';
 import Home from './Home';
@@ -7,6 +6,7 @@ import Loading from './Loading';
 import Login from './SecretLogin';
 import Auth from './Auth';
 import Pledge from './Pledge';
+import AdminRoute from './AdminRoute';
 import Admin from './Admin';
 import Privacy from './Privacy';
 import Terms from './Terms';
@@ -33,55 +33,6 @@ const LoggedInRoute = ({ component: Component, ...rest }) => (
   )} />
 );
 
-// Ensures the logged in user is an admin.  If not, redirects to /
-class AdminChecker extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      loading: true,
-      isAdmin: false
-    };
-  }
-
-  componentDidMount() {
-    let user_id = localStorage.getItem('user_id');
-    if (user_id) {
-      axios({
-        headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
-        method: 'GET',
-        url: `${process.env.REACT_APP_API_URL}/s/isAdmin`,
-        params: { auth0_id: user_id }
-      })
-      .then(res => {
-        this.setState({ loading: false, isAdmin: res.data.is_admin === true });
-      })
-      .catch(err => {
-        this.setState({ loading: false, isAdmin: false });
-      });
-    }
-    else {
-      this.setState({ loading: false, isAdmin: false });
-    };
-  }
-
-  render() {
-    if (this.state.loading) {
-      return <Loading {...this.props} />;
-    }
-    else if (this.state.isAdmin === false) {
-      return <Redirect to={{ pathname: '/' }} />;
-    }
-    const Component = this.props.component;
-    return <Component {...this.props} />;
-  }
-}
-
-const AdminRoute = ({ component: Component, ...rest }) => (
-  <Route {...rest} render={(props) => (
-    <AdminChecker component={Component} auth={auth} {...props} />
-  )} />
-);
-
 export const makeMainRoutes = () => {
   return (
       <Router history={history}>
@@ -96,7 +47,7 @@ export const makeMainRoutes = () => {
           <LoggedInRoute exact path="/dashboard" component={Dashboard} />
           <Route exact path="/secretlogin" render={(props) => <Login auth={auth} {...props} />} />
           <Route exact path="/pledge" render={(props) => <Pledge auth={auth} {...props} />} />
-          <AdminRoute exact path="/admin" component={Admin} />
+          <AdminRoute exact path="/admin" component={Admin} auth={auth} />
           <Route exact path="/privacy-policy" render={(props) => <Privacy auth={auth} {...props} />} />
           <Route exact path="/terms-of-use" render={(props) => <Terms auth={auth} {...props} />} />
         </React.Fragment>
