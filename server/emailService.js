@@ -1,5 +1,8 @@
 // Load the AWS SDK for Node.js
 var AWS = require('aws-sdk');
+var fs = require('fs');
+var template = fs.readFileSync('./email/layout.html', 'utf8');
+
 // Set the region
 AWS.config.update({region: 'us-west-2'});
 
@@ -12,7 +15,7 @@ function sendEmail(){
         //   /* more items */
         // ],
         ToAddresses: [
-          'andrewjtimmons@gmail.com',
+          'sjforman@gmail.com',
           /* more items */
         ]
       },
@@ -20,7 +23,7 @@ function sendEmail(){
         Body: { /* required */
           Html: {
            Charset: "UTF-8",
-           Data: "HTML_FORMAT_BODY"
+           Data: template
           },
           Text: {
            Charset: "UTF-8",
