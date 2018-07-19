@@ -55,6 +55,12 @@ p {
   color: $vf-blue;
 }
 
+.alert-danger {
+  background: rgba($vf-red, 0.1);
+  border: 2px solid $vf-red;
+  color: $vf-red;
+}
+
 // Backgrounds
 
 .bg-light {
@@ -64,6 +70,14 @@ p {
 .bg-dark {
   background-color: rgba($black,.9) !important;
   color: $white;
+}
+
+.bg-pattern {
+  background-color: $vf-purple;
+  background-image: url("/images/bg-bloom.png");
+  background-blend-mode: color-burn;
+  background-size: 400px;
+  background-repeat: repeat;
 }
 
 .bg-blue {

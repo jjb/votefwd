@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { Header } from './Header';
+import { Footer } from './Footer';
 
 class PledgeForm extends Component {
   constructor(props) {
@@ -39,16 +40,20 @@ class PledgeForm extends Component {
 
   render() {
     return (
-      <div className="text-center">
-        <form className="" onSubmit={this.handleSubmit}>
-          <label>
-            Enter your voter pledge code here:
-            <input className="" type="text" value={this.state.value} onChange={this.handleChange} />
+      <div className="bg-white px-3 px-md-5 py-3 py-md-4 align-self-center text-center">
+        <form onSubmit={this.handleSubmit}>
+          <label className="w-100">
+            <h3 className="mb-4">
+              Enter your voter pledge code here:
+            </h3>
+            <input className="form-control form-control-lg text-center mb-2 w-100" type="text" value={this.state.value} onChange={this.handleChange} />
           </label>
-          <input className="" type="submit" value="Pledge to be a voter." />
+          <input className="btn btn-primary btn-lg w-100 " type="submit" value="Pledge to be a voter." />
         </form>
       { this.state.pledgeError &&
-        <p>We didn’t recognize that code. Please try again!</p>
+        <div className="alert alert-danger mt-3" role="alert">
+          Sorry, we didn’t recognize that code. Please try again!
+        </div>
       }
       </div>
     )
@@ -60,11 +65,26 @@ class PledgeThanks extends Component {
     let tweetIntentText = "A fellow citizen sent me a letter asking me to be a voter, so I’m pledging to vote this year.\n\nWant to help elect Democrats to Congress? Visit www.votefwd.org to send ‘please vote’ letters of your own. @votefwd"
     let encodedTweetIntentText = encodeURIComponent(tweetIntentText);
     return (
-        <div className="text-center">
-          <p>You just pledged to be a voter in the special election on Tuesday, August 7, 2018. Thank you!</p>
-          <a href={"https://twitter.com/intent/tweet?text=" + encodedTweetIntentText} target="blank" className="link">Share your pledge on Twitter.</a>
+        <div className="bg-white px-3 px-md-5 py-3 py-md-4 align-self-center">
+          <p>
+            You just pledged to be a voter in the special election on Tuesday, August 7, 2018. Thank you!
+          </p>
+          <p>
+            <a
+              href={"https://twitter.com/intent/tweet?text=" + encodedTweetIntentText}
+              target="blank"
+              className=""
+            >
+                Share your pledge on Twitter.
+            </a>
+          </p>
           <p>Want to send letters like the one you received to encourage others to vote?</p>
-          <a href="/dashboard" className="pl2 link underline blue hover-orange">Send letters</a>
+          <a
+            href="/dashboard"
+            className="pl2 link underline blue"
+          >
+            Send letters
+          </a>
         </div>
     );
   }
@@ -84,15 +104,20 @@ class Pledge extends Component {
 
   render() {
     return (
-      <div>
-        <Header auth={this.props.auth}/>
-        { !this.state.pledgeStatus ?
+      <div className="h-100 d-md-flex flex-column">
+      <Header auth={this.props.auth} />
+      <div className="container-fluid h-75 bg-pattern d-flex justify-content-center">
+        <div className="d-flex">
+        { this.state.pledgeStatus ?
           (
             <PledgeForm handlePledge={this.handlePledge.bind(this)}/>
           ) : (
             <PledgeThanks />
           )
         }
+        </div>
+      </div>
+      <Footer />
       </div>
     );
   }
