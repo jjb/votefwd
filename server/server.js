@@ -120,6 +120,13 @@ router.route('/voter/confirm-sent')
     });
   });
 
+router.route('/voter/undo-confirm-sent')
+  .put(checkJwt, function(req, res) {
+    voterService.undoConfirmSent(req.body.id, function(result) {
+      res.json(result);
+    });
+  });
+
 router.route('/voter/pledge')
   .post(rateLimits.makePledgeRateLimit, function(req, res) {
     voterService.makePledge(req.body.code, function(result) {
