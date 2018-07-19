@@ -148,6 +148,26 @@ function confirmSent(voterId, callback) {
     });
 }
 
+function undoConfirmSent(voterId, callback) {
+  db('voters')
+    .where('id', voterId)
+    .update({
+      confirmed_sent_at: null,
+      updated_at: db.fn.now()
+    })
+    .then(function(result) {
+      getVoterById(voterId, function(voter) {
+        callback(voter);
+      })
+    })
+    .then(function() {
+      slackService.publishToSlack('A user marked a letter *not* sent.');
+    })
+    .catch(err => {
+      console.error(err)
+    });
+}
+
 function makePledge(code, callback) {
   db('voters')
     .where('hashid', code)
@@ -172,6 +192,7 @@ module.exports = {
   downloadAllLetters,
   adoptRandomVoter,
   confirmSent,
+  undoConfirmSent,
   confirmPrepped,
   undoConfirmPrepped,
   makePledge
