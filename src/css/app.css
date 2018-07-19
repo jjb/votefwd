@@ -75,12 +75,24 @@ p {
   border: 2px solid #2C74FF;
   color: #2C74FF; }
 
+.alert-danger {
+  background: rgba(255, 75, 75, 0.1);
+  border: 2px solid #FF4B4B;
+  color: #FF4B4B; }
+
 .bg-light {
   background-color: #eee; }
 
 .bg-dark {
   background-color: rgba(0, 0, 0, 0.9) !important;
   color: #fff; }
+
+.bg-pattern {
+  background-color: #262D7D;
+  background-image: url("/images/bg-bloom.png");
+  background-blend-mode: color-burn;
+  background-size: 400px;
+  background-repeat: repeat; }
 
 .bg-blue {
   background-color: #2C74FF !important;
