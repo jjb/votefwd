@@ -5,6 +5,8 @@ var db = require('./db');
 var emailService = require('./emailService');
 
 var letterService = require('./letterService');
+var slackService = require('./slackService');
+
 const allowedVoterBulkCount = [1, 2, 5, 15, 30, 60];
 
 function getVoterById(voterId, callback) {
@@ -64,6 +66,9 @@ function adoptRandomVoter(adopterId, numVoters, callback) {
             });
           }
         })
+        .then(function() {
+          slackService.publishToSlack('A user adopted ' + numVoters + ' voters.');
+        })
         .catch(err => {
           console.error(err);
         })
@@ -97,6 +102,9 @@ function confirmPrepped(voterId, callback) {
         callback(voter);
       })
     })
+    .then(function() {
+      slackService.publishToSlack('A user marked a letter prepped.');
+    })
     .catch(err => {
       console.error(err)
     });
@@ -113,6 +121,9 @@ function undoConfirmPrepped(voterId, callback) {
       getVoterById(voterId, function(voter) {
         callback(voter);
       })
+    })
+    .then(function() {
+      slackService.publishToSlack('A user marked a letter *not* prepped.');
     })
     .catch(err => {
       console.error(err)
@@ -131,6 +142,9 @@ function confirmSent(voterId, callback) {
         callback(voter);
       })
     })
+    .then(function() {
+      slackService.publishToSlack('A user marked a letter sent.');
+    })
     .catch(err => {
       console.error(err)
     });
@@ -140,6 +154,7 @@ function makePledge(code, callback) {
   console.log('hi')
   emailService.sendEmail();
   console.log('hi')
+
   // db('voters')
   //   .where('hashid', code)
   //   .update({
@@ -148,6 +163,9 @@ function makePledge(code, callback) {
   //   })
   //   .then(function(result) {
   //     callback(result);
+  //   })
+  //   .then(function() {
+  //     slackService.publishToSlack('A recipient made a vote pledge.');
   //   })
   //   .catch(err => {
   //     console.error(err)

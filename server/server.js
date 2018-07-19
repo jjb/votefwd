@@ -17,6 +17,8 @@ var rateLimits = require('./rateLimits')
 var userService = require('./userService');
 var voterService = require('./voterService');
 var letterService = require('./letterService');
+var slackService = require('./slackService');
+
 var db = require('./db');
 var fs = require('fs');
 var os = require('os');
@@ -42,7 +44,6 @@ app.use(express.static(path.resolve(__dirname, '..', 'public')));
 app.use(cors(corsOption));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
 
 const checkJwt = jwt({
   // Dynamically provide a signing key based on the kid in the header and the signing keys provided by the JWKS endpoint.
@@ -145,7 +146,11 @@ router.route('/user/new')
             db('users').insert({auth0_id: req.body.auth0_id})
               .then(function(result) {
               res.status(201).send(result);
-            });
+            })
+            .then(function() {
+              slackService.publishToSlack('A new user signed up.');
+            })
+            .catch(err => {console.error(err)});
           }
         })
         .catch(err => {console.error(err)});
@@ -229,7 +234,8 @@ router.route('/user')
     }
     if (req.body.accepted_code_at) {
       query.update('accepted_code_at', db.fn.now())
-      .then(res.status(201).send('Stored code agreement timestamp.'))
+      .then(query.update('accepted_terms_at', db.fn.now()))
+      .then(res.status(201).send('Stored code and terms agreement timestamps.'))
       .catch(err=> {console.error('ERROR: ', err)})
     }
   });
@@ -269,6 +275,31 @@ router.route('/s/users')
       .catch(err => {console.error(err);})
   });
 
+router.route('/s/stats')
+  .get(checkJwt, checkAdmin, function(req, res) {
+    db('voters')
+      .then(function(result) {
+        let availableCount = result.length;
+        let adoptedCount = result.filter(voter =>
+          voter.adopted_at && !voter.confirmed_prepped_at && !voter.confirmed_sent_at).length;
+        let preppedCount = result.filter(voter =>
+          voter.adopted_at && voter.confirmed_prepped_at && !voter.confirmed_sent_at).length;
+        let sentCount = result.filter(voter =>
+          voter.adopted_at && voter.confirmed_prepped_at && voter.confirmed_sent_at).length;
+        let totalCount = result.filter(voter =>
+          voter.adopted_at).length;
+        let counts = {
+          available: availableCount,
+          adopted: adoptedCount,
+          prepped: preppedCount,
+          sent: sentCount,
+          total: totalCount
+        };
+        res.json(counts)
+      })
+      .catch(err => {console.error(err);})
+  });
+
 //Use router configuration at /api
 app.use('/api', router);
 
@@ -277,6 +308,8 @@ app.get('*', function (request, response){
 })
 
 //start server and listen for requests
-app.listen(port, function() {
+var server = app.listen(port, function() {
   console.log(`api running on port ${port}`);
 });
+
+module.exports = server;

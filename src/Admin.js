@@ -8,7 +8,62 @@ import moment from 'moment';
 import history from './history';
 import { Header } from './Header';
 
-class OverviewTable extends Component {
+
+class Overview extends Component {
+  constructor(props) {
+    super(props)
+
+  this.state = { available: '', adopted: '', prepped: '', sent: '', total: '' };
+  this.getStats = this.getStats.bind(this);
+  }
+
+  getStats() {
+    axios({
+      method: 'GET',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
+      url: `${process.env.REACT_APP_API_URL}/s/stats`
+    })
+    .then(res => {
+      this.setState(res.data);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+  }
+
+  componentWillMount() {
+    this.getStats();
+  }
+
+  render() {
+    return(
+      <div className="w-25 mx-auto mt-3">
+        <table className="table table-condensed table-bordered text-center">
+          <thead className="thead-light">
+            <tr>
+              <th style={{width: '20%'}} scope="col">Available</th>
+              <th style={{width: '20%'}} scope="col">Adopted</th>
+              <th style={{width: '20%'}} scope="col">Prepped</th>
+              <th style={{width: '20%'}} scope="col">Sent</th>
+              <th style={{width: '20%'}} scope="col">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>{this.state.available}</td>
+              <td>{this.state.adopted}</td>
+              <td>{this.state.prepped}</td>
+              <td>{this.state.sent}</td>
+              <td>{this.state.total}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+}
+
+class UserTable extends Component {
   constructor(props) {
     super(props)
 
@@ -47,6 +102,7 @@ class OverviewTable extends Component {
         user.num_adopted = adopted.length;
         user.num_prepped = prepped.length;
         user.num_sent = sent.length;
+        user.total = res.data.length;
         users[index] = user;
       })
       .then(res => {
@@ -74,7 +130,7 @@ class OverviewTable extends Component {
       accessor: d => {
         return moment(d.created_at)
         .local()
-        .format("YYYY-MM-DD hh:mm")
+        .format("MMMM DD, hh:mm a")
       }
     }, {
       Header: 'Adopted',
@@ -85,6 +141,20 @@ class OverviewTable extends Component {
     }, {
       Header: 'Sent',
       accessor: 'num_sent',
+    }, {
+      Header: 'Total',
+      accessor: 'total',
+    }, {
+      id: 'a',
+      Header: 'Admin?',
+      accessor: a => {
+        if (a.is_admin) {
+          return 'admin';
+        }
+        else {
+          return null;
+        }
+      }
     }]
 
     return (
@@ -128,7 +198,8 @@ class Admin extends Component {
     return (
       <div>
         <Header auth={this.props.auth}/>
-        <OverviewTable />
+        <Overview />
+        <UserTable />
       </div>
     );
   }

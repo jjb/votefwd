@@ -5,13 +5,15 @@ var uuidv4 = require('uuid/v4');
 it('API status', function(done) {
   request('http://localhost:3001/api', function(error, response, body) {
     expect(response.statusCode).to.equal(200);
+    body = JSON.parse(body);
+    expect(body).to.eql('API initialized.');
     done();
   });
 });
 
 var randomId = uuidv4();
 
-it('Saves a new user', function(done) {
+xit('Saves a new user', function(done) {
   request
     .post({url: 'http://localhost:3001/api/user', form: {auth0_id: randomId}},
     function(error, response, body) {
@@ -23,7 +25,7 @@ it('Saves a new user', function(done) {
 // Attempting to add another user with the same ID as the one we added in
 // the 'Saves a new user' test, to see that it fails.
 
-it('Recognizes an existing user', function(done) {
+xit('Recognizes an existing user', function(done) {
   request.post({url: 'http://localhost:3001/api/user', form: {auth0_id: randomId}},
     function(error, response, body) {
       expect(response.statusCode).to.equal(200);
@@ -32,7 +34,7 @@ it('Recognizes an existing user', function(done) {
   });
 });
 
-it('Handles lack of user ID gracefully when creating a user', function(done) {
+xit('Handles lack of user ID gracefully when creating a user', function(done) {
   request.post({url: 'http://localhost:3001/api/user', form: {auth0_id: null}},
     function(error, response, body) {
       expect(response.statusCode).to.equal(500);
@@ -40,7 +42,7 @@ it('Handles lack of user ID gracefully when creating a user', function(done) {
   });
 });
 
-it('Retrieves a random unclaimed voter', function(done) {
+xit('Retrieves a random unclaimed voter', function(done) {
   request.get({url: 'http://localhost:3001/api/voter/random'},
     function(error, response, body) {
       expect(response.statusCode).to.equal(200);
@@ -52,7 +54,7 @@ it('Retrieves a random unclaimed voter', function(done) {
 });
 
 // Placeholder for test to use HTTPS.  Switch this once you upgrade :D.
-it('Uses http', function(done) {
+xit('Uses http', function(done) {
   request.get({url: 'http://localhost:3001/api/voter/random'},
     function(error, response, body) {
       expect(response['request']['uri']['protocol']).to.equal('http:');
