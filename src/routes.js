@@ -1,11 +1,12 @@
 import React from 'react';
-import { Route, Router } from 'react-router-dom';
+import { Redirect, Route, Router } from 'react-router-dom';
 import Home from './Home';
 import Dashboard from './Dashboard';
-import Callback from './Callback';
+import Loading from './Loading';
 import Login from './SecretLogin';
 import Auth from './Auth';
 import Pledge from './Pledge';
+import AdminRoute from './AdminRoute';
 import Admin from './Admin';
 import Privacy from './Privacy';
 import Terms from './Terms';
@@ -20,6 +21,18 @@ const handleAuthentication = ({location}) => {
   }
 }
 
+// This higher-order component pattern taken from
+// https://tylermcginnis.com/react-router-protected-routes-authentication/
+//
+// Ensures there is a logged in user.  If not, redirects to /
+const LoggedInRoute = ({ component: Component, ...rest }) => (
+  <Route {...rest} render={(props) => (
+    isAuthenticated() === true
+      ? <Component auth={auth} {...props} />
+      : <Redirect to={{ pathname: '/' }} />
+  )} />
+);
+
 export const makeMainRoutes = () => {
   return (
       <Router history={history}>
@@ -29,12 +42,12 @@ export const makeMainRoutes = () => {
           } />
           <Route exact path="/callback" render={(props) => {
             handleAuthentication(props);
-            return <Callback {...props} /> 
+            return <Loading {...props} />;
           }}/>
-          <Route exact path="/dashboard" render={(props) => <Dashboard auth={auth} {...props} />} />
+          <LoggedInRoute exact path="/dashboard" component={Dashboard} />
           <Route exact path="/secretlogin" render={(props) => <Login auth={auth} {...props} />} />
           <Route exact path="/pledge" render={(props) => <Pledge auth={auth} {...props} />} />
-          <Route exact path="/admin" render={(props) => <Admin auth={auth} {...props} />} />
+          <AdminRoute exact path="/admin" component={Admin} auth={auth} />
           <Route exact path="/privacy-policy" render={(props) => <Privacy auth={auth} {...props} />} />
           <Route exact path="/terms-of-use" render={(props) => <Terms auth={auth} {...props} />} />
         </React.Fragment>

@@ -266,6 +266,25 @@ function checkAdmin(req, res, next) {
   });
 }
 
+// Check that a user is an admin.  You have to be an admin to do so, but you can
+// check on another user.
+router.route('/s/isAdmin')
+  .get(checkJwt, checkAdmin, function(req, res) {
+    const auth0_id = req.query.auth0_id;
+    if (!auth0_id) {
+      res.status(400);
+      return;
+    }
+    userService.isAdmin(auth0_id, function (error, isAdmin) {
+      if (error) {
+        console.error(error);
+        res.status(500);
+        return;
+      }
+      res.json({ is_admin: isAdmin });
+    });
+  });
+
 router.route('/s/users')
   .get(checkJwt, checkAdmin, function(req, res) {
     db('users')
