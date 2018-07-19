@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import ReactMoment from 'react-moment';
 import moment from 'moment';
 import download from 'js-file-download';
 
@@ -91,8 +90,10 @@ class VoterRecord extends Component {
     }
     else {
       voterActions = (
-        <div className="text-success small mt-2">
-          <span>Sent on:</span> <ReactMoment format="M/DD/YY">{voter.confirmed_sent_at}</ReactMoment>
+        <div className="btn-group">
+          <button className="btn btn-success btn-sm" onClick={() => {this.props.undoConfirmSent(voter)}}>
+            <i className="fa fa-chevron-left" aria-hidden="true"></i>
+          </button>
         </div>
       )
     }
@@ -216,6 +217,7 @@ export class VoterList extends Component {
                 <VoterRecord
                   key={voter.id}
                   voter={voter}
+                  undoConfirmSent={this.props.undoConfirmSent}
                 />)}
             </ul>
           </div>
