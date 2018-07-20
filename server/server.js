@@ -147,10 +147,16 @@ router.route('/user/new')
       db('users').where('auth0_id', req.body.auth0_id)
         .then(function(result) {
           if (result.length != 0) {
+            if (result[0].email != req.body.email) {
+              userService.updateEmail(req.body.auth0_id, req.body.email);
+            }
             res.status(200).send('User already exists.');
           }
           else {
-            db('users').insert({auth0_id: req.body.auth0_id})
+            db('users').insert({
+              auth0_id: req.body.auth0_id,
+              email: req.body.email
+            })
               .then(function(result) {
               res.status(201).send(result);
             })
