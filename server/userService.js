@@ -28,8 +28,6 @@ function updateEmail(auth0_id, newEmail) {
   .where({auth0_id: auth0_id})
   .update({email: newEmail})
   .then(function(result) {
-    console.log(result)
-    console.log('email rest above')
     return;
   });
 }
