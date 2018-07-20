@@ -177,6 +177,7 @@ function undoConfirmSent(voterId, callback) {
     .catch(err => {
       console.error(err)
     });
+}
 
 function makePledge(code, callback) {
   console.log('hi we are sending pledge email')
