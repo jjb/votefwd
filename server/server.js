@@ -149,12 +149,7 @@ router.route('/user/new')
           if (result.length != 0) {
             if (result[0].email != req.body.email) {
               userService.updateEmail(req.body.auth0_id, req.body.email);
-              console.log('email_updated');
-            }else{
-              console.log('emailisgood')
             }
-            console.log('about to 200')
-            console.log(result)
             res.status(200).send('User already exists.');
           }
           else {
