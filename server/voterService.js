@@ -180,24 +180,22 @@ function undoConfirmSent(voterId, callback) {
 }
 
 function makePledge(code, callback) {
-  console.log('hi we are sending pledge email')
-  emailService.sendEmail();
-  console.log('hi we are sending pledge email')
-  // db('voters')
-  //   .where('hashid', code)
-  //   .update({
-  //     pledge_made_at: db.fn.now(),
-  //     updated_at: db.fn.now()
-  //   })
-  //   .then(function(result) {
-  //     callback(result);
-  //   })
-  //   .then(function() {
-  //     slackService.publishToSlack('A recipient made a vote pledge.');
-  //   })
-  //   .catch(err => {
-  //     console.error(err)
-  //   });
+  db('voters')
+    .where('hashid', code)
+    .update({
+      pledge_made_at: db.fn.now(),
+      updated_at: db.fn.now()
+    })
+    .then(function(result) {
+      emailService.sendEmail('pledge');
+      //callback(result);
+    })
+    .then(function() {
+      slackService.publishToSlack('A recipient made a vote pledge.');
+    })
+    .catch(err => {
+      console.error(err)
+    });
 }
 
 module.exports = {

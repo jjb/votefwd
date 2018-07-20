@@ -1,12 +1,14 @@
 // Load the AWS SDK for Node.js
 var AWS = require('aws-sdk');
 var fs = require('fs');
-var template = fs.readFileSync('./email/layout.html', 'utf8');
+var juice = require('juice');
 
 // Set the region
 AWS.config.update({region: 'us-west-2'});
 
-function sendEmail(){
+function sendEmail(templateName){
+    var template = fs.readFileSync('./email/' + templateName + '.html', 'utf8');
+    var inlinedTemplate = juice(template);
     // Create sendEmail params
     var params = {
       Destination: { /* required */
@@ -23,7 +25,7 @@ function sendEmail(){
         Body: { /* required */
           Html: {
            Charset: "UTF-8",
-           Data: template
+           Data: inlinedTemplate
           },
           Text: {
            Charset: "UTF-8",
@@ -35,9 +37,9 @@ function sendEmail(){
           Data: 'Test email'
          }
         },
-      Source: 'andrewjtimmons@gmail.com', /* required */
+      Source: 'scott@votefwd.org', /* required */
       ReplyToAddresses: [
-          'andrewjtimmons@gmail.com',
+          'scott@votefwd.org',
         /* more items */
       ],
     };
