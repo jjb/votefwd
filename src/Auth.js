@@ -41,7 +41,8 @@ export default class Auth {
       headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
       url: `${process.env.REACT_APP_API_URL}/user/new`,
       data: {
-        auth0_id: authResult.idTokenPayload.sub 
+        auth0_id: authResult.idTokenPayload.sub,
+        email: authResult.idTokenPayload.email
       }
     })
     .then(callback)
