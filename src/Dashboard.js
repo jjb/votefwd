@@ -20,7 +20,7 @@ class Dashboard extends Component {
     this.handleUndoConfirmPrepped = this.handleUndoConfirmPrepped.bind(this);
     this.handleUndoConfirmSent = this.handleUndoConfirmSent.bind(this);
     this.updateUser = this.updateUser.bind(this);
-    this.state = { voters: [], user: {}, isQualified: true }
+    this.state = { voters: [], user: {}, isQualified: true, enoughVoters: '' }
   }
 
   getCurrentUser() {
@@ -192,12 +192,31 @@ class Dashboard extends Component {
     });
   }
 
+  checkEnoughVoters() {
+    axios({
+      method: 'GET',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
+      url: `${process.env.REACT_APP_API_URL}/enough-voters`
+    })
+    .then(res => {
+      this.setState({ enoughVoters: res.data });
+    })
+    .catch(err => {
+      console.error(err);
+    });
+  }
+
   componentWillMount(){
     this.getCurrentUser();
     if (!this.getCurrentUser()) {
       history.replace('/');
     }
     this.getAdoptedVoters();
+    this.checkEnoughVoters();
+  }
+
+  componentDidUpdate() {
+    this.checkEnoughVoters();
   }
 
   render() {
@@ -209,7 +228,10 @@ class Dashboard extends Component {
           { !this.state.isQualified &&
             <Qualify user={this.state.user} updateUser={this.updateUser}/>
           }
-          <AdoptVoter handleAdoptedVoter={this.handleAdoptedVoter} />
+          <AdoptVoter
+             handleAdoptedVoter={this.handleAdoptedVoter}
+             enoughVoters={this.state.enoughVoters}
+            />
           <div className="container-fluid py-5">
             <VoterList
               voters={this.state.voters}

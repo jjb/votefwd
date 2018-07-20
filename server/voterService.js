@@ -32,6 +32,15 @@ function getUsersAdoptedVoters(userId, callback) {
 }
 
 function adoptRandomVoter(adopterId, numVoters, callback) {
+  db('voters')
+    .where('adopter_user_id', null)
+    .then(function(voters) {
+      let availableVoterCount = voters.length;
+      if (availableVoterCount < numVoters) {
+        console.error("not enough available voters.");
+        return;
+      }
+    })
   if (allowedVoterBulkCount.includes(numVoters) !== true){
     //user requested a weird number of voters, deny!
     console.error("invalid number of voters requested");
