@@ -191,6 +191,9 @@ function makePledge(code, callback) {
   //   .then(function(result) {
   //     callback(result);
   //   })
+  //   .then(function() {
+  //     slackService.publishToSlack('A recipient made a vote pledge.');
+  //   })
   //   .catch(err => {
   //     console.error(err)
   //   });
