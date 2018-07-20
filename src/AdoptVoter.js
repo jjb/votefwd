@@ -43,6 +43,19 @@ export class AdoptVoter extends Component {
           <img src={loading} alt="loading" className="ml-5 mr-3" /> Assigning 5 voters to you. This may take a moment.
         </div>
       )
+    } else if (!this.props.enoughVoters) {
+      content = (
+        <div>
+          <p className="text-danger">
+            All targeted voters have been adopted! We’re loading more data, so please check back soon.
+          </p>
+          <button
+            disabled={true}
+            className="btn btn-secondary btn-lg w-100">
+              Adopt <span className="reset-num">5</span> Voters
+          </button>
+        </div>
+      )
     } else {
       content = (
         <button
