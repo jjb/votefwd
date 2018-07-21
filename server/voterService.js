@@ -180,22 +180,41 @@ function undoConfirmSent(voterId, callback) {
 }
 
 function makePledge(code, callback) {
+  // andy put in a check to make sure they have not pledged before so we dont email people a bajillion times
   db('voters')
     .where('hashid', code)
     .update({
       pledge_made_at: db.fn.now(),
       updated_at: db.fn.now()
     })
-    .then(function(result) {
-      emailService.sendEmail('pledge');
-      //callback(result);
-    })
+    .then(getLetterWritingUserFromPledge(code)
+      .then(function(user){
+        emailService.sendEmail('pledge', user);
+      })
+    )
     .then(function() {
       slackService.publishToSlack('A recipient made a vote pledge.');
     })
     .catch(err => {
       console.error(err)
     });
+}
+
+var getLetterWritingUserFromPledge = function getLetterWritingUserFromPledge(code){
+  return new Promise(function(resolve, reject) {
+    db('voters')
+    .where('hashid', code)
+    .then(function(result){
+      db('users')
+      .where('auth0_id', result[0].adopter_user_id)
+      .then(function(result){
+        resolve(result[0]);
+      })
+    })
+    .catch(err => {
+      reject(err);
+    });
+  });
 }
 
 module.exports = {

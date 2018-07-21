@@ -19,7 +19,7 @@ function sendEmail(templateName, user){
         //   /* more items */
         // ],
         ToAddresses: [
-          'sjforman@gmail.com',
+          'andrewjtimmons@gmail.com',
           /* more items */
         ]
       },
