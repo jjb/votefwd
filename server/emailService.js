@@ -6,7 +6,9 @@ var juice = require('juice');
 // Set the region
 AWS.config.update({region: 'us-west-2'});
 
-function sendEmail(templateName){
+function sendEmail(templateName, user){
+    console.log(user);
+    console.log('in_email')
     var template = fs.readFileSync('./email/' + templateName + '.html', 'utf8');
     var inlinedTemplate = juice(template);
     // Create sendEmail params
