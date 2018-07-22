@@ -182,11 +182,26 @@ function undoConfirmSent(voterId, callback) {
 function makePledge(code, callback) {
   // andy put in a check to make sure they have not pledged before so we dont email people a bajillion times
   db('voters')
+  .where('hashid', code)
+  .then(function(result){
+    if (result[0] == null){
+      // should we tell them we couldnt find it? This will just succeed and move on.
+      callback('invalid code');
+      return;
+    }
+    if (result[0].pledge_made_at != null){
+      // check if already pledge and exit early if yes
+      callback('already pledged');
+      return;
+    }
+    // get the pledge row and update it with pledge time
+    db('voters')
     .where('hashid', code)
     .update({
       pledge_made_at: db.fn.now(),
       updated_at: db.fn.now()
     })
+    // send an email to the person who wrote the letter telling them a pledge was made
     .then(getLetterWritingUserFromPledge(code)
       .then(function(user){
         emailService.sendEmail('pledge', user);
@@ -195,9 +210,13 @@ function makePledge(code, callback) {
     .then(function() {
       slackService.publishToSlack('A recipient made a vote pledge.');
     })
+    .then(function() {
+      callback('successful pledge');
+    })
     .catch(err => {
       console.error(err)
     });
+  });
 }
 
 var getLetterWritingUserFromPledge = function getLetterWritingUserFromPledge(code){
