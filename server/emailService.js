@@ -1,16 +1,20 @@
 // Load the AWS SDK for Node.js
 var AWS = require('aws-sdk');
 var fs = require('fs');
+var Handlebars = require('handlebars');
 var juice = require('juice');
 
 // Set the region
 AWS.config.update({region: 'us-west-2'});
 
-function sendEmail(templateName, user){
-    console.log(user);
-    console.log('in_email')
+function sendEmail(templateName, context){
+    // This function takes a template name for an email and a context that is
+    // is a javascript object that has key value pairs to populate variables in the
+    // passed template.
     var template = fs.readFileSync('./email/' + templateName + '.html', 'utf8');
-    var inlinedTemplate = juice(template);
+    var uncompiledTemplate = Handlebars.compile(template);
+    var html = uncompiledTemplate(context);
+    // var inlinedTemplate = juice(template);
     // Create sendEmail params
     var params = {
       Destination: { /* required */
@@ -19,7 +23,7 @@ function sendEmail(templateName, user){
         //   /* more items */
         // ],
         ToAddresses: [
-          'andrewjtimmons@gmail.com',
+          context.email,
           /* more items */
         ]
       },
@@ -27,7 +31,7 @@ function sendEmail(templateName, user){
         Body: { /* required */
           Html: {
            Charset: "UTF-8",
-           Data: inlinedTemplate
+           Data: html
           },
           Text: {
            Charset: "UTF-8",
