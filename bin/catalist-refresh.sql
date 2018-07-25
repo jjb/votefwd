@@ -5,7 +5,7 @@ DECLARE
   experimentid integer := 1;
 
   populationtotal integer;
-  votercount integer := 10;
+  votercount integer := 500;
   timestamp timestamp := now();
 
 BEGIN
