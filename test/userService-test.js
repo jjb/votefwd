@@ -157,25 +157,25 @@ describe('userService', function() {
 
   describe('notifyUserOfNewQualifiedState', function() {
     it('should send a qualified email on promotion of pre_qualified to qualified', function(done) {
-      var result = userService.notifyUserOfNewQualifiedState(this.users[0], 'qualified');
+      var result = userService.notifyUserOfNewQualifiedState(this.users.prequal, 'qualified');
       expect(result).to.be.eql('sent qualified email');
       done();
     });
 
     it('should send a super_qualified email on promotion of pre_qualified to super_qualified', function(done) {
-      var result = userService.notifyUserOfNewQualifiedState(this.users[0], 'super_qualified');
+      var result = userService.notifyUserOfNewQualifiedState(this.users.prequal, 'super_qualified');
       expect(result).to.be.eql('sent super_qualified email');
       done();
     });
 
     it('should send a super_qualified email on promotion of pre_qualified to super_qualified', function(done) {
-      var result = userService.notifyUserOfNewQualifiedState(this.users[4], 'super_qualified');
+      var result = userService.notifyUserOfNewQualifiedState(this.users.qual, 'super_qualified');
       expect(result).to.be.eql('sent super_qualified email');
       done();
     });
 
     it('should not send an email on banned', function(done) {
-      var result = userService.notifyUserOfNewQualifiedState(this.users[4], 'banned');
+      var result = userService.notifyUserOfNewQualifiedState(this.users.qual, 'banned');
       expect(result).to.be.eql('not sending an email');
       done();
     });
