@@ -12,27 +12,33 @@ before('Adding user data to the database', function() {
   return db('users')
     .insert([{
       auth0_id: 'test-auth0-id-0',
-      full_name: 'Regular Joe'
+      full_name: 'Regular Joe',
+      email: 'reggo_joe@schmoe.com'
     }, {
       auth0_id: 'test-auth0-id-1',
       full_name: 'Admin Sally',
       is_admin: true,
+      email: 'sallyboss@bigboss.com'
     }, {
       auth0_id: 'test-auth0-id-2',
       full_name: 'Banned Billy',
-      qual_state: 'banned'
+      qual_state: 'banned',
+      email: 'billy_da_grifter@grifthub.com'
     }, {
       auth0_id: 'test-auth0-id-3',
       full_name: 'Prequal Patty',
-      qual_state: 'pre_qualified'
+      qual_state: 'pre_qualified',
+      email: 'pattycake@pattycake.com'
     }, {
       auth0_id: 'test-auth0-id-4',
       full_name: 'Qualified Quincy',
-      qual_state: 'qualified'
+      qual_state: 'qualified',
+      email: 'quincy@qal.com'
     }, {
       auth0_id: 'test-auth0-id-5',
       full_name: 'Superqual Cindy',
-      qual_state: 'super_qualified'
+      qual_state: 'super_qualified',
+      email: 'cinderella@shoe.com'
     }])
     .returning('*')
     .tap(function(result) {
