@@ -227,7 +227,11 @@ class UserTable extends Component {
       id: 's',
       width: 200,
       Header: 'Status',
-      Cell: this.renderStatus
+      Cell: this.renderStatus,
+      sortMethod: (a, b, desc) => {
+        console.log('sort', a, b);
+        return 0;
+      }
     }];
 
     return (
