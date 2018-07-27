@@ -6,6 +6,7 @@ var emailService = require('./emailService');
 
 var letterService = require('./letterService');
 var slackService = require('./slackService');
+var userService = require('./userService');
 
 const allowedVoterBulkCount = [1, 2, 5, 15, 30, 60];
 let adoptionOrder = 'RANDOM()';
@@ -42,6 +43,22 @@ function adoptRandomVoter(adopterId, numVoters, callback) {
     return;
   }
 
+  userService.canAdoptMoreVoters(adopterId, function(error, numCanAdopt) {
+    if (error) {
+      callback(error);
+      return;
+    }
+    if (numCanAdopt <= 0) {
+      callback(null, []);
+      return;
+    }
+
+    let numToAdopt = Math.min(numVoters, numCanAdopt);
+    _adoptSomeVoters(adopterId, numToAdopt, callback);
+  });
+}
+
+function _adoptSomeVoters(adopterId, numVoters, callback) {
   db('voters')
     .count()
     .where('adopter_user_id', null)
