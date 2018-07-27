@@ -75,7 +75,12 @@ router.route('/voters')
 
 router.route('/voter/adopt-random')
   .post(checkJwt, function(req, res) {
-    voterService.adoptRandomVoter(req.body.adopterId, req.body.numVoters, function(voters) {
+    voterService.adoptRandomVoter(req.body.adopterId, req.body.numVoters, function(error, voters) {
+      if (error) {
+        console.error(error);
+        res.status(500).end();
+        return;
+      }
       let response = {};
       response.voters = voters;
       res.json(response);

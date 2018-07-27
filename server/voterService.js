@@ -6,8 +6,10 @@ var emailService = require('./emailService');
 
 var letterService = require('./letterService');
 var slackService = require('./slackService');
+var userService = require('./userService');
 
 const allowedVoterBulkCount = [1, 2, 5, 15, 30, 60];
+let adoptionOrder = 'RANDOM()';
 
 function getVoterById(voterId, callback) {
   db.select().table('voters')
@@ -34,56 +36,83 @@ function getUsersAdoptedVoters(userId, callback) {
 }
 
 function adoptRandomVoter(adopterId, numVoters, callback) {
-  db('voters')
-    .where('adopter_user_id', null)
-    .then(function(voters) {
-      let availableVoterCount = voters.length;
-      if (availableVoterCount < numVoters) {
-        console.error("not enough available voters.");
-        return;
-      }
-    })
   if (allowedVoterBulkCount.includes(numVoters) !== true){
     //user requested a weird number of voters, deny!
-    console.error("invalid number of voters requested");
-    return; //should we return a 500? idk
+    console.error("invalid number of voters requested %s", numVoters);
+    callback(new Error('Invalid number of voters requested'));
+    return;
   }
+
+  userService.canAdoptMoreVoters(adopterId, function(error, numCanAdopt) {
+    if (error) {
+      callback(error);
+      return;
+    }
+    if (numCanAdopt <= 0) {
+      callback(null, []);
+      return;
+    }
+
+    let numToAdopt = Math.min(numVoters, numCanAdopt);
+    _adoptSomeVoters(adopterId, numToAdopt, callback);
+  });
+}
+
+function _adoptSomeVoters(adopterId, numVoters, callback) {
   db('voters')
+    .count()
     .where('adopter_user_id', null)
-    .orderByRaw('RANDOM()')
-    .limit(numVoters)
-    .then(function(voters) {
-      var ids = voters.map(voter => voter.id)
+    .then(function(results) {
+      let availableVoterCount = results[0].count;
+      if (availableVoterCount < numVoters) {
+        console.error("not enough available voters.");
+        callback(null, []);
+        return;
+      }
+
       db('voters')
-        .whereIn('id', ids)
-        .update({
-          adopter_user_id: adopterId,
-          adopted_at: db.fn.now(),
-          updated_at: db.fn.now()
-        })
-        .then(function() {
-          var voters_to_return = [];
-          for (var i = 0; i < voters.length; i++){
-            var voter = voters[i];
-            var num_finished_calls = 0;
-            letterService.generateAndStorePdfForVoter(voter, function(voter) {
-              num_finished_calls += 1;
-              voters_to_return.push(voter)
-              if (num_finished_calls == voters.length){
-                callback(voters_to_return);
+        .where('adopter_user_id', null)
+        .orderByRaw(adoptionOrder)
+        .limit(numVoters)
+        .then(function(voters) {
+          var ids = voters.map(voter => voter.id)
+          db('voters')
+            .whereIn('id', ids)
+            .update({
+              adopter_user_id: adopterId,
+              adopted_at: db.fn.now(),
+              updated_at: db.fn.now()
+            })
+            .then(function() {
+              var voters_to_return = [];
+              for (var i = 0; i < voters.length; i++){
+                var voter = voters[i];
+                var num_finished_calls = 0;
+                letterService.generateAndStorePdfForVoter(voter, function(voter) {
+                  num_finished_calls += 1;
+                  voters_to_return.push(voter)
+                  if (num_finished_calls === voters.length){
+                    callback(null, voters_to_return);
+                  }
+                });
               }
+            })
+            .then(function() {
+              slackService.publishToSlack('A user adopted ' + numVoters + ' voters.');
+            })
+            .catch(err => {
+              console.error(err);
+              callback(err);
             });
-          }
-        })
-        .then(function() {
-          slackService.publishToSlack('A user adopted ' + numVoters + ' voters.');
         })
         .catch(err => {
           console.error(err);
-        })
+          callback(err);
+        });
     })
     .catch(err => {
       console.error(err);
+      callback(err);
     });
 }
 
@@ -236,6 +265,16 @@ var getLetterWritingUserFromPledge = function getLetterWritingUserFromPledge(cod
   });
 }
 
+function _prepForTests() {
+  if (process.env.NODE_ENV !== 'test') {
+    console.error('Someone is calling _prepForTests outside of tests');
+    return;
+  }
+
+  allowedVoterBulkCount.push(256);
+  adoptionOrder = 'id DESC';
+}
+
 module.exports = {
   getVoterById,
   getUsersAdoptedVoters,
@@ -245,5 +284,6 @@ module.exports = {
   undoConfirmSent,
   confirmPrepped,
   undoConfirmPrepped,
-  makePledge
+  makePledge,
+  _prepForTests
 }
