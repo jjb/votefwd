@@ -174,6 +174,7 @@ class Dashboard extends Component {
     })
   }
 
+  // TODO: Can remove this once confirmed that its all in Verify.js
   updateUser(key, value) {
     let data = {}
     data['auth0_id'] = localStorage.getItem('user_id');
