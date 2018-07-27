@@ -134,13 +134,18 @@ class UserTable extends Component {
       }
     })
     .then(res => {
-      this.setState({
-        users: this.state.users.map(u => {
-          if (u.auth0_id === user.auth0_id) {
-            u.qual_state = newQualState;
-          }
-          return u;
-        })
+      // setState calls are batched, so if you rely on the previous state, then
+      // the only way to guarantee you are reading it is to use this syntax.
+      // see: https://reactjs.org/docs/state-and-lifecycle.html#state-updates-may-be-asynchronous
+      this.setState((prevState, props) => {
+        return {
+          users: prevState.users.map(u => {
+            if (u.auth0_id === user.auth0_id) {
+              u.qual_state = newQualState;
+            }
+            return u;
+          })
+        }
       });
     })
     .catch(err => {
