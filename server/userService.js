@@ -3,6 +3,14 @@
 
 var db = require('./db');
 
+// What level of permissions does this user have?
+const QualStateEnum = {
+  banned: 'banned', // not allowed on the platform
+  pre_qualified: 'pre_qualified', // awaiting account review
+  qualified: 'qualified', // approved for limited activity
+  super_qualified: 'super_qualified', // approved for all activity
+}
+
 function isAdmin(auth0_id, callback) {
   db('users')
     .first('is_admin')
