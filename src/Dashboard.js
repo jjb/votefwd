@@ -34,10 +34,12 @@ class Dashboard extends Component {
         })
         .then(res => {
           let user = res.data[0];
-          if (!this.isQualified(user)) {
-            this.setState({ isQualified: false });
-          }
           this.setState({ user: res.data[0] })
+          
+          if (!this.isQualified(user)) {
+            history.replace('/verify');
+            return true;
+          }
         })
         .catch(err => {
           console.error(err)
@@ -50,8 +52,7 @@ class Dashboard extends Component {
   }
 
   isQualified(user) {
-    if ( user.is_human_at && user.pledged_vote_at && user.is_resident_at &&
-      user.full_name && user.accepted_code_at && user.zip && user.why_write_letters) {
+    if ( user.qual_state === "qualified" || user.qual_state === "super_qualified" ) {
       return true;
     } else {
       return false;
@@ -211,9 +212,6 @@ class Dashboard extends Component {
     this.getCurrentUser();
     if (!this.getCurrentUser()) {
       history.replace('/');
-    }
-    if (!this.state.isQualified) {
-      history.replace('/verify');
     }
     this.getAdoptedVoters();
     this.checkEnoughVoters();
