@@ -2,7 +2,9 @@
 
 exports.up = function(knex, Promise) {
   return knex.schema.table('users', function(table) {
-    table.string('qual_state', 32);
+    table.string('qual_state', 32).notNull().defaultTo('pre_qualified');
+  }).then(function(){
+    return knex('users').update('qual_state', 'qualified');
   })
 };
 
