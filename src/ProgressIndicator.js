@@ -9,13 +9,15 @@ export class ProgressIndicator extends Component {
 
   render() {
     return (
-      <div className="progress mt-5">
-        <div className="progress-bar bg-success"
-          role="progressbar"
-          style={{width: this.setWidth()}}
-          aria-valuenow={this.props.current}
-          aria-valuemin="0"
-          aria-valuemax={this.props.max}>
+      <div className="mt-1 p-4 bg-light border-top">
+        <div className="progress">
+          <div className="progress-bar bg-success"
+            role="progressbar"
+            style={{width: this.setWidth()}}
+            aria-valuenow={this.props.current}
+            aria-valuemin="0"
+            aria-valuemax={this.props.max}>
+          </div>
         </div>
       </div>
     )
