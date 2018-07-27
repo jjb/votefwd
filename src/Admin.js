@@ -66,9 +66,11 @@ class UserTable extends Component {
   constructor(props) {
     super(props)
 
-  this.state = { users: [] };
-  this.getAllUsers = this.getAllUsers.bind(this);
-  this.setVoterCountsForUsers = this.setVoterCountsForUsers.bind(this);
+    this.state = { users: [] };
+    this.getAllUsers = this.getAllUsers.bind(this);
+    this.setVoterCountsForUsers = this.setVoterCountsForUsers.bind(this);
+    this.renderStatus = this.renderStatus.bind(this);
+    this.handleChangeStatus = this.handleChangeStatus.bind(this);
   }
 
   getAllUsers() {
@@ -117,6 +119,68 @@ class UserTable extends Component {
     this.getAllUsers();
   }
 
+  handleChangeStatus(user, newQualState, event) {
+    event.preventDefault();
+    if (user.qual_state === newQualState) {
+      return;
+    }
+    axios({
+      method: 'POST',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
+      url: `${process.env.REACT_APP_API_URL}/s/updateUserQualifiedState`,
+      data: {
+        auth0_id: user.auth0_id,
+        qualState: newQualState
+      }
+    })
+    .then(res => {
+      this.setState({
+        users: this.state.users.map(u => {
+          if (u.auth0_id === user.auth0_id) {
+            u.qual_state = newQualState;
+          }
+          return u;
+        })
+      });
+    })
+    .catch(err => {
+      console.error(err);
+    });
+  }
+
+  renderStatus(props) {
+    const buttonClass = function buttonClass(state, qualState) {
+      return "btn btn-light" + (qualState === state ? ' active' : '');
+    };
+
+    const user = props.original;
+    const qualState = user.qual_state;
+    return (
+      <div className="btn-group btn-group-toggle">
+        <label className={buttonClass('banned', qualState)}
+               onClick={this.handleChangeStatus.bind(this, user, 'banned')}
+        >
+          <input type="radio" name="status" id="banned" autoComplete="off" /> B
+        </label>
+        <label className={buttonClass('pre_qualified', qualState)}
+               onClick={this.handleChangeStatus.bind(this, user, 'pre_qualified')}
+        >
+          <input type="radio" name="status" id="prequal" autoComplete="off" /> P
+        </label>
+        <label className={buttonClass('qualified', qualState)}
+               onClick={this.handleChangeStatus.bind(this, user, 'qualified')}
+        >
+          <input type="radio" name="status" id="qual" autoComplete="off" /> Q
+        </label>
+        <label className={buttonClass('super_qualified', qualState)}
+               onClick={this.handleChangeStatus.bind(this, user, 'super_qualified')}
+        >
+          <input type="radio" name="status" id="superqual" autoComplete="off" /> S
+        </label>
+      </div>
+    );
+  }
+
   render() {
     const users = this.state.users;
 
@@ -154,7 +218,12 @@ class UserTable extends Component {
           return null;
         }
       }
-    }]
+    }, {
+      id: 's',
+      width: 200,
+      Header: 'Status',
+      Cell: this.renderStatus
+    }];
 
     return (
       <ReactTable data={users} columns={columns} />
