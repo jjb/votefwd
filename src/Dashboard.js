@@ -51,6 +51,7 @@ class Dashboard extends Component {
     }
   }
 
+  // TODO: abstract this out
   isQualified(user) {
     if ( user.qual_state === "qualified" || user.qual_state === "super_qualified" ) {
       return true;
