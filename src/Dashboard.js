@@ -23,6 +23,7 @@ class Dashboard extends Component {
     this.state = { voters: [], user: {}, isQualified: true, enoughVoters: '' }
   }
 
+  // TODO: Probably abstract this out
   getCurrentUser() {
     let user_id = localStorage.getItem('user_id');
     if (user_id) {
@@ -49,6 +50,7 @@ class Dashboard extends Component {
     }
   }
 
+  // TODO: abstract this out
   isQualified(user) {
     if ( user.is_human_at && user.pledged_vote_at && user.is_resident_at &&
       user.full_name && user.accepted_code_at && user.zip) {
