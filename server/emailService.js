@@ -10,7 +10,10 @@ function sendEmail(templateName, context, subject){
     // This function takes a template name for an email and a context that is
     // is a javascript object that has key value pairs to populate variables in the
     // passed template.
-    var template = fs.readFileSync('./email/' + templateName + '.html', 'utf8');
+    var header = fs.readFileSync('./email/header.html', 'utf8');
+    var body = fs.readFileSync('./email/' + templateName + '.html', 'utf8');
+    var footer = fs.readFileSync('./email/footer.html', 'utf8');
+    var template = header + body + footer;
     var uncompiledTemplate = Handlebars.compile(template);
     var html = uncompiledTemplate(context);
     // Create sendEmail params
