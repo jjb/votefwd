@@ -6,7 +6,6 @@ import history from './history';
 import { AdoptVoter } from './AdoptVoter';
 import { Header } from './Header';
 import { Login } from './Login';
-import { Qualify } from './Qualify';
 import { VoterList } from './VoterList';
 import { Footer } from './Footer';
 
@@ -20,7 +19,7 @@ class Dashboard extends Component {
     this.handleUndoConfirmPrepped = this.handleUndoConfirmPrepped.bind(this);
     this.handleUndoConfirmSent = this.handleUndoConfirmSent.bind(this);
     this.updateUser = this.updateUser.bind(this);
-    this.state = { voters: [], user: {}, isQualified: true, enoughVoters: '' }
+    this.state = { voters: [], user: {}, isQualified: false, enoughVoters: '' }
   }
 
   // TODO: Probably abstract this out
@@ -50,10 +49,9 @@ class Dashboard extends Component {
     }
   }
 
-  // TODO: abstract this out
   isQualified(user) {
     if ( user.is_human_at && user.pledged_vote_at && user.is_resident_at &&
-      user.full_name && user.accepted_code_at && user.zip) {
+      user.full_name && user.accepted_code_at && user.zip && user.why_write_letters) {
       return true;
     } else {
       return false;
@@ -214,6 +212,9 @@ class Dashboard extends Component {
     if (!this.getCurrentUser()) {
       history.replace('/');
     }
+    if (!this.state.isQualified) {
+      history.replace('/verify');
+    }
     this.getAdoptedVoters();
     this.checkEnoughVoters();
   }
@@ -228,9 +229,6 @@ class Dashboard extends Component {
       <Header auth={this.props.auth} />
       { this.props.auth.isAuthenticated() ? (
         <div>
-          { !this.state.isQualified &&
-            <Qualify user={this.state.user} updateUser={this.updateUser}/>
-          }
           <AdoptVoter
              handleAdoptedVoter={this.handleAdoptedVoter}
              enoughVoters={this.state.enoughVoters}

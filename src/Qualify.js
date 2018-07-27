@@ -15,7 +15,8 @@ export class Qualify extends Component {
       facebookProfileVal: '',
       twitterProfileVal: '',
       linkedInProfileVal: '',
-      reasonVal: ''
+      reasonVal: '',
+      reasonError: false,
     }
 
     this.handleNameChange = this.handleNameChange.bind(this);
@@ -90,15 +91,20 @@ export class Qualify extends Component {
 
   handleProfileChange(event) {
     event.preventDefault();
-    // console.log(this.state);
-    const inputs = event.target.getElementsByTagName('input');
-    this.setState({
-      firstName: inputs.firstName.value,// should match the name attribute on the input element
-      lastName: inputs.lastName.value,
-      username: inputs.username.value,
-      email: inputs.email.value
-    });
-    debugger;
+    const inputs = event.target.getElementsByClassName('js-profile-input');
+    const reasonForParticipation = inputs.profileReason.value;
+
+    if (!reasonForParticipation || reasonForParticipation.length < 25) {
+      // Render error if there is no reason or the length is too short
+      this.setState({ reasonError: true });
+      return false;
+    } else {
+      this.props.updateUser('twitter_profile_url', inputs.profileTwitter.value);
+      this.props.updateUser('facebook_profile_url', inputs.profileFacebook.value);
+      this.props.updateUser('linkedin_profile_url', inputs.profileLinkedin.value);
+      this.props.updateUser('why_write_letters', inputs.profileReason.value);
+    }
+
   }
 
   render() {
@@ -139,7 +145,8 @@ export class Qualify extends Component {
               className="form-control"
               placeholder="First and last name"
               value={this.state.nameFormVal}
-              onChange={this.handleNameChange} />
+              onChange={this.handleNameChange}
+              required />
             <button className="btn btn-primary" type="submit">Submit</button>
           </div>
         </div>
@@ -191,20 +198,20 @@ export class Qualify extends Component {
       <div>
         <form onSubmit={this.handleProfileChange} className="px-4 pt-2">
           <p className="mb-4">
-            Finally, we just need to be sure you're serious about sending letters to boost turnout among Democrats. If you have a public web presence, please share those profiles below.
+            One last step -- we need to be sure you're serious about sending letters to boost turnout among Democrats. If you have a public web presence, please share those profiles below.
           </p>
 
           {/* ///////////////////////////////////////////////////////////////// */}
 
           <div className="d-block d-sm-flex mb-3">
-            <label htmlFor="profile-twitter" className="col-12 col-sm-3 m-0 pl-0 d-flex align-self-center">Twitter:</label>
+            <label htmlFor="profileTwitter" className="col-12 col-sm-3 m-0 pl-0 d-flex align-self-center">Twitter:</label>
             <div className="input-group">
               <div className="input-group-prepend">
                 <span className="input-group-text pt-0">@</span>
               </div>
               <input type="text"
-                id="profile-twitter"
-                className="form-control"
+                id="profileTwitter"
+                className="form-control js-profile-input"
                 placeholder="votefwd"
               />
             </div>
@@ -213,14 +220,14 @@ export class Qualify extends Component {
           {/* ///////////////////////////////////////////////////////////////// */}
 
           <div className="d-block d-sm-flex mb-3">
-            <label htmlFor="profile-facebook" className="col-12 col-sm-3 m-0 pl-0 d-flex align-self-center">Facebook:</label>
+            <label htmlFor="profileFacebook" className="col-12 col-sm-3 m-0 pl-0 d-flex align-self-center">Facebook:</label>
             <div className="input-group">
               <div className="input-group-prepend">
                 <span className="input-group-text">facebook.com/</span>
               </div>
               <input type="text"
-                id="profile-facebook"
-                className="form-control"
+                id="profileFacebook"
+                className="form-control js-profile-input"
                 placeholder="votefwd"
               />
             </div>
@@ -229,31 +236,38 @@ export class Qualify extends Component {
           {/* ///////////////////////////////////////////////////////////////// */}
 
           <div className="d-block d-sm-flex mb-3">
-            <label htmlFor="profile-linkedIn" className="col-12 col-sm-3 m-0 pl-0 d-flex align-self-center">LinkedIn:</label>
+            <label htmlFor="profileLinkedin" className="col-12 col-sm-3 m-0 pl-0 d-flex align-self-center">LinkedIn:</label>
             <div className="input-group">
               <div className="input-group-prepend">
                 <span className="input-group-text">linkedin.com/in/</span>
               </div>
               <input type="text"
-                id="profile-linkedIn"
-                className="form-control"
+                id="profileLinkedin"
+                className="form-control js-profile-input"
                 placeholder="votefwd"
               />
             </div>
           </div>
 
-          <label htmlFor="profile-reason" className="w-100 d-block d-sm-flex justify-content-between mt-4">
+          <label htmlFor="profileReason" className="w-100 d-block d-sm-flex justify-content-between mt-4">
             <span>Finally, why are you interested in sending letters?</span>
             <span className="small text-danger d-block">&#x2605; Required</span>
           </label>
 
           <textarea
-            id="profile-reason"
+            id="profileReason"
             rows="4"
-            className="form-control"
+            className="form-control js-profile-input"
             placeholder="Please share a sentence or two about why you want to get involved."
             value={this.state.reasonVal}
-            onChange={this.handleReasonChange} />
+            onChange={this.handleReasonChange}
+            required />
+
+          {this.state.reasonError &&
+            <div className="alert alert-danger alert-sm mt-3 mb-3 center" role="alert">
+              Please share a reason for participating - it helps us to verify volunteers.
+            </div>
+          }
 
           <div className="py-4">
             <button
@@ -265,6 +279,12 @@ export class Qualify extends Component {
 
         </form>
         <ProgressIndicator current={6} max={7}></ProgressIndicator>
+      </div>
+    );
+
+    let thankYou = (
+      <div>
+        THANKS!
       </div>
     );
 
@@ -286,11 +306,11 @@ export class Qualify extends Component {
     else if (!this.props.user.accepted_code_at) {
       formMarkup = codeQ;
     }
-    else if (!this.props.user.profile) {
+    else if (!this.props.user.why_write_letters) {
       formMarkup = profileQ;
     }
     else {
-      formMarkup = null;
+      formMarkup = thankYou;
     }
 
     if (!this.props.isQualified && formMarkup) {
