@@ -199,7 +199,11 @@ export class Qualify extends Component {
 
     if (!this.props.isQualified && formMarkup) {
       return (
-        <div>{formMarkup}</div>
+        <div>
+          { this.props.auth.isAuthenticated() && (
+            <React.Fragment>{formMarkup}</React.Fragment>
+          )}
+        </div>
       )
     }
     else
