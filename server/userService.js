@@ -60,18 +60,48 @@ function updateUserQualifiedState(auth0_id, qualState, callback){
     callback("invalidEnum", null);
     return;
   }
-  // update that state for the user
+  // get the user for email sending and then update that state for the user
   db('users')
+  .first()
   .where({auth0_id: auth0_id})
-  .update({qual_state: newState})
-  .then(function() {
-    callback(null, newState);
-    return;
+  .then(function(user){
+    db('users')
+    .where({auth0_id: auth0_id})
+    .update({qual_state: newState})
+    .then(function() {
+      notifyUserOfNewQualifiedState(user, newState);
+      callback(null, newState);
+      return;
+    })
+    .catch(err => {
+        console.error(err);
+        callback(err);
+    });
   })
   .catch(err => {
       console.error(err);
       callback(err);
   });
+}
+
+function notifyUserOfNewQualifiedState(user, newState){
+  // this function takes a user right before their qualified state is changed and compares
+  // their old state to their new state.  Depending on what changed we might want to send them
+  // an email so they are aware of this change.
+  // Note that user['qual_state'] is their *previous* state and newState is their just set current state.
+  console.log(user['qual_state'] + ' ' + newState)
+  if (user['qual_state'] == QualStateEnum.pre_qualified && newState == QualStateEnum.qualified) {
+    //notify users when promoted to qualified
+
+    return 'sent qualified email';
+  } else if ((user['qual_state'] == QualStateEnum.pre_qualified || user['qual_state'] == QualStateEnum.qualified) && newState == QualStateEnum.super_qualified) {
+    //notify users when promoted to super_qualified
+
+    return 'sent super_qualified email';
+  }
+
+  return 'not sending an email';
+
 }
 
 /**
@@ -118,5 +148,6 @@ module.exports = {
   canAdoptMoreVoters,
   isAdmin,
   updateEmail,
-  updateUserQualifiedState
+  updateUserQualifiedState,
+  notifyUserOfNewQualifiedState
 }
