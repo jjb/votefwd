@@ -53,7 +53,7 @@
     "scss-compile": "node-sass -rw src/scss -o src/css",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "test-server": "mocha",
+    "test-server": "NODE_ENV=test mocha",
     "eject": "react-scripts eject",
     "clear-claims": "psql -f bin/clear-claimed-voters.sql votefwd"
   },
