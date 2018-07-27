@@ -40,9 +40,14 @@ class Verify extends Component {
       <div className="h-100 d-md-flex flex-column">
       <Header auth={this.props.auth} />
       <div className="container-fluid h-75 bg-pattern d-flex justify-content-center">
-        <div className="d-flex">
-          <div className="bg-white px-3 px-md-5 py-3 py-md-4 align-self-center">
-            <h1>Verify</h1>
+        <div
+          className="d-flex"
+          style={{
+            maxWidth: "700px"
+          }}
+        >
+          <div className="bg-white align-self-center">
+            <h1 className="px-4 pt-4">Welcome to Vote Forward</h1>
             <Qualify user={this.state.user} updateUser={this.updateUser}/>
           </div>
         </div>
