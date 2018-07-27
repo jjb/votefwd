@@ -296,6 +296,28 @@ function checkAdmin(req, res, next) {
 
 // Check that a user is an admin.  You have to be an admin to do so, but you can
 // check on another user.
+router.route('/s/updateUserQualifiedState')
+  .get(checkJwt, checkAdmin, function(req, res) {
+    const auth0_id = req.auth0_id;
+    const qualState = req.qualState;
+    if (!auth0_id || !qualState) {
+      res.status(400);
+      return;
+    }
+
+    userService.updateUserQualifiedState(auth0_id, qualState, function (error, newState){
+      if (error) {
+        console.error(error);
+        res.status(500);
+        return;
+      }
+      res.status(200).send('User Qual State Updated.');
+      return;
+    });
+  });
+
+// Check that a user is an admin.  You have to be an admin to do so, but you can
+// check on another user.
 router.route('/s/isAdmin')
   .get(checkJwt, checkAdmin, function(req, res) {
     const auth0_id = req.query.auth0_id;
@@ -321,6 +343,8 @@ router.route('/s/users')
       })
       .catch(err => {console.error(err);})
   });
+
+
 
 router.route('/s/stats')
   .get(checkJwt, checkAdmin, function(req, res) {
