@@ -48,6 +48,32 @@ function updateEmail(auth0_id, newEmail) {
   });
 }
 
+function updateUserQualifiedState(auth0_id, qualState, callback){
+  // takes an auth0_id of a user and a qualStateValue from QualStateEnum
+  // and gives the user that state.
+  // This function should only be called by admins and verified through a middlewear.
+
+  // check that we have a valid qual state
+  var newState = QualStateEnum[qualState];
+  if (newState == null){
+    //return an error in callback
+    callback("invalidEnum", null);
+    return;
+  }
+  // update that state for the user
+  db('users')
+  .where({auth0_id: auth0_id})
+  .update({qual_state: newState})
+  .then(function() {
+    callback(null, newState);
+    return;
+  })
+  .catch(err => {
+      console.error(err);
+      callback(err);
+  });
+}
+
 /**
  * Callback with number of allowed voters
  */
@@ -91,5 +117,6 @@ function canAdoptMoreVoters(auth0_id, callback) {
 module.exports = {
   canAdoptMoreVoters,
   isAdmin,
-  updateEmail
+  updateEmail,
+  updateUserQualifiedState
 }
