@@ -12,7 +12,7 @@ describe('userService', function() {
 
   describe('isAdmin', function() {
     it('should find a non-admin', function(done) {
-      userService.isAdmin(this.users[0].auth0_id, function(error, isAdmin) {
+      userService.isAdmin(this.users.regular.auth0_id, function(error, isAdmin) {
         if (error) {
           return done(error);
         }
@@ -22,7 +22,7 @@ describe('userService', function() {
     });
 
     it('should find an admin', function(done) {
-      userService.isAdmin(this.users[1].auth0_id, function(error, isAdmin) {
+      userService.isAdmin(this.users.admin.auth0_id, function(error, isAdmin) {
         if (error) {
           return done(error);
         }
@@ -32,7 +32,7 @@ describe('userService', function() {
     });
 
     it('should consider missing user not an admin', function(done) {
-      userService.isAdmin(this.users[0].auth0_id + 'MISSING', function(error, isAdmin) {
+      userService.isAdmin(this.users.regular.auth0_id + 'MISSING', function(error, isAdmin) {
         if (error) {
           return done(error);
         }
@@ -45,7 +45,7 @@ describe('userService', function() {
 
   describe('canAdoptMoreVoters', function() {
     it('should consider a missing user to have no more adoptees', function(done) {
-      userService.canAdoptMoreVoters(this.users[0].auth0_id + 'MISSING', function(error, numAdoptees) {
+      userService.canAdoptMoreVoters(this.users.regular.auth0_id + 'MISSING', function(error, numAdoptees) {
         if (error) {
           return done(error);
         }
@@ -55,7 +55,7 @@ describe('userService', function() {
     });
 
     it('should offer no voters to a banned user', function(done) {
-      userService.canAdoptMoreVoters(this.users[2].auth0_id, function(error, numAdoptees) {
+      userService.canAdoptMoreVoters(this.users.banned.auth0_id, function(error, numAdoptees) {
         if (error) {
           return done(error);
         }
@@ -65,7 +65,7 @@ describe('userService', function() {
     });
 
     it('should offer no voters to a pre-qualified user', function(done) {
-      userService.canAdoptMoreVoters(this.users[3].auth0_id, function(error, numAdoptees) {
+      userService.canAdoptMoreVoters(this.users.prequal.auth0_id, function(error, numAdoptees) {
         if (error) {
           return done(error);
         }
@@ -75,7 +75,7 @@ describe('userService', function() {
     });
 
     it('should offer 100 voters to a qualified user', function(done) {
-      userService.canAdoptMoreVoters(this.users[4].auth0_id, function(error, numAdoptees) {
+      userService.canAdoptMoreVoters(this.users.qual.auth0_id, function(error, numAdoptees) {
         if (error) {
           return done(error);
         }
@@ -84,8 +84,8 @@ describe('userService', function() {
       });
     });
 
-    it('should offer 1000 voters to a qualified user', function(done) {
-      userService.canAdoptMoreVoters(this.users[5].auth0_id, function(error, numAdoptees) {
+    it('should offer 1000 voters to a super-qualified user', function(done) {
+      userService.canAdoptMoreVoters(this.users.superqual.auth0_id, function(error, numAdoptees) {
         if (error) {
           return done(error);
         }
@@ -95,7 +95,7 @@ describe('userService', function() {
     });
 
     it('should calculate the remaining voters allowed', function(done) {
-      userService.canAdoptMoreVoters(this.users[6].auth0_id, function(error, numAdoptees) {
+      userService.canAdoptMoreVoters(this.users.testqual.auth0_id, function(error, numAdoptees) {
         if (error) {
           return done(error);
         }
