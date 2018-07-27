@@ -55,7 +55,8 @@
     "test": "react-scripts test --env=jsdom",
     "test-server": "NODE_ENV=test mocha",
     "eject": "react-scripts eject",
-    "clear-claims": "psql -f bin/clear-claimed-voters.sql votefwd"
+    "clear-claims": "psql -f bin/clear-claimed-voters.sql votefwd",
+    "clear-quals": "psql -f bin/clear-user-qualifications.sql votefwd"
   },
   "devDependencies": {
     "chai": "^4.1.2",
