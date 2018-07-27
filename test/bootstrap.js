@@ -39,6 +39,10 @@ before('Adding user data to the database', function() {
       full_name: 'Superqual Cindy',
       qual_state: 'super_qualified',
       email: 'cinderella@shoe.com'
+    }, {
+      auth0_id: 'test-auth0-id-6',
+      full_name: 'Testqual Timmy',
+      qual_state: 'test_qualified' // only valid for tests
     }])
     .returning('*')
     .tap(function(result) {
@@ -48,11 +52,21 @@ before('Adding user data to the database', function() {
 
 before('Adding voter data to the database', function() {
   var context = this;
+  // The test-qualified user
+  var user = context.users[6];
   return db('voters')
     .insert([{
       hashid: 'test-hash-id-0'
     }, {
-      hashid: 'test-hash-id-1'
+      hashid: 'test-hash-id-1',
+      adopter_user_id: user.auth0_id,
+      adopted_at: db.fn.now()
+    }, {
+      hashid: 'test-hash-id-2',
+      adopter_user_id: user.auth0_id,
+      adopted_at: db.fn.now()
+    }, {
+      hashid: 'test-hash-id-3'
     }])
     .returning('*')
     .tap(function(result) {

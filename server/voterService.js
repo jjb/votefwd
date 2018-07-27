@@ -267,7 +267,7 @@ var getLetterWritingUserFromPledge = function getLetterWritingUserFromPledge(cod
 
 function _prepForTests() {
   if (process.env.NODE_ENV !== 'test') {
-    console.error('Someone is calling _prepForTests outside of tests');
+    console.error('voterService._prepForTests called outside of tests');
     return;
   }
 

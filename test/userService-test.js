@@ -6,6 +6,10 @@ var db = require('../server/db');
 var userService = require('../server/userService');
 
 describe('userService', function() {
+  before(function() {
+    userService._prepForTests();
+  });
+
   describe('isAdmin', function() {
     it('should find a non-admin', function(done) {
       userService.isAdmin(this.users[0].auth0_id, function(error, isAdmin) {
@@ -90,8 +94,15 @@ describe('userService', function() {
       });
     });
 
-    // Will get to this when we have better handling of test data
-    it('should calculate the remaining voters allowed');
+    it('should calculate the remaining voters allowed', function(done) {
+      userService.canAdoptMoreVoters(this.users[6].auth0_id, function(error, numAdoptees) {
+        if (error) {
+          return done(error);
+        }
+        expect(numAdoptees).to.eql(3);
+        done();
+      });
+    });
   });
 
   describe('updateUserQualifiedState', function() {
