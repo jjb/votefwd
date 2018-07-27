@@ -306,17 +306,17 @@ router.route('/s/updateUserQualifiedState')
     const auth0_id = req.auth0_id;
     const qualState = req.qualState;
     if (!auth0_id || !qualState) {
-      res.status(400);
+      res.status(400).end();
       return;
     }
 
     userService.updateUserQualifiedState(auth0_id, qualState, function (error, newState){
       if (error) {
         console.error(error);
-        res.status(500);
+        res.status(500).end();
         return;
       }
-      res.status(200).send('User Qual State Updated.');
+      res.status(200).send('User Qual State Updated.').end();
       return;
     });
   });
