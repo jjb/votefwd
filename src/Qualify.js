@@ -71,6 +71,10 @@ export class Qualify extends Component {
     this.props.updateUser('accepted_code_at', true);
   }
 
+  handleAgreedProfile() {
+    this.props.updateUser('profile', true);
+  }
+
   render() {
 
     let formMarkup;
@@ -96,7 +100,7 @@ export class Qualify extends Component {
             The letters you send will mention <strong>your</strong> commitment to voting, urging the recipient to follow your example.
           </p>
         </div>
-        <ProgressIndicator current={1} max={6}></ProgressIndicator>
+        <ProgressIndicator current={1} max={7}></ProgressIndicator>
       </div>
     );
 
@@ -113,7 +117,7 @@ export class Qualify extends Component {
             <button className="btn btn-primary" type="submit">Submit</button>
           </div>
         </div>
-        <ProgressIndicator current={2} max={6}></ProgressIndicator>
+        <ProgressIndicator current={2} max={7}></ProgressIndicator>
       </form>
     );
 
@@ -124,7 +128,7 @@ export class Qualify extends Component {
           <button className="btn btn-primary w-100" onClick={this.handleIsResident.bind(this)}>Yes</button>
           <p className="small my-3">In general, one must be a citizen or permanent resident to participate in election activities. There’s an exception for volunteering, but we’re erring on the side of caution.</p>
         </div>
-        <ProgressIndicator current={3} max={6}></ProgressIndicator>
+        <ProgressIndicator current={3} max={7}></ProgressIndicator>
       </div>
     );
 
@@ -141,7 +145,7 @@ export class Qualify extends Component {
             <button className="btn btn-primary" type="submit">Submit</button>
           </div>
         </div>
-        <ProgressIndicator current={4} max={6}></ProgressIndicator>
+        <ProgressIndicator current={4} max={7}></ProgressIndicator>
       </form>
     );
 
@@ -153,7 +157,18 @@ export class Qualify extends Component {
           </p>
           <button className="btn btn-primary w-100" onClick={this.handleAgreedCode.bind(this)}>Yes</button>
         </div>
-        <ProgressIndicator current={5} max={6}></ProgressIndicator>
+        <ProgressIndicator current={5} max={7}></ProgressIndicator>
+      </div>
+    );
+
+    let profileQ = (
+      <div>
+        <div className="px-4 pt-2">
+          <p className="f4">
+            Scott is a meat popsicle
+          </p>
+        </div>
+        <ProgressIndicator current={6} max={7}></ProgressIndicator>
       </div>
     );
 
@@ -174,6 +189,9 @@ export class Qualify extends Component {
     }
     else if (!this.props.user.accepted_code_at) {
       formMarkup = codeQ;
+    }
+    else if (!this.props.user.profile) {
+      formMarkup = profileQ;
     }
     else {
       formMarkup = null;
