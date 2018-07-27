@@ -180,12 +180,12 @@ function undoConfirmSent(voterId, callback) {
 }
 
 function makePledge(code, callback) {
-  // andy put in a check to make sure they have not pledged before so we dont email people a bajillion times
   db('voters')
   .where('hashid', code)
   .then(function(result){
     if (result[0] == null){
       // should we tell them we couldnt find it? This will just succeed and move on.
+      // I think we should probably, yes.
       callback('invalid code');
       return;
     }
@@ -204,7 +204,7 @@ function makePledge(code, callback) {
     // send an email to the person who wrote the letter telling them a pledge was made
     .then(getLetterWritingUserFromPledge(code)
       .then(function(user){
-        emailService.sendEmail('pledge', user);
+        emailService.sendEmail('pledge', user, 'One of your unlikely voters pledged to vote!');
       })
     )
     .then(function() {

@@ -6,7 +6,7 @@ var Handlebars = require('handlebars');
 // Set the region
 AWS.config.update({region: 'us-west-2'});
 
-function sendEmail(templateName, context){
+function sendEmail(templateName, context, subject){
     // This function takes a template name for an email and a context that is
     // is a javascript object that has key value pairs to populate variables in the
     // passed template.
@@ -38,7 +38,7 @@ function sendEmail(templateName, context){
          },
          Subject: {
           Charset: 'UTF-8',
-          Data: 'Test email'
+          Data: subject
          }
         },
       Source: 'scott@votefwd.org', /* required */
