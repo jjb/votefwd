@@ -107,7 +107,7 @@ describe('userService', function() {
 
   describe('updateUserQualifiedState', function() {
     it('should fail on an invalid qualified state', function(done) {
-      userService.updateUserQualifiedState(this.users[0].auth0_id, 'somethingFakeAndNotValid', function(error, newState) {
+      userService.updateUserQualifiedState(this.users.regular.auth0_id, 'somethingFakeAndNotValid', function(error, newState) {
         expect(error).to.be.eql('invalidEnum', 'incorrect or missing error for test. Expected: invalidEnum. Got: ' + error);
         expect(newState).to.be.a('null');
         done();
@@ -115,7 +115,7 @@ describe('userService', function() {
     });
 
     it('should succeed on setting qualified state to banned', function(done) {
-      userService.updateUserQualifiedState(this.users[0].auth0_id, 'banned', function(error, newState) {
+      userService.updateUserQualifiedState(this.users.regular.auth0_id, 'banned', function(error, newState) {
         if (error) {
           return done(error);
         }
@@ -125,7 +125,7 @@ describe('userService', function() {
     });
 
     it('should succeed on setting qualified state to pre_qualified', function(done) {
-      userService.updateUserQualifiedState(this.users[0].auth0_id, 'pre_qualified', function(error, newState) {
+      userService.updateUserQualifiedState(this.users.regular.auth0_id, 'pre_qualified', function(error, newState) {
         if (error) {
           return done(error);
         }
@@ -135,7 +135,7 @@ describe('userService', function() {
     });
 
     it('should succeed on setting qualified state to qualified', function(done) {
-      userService.updateUserQualifiedState(this.users[0].auth0_id, 'qualified', function(error, newState) {
+      userService.updateUserQualifiedState(this.users.regular.auth0_id, 'qualified', function(error, newState) {
         if (error) {
           return done(error);
         }
@@ -145,7 +145,7 @@ describe('userService', function() {
     });
 
     it('should succeed on setting qualified state to super_qualified', function(done) {
-      userService.updateUserQualifiedState(this.users[0].auth0_id, 'super_qualified', function(error, newState) {
+      userService.updateUserQualifiedState(this.users.regular.auth0_id, 'super_qualified', function(error, newState) {
         if (error) {
           return done(error);
         }
