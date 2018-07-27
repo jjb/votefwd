@@ -106,16 +106,18 @@ before('Adding voter data to the database', function() {
     }])
     .returning('*')
     .tap(function(result) {
-      context.voters = result;
+      context.voters = {
+        all: result
+      };
     });
 });
 
 after('Deleting voter data from the database', function() {
   var context = this;
   var voters = context.voters;
-  if (voters && voters.length) {
+  if (voters && voters.all && voters.all.length) {
     return db('voters')
-      .whereIn('id', voters.map(u => u.id))
+      .whereIn('id', voters.all.map(u => u.id))
       .del();
   }
   return Promise.resolve(true);
