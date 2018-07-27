@@ -2,6 +2,8 @@
 'use strict'
 
 var db = require('./db');
+var emailService = require('./emailService');
+
 var letterService = require('./letterService');
 var slackService = require('./slackService');
 
@@ -179,20 +181,59 @@ function undoConfirmSent(voterId, callback) {
 
 function makePledge(code, callback) {
   db('voters')
+  .where('hashid', code)
+  .then(function(result){
+    if (result[0] == null){
+      // should we tell them we couldnt find it? This will just succeed and move on.
+      // I think we should probably, yes.
+      callback('invalid code');
+      return;
+    }
+    if (result[0].pledge_made_at != null){
+      // check if already pledge and exit early if yes
+      callback('already pledged');
+      return;
+    }
+    // get the pledge row and update it with pledge time
+    db('voters')
     .where('hashid', code)
     .update({
       pledge_made_at: db.fn.now(),
       updated_at: db.fn.now()
     })
-    .then(function(result) {
-      callback(result);
-    })
+    // send an email to the person who wrote the letter telling them a pledge was made
+    .then(getLetterWritingUserFromPledge(code)
+      .then(function(user){
+        emailService.sendEmail('pledge', user, 'One of your unlikely voters pledged to vote!');
+      })
+    )
     .then(function() {
       slackService.publishToSlack('A recipient made a vote pledge.');
+    })
+    .then(function() {
+      callback('successful pledge');
     })
     .catch(err => {
       console.error(err)
     });
+  });
+}
+
+var getLetterWritingUserFromPledge = function getLetterWritingUserFromPledge(code){
+  return new Promise(function(resolve, reject) {
+    db('voters')
+    .where('hashid', code)
+    .then(function(result){
+      db('users')
+      .where('auth0_id', result[0].adopter_user_id)
+      .then(function(result){
+        resolve(result[0]);
+      })
+    })
+    .catch(err => {
+      reject(err);
+    });
+  });
 }
 
 module.exports = {
