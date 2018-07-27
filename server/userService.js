@@ -47,8 +47,7 @@ function updateUserQualifiedState(auth0_id, qualState, callback){
 
   // check that we have a valid qual state
   var newState = QualStateEnum[qualState];
-
-  if (!newState){
+  if (newState == null){
     //return an error in callback
     callback("invalidEnum", null);
     return;
@@ -60,8 +59,11 @@ function updateUserQualifiedState(auth0_id, qualState, callback){
   .then(function() {
     callback(null, newState);
     return;
+  })
+  .catch(err => {
+      console.error(err);
+      callback(err);
   });
-
 }
 
 module.exports = {
