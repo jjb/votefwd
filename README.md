@@ -108,7 +108,7 @@ These voter records consist of randomized names and addresses.
 
 #### Run server-side tests
 
-Note: currently, the server must be already running for these server-side tests, such as they are, to succeed.
+Note: if you run this with the dev server running you will get a localhost:3001 error on a test.  Stop the `npm run start-dev` to fix.
 
 	npm run test-server
 
