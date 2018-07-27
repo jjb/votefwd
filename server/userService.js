@@ -2,6 +2,7 @@
 'use strict'
 
 var db = require('./db');
+var emailService = require('./emailService');
 
 // What level of permissions does this user have?
 const QualStateEnum = {
@@ -60,18 +61,51 @@ function updateUserQualifiedState(auth0_id, qualState, callback){
     callback("invalidEnum", null);
     return;
   }
-  // update that state for the user
+  // get the user for email sending and then update that state for the user
   db('users')
+  .first()
   .where({auth0_id: auth0_id})
-  .update({qual_state: newState})
-  .then(function() {
-    callback(null, newState);
-    return;
+  .then(function(user){
+    db('users')
+    .where({auth0_id: auth0_id})
+    .update({qual_state: newState})
+    .then(function() {
+      notifyUserOfNewQualifiedState(user, newState);
+      callback(null, newState);
+      return;
+    })
+    .catch(err => {
+        console.error(err);
+        callback(err);
+    });
   })
   .catch(err => {
       console.error(err);
       callback(err);
   });
+}
+
+function notifyUserOfNewQualifiedState(user, newState){
+  // this function takes a user right before their qualified state is changed and compares
+  // their old state to their new state.  Depending on what changed we might want to send them
+  // an email so they are aware of this change.
+  // Note that user['qual_state'] is their *previous* state and newState is their just set current state.
+  if (user['qual_state'] == QualStateEnum.pre_qualified && newState == QualStateEnum.qualified) {
+    //notify users when promoted to qualified
+    if (process.env.NODE_ENV !== 'test') {
+      emailService.sendEmail('qualified', user, 'You are approved to adopt voters.');
+    }
+    return 'sent qualified email';
+  } else if ((user['qual_state'] == QualStateEnum.pre_qualified || user['qual_state'] == QualStateEnum.qualified) && newState == QualStateEnum.super_qualified) {
+    if (process.env.NODE_ENV !== 'test') {
+      //notify users when promoted to super_qualified
+      emailService.sendEmail('super_qualified', user, 'You are approved to adopt large numbers of voters.');
+    }
+    return 'sent super_qualified email';
+  }
+
+  return 'not sending an email';
+
 }
 
 /**
@@ -118,5 +152,6 @@ module.exports = {
   canAdoptMoreVoters,
   isAdmin,
   updateEmail,
-  updateUserQualifiedState
+  updateUserQualifiedState,
+  notifyUserOfNewQualifiedState
 }

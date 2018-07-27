@@ -94,7 +94,7 @@ describe('userService', function() {
     it('should calculate the remaining voters allowed');
   });
 
- describe('updateUserQualifiedState', function() {
+  describe('updateUserQualifiedState', function() {
     it('should fail on an invalid qualified state', function(done) {
       userService.updateUserQualifiedState(this.users[0].auth0_id, 'somethingFakeAndNotValid', function(error, newState) {
         expect(error).to.be.eql('invalidEnum', 'incorrect or missing error for test. Expected: invalidEnum. Got: ' + error);
@@ -142,6 +142,33 @@ describe('userService', function() {
         done();
       });
     });
+  });
+
+  describe('notifyUserOfNewQualifiedState', function() {
+    it('should send a qualified email on promotion of pre_qualified to qualified', function(done) {
+      var result = userService.notifyUserOfNewQualifiedState(this.users[0], 'qualified');
+      expect(result).to.be.eql('sent qualified email');
+      done();
+    });
+
+    it('should send a super_qualified email on promotion of pre_qualified to super_qualified', function(done) {
+      var result = userService.notifyUserOfNewQualifiedState(this.users[0], 'super_qualified');
+      expect(result).to.be.eql('sent super_qualified email');
+      done();
+    });
+
+    it('should send a super_qualified email on promotion of pre_qualified to super_qualified', function(done) {
+      var result = userService.notifyUserOfNewQualifiedState(this.users[4], 'super_qualified');
+      expect(result).to.be.eql('sent super_qualified email');
+      done();
+    });
+
+    it('should not send an email on banned', function(done) {
+      var result = userService.notifyUserOfNewQualifiedState(this.users[4], 'banned');
+      expect(result).to.be.eql('not sending an email');
+      done();
+    });
 
   });
+
 });
