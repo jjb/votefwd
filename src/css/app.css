@@ -168,10 +168,16 @@ input + .btn {
 .btn-group .btn + .btn {
   border-left: 1px solid rgba(0, 0, 0, 0.3); }
 
+label {
+  font-weight: bold; }
+
+.input-group-text {
+  padding-top: 0.25rem; }
+
 .form-control {
   border-radius: 0px; }
   .form-control::placeholder {
-    color: #2C74FF; }
+    color: rgba(0, 0, 0, 0.45); }
   .form-control:focus {
     box-shadow: none; }
     .form-control:focus::placeholder {

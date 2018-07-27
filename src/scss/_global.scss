@@ -183,10 +183,18 @@ input + .btn {
 
 // Form Inputs
 
+label {
+  font-weight: bold;
+}
+
+.input-group-text {
+  padding-top: 0.25rem;
+}
+
 .form-control {
   border-radius: 0px;
   &::placeholder {
-    color: $vf-blue;
+    color: rgba(0,0,0,0.45);
   }
   &:focus {
     box-shadow: none;
