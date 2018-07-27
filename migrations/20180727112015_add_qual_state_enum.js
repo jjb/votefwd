@@ -2,7 +2,7 @@
 
 exports.up = function(knex, Promise) {
   return knex.schema.table('users', function(table) {
-    table.string('qual_state', 256);
+    table.string('qual_state', 32);
   })
 };
 
