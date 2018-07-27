@@ -11,13 +11,30 @@ export class Qualify extends Component {
     this.state = {
       nameFormVal: '',
       zipFormVal: '',
-      gRecaptchaResponse: ''
+      gRecaptchaResponse: '',
+      facebookProfileVal: '', 
+      twitterProfileVal: '',
+      linkedInProfileVal: '',
+      reasonVal: ''
     }
 
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleNameSubmit = this.handleNameSubmit.bind(this);
+
     this.handleZipChange = this.handleZipChange.bind(this);
     this.handleZipSubmit = this.handleZipSubmit.bind(this);
+
+    this.handleTwitterChange = this.handleTwitterChange.bind(this);
+    this.handleTwitterSubmit = this.handleTwitterSubmit.bind(this);
+
+    this.handleFacebookChange = this.handleFacebookChange.bind(this);
+    this.handleFacebookSubmit = this.handleFacebookSubmit.bind(this);
+
+    this.handleLinkedInChange = this.handleLinkedInChange.bind(this);
+    this.handleLinkedInSubmit = this.handleLinkedInSubmit.bind(this);
+    
+    this.handleReasonChange = this.handleReasonChange.bind(this);
+    this.handleReasonSubmit = this.handleReasonSubmit.bind(this);
   }
 
   handleCaptcha(response) {
@@ -71,8 +88,40 @@ export class Qualify extends Component {
     this.props.updateUser('accepted_code_at', true);
   }
 
-  handleAgreedProfile() {
-    this.props.updateUser('profile', true);
+  handleTwitterChange(event) {
+    this.setState({ twitterProfileVal: event.target.value });
+  }
+
+  handleTwitterSubmit(event) {
+    this.props.updateUser('twitter_profile', this.state.twitterProfileVal);
+    event.preventDefault();
+  }
+
+  handleLinkedInChange(event) {
+    this.setState({ linkedInProfileVal: event.target.value });
+  }
+
+  handleLinkedInSubmit(event) {
+    this.props.updateUser('linkedin_profile', this.state.linkedInProfileVal);
+    event.preventDefault();
+  }
+
+  handleFacebookChange(event) {
+    this.setState({ facebookProfileVal: event.target.value });
+  }
+
+  handleFacebookSubmit(event) {
+    this.props.updateUser('facebook_profile', this.state.facebookProfileVal);
+    event.preventDefault();
+  }
+
+  handleReasonChange(event) {
+    this.setState({ reasonVal: event.target.value });
+  }
+
+  handleReasonSubmit(event) {
+    this.props.updateUser('reason', this.state.reasonVal);
+    event.preventDefault();
   }
 
   render() {
@@ -163,11 +212,58 @@ export class Qualify extends Component {
 
     let profileQ = (
       <div>
-        <div className="px-4 pt-2">
-          <p className="f4">
-            Scott is a meat popsicle
-          </p>
-        </div>
+        <form onSubmit={this.handleTwitterSubmit}>
+          <div className="px-4 pt-2">
+            <p>What’s your Twitter handle?</p>
+            <div className="input-group mb-3">
+              <input type="text"
+                className="form-control"
+                placeholder="@votefwd"
+                value={this.state.twitterProfileVal}
+                onChange={this.handleTwitterChange} />
+              <button className="btn btn-primary" type="submit">Submit</button>
+            </div>
+          </div>
+        </form>
+        <form onSubmit={this.handleFacebookSubmit}>
+          <div className="px-4 pt-2">
+            <p>What’s your Facebook profile</p>
+            <div className="input-group mb-3">
+              <input type="text"
+                className="form-control"
+                placeholder="@facebook"
+                value={this.state.facebookProfileVal}
+                onChange={this.handleFacebookChange} />
+              <button className="btn btn-primary" type="submit">Submit</button>
+            </div>
+          </div>
+        </form>
+        <form onSubmit={this.handleLinkedInSubmit}>
+          <div className="px-4 pt-2">
+            <p>What’s your LinkedIn profile</p>
+            <div className="input-group mb-3">
+              <input type="text"
+                className="form-control"
+                placeholder="@linkedIn"
+                value={this.state.linkedInProfileVal}
+                onChange={this.handleLinkedInChange} />
+              <button className="btn btn-primary" type="submit">Submit</button>
+            </div>
+          </div>
+        </form>
+        <form onSubmit={this.handleReasonSubmit}>
+          <div className="px-4 pt-2">
+            <p>Why are you here?</p>
+            <div className="input-group mb-3">
+              <input type="text"
+                className="form-control"
+                placeholder="Words"
+                value={this.state.reasonVal}
+                onChange={this.handleReasonChange} />
+              <button className="btn btn-primary" type="submit">Submit</button>
+            </div>
+          </div>
+        </form>
         <ProgressIndicator current={6} max={7}></ProgressIndicator>
       </div>
     );
