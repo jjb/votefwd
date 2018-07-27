@@ -251,6 +251,26 @@ router.route('/user')
       .then(res.status(201).send('Stored code and terms agreement timestamps.'))
       .catch(err=> {console.error('ERROR: ', err)})
     }
+    if (req.body.twitter_profile_url) {
+      query.update('twitter_profile_url', req.body.twitter_profile_url)
+      .then(res.status(201).send('Stored Twitter profile link.'))
+      .catch(err=> {console.error('ERROR: ', err)})
+    }
+    if (req.body.facebook_profile_url) {
+      query.update('facebook_profile_url', req.body.facebook_profile_url)
+      .then(res.status(201).send('Stored Facebook profile link.'))
+      .catch(err=> {console.error('ERROR: ', err)})
+    }
+    if (req.body.linkedin_profile_url) {
+      query.update('linkedin_profile_url', req.body.linkedin_profile_url)
+      .then(res.status(201).send('Stored LinkedIn profile link.'))
+      .catch(err=> {console.error('ERROR: ', err)})
+    }
+    if (req.body.why_write_letters) {
+      query.update('why_write_letters', req.body.why_write_letters)
+      .then(res.status(201).send('Updated reason for writing letters.'))
+      .catch(err=> {console.error('ERROR: ', err)})
+    }
   });
 
 // Publicly available stats
