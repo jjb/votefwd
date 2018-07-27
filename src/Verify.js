@@ -82,9 +82,9 @@ class Verify extends Component {
 
   render() {
     return (
-      <div className="h-100 d-md-flex flex-column">
+      <div>
       <Header auth={this.props.auth} />
-      <div className="container-fluid h-75 bg-pattern d-flex justify-content-center">
+      <div className="py-5 bg-pattern d-flex justify-content-center">
         <div
           className="d-flex"
           style={{

@@ -12,7 +12,7 @@ export class Qualify extends Component {
       nameFormVal: '',
       zipFormVal: '',
       gRecaptchaResponse: '',
-      facebookProfileVal: '', 
+      facebookProfileVal: '',
       twitterProfileVal: '',
       linkedInProfileVal: '',
       reasonVal: ''
@@ -24,17 +24,9 @@ export class Qualify extends Component {
     this.handleZipChange = this.handleZipChange.bind(this);
     this.handleZipSubmit = this.handleZipSubmit.bind(this);
 
-    this.handleTwitterChange = this.handleTwitterChange.bind(this);
-    this.handleTwitterSubmit = this.handleTwitterSubmit.bind(this);
-
-    this.handleFacebookChange = this.handleFacebookChange.bind(this);
-    this.handleFacebookSubmit = this.handleFacebookSubmit.bind(this);
-
-    this.handleLinkedInChange = this.handleLinkedInChange.bind(this);
-    this.handleLinkedInSubmit = this.handleLinkedInSubmit.bind(this);
-    
     this.handleReasonChange = this.handleReasonChange.bind(this);
-    this.handleReasonSubmit = this.handleReasonSubmit.bind(this);
+
+    this.handleProfileChange = this.handleProfileChange.bind(this);
   }
 
   handleCaptcha(response) {
@@ -88,40 +80,25 @@ export class Qualify extends Component {
     this.props.updateUser('accepted_code_at', true);
   }
 
-  handleTwitterChange(event) {
-    this.setState({ twitterProfileVal: event.target.value });
-  }
-
-  handleTwitterSubmit(event) {
-    this.props.updateUser('twitter_profile', this.state.twitterProfileVal);
-    event.preventDefault();
-  }
-
-  handleLinkedInChange(event) {
-    this.setState({ linkedInProfileVal: event.target.value });
-  }
-
-  handleLinkedInSubmit(event) {
-    this.props.updateUser('linkedin_profile', this.state.linkedInProfileVal);
-    event.preventDefault();
-  }
-
-  handleFacebookChange(event) {
-    this.setState({ facebookProfileVal: event.target.value });
-  }
-
-  handleFacebookSubmit(event) {
-    this.props.updateUser('facebook_profile', this.state.facebookProfileVal);
-    event.preventDefault();
-  }
+  //////////////////////////////////////////////////////////////////////
 
   handleReasonChange(event) {
     this.setState({ reasonVal: event.target.value });
   }
 
-  handleReasonSubmit(event) {
-    this.props.updateUser('reason', this.state.reasonVal);
+  //////////////////////////////////////////////////////////////////////
+
+  handleProfileChange(event) {
     event.preventDefault();
+    // console.log(this.state);
+    const inputs = event.target.getElementsByTagName('input');
+    this.setState({
+      firstName: inputs.firstName.value,// should match the name attribute on the input element
+      lastName: inputs.lastName.value,
+      username: inputs.username.value,
+      email: inputs.email.value
+    });
+    debugger;
   }
 
   render() {
@@ -212,57 +189,80 @@ export class Qualify extends Component {
 
     let profileQ = (
       <div>
-        <form onSubmit={this.handleTwitterSubmit}>
-          <div className="px-4 pt-2">
-            <p>What’s your Twitter handle?</p>
-            <div className="input-group mb-3">
+        <form onSubmit={this.handleProfileChange} className="px-4 pt-2">
+          <p className="mb-4">
+            Finally, we just need to be sure you're serious about sending letters to boost turnout among Democrats. If you have a public web presence, please share those profiles below.
+          </p>
+
+          {/* ///////////////////////////////////////////////////////////////// */}
+
+          <div className="d-block d-sm-flex mb-3">
+            <label htmlFor="profile-twitter" className="col-12 col-sm-3 m-0 pl-0 d-flex align-self-center">Twitter:</label>
+            <div className="input-group">
+              <div className="input-group-prepend">
+                <span className="input-group-text pt-0">@</span>
+              </div>
               <input type="text"
+                id="profile-twitter"
                 className="form-control"
-                placeholder="@votefwd"
-                value={this.state.twitterProfileVal}
-                onChange={this.handleTwitterChange} />
-              <button className="btn btn-primary" type="submit">Submit</button>
+                placeholder="votefwd"
+              />
             </div>
           </div>
-        </form>
-        <form onSubmit={this.handleFacebookSubmit}>
-          <div className="px-4 pt-2">
-            <p>What’s your Facebook profile</p>
-            <div className="input-group mb-3">
+
+          {/* ///////////////////////////////////////////////////////////////// */}
+
+          <div className="d-block d-sm-flex mb-3">
+            <label htmlFor="profile-facebook" className="col-12 col-sm-3 m-0 pl-0 d-flex align-self-center">Facebook:</label>
+            <div className="input-group">
+              <div className="input-group-prepend">
+                <span className="input-group-text">facebook.com/</span>
+              </div>
               <input type="text"
+                id="profile-facebook"
                 className="form-control"
-                placeholder="@facebook"
-                value={this.state.facebookProfileVal}
-                onChange={this.handleFacebookChange} />
-              <button className="btn btn-primary" type="submit">Submit</button>
+                placeholder="votefwd"
+              />
             </div>
           </div>
-        </form>
-        <form onSubmit={this.handleLinkedInSubmit}>
-          <div className="px-4 pt-2">
-            <p>What’s your LinkedIn profile</p>
-            <div className="input-group mb-3">
+
+          {/* ///////////////////////////////////////////////////////////////// */}
+
+          <div className="d-block d-sm-flex mb-3">
+            <label htmlFor="profile-linkedIn" className="col-12 col-sm-3 m-0 pl-0 d-flex align-self-center">LinkedIn:</label>
+            <div className="input-group">
+              <div className="input-group-prepend">
+                <span className="input-group-text">linkedin.com/in/</span>
+              </div>
               <input type="text"
+                id="profile-linkedIn"
                 className="form-control"
-                placeholder="@linkedIn"
-                value={this.state.linkedInProfileVal}
-                onChange={this.handleLinkedInChange} />
-              <button className="btn btn-primary" type="submit">Submit</button>
+                placeholder="votefwd"
+              />
             </div>
           </div>
-        </form>
-        <form onSubmit={this.handleReasonSubmit}>
-          <div className="px-4 pt-2">
-            <p>Why are you here?</p>
-            <div className="input-group mb-3">
-              <input type="text"
-                className="form-control"
-                placeholder="Words"
-                value={this.state.reasonVal}
-                onChange={this.handleReasonChange} />
-              <button className="btn btn-primary" type="submit">Submit</button>
-            </div>
+
+          <label htmlFor="profile-reason" className="w-100 d-block d-sm-flex justify-content-between mt-4">
+            <span>Finally, why are you interested in sending letters?</span>
+            <span className="small text-danger d-block">&#x2605; Required</span>
+          </label>
+
+          <textarea
+            id="profile-reason"
+            rows="4"
+            className="form-control"
+            placeholder="Please share a sentence or two about why you want to get involved."
+            value={this.state.reasonVal}
+            onChange={this.handleReasonChange} />
+
+          <div className="py-4">
+            <button
+              type="submit"
+              className="btn btn-primary btn-lg w-100">
+              Finish sign-up
+            </button>
           </div>
+
         </form>
         <ProgressIndicator current={6} max={7}></ProgressIndicator>
       </div>
