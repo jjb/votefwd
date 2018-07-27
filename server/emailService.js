@@ -2,7 +2,6 @@
 var AWS = require('aws-sdk');
 var fs = require('fs');
 var Handlebars = require('handlebars');
-var juice = require('juice');
 
 // Set the region
 AWS.config.update({region: 'us-west-2'});
@@ -14,7 +13,6 @@ function sendEmail(templateName, context){
     var template = fs.readFileSync('./email/' + templateName + '.html', 'utf8');
     var uncompiledTemplate = Handlebars.compile(template);
     var html = uncompiledTemplate(context);
-    // var inlinedTemplate = juice(template);
     // Create sendEmail params
     var params = {
       Destination: { /* required */
