@@ -35,7 +35,7 @@ class Dashboard extends Component {
         .then(res => {
           let user = res.data[0];
           this.setState({ user: res.data[0] })
-          
+
           if (!this.isQualified(user)) {
             history.replace('/verify');
             return true;

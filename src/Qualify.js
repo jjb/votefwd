@@ -112,7 +112,8 @@ export class Qualify extends Component {
     let formMarkup;
 
     let captchaQ = (
-      <div className="px-4 pt-2">
+      <div className="px-4">
+        <h1 className="px-4 pt-4">Welcome to Vote Forward</h1>
         <p>
           We're so excited you're getting involved! We have a few quick questions before you get started…
         </p>
@@ -125,8 +126,8 @@ export class Qualify extends Component {
 
     let pledgeQ = (
       <div>
-        <div className="px-4 pt-2">
-          <p>Do you pledge to vote in every election?</p>
+        <div className="p-4">
+          <h4 className="mb-3">Do you pledge to vote in every election?</h4>
           <button className="btn btn-primary w-100" onClick={this.handlePledgedVote.bind(this)}>Yes</button>
           <p className="small my-3">
             The letters you send will mention <strong>your</strong> commitment to voting, urging the recipient to follow your example.
@@ -138,8 +139,8 @@ export class Qualify extends Component {
 
     let nameQ = (
       <form onSubmit={this.handleNameSubmit}>
-        <div className="px-4 pt-2">
-          <p>What’s your full name?</p>
+        <div className="p-4">
+          <h4 className="mb-3">What’s your full name?</h4>
           <div className="input-group mb-3">
             <input type="text"
               className="form-control"
@@ -156,8 +157,8 @@ export class Qualify extends Component {
 
     let residentQ = (
       <div>
-        <div className="px-4 pt-2">
-          <p>Are you a U.S. citizen or permanent resident?</p>
+        <div className="p-4">
+          <h4 className="mb-3">Are you a U.S. citizen or permanent resident?</h4>
           <button className="btn btn-primary w-100" onClick={this.handleIsResident.bind(this)}>Yes</button>
           <p className="small my-3">In general, one must be a citizen or permanent resident to participate in election activities. There’s an exception for volunteering, but we’re erring on the side of caution.</p>
         </div>
@@ -167,8 +168,8 @@ export class Qualify extends Component {
 
     let zipQ = (
       <form onSubmit={this.handleZipSubmit}>
-        <div className="px-4 pt-2">
-          <p>What’s your ZIP code?</p>
+        <div className="p-4">
+          <h4 className="mb-3">What's your ZIP code?</h4>
           <div className="input-group mb-3">
             <input type="text"
               className="form-control"
@@ -196,9 +197,10 @@ export class Qualify extends Component {
 
     let profileQ = (
       <div>
-        <form onSubmit={this.handleProfileChange} className="px-4 pt-2">
+        <form onSubmit={this.handleProfileChange} className="p-4">
+          <h3 className="mb-3">One last step</h3>
           <p className="mb-4">
-            One last step -- we need to be sure you're serious about sending letters to boost turnout among Democrats. If you have a public web presence, please share those profiles below.
+            We need to be sure you're serious about sending letters to boost turnout among Democrats. If you have a public web presence, please share those profiles below.
           </p>
 
           {/* ///////////////////////////////////////////////////////////////// */}
@@ -283,8 +285,12 @@ export class Qualify extends Component {
     );
 
     let thankYou = (
-      <div>
-        THANKS!
+      <div className="p-4">
+        <h2>Thank you for signing up</h2>
+        <p>
+          You should hear back from us shortly with next steps for getting involved. Thank you for volunteering to help -- we won't be able to do this without help from folks like you.
+        </p>
+        <p><strong>- Scott and the Vote Forward Team</strong></p>
       </div>
     );
 

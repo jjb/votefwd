@@ -86,13 +86,12 @@ class Verify extends Component {
       <Header auth={this.props.auth} />
       <div className="py-5 bg-pattern d-flex justify-content-center">
         <div
-          className="d-flex"
+          className="d-flex w-100"
           style={{
             maxWidth: "700px"
           }}
         >
-          <div className="bg-white align-self-center">
-            <h1 className="px-4 pt-4">Welcome to Vote Forward</h1>
+          <div className="bg-white w-100 align-self-center">
             <Qualify user={this.state.user} updateUser={this.updateUser} auth={this.props.auth} />
           </div>
         </div>
