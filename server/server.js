@@ -302,9 +302,9 @@ function checkAdmin(req, res, next) {
 // Check that a user is an admin.  You have to be an admin to do so, but you can
 // check on another user.
 router.route('/s/updateUserQualifiedState')
-  .get(checkJwt, checkAdmin, function(req, res) {
-    const auth0_id = req.auth0_id;
-    const qualState = req.qualState;
+  .post(checkJwt, checkAdmin, function(req, res) {
+    const auth0_id = req.body.auth0_id;
+    const qualState = req.body.qualState;
     if (!auth0_id || !qualState) {
       res.status(400).end();
       return;
