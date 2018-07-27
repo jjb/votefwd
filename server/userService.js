@@ -72,6 +72,7 @@ function updateUserQualifiedState(auth0_id, qualState, callback){
       console.error(err);
       callback(err);
   });
+}
 
 /**
  * Callback with number of allowed voters
