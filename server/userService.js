@@ -89,14 +89,13 @@ function notifyUserOfNewQualifiedState(user, newState){
   // their old state to their new state.  Depending on what changed we might want to send them
   // an email so they are aware of this change.
   // Note that user['qual_state'] is their *previous* state and newState is their just set current state.
-  console.log(user['qual_state'] + ' ' + newState)
   if (user['qual_state'] == QualStateEnum.pre_qualified && newState == QualStateEnum.qualified) {
     //notify users when promoted to qualified
-
+    sendEmail('qualified', user, '');
     return 'sent qualified email';
   } else if ((user['qual_state'] == QualStateEnum.pre_qualified || user['qual_state'] == QualStateEnum.qualified) && newState == QualStateEnum.super_qualified) {
     //notify users when promoted to super_qualified
-
+    sendEmail('super_qualified', user, '');
     return 'sent super_qualified email';
   }
 
