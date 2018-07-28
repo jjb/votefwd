@@ -268,7 +268,7 @@ class UserTable extends Component {
         >
           <option value="all">All</option>
           <option value="banned">Banned</option>
-          <option value="pre_qualfied">Pre-qualified</option>
+          <option value="pre_qualified">Pre-qualified</option>
           <option value="qualified">Qualified</option>
           <option value="super_qualified">Super-qualified</option>
         </select>
