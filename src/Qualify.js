@@ -8,7 +8,6 @@ import axios from 'axios';
 export class Qualify extends Component {
   constructor(props) {
     super(props);
-    console.log(props);
     this.state = {
       nameFormVal: '',
       zipFormVal: '',
