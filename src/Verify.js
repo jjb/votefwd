@@ -20,7 +20,6 @@ class Verify extends Component {
   }
 
   componentWillMount(){
-    this.getCurrentUser();
     if (!this.getCurrentUser()) {
       history.replace('/');
     }
@@ -40,6 +39,8 @@ class Verify extends Component {
           let user = res.data[0];
           if (!this.isQualified(user)) {
             this.setState({ isQualified: false });
+          } else {
+            this.setState({ isQualified: true });
           }
           this.setState({ user: res.data[0] })
         })

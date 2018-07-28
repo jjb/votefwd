@@ -8,6 +8,7 @@ import axios from 'axios';
 export class Qualify extends Component {
   constructor(props) {
     super(props);
+    console.log(props);
     this.state = {
       nameFormVal: '',
       zipFormVal: '',
@@ -185,8 +186,9 @@ export class Qualify extends Component {
 
     let codeQ = (
       <div>
-        <div className="px-4 pt-2">
-          <p className="f4">
+        <div className="p-4">
+          <h4 className="mb-3">Terms of Service</h4>
+          <p>
             Do you agree to the <a href="/terms-of-use" target="_blank">Terms of Use</a> and <a href="privacy-policy" target="_blank">Privacy Policy</a>, and specifically, do you promise to be respectful at all times in your communications with fellow citizens via Vote Forward?
           </p>
           <button className="btn btn-primary w-100" onClick={this.handleAgreedCode.bind(this)}>Yes</button>
@@ -294,6 +296,16 @@ export class Qualify extends Component {
       </div>
     );
 
+    let readyToGo = (
+      <div className="p-4">
+        <h2>You're all set!</h2>
+        <p>We've reviewed your profile and you're ready to start adopting voters.</p>
+        <p>
+          <a href="/dashboard">Go to the Dashboard</a>
+        </p>
+      </div>
+    );
+
     if (!this.props.user.is_human_at) {
       formMarkup = captchaQ;
     }
@@ -315,20 +327,19 @@ export class Qualify extends Component {
     else if (!this.props.user.why_write_letters) {
       formMarkup = profileQ;
     }
+    else if (this.props.user.qual_state === "qualified" || this.props.user.qual_state === "super_qualified") {
+      formMarkup = readyToGo;
+    }
     else {
       formMarkup = thankYou;
     }
 
-    if (!this.props.isQualified && formMarkup) {
-      return (
-        <div>
-          { this.props.auth.isAuthenticated() && (
-            <React.Fragment>{formMarkup}</React.Fragment>
-          )}
-        </div>
-      )
-    }
-    else
-      return null;
+    return (
+      <div>
+        { this.props.auth.isAuthenticated() && (
+          <React.Fragment>{formMarkup}</React.Fragment>
+        )}
+      </div>
+    );
   }
 }

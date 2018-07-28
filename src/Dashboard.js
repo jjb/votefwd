@@ -38,7 +38,6 @@ class Dashboard extends Component {
 
           if (!this.isQualified(user)) {
             history.replace('/verify');
-            return true;
           }
         })
         .catch(err => {
