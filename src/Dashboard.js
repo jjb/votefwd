@@ -215,10 +215,6 @@ class Dashboard extends Component {
     this.checkEnoughVoters();
   }
 
-  componentDidUpdate() {
-    this.checkEnoughVoters();
-  }
-
   render() {
     return (
       <div>
