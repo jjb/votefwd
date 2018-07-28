@@ -191,7 +191,17 @@ class UserTable extends Component {
 
     const columns = [{
       Header: 'Full Name',
-      accessor: 'full_name' // String-based value accessors!
+      accessor: 'full_name',
+      filterable: true,
+      filterMethod: (filter, row, column) => {
+        // Split name on any amount of whitespace
+        // and check that any of them begins with the filter value
+        return (row.full_name || '')
+          .trim()
+          .toLowerCase()
+          .split(/\W+/)
+          .some(name => name.startsWith(filter.value.toLowerCase()));
+      }
     }, {
       id: 'd',
       Header: 'Signup Date',
@@ -222,16 +232,54 @@ class UserTable extends Component {
         else {
           return null;
         }
-      }
+      },
+      filterable: true,
+      Filter: ({ filter, onChange }) => (
+        <select
+          className="form-control"
+          onChange={ event => onChange(event.target.value) }
+          value={ filter ? filter.value : 'all' }
+        >
+          <option value="all">All</option>
+          <option value="admin">Admin</option>
+          <option value="user">User</option>
+        </select>
+      ),
+      filterMethod: (filter, row, column) => {
+        if (filter.value === 'all') {
+          return true;
+        }
+        if (filter.value === 'admin') {
+          return row._original.is_admin;
+        }
+        return !row._original.is_admin;
+      },
     }, {
-      id: 's',
       width: 200,
       Header: 'Status',
       Cell: this.renderStatus,
-      sortMethod: (a, b, desc) => {
-        console.log('sort', a, b);
-        return 0;
-      }
+      accessor: 'qual_state',
+      filterable: true,
+      Filter: ({ filter, onChange }) => (
+        <select
+          className="form-control"
+          onChange={ event => onChange(event.target.value) }
+          value={ filter ? filter.value : 'all' }
+        >
+          <option value="all">All</option>
+          <option value="banned">Banned</option>
+          <option value="pre_qualfied">Pre-qualified</option>
+          <option value="qualified">Qualified</option>
+          <option value="super_qualified">Super-qualified</option>
+        </select>
+      ),
+      filterMethod: (filter, row, column) => {
+        if (filter.value === 'all') {
+          return true;
+        }
+        return (row.qual_state === filter.value);
+      },
+      sortable: false
     }];
 
     return (
