@@ -148,10 +148,20 @@ function canAdoptMoreVoters(auth0_id, callback) {
     });
 }
 
+function _prepForTests() {
+  if (process.env.NODE_ENV !== 'test') {
+    console.error('userService._prepForTests called outside of tests');
+    return;
+  }
+
+  AllowedVoterAdoption.test_qualified = 5;
+}
+
 module.exports = {
   canAdoptMoreVoters,
   isAdmin,
   updateEmail,
   updateUserQualifiedState,
-  notifyUserOfNewQualifiedState
+  notifyUserOfNewQualifiedState,
+  _prepForTests
 }
