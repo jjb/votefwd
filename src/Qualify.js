@@ -3,6 +3,7 @@
 import React, { Component } from 'react';
 import { RecaptchaComponent } from './Recaptcha';
 import { ProgressIndicator } from './ProgressIndicator';
+import { isUserQualified } from './utils/User';
 import axios from 'axios';
 
 export class Qualify extends Component {
@@ -330,7 +331,7 @@ export class Qualify extends Component {
     else if (!this.props.user.why_write_letters) {
       formMarkup = profileQ;
     }
-    else if (this.props.user.qual_state === "qualified" || this.props.user.qual_state === "super_qualified") {
+    else if (isUserQualified(this.props.user)) {
       formMarkup = readyToGo;
     }
     else {
