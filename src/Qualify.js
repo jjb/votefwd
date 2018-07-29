@@ -128,7 +128,7 @@ export class Qualify extends Component {
       <div>
         <div className="p-4">
           <h4 className="mb-3">Do you pledge to vote in every election?</h4>
-          <button className="btn btn-primary w-100" onClick={this.handlePledgedVote.bind(this)}>Yes</button>
+          <button className="btn btn-primary btn-lg w-100" onClick={this.handlePledgedVote.bind(this)}>Yes</button>
           <p className="small my-3">
             The letters you send will mention <strong>your</strong> commitment to voting, urging the recipient to follow your example.
           </p>
@@ -143,7 +143,7 @@ export class Qualify extends Component {
           <h4 className="mb-3">What’s your full name?</h4>
           <div className="input-group mb-3">
             <input type="text"
-              className="form-control"
+              className="form-control form-control-lg"
               placeholder="First and last name"
               value={this.state.nameFormVal}
               onChange={this.handleNameChange}
@@ -159,7 +159,7 @@ export class Qualify extends Component {
       <div>
         <div className="p-4">
           <h4 className="mb-3">Are you a U.S. citizen or permanent resident?</h4>
-          <button className="btn btn-primary w-100" onClick={this.handleIsResident.bind(this)}>Yes</button>
+          <button className="btn btn-primary btn-lg w-100" onClick={this.handleIsResident.bind(this)}>Yes</button>
           <p className="small my-3">In general, one must be a citizen or permanent resident to participate in election activities. There’s an exception for volunteering, but we’re erring on the side of caution.</p>
         </div>
         <ProgressIndicator current={3} max={7}></ProgressIndicator>
@@ -172,7 +172,7 @@ export class Qualify extends Component {
           <h4 className="mb-3">What's your ZIP code?</h4>
           <div className="input-group mb-3">
             <input type="text"
-              className="form-control"
+              className="form-control form-control-lg"
               placeholder="00000"
               value={this.state.ZipFormVal}
               onChange={this.handleZipChange} />
@@ -292,6 +292,9 @@ export class Qualify extends Component {
           You should hear back from us shortly with next steps for getting involved. Thank you for volunteering to help -- we won't be able to do this without help from folks like you.
         </p>
         <p><strong>- Scott and the Vote Forward Team</strong></p>
+        <div className="text-center p-4">
+          <img src="/images/bg-masthead.png" className="w-50" alt=""/>
+        </div>
       </div>
     );
 
