@@ -27,7 +27,7 @@ export class Qualify extends Component {
 
     this.handleReasonChange = this.handleReasonChange.bind(this);
 
-    this.handleProfileChange = this.handleProfileChange.bind(this);
+    this.handleProfileSubmit = this.handleProfileSubmit.bind(this);
   }
 
   handleCaptcha(response) {
@@ -89,7 +89,7 @@ export class Qualify extends Component {
 
   //////////////////////////////////////////////////////////////////////
 
-  handleProfileChange(event) {
+  handleProfileSubmit(event) {
     event.preventDefault();
     const inputs = event.target.getElementsByClassName('js-profile-input');
     const reasonForParticipation = inputs.profileReason.value;
@@ -99,6 +99,7 @@ export class Qualify extends Component {
       this.setState({ reasonError: true });
       return false;
     } else {
+      // TODO: Combine these into a single API call
       this.props.updateUser('twitter_profile_url', inputs.profileTwitter.value);
       this.props.updateUser('facebook_profile_url', inputs.profileFacebook.value);
       this.props.updateUser('linkedin_profile_url', inputs.profileLinkedin.value);
@@ -198,7 +199,7 @@ export class Qualify extends Component {
 
     let profileQ = (
       <div>
-        <form onSubmit={this.handleProfileChange} className="p-4">
+        <form onSubmit={this.handleProfileSubmit} className="p-4">
           <h3 className="mb-3">One last step</h3>
           <p className="mb-4">
             We need to be sure you're serious about sending letters to boost turnout among Democrats. If you have a public web presence, please share those profiles below.
@@ -268,7 +269,7 @@ export class Qualify extends Component {
 
           {this.state.reasonError &&
             <div className="alert alert-danger alert-sm mt-3 mb-3 center" role="alert">
-              Please share a reason for participating - it helps us to verify volunteers.
+              Please share a  reason for participating - it helps us to verify volunteers.
             </div>
           }
 

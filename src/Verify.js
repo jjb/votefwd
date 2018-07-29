@@ -77,7 +77,11 @@ class Verify extends Component {
           }}
         >
           <div className="bg-white w-100 align-self-center">
-            <Qualify user={this.state.user} updateUser={this.updateUser} auth={this.props.auth} />
+            <Qualify
+              user={this.state.user}
+              updateUser={this.updateUser}
+              auth={this.props.auth}
+            />
           </div>
         </div>
       </div>
