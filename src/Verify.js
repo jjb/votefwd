@@ -35,7 +35,6 @@ class Verify extends Component {
         params: { auth0_id: user_id }
         })
         .then(res => {
-          let user = res.data[0];
           this.setState({ user: res.data[0] })
         })
         .catch(err => {
