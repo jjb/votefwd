@@ -123,7 +123,7 @@ function canAdoptMoreVoters(auth0_id, callback) {
         callback(null, 0);
         return;
       }
-      let qualState = result.qual_state;
+      let qualState = 'qualified';
       let allowed = AllowedVoterAdoption[qualState];
       if (allowed === 0) {
         callback(null, 0);
