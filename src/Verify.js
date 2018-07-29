@@ -14,8 +14,7 @@ class Verify extends Component {
 
     this.updateUser = this.updateUser.bind(this);
     this.state = {
-      user: {},
-      isQualified: false
+      user: {}
     }
   }
 
@@ -37,11 +36,6 @@ class Verify extends Component {
         })
         .then(res => {
           let user = res.data[0];
-          if (!this.isQualified(user)) {
-            this.setState({ isQualified: false });
-          } else {
-            this.setState({ isQualified: true });
-          }
           this.setState({ user: res.data[0] })
         })
         .catch(err => {
@@ -50,15 +44,6 @@ class Verify extends Component {
       return true;
     }
     else {
-      return false;
-    }
-  }
-
-  isQualified(user) {
-    if ( user.is_human_at && user.pledged_vote_at && user.is_resident_at &&
-      user.full_name && user.accepted_code_at && user.zip) {
-      return true;
-    } else {
       return false;
     }
   }

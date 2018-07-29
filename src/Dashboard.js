@@ -36,6 +36,7 @@ class Dashboard extends Component {
           let user = res.data[0];
           this.setState({ user: res.data[0] })
 
+          // TODO: Return to here and find better way of abstracting qualification
           if (!this.isQualified(user)) {
             history.replace('/verify');
           }
