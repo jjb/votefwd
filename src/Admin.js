@@ -155,30 +155,34 @@ class UserTable extends Component {
 
   renderStatus(props) {
     const buttonClass = function buttonClass(state, qualState) {
-      return "btn btn-light" + (qualState === state ? ' active' : '');
+      return "w-25 btn btn-light small" + (qualState === state ? ' active' : '');
     };
 
     const user = props.original;
     const qualState = user.qual_state;
     return (
-      <div className="btn-group btn-group-toggle">
-        <label className={buttonClass('banned', qualState)}
-               onClick={this.handleChangeStatus.bind(this, user, 'banned')}
+      <div className="btn-group btn-group-toggle w-100">
+        <label
+          className={buttonClass('banned', qualState)}
+          onClick={this.handleChangeStatus.bind(this, user, 'banned')}
         >
           <input type="radio" name="status" id="banned" autoComplete="off" /> B
         </label>
-        <label className={buttonClass('pre_qualified', qualState)}
-               onClick={this.handleChangeStatus.bind(this, user, 'pre_qualified')}
+        <label
+          className={buttonClass('pre_qualified', qualState)}
+          onClick={this.handleChangeStatus.bind(this, user, 'pre_qualified')}
         >
           <input type="radio" name="status" id="prequal" autoComplete="off" /> P
         </label>
-        <label className={buttonClass('qualified', qualState)}
-               onClick={this.handleChangeStatus.bind(this, user, 'qualified')}
+        <label
+          className={buttonClass('qualified', qualState)}
+          onClick={this.handleChangeStatus.bind(this, user, 'qualified')}
         >
           <input type="radio" name="status" id="qual" autoComplete="off" /> Q
         </label>
-        <label className={buttonClass('super_qualified', qualState)}
-               onClick={this.handleChangeStatus.bind(this, user, 'super_qualified')}
+        <label
+          className={buttonClass('super_qualified', qualState)}
+          onClick={this.handleChangeStatus.bind(this, user, 'super_qualified')}
         >
           <input type="radio" name="status" id="superqual" autoComplete="off" /> S
         </label>
@@ -283,7 +287,7 @@ class UserTable extends Component {
     }];
 
     return (
-      <ReactTable data={users} columns={columns} />
+      <ReactTable data={users} columns={columns} className="-striped" />
     )}
 }
 
