@@ -90,15 +90,19 @@ before('Adding voter data to the database', function() {
     }, {
       hashid: 'test-hash-id-5',
       adopter_user_id: full.auth0_id,
-      adopted_at: db.fn.now()
+      adopted_at: db.fn.now(),
+      confirmed_prepped_at: db.fn.now()
     }, {
       hashid: 'test-hash-id-6',
       adopter_user_id: full.auth0_id,
-      adopted_at: db.fn.now()
+      adopted_at: db.fn.now(),
+      confirmed_prepped_at: db.fn.now()
     }, {
       hashid: 'test-hash-id-7',
       adopter_user_id: full.auth0_id,
-      adopted_at: db.fn.now()
+      adopted_at: db.fn.now(),
+      confirmed_prepped_at: db.fn.now(),
+      confirmed_sent_at: db.fn.now()
     }, {
       hashid: 'test-hash-id-8',
       adopter_user_id: full.auth0_id,
