@@ -68,7 +68,6 @@ class UserTable extends Component {
 
     this.state = { users: [] };
     this.getAllUsers = this.getAllUsers.bind(this);
-    this.setVoterCountsForUsers = this.setVoterCountsForUsers.bind(this);
     this.renderStatus = this.renderStatus.bind(this);
     this.handleChangeStatus = this.handleChangeStatus.bind(this);
   }
@@ -80,39 +79,11 @@ class UserTable extends Component {
       url: `${process.env.REACT_APP_API_URL}/s/users`,
     })
     .then(res => {
-      this.setState({ users: res.data }, () => this.setVoterCountsForUsers())
+      this.setState({ users: res.data });
     })
     .catch(err => {
       console.error(err);
     });
-  }
-
-  setVoterCountsForUsers() {
-    let users = this.state.users;
-    users.forEach(function(user, index) {
-      axios({
-        method: 'GET',
-        headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
-        url: `${process.env.REACT_APP_API_URL}/voters`,
-        params: { user_id: user.auth0_id }
-      })
-      .then(res => {
-        let adopted = res.data.filter(voter => !voter.confirmed_prepped_at && !voter.confirmed_sent_at);
-        let prepped = res.data.filter(voter => voter.confirmed_prepped_at && !voter.confirmed_sent_at);
-        let sent = res.data.filter(voter => voter.confirmed_prepped_at && voter.confirmed_sent_at);
-        user.num_adopted = adopted.length;
-        user.num_prepped = prepped.length;
-        user.num_sent = sent.length;
-        user.total = res.data.length;
-        users[index] = user;
-      })
-      .then(res => {
-        this.setState({users: users})
-      })
-      .catch(err => {
-        console.error(err);
-      });
-    }, this)
   }
 
   componentWillMount() {
@@ -212,16 +183,16 @@ class UserTable extends Component {
       }
     }, {
       Header: 'Adopted',
-      accessor: 'num_adopted',
+      accessor: 'stats.adopted',
     }, {
       Header: 'Prepped',
-      accessor: 'num_prepped',
+      accessor: 'stats.prepped',
     }, {
       Header: 'Sent',
-      accessor: 'num_sent',
+      accessor: 'stats.sent',
     }, {
       Header: 'Total',
-      accessor: 'total',
+      accessor: 'stats.total',
     }, {
       id: 'a',
       Header: 'Admin?',

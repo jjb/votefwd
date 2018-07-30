@@ -36,4 +36,30 @@ describe('voterService', function() {
     // Pending b/c we need to mock out letterService and slackService
     it('should let the user adopt voters');
   });
+
+  describe('getAdoptedVoterSummary', function() {
+    it('should get the data', function(done) {
+      voterService.getAdoptedVoterSummary(function(error, summary) {
+        expect(error).to.be.null;
+        expect(summary).to.have.lengthOf.above(1);
+        var v1 = summary.find(s => s.adopter_user_id === 'test-auth0-id-6');
+        expect(v1).to.eql({
+          adopter_user_id: 'test-auth0-id-6',
+          adopted: 2,
+          prepped: 0,
+          sent: 0,
+          total: 2
+        });
+        var v2 = summary.find(s => s.adopter_user_id === 'test-auth0-id-7');
+        expect(v2).to.eql({
+          adopter_user_id: 'test-auth0-id-7',
+          adopted: 2,
+          prepped: 2,
+          sent: 1,
+          total: 5
+        });
+        done(error);
+      });
+    });
+  });
 });
