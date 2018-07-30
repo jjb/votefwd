@@ -200,6 +200,10 @@ label {
 .form-row > .col, .form-row > [class*=col-] {
   padding: 1rem; }
 
+.modal {
+  display: block;
+  background: rgba(0, 0, 0, 0.5); }
+
 .modal-content {
   border-width: 3px; }
 
@@ -218,6 +222,12 @@ label {
 
 .ReactTable .rt-td {
   padding: 0.25rem !important; }
+
+.ReactTable.-highlight .rt-tbody .rt-tr:hover {
+  background: rgba(44, 116, 255, 0.1) !important; }
+
+table.table tr:first-child td {
+  border-top: none; }
 
 .small, small {
   font-size: 90%; }

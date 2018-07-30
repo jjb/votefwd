@@ -36,6 +36,7 @@ p {
 //  - Form Inputs
 //  - Modals
 //  - ReactTable
+//  - Tables
 //  - Text
 // ---------------------------------------------------------------------------
 
@@ -233,6 +234,11 @@ label {
 
 // Modals
 
+.modal {
+  display: block;
+  background: rgba(0,0,0,0.5);
+}
+
 .modal-content {
   border-width: 3px;
 }
@@ -253,6 +259,15 @@ label {
 }
 .ReactTable .rt-td {
   padding: 0.25rem !important;
+}
+.ReactTable.-highlight .rt-tbody .rt-tr:hover {
+  background: fade-out($vf-blue, $amount: .9) !important;
+}
+
+// Tables
+
+table.table tr:first-child td {
+  border-top: none;
 }
 
 // Text

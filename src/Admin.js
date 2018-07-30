@@ -6,14 +6,15 @@ import 'react-table/react-table.css';
 import axios from 'axios';
 import moment from 'moment';
 import { Header } from './Header';
+import { UserProfilePreview } from './admin/UserProfilePreview';
 
 
 class Overview extends Component {
   constructor(props) {
     super(props)
 
-  this.state = { available: '', adopted: '', prepped: '', sent: '', total: '' };
-  this.getStats = this.getStats.bind(this);
+    this.state = { available: '', adopted: '', prepped: '', sent: '', total: '' };
+    this.getStats = this.getStats.bind(this);
   }
 
   getStats() {
@@ -66,11 +67,13 @@ class UserTable extends Component {
   constructor(props) {
     super(props)
 
-    this.state = { users: [] };
+    this.state = { users: [], activeUserProfile: null };
     this.getAllUsers = this.getAllUsers.bind(this);
     this.setVoterCountsForUsers = this.setVoterCountsForUsers.bind(this);
     this.renderStatus = this.renderStatus.bind(this);
+    this.renderNameAndProfile = this.renderNameAndProfile.bind(this);
     this.handleChangeStatus = this.handleChangeStatus.bind(this);
+    this.hideUserInformation = this.hideUserInformation.bind(this);
   }
 
   getAllUsers() {
@@ -190,6 +193,23 @@ class UserTable extends Component {
     );
   }
 
+  showUserInformation(user) {
+    this.setState({ activeUserProfile: user })
+  }
+
+  hideUserInformation() {
+    this.setState({ activeUserProfile: null })
+  }
+
+  renderNameAndProfile(props) {
+    let user = props.original;
+    return (
+      <button onClick={this.showUserInformation.bind(this, user)} className="w-100">
+        View Profile
+      </button>
+    );
+  }
+
   render() {
     const users = this.state.users;
 
@@ -208,24 +228,33 @@ class UserTable extends Component {
       }
     }, {
       id: 'd',
-      Header: 'Signup Date',
+      Header: 'Profile',
+      Cell: this.renderNameAndProfile,
+    }, {
+      id: 'd',
+      Header: 'Signup date',
       accessor: d => {
         return moment(d.created_at)
         .local()
         .format("MMMM DD, hh:mm a")
-      }
+      },
+      maxWidth: 150,
     }, {
       Header: 'Adopted',
       accessor: 'num_adopted',
+      maxWidth: 100,
     }, {
       Header: 'Prepped',
       accessor: 'num_prepped',
+      maxWidth: 100,
     }, {
       Header: 'Sent',
       accessor: 'num_sent',
+      maxWidth: 100,
     }, {
       Header: 'Total',
       accessor: 'total',
+      maxWidth: 100,
     }, {
       id: 'a',
       Header: 'Admin?',
@@ -237,6 +266,7 @@ class UserTable extends Component {
           return null;
         }
       },
+      maxWidth: 120,
       filterable: true,
       Filter: ({ filter, onChange }) => (
         <select
@@ -287,14 +317,22 @@ class UserTable extends Component {
     }];
 
     return (
-      <ReactTable data={users} columns={columns} className="-striped" />
+      <React.Fragment>
+        {this.state.activeUserProfile && (
+          <UserProfilePreview
+            user={this.state.activeUserProfile}
+            closeModal={this.hideUserInformation}
+          />
+        )}
+        <ReactTable data={users} columns={columns} className="-striped -highlight" />
+      </React.Fragment>
     )}
 }
 
 class Admin extends Component {
   render() {
     return (
-      <div>
+      <div className="position-relative">
         <Header auth={this.props.auth}/>
         <Overview />
         <UserTable />
