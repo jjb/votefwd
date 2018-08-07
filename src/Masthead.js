@@ -30,14 +30,16 @@ export class Masthead extends Component {
             <div className="text-center mt-5">
               { this.props.auth.isAuthenticated() ?
                 (
-                  <React.Fragment>
-                    <p>You‘re already signed in!</p>
-                    <a href="/dashboard">
-                      <button type="button" className="btn btn-success">
-                        Click here to send letters
-                      </button>
-                    </a>
-                  </React.Fragment>
+                  <div className="card">
+										<div className="card-body">
+											<p>You‘re already signed in!</p>
+											<a href="/dashboard">
+												<button type="button" className="btn btn-success btn-lg">
+													Click here to send letters
+												</button>
+											</a>
+										</div>
+                  </div>
                 ) :
                 (
                   <div className="text-center p-4">
