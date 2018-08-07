@@ -27,7 +27,7 @@ export class Masthead extends Component {
               <h3 className="mb-4">
                 Send letters to unlikely voters
               </h3>
-            <div className="text-center mt-5">
+            <div className="mt-5">
               { this.props.auth.isAuthenticated() ?
                 (
                   <div className="card">
@@ -42,9 +42,9 @@ export class Masthead extends Component {
                   </div>
                 ) :
                 (
-                  <div className="text-center p-4">
+                  <React.Fragment>
                     <Login auth={this.props.auth} buttonText="Sign Up Or Log In To Send Letters" />
-                  </div>
+                  </React.Fragment>
                 )
               }
             </div>

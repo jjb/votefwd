@@ -25,10 +25,10 @@ export class Login extends Component {
     const username = localStorage.getItem('uid');
 
     return (
-        <div className="pa2 tc">
+        <div>
           {
             !isAuthenticated() && (
-              <button onClick={this.login.bind(this)} className="btn btn-primary btn-lg">
+              <button onClick={this.login.bind(this)} className="btn btn-danger btn-lg">
                 {buttonText}
               </button>
             )
