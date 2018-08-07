@@ -16,7 +16,7 @@ const QualStateEnum = {
 const AllowedVoterAdoption = {
   banned: 0,
   pre_qualified: 0,
-  qualified: 1000,
+  qualified: 100,
   super_qualified: 1000
 };
 
@@ -123,7 +123,7 @@ function canAdoptMoreVoters(auth0_id, callback) {
         callback(null, 0);
         return;
       }
-      let qualState = 'qualified';
+      let qualState = result.qual_state;
       let allowed = AllowedVoterAdoption[qualState];
       if (allowed === 0) {
         callback(null, 0);
