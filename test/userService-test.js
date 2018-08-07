@@ -6,9 +6,13 @@ var db = require('../server/db');
 var userService = require('../server/userService');
 
 describe('userService', function() {
+  before(function() {
+    userService._prepForTests();
+  });
+
   describe('isAdmin', function() {
     it('should find a non-admin', function(done) {
-      userService.isAdmin(this.users[0].auth0_id, function(error, isAdmin) {
+      userService.isAdmin(this.users.regular.auth0_id, function(error, isAdmin) {
         if (error) {
           return done(error);
         }
@@ -18,7 +22,7 @@ describe('userService', function() {
     });
 
     it('should find an admin', function(done) {
-      userService.isAdmin(this.users[1].auth0_id, function(error, isAdmin) {
+      userService.isAdmin(this.users.admin.auth0_id, function(error, isAdmin) {
         if (error) {
           return done(error);
         }
@@ -28,7 +32,7 @@ describe('userService', function() {
     });
 
     it('should consider missing user not an admin', function(done) {
-      userService.isAdmin(this.users[0].auth0_id + 'MISSING', function(error, isAdmin) {
+      userService.isAdmin(this.users.regular.auth0_id + 'MISSING', function(error, isAdmin) {
         if (error) {
           return done(error);
         }
@@ -41,7 +45,7 @@ describe('userService', function() {
 
   describe('canAdoptMoreVoters', function() {
     it('should consider a missing user to have no more adoptees', function(done) {
-      userService.canAdoptMoreVoters(this.users[0].auth0_id + 'MISSING', function(error, numAdoptees) {
+      userService.canAdoptMoreVoters(this.users.regular.auth0_id + 'MISSING', function(error, numAdoptees) {
         if (error) {
           return done(error);
         }
@@ -51,7 +55,7 @@ describe('userService', function() {
     });
 
     it('should offer no voters to a banned user', function(done) {
-      userService.canAdoptMoreVoters(this.users[2].auth0_id, function(error, numAdoptees) {
+      userService.canAdoptMoreVoters(this.users.banned.auth0_id, function(error, numAdoptees) {
         if (error) {
           return done(error);
         }
@@ -61,7 +65,7 @@ describe('userService', function() {
     });
 
     it('should offer no voters to a pre-qualified user', function(done) {
-      userService.canAdoptMoreVoters(this.users[3].auth0_id, function(error, numAdoptees) {
+      userService.canAdoptMoreVoters(this.users.prequal.auth0_id, function(error, numAdoptees) {
         if (error) {
           return done(error);
         }
@@ -71,7 +75,7 @@ describe('userService', function() {
     });
 
     it('should offer 100 voters to a qualified user', function(done) {
-      userService.canAdoptMoreVoters(this.users[4].auth0_id, function(error, numAdoptees) {
+      userService.canAdoptMoreVoters(this.users.qual.auth0_id, function(error, numAdoptees) {
         if (error) {
           return done(error);
         }
@@ -80,8 +84,8 @@ describe('userService', function() {
       });
     });
 
-    it('should offer 1000 voters to a qualified user', function(done) {
-      userService.canAdoptMoreVoters(this.users[5].auth0_id, function(error, numAdoptees) {
+    it('should offer 1000 voters to a super-qualified user', function(done) {
+      userService.canAdoptMoreVoters(this.users.superqual.auth0_id, function(error, numAdoptees) {
         if (error) {
           return done(error);
         }
@@ -90,13 +94,20 @@ describe('userService', function() {
       });
     });
 
-    // Will get to this when we have better handling of test data
-    it('should calculate the remaining voters allowed');
+    it('should calculate the remaining voters allowed', function(done) {
+      userService.canAdoptMoreVoters(this.users.testqual.auth0_id, function(error, numAdoptees) {
+        if (error) {
+          return done(error);
+        }
+        expect(numAdoptees).to.eql(3);
+        done();
+      });
+    });
   });
 
   describe('updateUserQualifiedState', function() {
     it('should fail on an invalid qualified state', function(done) {
-      userService.updateUserQualifiedState(this.users[0].auth0_id, 'somethingFakeAndNotValid', function(error, newState) {
+      userService.updateUserQualifiedState(this.users.regular.auth0_id, 'somethingFakeAndNotValid', function(error, newState) {
         expect(error).to.be.eql('invalidEnum', 'incorrect or missing error for test. Expected: invalidEnum. Got: ' + error);
         expect(newState).to.be.a('null');
         done();
@@ -104,7 +115,7 @@ describe('userService', function() {
     });
 
     it('should succeed on setting qualified state to banned', function(done) {
-      userService.updateUserQualifiedState(this.users[0].auth0_id, 'banned', function(error, newState) {
+      userService.updateUserQualifiedState(this.users.regular.auth0_id, 'banned', function(error, newState) {
         if (error) {
           return done(error);
         }
@@ -114,7 +125,7 @@ describe('userService', function() {
     });
 
     it('should succeed on setting qualified state to pre_qualified', function(done) {
-      userService.updateUserQualifiedState(this.users[0].auth0_id, 'pre_qualified', function(error, newState) {
+      userService.updateUserQualifiedState(this.users.regular.auth0_id, 'pre_qualified', function(error, newState) {
         if (error) {
           return done(error);
         }
@@ -124,7 +135,7 @@ describe('userService', function() {
     });
 
     it('should succeed on setting qualified state to qualified', function(done) {
-      userService.updateUserQualifiedState(this.users[0].auth0_id, 'qualified', function(error, newState) {
+      userService.updateUserQualifiedState(this.users.regular.auth0_id, 'qualified', function(error, newState) {
         if (error) {
           return done(error);
         }
@@ -134,7 +145,7 @@ describe('userService', function() {
     });
 
     it('should succeed on setting qualified state to super_qualified', function(done) {
-      userService.updateUserQualifiedState(this.users[0].auth0_id, 'super_qualified', function(error, newState) {
+      userService.updateUserQualifiedState(this.users.regular.auth0_id, 'super_qualified', function(error, newState) {
         if (error) {
           return done(error);
         }
@@ -146,25 +157,25 @@ describe('userService', function() {
 
   describe('notifyUserOfNewQualifiedState', function() {
     it('should send a qualified email on promotion of pre_qualified to qualified', function(done) {
-      var result = userService.notifyUserOfNewQualifiedState(this.users[0], 'qualified');
+      var result = userService.notifyUserOfNewQualifiedState(this.users.prequal, 'qualified');
       expect(result).to.be.eql('sent qualified email');
       done();
     });
 
     it('should send a super_qualified email on promotion of pre_qualified to super_qualified', function(done) {
-      var result = userService.notifyUserOfNewQualifiedState(this.users[0], 'super_qualified');
+      var result = userService.notifyUserOfNewQualifiedState(this.users.prequal, 'super_qualified');
       expect(result).to.be.eql('sent super_qualified email');
       done();
     });
 
     it('should send a super_qualified email on promotion of pre_qualified to super_qualified', function(done) {
-      var result = userService.notifyUserOfNewQualifiedState(this.users[4], 'super_qualified');
+      var result = userService.notifyUserOfNewQualifiedState(this.users.qual, 'super_qualified');
       expect(result).to.be.eql('sent super_qualified email');
       done();
     });
 
     it('should not send an email on banned', function(done) {
-      var result = userService.notifyUserOfNewQualifiedState(this.users[4], 'banned');
+      var result = userService.notifyUserOfNewQualifiedState(this.users.qual, 'banned');
       expect(result).to.be.eql('not sending an email');
       done();
     });

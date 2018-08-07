@@ -248,6 +248,59 @@ function makePledge(code, callback) {
   });
 }
 
+function getAdoptedVoterSummary(callback) {
+  db('voters')
+    .select(
+      'adopter_user_id',
+      db.raw('sum(adopted) as adopted'),
+      db.raw('sum(prepped) as prepped'),
+      db.raw('sum(sent) as sent')
+    )
+    .from(function() {
+      this.select(
+        'adopter_user_id',
+        db.raw(`
+          case when adopted_at is not null
+                and confirmed_prepped_at is null
+                and confirmed_sent_at is null then 1
+                else 0
+            end as adopted
+          `),
+        db.raw(`
+          case when confirmed_prepped_at is not null
+                and confirmed_sent_at is null then 1
+                else 0
+            end as prepped
+          `),
+        db.raw(`
+          case when confirmed_prepped_at is not null
+                and confirmed_sent_at is not null then 1
+                else 0
+            end as sent
+          `)
+        )
+        .from('voters')
+        .whereNotNull('adopter_user_id')
+        .as('stats')
+    })
+    .groupBy('adopter_user_id')
+    .then(function(results) {
+      results = results.map(r => {
+        r.adopted = parseInt(r.adopted);
+        r.prepped = parseInt(r.prepped);
+        r.sent = parseInt(r.sent);
+        r.total = r.adopted + r.prepped + r.sent;
+        return r;
+      });
+      callback(null, results);
+    })
+    .catch(err => {
+      console.error(err);
+      callback(err);
+    });
+
+}
+
 var getLetterWritingUserFromPledge = function getLetterWritingUserFromPledge(code){
   return new Promise(function(resolve, reject) {
     db('voters')
@@ -267,7 +320,7 @@ var getLetterWritingUserFromPledge = function getLetterWritingUserFromPledge(cod
 
 function _prepForTests() {
   if (process.env.NODE_ENV !== 'test') {
-    console.error('Someone is calling _prepForTests outside of tests');
+    console.error('voterService._prepForTests called outside of tests');
     return;
   }
 
@@ -285,5 +338,6 @@ module.exports = {
   confirmPrepped,
   undoConfirmPrepped,
   makePledge,
+  getAdoptedVoterSummary,
   _prepForTests
 }

@@ -364,12 +364,26 @@ router.route('/s/users')
   .get(checkJwt, checkAdmin, function(req, res) {
     db('users')
       .then(function(result) {
-        res.json(result)
+        // Add in the voter summary data for the users
+        voterService.getAdoptedVoterSummary(function(error, summary) {
+          if (error) {
+            console.error(error);
+            res.status(500);
+            return;
+          }
+          let summaryByAdopter = summary.reduce((a, s) => {
+            a[s.adopter_user_id] = s;
+            return a;
+          }, {});
+          let users = result.map(u => {
+            u.stats = summaryByAdopter[u.auth0_id];
+            return u;
+          });
+          res.json(users)
+        });
       })
       .catch(err => {console.error(err);})
   });
-
-
 
 router.route('/s/stats')
   .get(checkJwt, checkAdmin, function(req, res) {
