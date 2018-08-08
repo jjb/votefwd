@@ -270,7 +270,7 @@ export class Qualify extends Component {
 
           {this.state.reasonError &&
             <div className="alert alert-danger alert-sm mt-3 mb-3 center" role="alert">
-              Please share a  reason for participating - it helps us to verify volunteers.
+              Please share your reason for participating — this helps us to verify volunteers.
             </div>
           }
 
@@ -289,9 +289,12 @@ export class Qualify extends Component {
 
     let thankYou = (
       <div className="p-4">
-        <h2>Thank you for signing up</h2>
+        <h2>Thanks for signing up!</h2>
         <p>
-          You should hear back from us shortly with next steps for getting involved. Thank you for volunteering to help -- we won't be able to do this without help from folks like you.
+          We‘ll send you an email soon with details on how to get started writing letters.
+        </p>
+        <p>
+          And seriously, thank you. We‘re counting on folks like you to help turn the tide in November and we’re grateful for your help.
         </p>
         <p><strong>- Scott and the Vote Forward Team</strong></p>
         <div className="text-center p-4">
