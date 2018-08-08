@@ -80,6 +80,12 @@ export class AdoptVoter extends Component {
                 <br />Georgia's 6th District, Tuesday, November 6, 2018
                 <br />Target: unlikely voters; very likely to choose the Democrat if they turn out
               </p>
+              <p className="mb-3">
+                <span className="small">Return address:</span>
+                <br />Your first name & last initial
+                <br />2870 Peachtree Road, #172
+                <br />Atlanta, GA 30305
+              </p>
               <p className="mt-4 mb-3 small">
                 Voters you adopt won‘t be assigned to anyone else, so by adopting them, you’re committing to send the letters.
               </p>
