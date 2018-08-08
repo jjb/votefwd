@@ -6,7 +6,6 @@ import history from './history';
 import { AdoptVoter } from './AdoptVoter';
 import { Header } from './Header';
 import { Login } from './Login';
-import { Qualify } from './Qualify';
 import { VoterList } from './VoterList';
 import { Footer } from './Footer';
 
@@ -20,9 +19,10 @@ class Dashboard extends Component {
     this.handleUndoConfirmPrepped = this.handleUndoConfirmPrepped.bind(this);
     this.handleUndoConfirmSent = this.handleUndoConfirmSent.bind(this);
     this.updateUser = this.updateUser.bind(this);
-    this.state = { voters: [], user: {}, isQualified: true, enoughVoters: '' }
+    this.state = { voters: [], user: {}, isQualified: false, enoughVoters: '' }
   }
 
+  // TODO: Probably abstract this out
   getCurrentUser() {
     let user_id = localStorage.getItem('user_id');
     if (user_id) {
@@ -34,10 +34,12 @@ class Dashboard extends Component {
         })
         .then(res => {
           let user = res.data[0];
-          if (!this.isQualified(user)) {
-            this.setState({ isQualified: false });
-          }
           this.setState({ user: res.data[0] })
+
+          // TODO: Return to here and find better way of abstracting qualification
+          if (!this.isQualified(user)) {
+            history.replace('/verify');
+          }
         })
         .catch(err => {
           console.error(err)
@@ -49,9 +51,9 @@ class Dashboard extends Component {
     }
   }
 
+  // TODO: abstract this out
   isQualified(user) {
-    if ( user.is_human_at && user.pledged_vote_at && user.is_resident_at &&
-      user.full_name && user.accepted_code_at && user.zip) {
+    if ( user.qual_state === "qualified" || user.qual_state === "super_qualified" ) {
       return true;
     } else {
       return false;
@@ -174,6 +176,7 @@ class Dashboard extends Component {
     })
   }
 
+  // TODO: Can remove this once confirmed that its all in Verify.js
   updateUser(key, value) {
     let data = {}
     data['auth0_id'] = localStorage.getItem('user_id');
@@ -221,9 +224,6 @@ class Dashboard extends Component {
       <Header auth={this.props.auth} />
       { this.props.auth.isAuthenticated() ? (
         <div>
-          { !this.state.isQualified &&
-            <Qualify user={this.state.user} updateUser={this.updateUser}/>
-          }
           <AdoptVoter
              handleAdoptedVoter={this.handleAdoptedVoter}
              enoughVoters={this.state.enoughVoters}

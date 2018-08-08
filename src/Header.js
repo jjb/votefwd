@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Login } from './Login';
 import { Logo } from './Logo';
 import { Masthead } from './Masthead';
+
 class Navbar extends Component {
   render() {
     return (
@@ -27,7 +28,7 @@ export class Header extends Component {
             <Navbar {...this.props} />
           ) :
           (
-            <Masthead />
+            <Masthead auth={this.props.auth} />
           )
         }
       </React.Fragment>

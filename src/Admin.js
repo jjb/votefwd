@@ -6,14 +6,15 @@ import 'react-table/react-table.css';
 import axios from 'axios';
 import moment from 'moment';
 import { Header } from './Header';
+import { UserProfilePreview } from './admin/UserProfilePreview';
 
 
 class Overview extends Component {
   constructor(props) {
     super(props)
 
-  this.state = { available: '', adopted: '', prepped: '', sent: '', total: '' };
-  this.getStats = this.getStats.bind(this);
+    this.state = { available: '', adopted: '', prepped: '', sent: '', total: '' };
+    this.getStats = this.getStats.bind(this);
   }
 
   getStats() {
@@ -66,10 +67,12 @@ class UserTable extends Component {
   constructor(props) {
     super(props)
 
-    this.state = { users: [] };
+    this.state = { users: [], activeUserProfile: null };
     this.getAllUsers = this.getAllUsers.bind(this);
     this.renderStatus = this.renderStatus.bind(this);
+    this.renderNameAndProfile = this.renderNameAndProfile.bind(this);
     this.handleChangeStatus = this.handleChangeStatus.bind(this);
+    this.hideUserInformation = this.hideUserInformation.bind(this);
   }
 
   getAllUsers() {
@@ -126,34 +129,55 @@ class UserTable extends Component {
 
   renderStatus(props) {
     const buttonClass = function buttonClass(state, qualState) {
-      return "btn btn-light" + (qualState === state ? ' active' : '');
+      return "w-25 btn btn-light small" + (qualState === state ? ' active' : '');
     };
 
     const user = props.original;
     const qualState = user.qual_state;
     return (
-      <div className="btn-group btn-group-toggle">
-        <label className={buttonClass('banned', qualState)}
-               onClick={this.handleChangeStatus.bind(this, user, 'banned')}
+      <div className="btn-group btn-group-toggle w-100">
+        <label
+          className={buttonClass('banned', qualState)}
+          onClick={this.handleChangeStatus.bind(this, user, 'banned')}
         >
           <input type="radio" name="status" id="banned" autoComplete="off" /> B
         </label>
-        <label className={buttonClass('pre_qualified', qualState)}
-               onClick={this.handleChangeStatus.bind(this, user, 'pre_qualified')}
+        <label
+          className={buttonClass('pre_qualified', qualState)}
+          onClick={this.handleChangeStatus.bind(this, user, 'pre_qualified')}
         >
           <input type="radio" name="status" id="prequal" autoComplete="off" /> P
         </label>
-        <label className={buttonClass('qualified', qualState)}
-               onClick={this.handleChangeStatus.bind(this, user, 'qualified')}
+        <label
+          className={buttonClass('qualified', qualState)}
+          onClick={this.handleChangeStatus.bind(this, user, 'qualified')}
         >
           <input type="radio" name="status" id="qual" autoComplete="off" /> Q
         </label>
-        <label className={buttonClass('super_qualified', qualState)}
-               onClick={this.handleChangeStatus.bind(this, user, 'super_qualified')}
+        <label
+          className={buttonClass('super_qualified', qualState)}
+          onClick={this.handleChangeStatus.bind(this, user, 'super_qualified')}
         >
           <input type="radio" name="status" id="superqual" autoComplete="off" /> S
         </label>
       </div>
+    );
+  }
+
+  showUserInformation(user) {
+    this.setState({ activeUserProfile: user })
+  }
+
+  hideUserInformation() {
+    this.setState({ activeUserProfile: null })
+  }
+
+  renderNameAndProfile(props) {
+    let user = props.original;
+    return (
+      <button onClick={this.showUserInformation.bind(this, user)} className="w-100">
+        View Profile
+      </button>
     );
   }
 
@@ -175,12 +199,17 @@ class UserTable extends Component {
       }
     }, {
       id: 'd',
-      Header: 'Signup Date',
+      Header: 'Profile',
+      Cell: this.renderNameAndProfile,
+    }, {
+      id: 'd',
+      Header: 'Signup date',
       accessor: d => {
         return moment(d.created_at)
         .local()
         .format("MMMM DD, hh:mm a")
-      }
+      },
+      maxWidth: 150,
     }, {
       Header: 'Adopted',
       accessor: 'stats.adopted',
@@ -194,6 +223,21 @@ class UserTable extends Component {
       Header: 'Total',
       accessor: 'stats.total',
     }, {
+      accessor: 'num_adopted',
+      maxWidth: 100,
+    }, {
+      Header: 'Prepped',
+      accessor: 'num_prepped',
+      maxWidth: 100,
+    }, {
+      Header: 'Sent',
+      accessor: 'num_sent',
+      maxWidth: 100,
+    }, {
+      Header: 'Total',
+      accessor: 'total',
+      maxWidth: 100,
+    }, {
       id: 'a',
       Header: 'Admin?',
       accessor: a => {
@@ -204,6 +248,7 @@ class UserTable extends Component {
           return null;
         }
       },
+      maxWidth: 120,
       filterable: true,
       Filter: ({ filter, onChange }) => (
         <select
@@ -254,14 +299,22 @@ class UserTable extends Component {
     }];
 
     return (
-      <ReactTable data={users} columns={columns} />
+      <React.Fragment>
+        {this.state.activeUserProfile && (
+          <UserProfilePreview
+            user={this.state.activeUserProfile}
+            closeModal={this.hideUserInformation}
+          />
+        )}
+        <ReactTable data={users} columns={columns} className="-striped -highlight" />
+      </React.Fragment>
     )}
 }
 
 class Admin extends Component {
   render() {
     return (
-      <div>
+      <div className="position-relative">
         <Header auth={this.props.auth}/>
         <Overview />
         <UserTable />

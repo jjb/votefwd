@@ -25,10 +25,10 @@ export class Login extends Component {
     const username = localStorage.getItem('uid');
 
     return (
-        <div className="pa2 tc">
+        <div>
           {
             !isAuthenticated() && (
-              <button onClick={this.login.bind(this)}>
+              <button onClick={this.login.bind(this)} className="btn btn-danger btn-lg">
                 {buttonText}
               </button>
             )
@@ -36,11 +36,10 @@ export class Login extends Component {
           {
             isAuthenticated() && (
               <div>
-                <img className="profile-pic rounded-circle d-inline mr-2" src={pictureUrl} alt={username} />
-                <span className="p-2">{username}</span>
-                <button onClick={this.logout.bind(this)} className="btn">
+                <a href="/" onClick={this.logout.bind(this)} className="text-white mr-3">
                   Log Out
-                </button>
+                </a>
+                <img className="profile-pic rounded-circle d-inline mr-2" src={pictureUrl} alt={username} />
               </div>
             )
           }

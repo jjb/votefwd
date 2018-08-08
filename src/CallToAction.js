@@ -10,9 +10,9 @@ export class CallToAction extends Component {
         <div className="overlay"></div>
         <div className="container">
           <div className="w-75 mx-auto">
-            <h2 className="mb-4">Help us flip the House. Sign up now!</h2>
+            <h2 className="mb-4">Sign up for our mailing list.</h2>
             <p className="mb-5">
-              We’ll be in touch soon to assign you some voters.
+              We’ll keep you in the loop as we work to flip the House blue.
             </p>
             <div className="hero-form-wrapper">
                 <form
