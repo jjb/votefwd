@@ -74,17 +74,11 @@ export class AdoptVoter extends Component {
           <div className="col-lg-6 order-lg-2 dashboard--call-to-action px-3 py-4" />
           <div className="col-lg-6 order-lg-1 showcase-text bg-light p-5">
             <div className="p-2 p-5-m">
-              <h1>Send Letters to Ohio Voters</h1>
+              <h1>Send Letters to Georgia Voters</h1>
               <p className="u-highlight mb-3">
-                Special election for U.S. House of Representatives
-                <br />Ohio’s 12th District, Tuesday, August 7, 2018
-                <br />Target: Democrats who voted in ‘12 & ‘16 <strong>but not ‘14</strong>
-              </p>
-              <p className="mb-3">
-                <span className="small">Return address:</span>
-                <br />Your first name & last initial
-                <br />829 Bethel Road #137
-                <br />Columbus, OH 43214
+                Mid-term election for U.S. House of Representatives
+                <br />Georgia's 6th District, Tuesday, November 6, 2018
+                <br />Target: unlikely voters; very likely to choose the Democrat if they turn out
               </p>
               <p className="mt-4 mb-3 small">
                 Voters you adopt won‘t be assigned to anyone else, so by adopting them, you’re committing to send the letters.

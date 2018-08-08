@@ -185,7 +185,7 @@ export class VoterList extends Component {
           <div className="col mx-2">
             <div className="d-flex justify-content-between align-items-center mb-3">
               <span><strong>Letters Prepared</strong> ({toSend.length})</span>
-              <span className="badge badge-warning ml-2">Mail on Tuesday, July 31!</span>
+              <span className="badge badge-warning ml-2">Mail on Tuesday, October 30!</span>
             </div>
             <ul className="list-group">
               {toSend.length < 1 &&
