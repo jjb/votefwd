@@ -10,7 +10,7 @@ BEGIN
   -- DESCRIBE THE EXPERIMENT
 
   INSERT INTO experiment VALUES
-    (DEFAULT, 'OHIO_SPECIAL', 'Special election; pledge codes; no reply cards.')
+    (DEFAULT, 'GA06', 'Midterm; propensity 5-50, Dem likelihood 85-100.')
     RETURNING id INTO experimentid;
 
   RAISE NOTICE 'Registered experiment as id: %', experimentid;
@@ -21,7 +21,9 @@ BEGIN
   INSERT INTO experiment_voter (voter_id, experiment_id)
   SELECT dwid, experimentid
   FROM catalist_raw
-  WHERE registration_address_line_1 = mail_address_line_1;
+  WHERE registration_address_line_1 = mail_address_line_1
+  AND state='GA'
+  AND congressional_district='6';
 
   -- COUNT HOW MANY NEWLY ELIGIBLE VOTERS WE ADDED --
 
@@ -83,7 +85,9 @@ BEGIN
   FROM catalist_raw
   JOIN experiment_voter
   ON experiment_voter.voter_id = catalist_raw.dwid
-  WHERE experiment_voter.cohort = 'TEST';
+  WHERE experiment_voter.cohort = 'TEST'
+  AND state='GA'
+  AND congressional_district='6';
 
   RAISE NOTICE 'Populated voters table with new TEST voters.';
 
