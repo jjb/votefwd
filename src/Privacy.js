@@ -37,7 +37,7 @@ class Privacy extends Component {
             <h5>Sending Letters Via Vote Forward</h5>
             <p>A key component of our project is that we enable you to send letters to potential voters. You are solely responsible for the specific message(s) you send using our letters tool.</p>
             <h5>Financial Donations</h5>
-            <p>If you choose to make a donation to Vote Froward, your credit card information will be used only for this transaction through a secure third party online payment system which will be encrypted using SSL technology. Vote Forward does not retain credit card information.</p>
+            <p>If you choose to make a donation to Vote Forward, your credit card information will be used only for this transaction through a secure third party online payment system which will be encrypted using SSL technology. Vote Forward does not retain credit card information.</p>
             <h5>Children</h5>
             <p>Vote Forward does not solicit personally identifying information from children. Visitors who are under 13 years of age should ask their parent or legal guardian for assistance when using the Site and should not submit any personally identifying information to the Site. Visitors under 18 years of age should not make donations.</p>
             <h5>Cookies</h5>
