@@ -52,7 +52,7 @@ class VoterRecord extends Component {
     let voterDownloadButton;
 
     let today = moment();
-    let electionDate = moment('2018-08-07');
+    let electionDate = moment('2018-11-06');
     let sendDate = electionDate.subtract(7, "days");
     let readyToSend;
     today < sendDate ? readyToSend = false : readyToSend = true;
