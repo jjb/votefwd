@@ -93,7 +93,7 @@ function notifyUserOfNewQualifiedState(user, newState){
   if (user['qual_state'] == QualStateEnum.pre_qualified && newState == QualStateEnum.qualified) {
     //notify users when promoted to qualified
     if (process.env.NODE_ENV !== 'test') {
-      emailService.sendEmail('qualified', user, 'You are approved to adopt voters.');
+      emailService.sendEmail('qualified', user, 'You\'re approved to send letters on Vote Forward!');
     }
     return 'sent qualified email';
   } else if ((user['qual_state'] == QualStateEnum.pre_qualified || user['qual_state'] == QualStateEnum.qualified) && newState == QualStateEnum.super_qualified) {
