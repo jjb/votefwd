@@ -248,6 +248,58 @@ function makePledge(code, callback) {
   });
 }
 
+function getVoterSummaryByState(callback) {
+  db('voters')
+    .select(
+      'state',
+      db.raw('sum(adopted) as adopted'),
+      db.raw('sum(prepped) as prepped'),
+      db.raw('sum(sent) as sent')
+    )
+    .from(function() {
+      this.select(
+        'state',
+        db.raw(`
+          case when adopted_at is not null
+                and confirmed_prepped_at is null
+                and confirmed_sent_at is null then 1
+                else 0
+            end as adopted
+          `),
+        db.raw(`
+          case when confirmed_prepped_at is not null
+                and confirmed_sent_at is null then 1
+                else 0
+            end as prepped
+          `),
+        db.raw(`
+          case when confirmed_prepped_at is not null
+                and confirmed_sent_at is not null then 1
+                else 0
+            end as sent
+          `)
+        )
+        .from('voters')
+        .whereNotNull('adopter_user_id')
+        .as('stats')
+    })
+    .groupBy('state')
+    .then(function(results) {
+      results = results.map(r => {
+        r.adopted = parseInt(r.adopted);
+        r.prepped = parseInt(r.prepped);
+        r.sent = parseInt(r.sent);
+        return r;
+      });
+      callback(null, results);
+    })
+  .catch(err => {
+    console.error(err);
+    callback(err);
+  });
+}
+
+
 function getAdoptedVoterSummary(callback) {
   db('voters')
     .select(
@@ -339,5 +391,6 @@ module.exports = {
   undoConfirmPrepped,
   makePledge,
   getAdoptedVoterSummary,
+  getVoterSummaryByState,
   _prepForTests
 }
