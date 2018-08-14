@@ -252,6 +252,7 @@ function getVoterSummaryByState(callback) {
   db('voters')
     .select(
       'state',
+      db.raw('sum(available) as available'),
       db.raw('sum(adopted) as adopted'),
       db.raw('sum(prepped) as prepped'),
       db.raw('sum(sent) as sent')
@@ -259,6 +260,13 @@ function getVoterSummaryByState(callback) {
     .from(function() {
       this.select(
         'state',
+        db.raw(`
+          case when adopted_at is null
+                and confirmed_prepped_at is null
+                and confirmed_sent_at is null then 1
+                else 0
+            end as available
+                `),
         db.raw(`
           case when adopted_at is not null
                 and confirmed_prepped_at is null
@@ -280,12 +288,12 @@ function getVoterSummaryByState(callback) {
           `)
         )
         .from('voters')
-        .whereNotNull('adopter_user_id')
         .as('stats')
     })
     .groupBy('state')
     .then(function(results) {
       results = results.map(r => {
+        r.available = parseInt(r.available);
         r.adopted = parseInt(r.adopted);
         r.prepped = parseInt(r.prepped);
         r.sent = parseInt(r.sent);

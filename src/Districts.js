@@ -22,7 +22,8 @@ class DistrictTable extends Component {
       url: `${process.env.REACT_APP_API_URL}/s/stats`
     })
     .then(res => {
-      this.setState( {districts: res.data}, () => {console.log(this.state)});
+      console.log(res.data);
+      this.setState({districts: res.data});
     })
     .catch(err => {
       console.error(err);
@@ -39,6 +40,9 @@ class DistrictTable extends Component {
     const columns = [{
       Header: 'District',
       accessor: 'state'
+    }, {
+      Header: 'Available',
+      accessor: 'available',
     }, {
       Header: 'Adopted',
       accessor: 'adopted'
