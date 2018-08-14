@@ -6,8 +6,21 @@ import React, { Component } from 'react';
 export class UserProfilePreview extends Component {
 	constructor(props) {
 		super(props);
-		console.log(props.user);
+		this.escModal = this.escModal.bind(this);
 	}
+
+	escModal(event) {
+	  if (event.keyCode === 27) {
+      this.props.closeModal();
+    }
+  }
+
+  componentDidMount(){
+    document.addEventListener("keydown", this.escModal, false);
+  }
+  componentWillUnmount(){
+    document.removeEventListener("keydown", this.escModal, false);
+  }
 
 	render() {
 		let emailUrl = "mailto:" + this.props.user.email;
@@ -21,7 +34,6 @@ export class UserProfilePreview extends Component {
 				tabIndex="-1"
 				role="dialog"
 				aria-hidden="true"
-				onClick={this.props.closeModal}
 			>
 				<div className="modal-dialog" role="document">
 				<div className="modal-content">
