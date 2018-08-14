@@ -319,8 +319,6 @@ function checkAdmin(req, res, next) {
   });
 }
 
-// Check that a user is an admin.  You have to be an admin to do so, but you can
-// check on another user.
 router.route('/s/updateUserQualifiedState')
   .post(checkJwt, checkAdmin, function(req, res) {
     const auth0_id = req.body.auth0_id;
@@ -387,28 +385,15 @@ router.route('/s/users')
 
 router.route('/s/stats')
   .get(checkJwt, checkAdmin, function(req, res) {
-    db('voters')
-      .then(function(result) {
-        let availableCount = result.length;
-        let adoptedCount = result.filter(voter =>
-          voter.adopted_at && !voter.confirmed_prepped_at && !voter.confirmed_sent_at).length;
-        let preppedCount = result.filter(voter =>
-          voter.adopted_at && voter.confirmed_prepped_at && !voter.confirmed_sent_at).length;
-        let sentCount = result.filter(voter =>
-          voter.adopted_at && voter.confirmed_prepped_at && voter.confirmed_sent_at).length;
-        let totalCount = result.filter(voter =>
-          voter.adopted_at).length;
-        let counts = {
-          available: availableCount,
-          adopted: adoptedCount,
-          prepped: preppedCount,
-          sent: sentCount,
-          total: totalCount
-        };
-        res.json(counts)
-      })
-      .catch(err => {console.error(err);})
-  });
+    voterService.getVoterSummaryByState(function(error, summary) {
+      if (error) {
+        console.error(error);
+        res.status(500);
+        return;
+      }
+      res.json(summary);
+    });
+  })
 
 //Use router configuration at /api
 app.use('/api', router);

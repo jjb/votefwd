@@ -6,8 +6,21 @@ import React, { Component } from 'react';
 export class UserProfilePreview extends Component {
 	constructor(props) {
 		super(props);
-		console.log(props.user);
+		this.escModal = this.escModal.bind(this);
 	}
+
+	escModal(event) {
+	  if (event.keyCode === 27) {
+      this.props.closeModal();
+    }
+  }
+
+  componentDidMount(){
+    document.addEventListener("keydown", this.escModal, false);
+  }
+  componentWillUnmount(){
+    document.removeEventListener("keydown", this.escModal, false);
+  }
 
 	render() {
 		let emailUrl = "mailto:" + this.props.user.email;
@@ -21,7 +34,6 @@ export class UserProfilePreview extends Component {
 				tabIndex="-1"
 				role="dialog"
 				aria-hidden="true"
-				onClick={this.props.closeModal}
 			>
 				<div className="modal-dialog" role="document">
 				<div className="modal-content">
@@ -55,7 +67,7 @@ export class UserProfilePreview extends Component {
 									<tr>
 										<td width="40%">Twitter profile</td>
 										<td>
-											<a href={twitterUrl}>
+											<a href={twitterUrl} target="_blank">
 												@{this.props.user.twitter_profile_url}
 											</a>
 										</td>
@@ -66,7 +78,7 @@ export class UserProfilePreview extends Component {
 									<tr>
 										<td width="30%">Facebook profile</td>
 										<td>
-											<a href={facebookUrl}>
+											<a href={facebookUrl} target="_blank">
 												facebook.com/{this.props.user.facebook_profile_url}
 											</a>
 										</td>
@@ -77,7 +89,7 @@ export class UserProfilePreview extends Component {
 									<tr>
 										<td width="30%">LinkedIn profile</td>
 										<td>
-											<a href={linkedinUrl}>
+											<a href={linkedinUrl} target="_blank">
 												linkedin.com/in/{this.props.user.linkedin_profile_url}
 											</a>
 										</td>

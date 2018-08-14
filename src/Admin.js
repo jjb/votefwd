@@ -8,61 +8,6 @@ import moment from 'moment';
 import { Header } from './Header';
 import { UserProfilePreview } from './admin/UserProfilePreview';
 
-
-class Overview extends Component {
-  constructor(props) {
-    super(props)
-
-    this.state = { available: '', adopted: '', prepped: '', sent: '', total: '' };
-    this.getStats = this.getStats.bind(this);
-  }
-
-  getStats() {
-    axios({
-      method: 'GET',
-      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
-      url: `${process.env.REACT_APP_API_URL}/s/stats`
-    })
-    .then(res => {
-      this.setState(res.data);
-    })
-    .catch(err => {
-      console.error(err);
-    });
-  }
-
-  componentWillMount() {
-    this.getStats();
-  }
-
-  render() {
-    return(
-      <div className="w-25 mx-auto mt-3">
-        <table className="table table-condensed table-bordered text-center">
-          <thead className="thead-light">
-            <tr>
-              <th style={{width: '20%'}} scope="col">Available</th>
-              <th style={{width: '20%'}} scope="col">Adopted</th>
-              <th style={{width: '20%'}} scope="col">Prepped</th>
-              <th style={{width: '20%'}} scope="col">Sent</th>
-              <th style={{width: '20%'}} scope="col">Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>{this.state.available}</td>
-              <td>{this.state.adopted}</td>
-              <td>{this.state.prepped}</td>
-              <td>{this.state.sent}</td>
-              <td>{this.state.total}</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    );
-  }
-}
-
 class UserTable extends Component {
   constructor(props) {
     super(props)
@@ -198,18 +143,28 @@ class UserTable extends Component {
           .some(name => name.startsWith(filter.value.toLowerCase()));
       }
     }, {
-      id: 'd',
-      Header: 'Profile',
-      Cell: this.renderNameAndProfile,
+      Header: 'Email',
+      accessor: 'email',
+      filterable: true,
+      filterMethod: (filter, row) => {
+        return (row.email || '').startsWith(filter.value);
+      }
     }, {
-      id: 'd',
+      id: 's',
       Header: 'Signup date',
-      accessor: d => {
-        return moment(d.created_at)
+      accessor: s => {
+        return moment(s.created_at)
         .local()
-        .format("MMMM DD, hh:mm a")
-      },
-      maxWidth: 150,
+        .format("MM/DD, hh:mm a")
+      }
+    }, {
+      id: 'u',
+      Header: 'Updated',
+      accessor: u => {
+        return moment(u.updated_at)
+        .local()
+        .format("MM/DD, hh:mm a")
+      }
     }, {
       Header: 'Adopted',
       accessor: 'stats.adopted',
@@ -223,20 +178,9 @@ class UserTable extends Component {
       Header: 'Total',
       accessor: 'stats.total',
     }, {
-      accessor: 'num_adopted',
-      maxWidth: 100,
-    }, {
-      Header: 'Prepped',
-      accessor: 'num_prepped',
-      maxWidth: 100,
-    }, {
-      Header: 'Sent',
-      accessor: 'num_sent',
-      maxWidth: 100,
-    }, {
-      Header: 'Total',
-      accessor: 'total',
-      maxWidth: 100,
+      id: 'd',
+      Header: 'Profile',
+      Cell: this.renderNameAndProfile,
     }, {
       id: 'a',
       Header: 'Admin?',
@@ -316,7 +260,6 @@ class Admin extends Component {
     return (
       <div className="position-relative">
         <Header auth={this.props.auth}/>
-        <Overview />
         <UserTable />
       </div>
     );
