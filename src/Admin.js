@@ -198,18 +198,28 @@ class UserTable extends Component {
           .some(name => name.startsWith(filter.value.toLowerCase()));
       }
     }, {
-      id: 'd',
-      Header: 'Profile',
-      Cell: this.renderNameAndProfile,
+      Header: 'Email',
+      accessor: 'email',
+      filterable: true,
+      filterMethod: (filter, row) => {
+        return (row.email || '').startsWith(filter.value);
+      }
     }, {
-      id: 'd',
+      id: 's',
       Header: 'Signup date',
-      accessor: d => {
-        return moment(d.created_at)
+      accessor: s => {
+        return moment(s.created_at)
         .local()
-        .format("MMMM DD, hh:mm a")
-      },
-      maxWidth: 150,
+        .format("MM/DD, hh:mm a")
+      }
+    }, {
+      id: 'u',
+      Header: 'Updated',
+      accessor: u => {
+        return moment(u.updated_at)
+        .local()
+        .format("MM/DD, hh:mm a")
+      }
     }, {
       Header: 'Adopted',
       accessor: 'stats.adopted',
@@ -223,20 +233,9 @@ class UserTable extends Component {
       Header: 'Total',
       accessor: 'stats.total',
     }, {
-      accessor: 'num_adopted',
-      maxWidth: 100,
-    }, {
-      Header: 'Prepped',
-      accessor: 'num_prepped',
-      maxWidth: 100,
-    }, {
-      Header: 'Sent',
-      accessor: 'num_sent',
-      maxWidth: 100,
-    }, {
-      Header: 'Total',
-      accessor: 'total',
-      maxWidth: 100,
+      id: 'd',
+      Header: 'Profile',
+      Cell: this.renderNameAndProfile,
     }, {
       id: 'a',
       Header: 'Admin?',
