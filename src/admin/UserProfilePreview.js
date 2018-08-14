@@ -55,7 +55,7 @@ export class UserProfilePreview extends Component {
 									<tr>
 										<td width="40%">Twitter profile</td>
 										<td>
-											<a href={twitterUrl}>
+											<a href={twitterUrl} target="_blank">
 												@{this.props.user.twitter_profile_url}
 											</a>
 										</td>
@@ -66,7 +66,7 @@ export class UserProfilePreview extends Component {
 									<tr>
 										<td width="30%">Facebook profile</td>
 										<td>
-											<a href={facebookUrl}>
+											<a href={facebookUrl} target="_blank">
 												facebook.com/{this.props.user.facebook_profile_url}
 											</a>
 										</td>
@@ -77,7 +77,7 @@ export class UserProfilePreview extends Component {
 									<tr>
 										<td width="30%">LinkedIn profile</td>
 										<td>
-											<a href={linkedinUrl}>
+											<a href={linkedinUrl} target="_blank">
 												linkedin.com/in/{this.props.user.linkedin_profile_url}
 											</a>
 										</td>
