@@ -2,10 +2,10 @@ DO $$
 
 DECLARE
   -- SET THIS BY INSPECTING THE EXPERIMENTS TABLE --
-  experimentid integer := 1;
+  experimentid integer := 2;
 
   populationtotal integer;
-  votercount integer := 500;
+  votercount integer := 3000;
   timestamp timestamp := now();
 
 BEGIN
