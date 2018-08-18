@@ -9,7 +9,8 @@ export class AdoptVoter extends Component {
     super(props);
 
     this.adoptVoter = this.adoptVoter.bind(this);
-    this.state = { adopting: false };
+    this.lookupDistrict= this.lookupDistrict.bind(this);
+    this.state = { adopting: false, district: ''};
   }
 
   adoptVoter(numVoters) {
@@ -31,6 +32,27 @@ export class AdoptVoter extends Component {
       .catch(err => {
         console.error(err);
     })
+  }
+
+  lookupDistrict(districtid) {
+    axios({
+      method: 'GET',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
+      url: `${process.env.REACT_APP_API_URL}/lookup-district`,
+      params: {district_id: districtid.toString()}
+      })
+      .then(res => {
+        this.setState({ district: res.data[0]});
+      })
+      .catch(err => {
+        console.error(err);
+    })
+  }
+
+  componentWillReceiveProps() {
+    if (this.props.district) {
+      this.lookupDistrict(this.props.district);
+    }
   }
 
   render() {
@@ -66,6 +88,7 @@ export class AdoptVoter extends Component {
         </button>
       )
     }
+
     return (
       <div className="container-fluid p-0">
         <div className="row no-gutters position-relative">
@@ -74,11 +97,9 @@ export class AdoptVoter extends Component {
           <div className="col-lg-6 order-lg-2 dashboard--call-to-action px-3 py-4" />
           <div className="col-lg-6 order-lg-1 showcase-text bg-light p-5">
             <div className="p-2 p-5-m">
-              <h1>Send Letters to Georgia Voters</h1>
+              <h1>Help Flip {this.props.district} Blue</h1>
               <p className="u-highlight mb-3">
-                Mid-term election for U.S. House of Representatives
-                <br />Georgia's 6th District, Tuesday, November 6, 2018
-                <br />Target: unlikely voters; very likely to choose the Democrat if they turn out
+                {this.state.district.description}
               </p>
               <p className="mb-3">
                 <span className="small">Return address:</span>

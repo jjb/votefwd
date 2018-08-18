@@ -328,6 +328,23 @@ router.route('/lookup-zip')
   });
 
 /**
+ * Look up a district.
+ */
+router.route('/lookup-district')
+  .get(checkJwt, function(req, res) {
+    db('districts')
+      .where({ district_id: req.query.district_id })
+      .then(function(result) {
+        if (result.length === 0) {
+          res.json(false);
+        } else {
+          res.json(result);
+        }
+      })
+      .catch(err => {console.error(err);})
+  });
+
+/**
  * Check that the logged in user is an admin.
  */
 function checkAdmin(req, res, next) {

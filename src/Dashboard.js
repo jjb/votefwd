@@ -205,8 +205,9 @@ class Dashboard extends Component {
       { this.props.auth.isAuthenticated() ? (
         <div>
           <AdoptVoter
-             handleAdoptedVoter={this.handleAdoptedVoter}
-             enoughVoters={this.state.enoughVoters}
+              district={this.state.user.current_district}
+              handleAdoptedVoter={this.handleAdoptedVoter}
+              enoughVoters={this.state.enoughVoters}
             />
           <div className="container-fluid py-5">
             <VoterList
