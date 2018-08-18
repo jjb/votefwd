@@ -250,6 +250,11 @@ router.route('/user')
       .then(res.status(201).send('Stored ZIP code.'))
       .catch(err=> {console.error('ERROR: ', err)})
     }
+    if (req.body.district) {
+      query.update('current_district', req.body.district)
+      .then(res.status(201).send('Stored current district.'))
+      .catch(err=> {console.error('ERROR: ', err)})
+    }
     if (req.body.accepted_code_at) {
       query.update('accepted_code_at', db.fn.now())
       .then(query.update('accepted_terms_at', db.fn.now()))
@@ -289,6 +294,35 @@ router.route('/enough-voters')
           res.json(false);
         }
         else res.json(true);
+      })
+      .catch(err => {console.error(err);})
+  });
+
+/**
+ * Look up a ZIP code.
+ */
+router.route('/lookup-zip')
+  .get(checkJwt, function(req, res) {
+    db('lu_zip')
+      .where({ zip: req.query.zip })
+      .then(function(result) {
+        if (result.length === 0) {
+          res.json(false);
+        } else {
+          const ziplat = result[0].lat;
+          const ziplong = result[0].long;
+          const distanceString = `point(${ziplat}, ${ziplong}) <-> point(districts.coordinates) as distance`;
+          let nearestDistrict;
+          db('districts')
+            .select('district_id', db.raw(distanceString))
+            .orderBy('distance', 'asc')
+            .limit(1)
+          .then(function(result) {
+            nearestDistrict = result[0].district_id;
+            res.json(nearestDistrict);
+          })
+          .catch(err => {console.error(err);});
+        }
       })
       .catch(err => {console.error(err);})
   });

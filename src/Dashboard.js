@@ -18,7 +18,6 @@ class Dashboard extends Component {
     this.handleConfirmPrepped = this.handleConfirmPrepped.bind(this);
     this.handleUndoConfirmPrepped = this.handleUndoConfirmPrepped.bind(this);
     this.handleUndoConfirmSent = this.handleUndoConfirmSent.bind(this);
-    this.updateUser = this.updateUser.bind(this);
     this.state = { voters: [], user: {}, isQualified: false, enoughVoters: '' }
   }
 
@@ -174,25 +173,6 @@ class Dashboard extends Component {
       .catch(err => {
         console.error(err);
     })
-  }
-
-  // TODO: Can remove this once confirmed that its all in Verify.js
-  updateUser(key, value) {
-    let data = {}
-    data['auth0_id'] = localStorage.getItem('user_id');
-    data[key] = value;
-    axios({
-      method: 'POST',
-      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
-      url: `${process.env.REACT_APP_API_URL}/user`,
-      data: data
-    })
-    .then(
-      this.setState({ user: {...this.state.user, [key]: value}})
-    )
-    .catch(err => {
-      console.error(err);
-    });
   }
 
   checkEnoughVoters() {

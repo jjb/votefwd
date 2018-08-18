@@ -12,12 +12,14 @@ export class Qualify extends Component {
     this.state = {
       nameFormVal: '',
       zipFormVal: '',
+      zipDetails: '',
       gRecaptchaResponse: '',
       facebookProfileVal: '',
       twitterProfileVal: '',
       linkedInProfileVal: '',
       reasonVal: '',
       reasonError: false,
+      zipError: false
     }
 
     this.handleNameChange = this.handleNameChange.bind(this);
@@ -25,6 +27,7 @@ export class Qualify extends Component {
 
     this.handleZipChange = this.handleZipChange.bind(this);
     this.handleZipSubmit = this.handleZipSubmit.bind(this);
+    this.checkZip = this.checkZip.bind(this);
 
     this.handleReasonChange = this.handleReasonChange.bind(this);
 
@@ -61,12 +64,36 @@ export class Qualify extends Component {
     event.preventDefault();
   }
 
+  checkZip(zip, callback) {
+    axios({
+      method: 'GET',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
+      url: `${process.env.REACT_APP_API_URL}/lookup-zip`,
+      params: {
+        zip: zip
+      }
+    })
+    .then(res => {
+      if (res.data === false) {
+        this.setState({ zipError: true });
+      }
+      else {
+        this.setState({ zipError: false });
+        this.props.updateUser('zip', zip);
+        this.props.updateUser('district', res.data);
+      }
+    })
+    .catch(err => {
+      console.error(err);
+    })
+  }
+
   handleZipChange(event) {
     this.setState({ zipFormVal: event.target.value });
   }
 
   handleZipSubmit(event) {
-    this.props.updateUser('zip', this.state.zipFormVal);
+    this.checkZip(this.state.zipFormVal);
     event.preventDefault();
   }
 
@@ -174,13 +201,19 @@ export class Qualify extends Component {
           <h4 className="mb-3">What's your ZIP code?</h4>
           <div className="input-group mb-3">
             <input type="text"
+              id="zipInput"
               className="form-control form-control-lg"
-              placeholder="00000"
+              placeholder="12345"
               value={this.state.ZipFormVal}
               onChange={this.handleZipChange} />
             <button className="btn btn-primary" type="submit">Submit</button>
           </div>
         </div>
+        {this.state.zipError &&
+          <div className="alert alert-danger alert-sm mt-3 mb-3 mr-3 ml-3 center" role="alert">
+            We don‘t recognize that ZIP. Please enter a valid US ZIP code.
+          </div>
+        }
         <ProgressIndicator current={4} max={7}></ProgressIndicator>
       </form>
     );
@@ -291,7 +324,9 @@ export class Qualify extends Component {
       <div className="p-4">
         <h2>Thanks for signing up!</h2>
         <p>
-          We‘ll send you an email soon with details on how to get started writing letters.
+          We‘ll send you an email soon with details on how to get started writing letters to infrequent voters in {this.state.district}.
+        </p>
+        <p>We automatically selected this one for you because it’s geographically closest to your ZIP code. You’ll be able to choose a different one at any time.
         </p>
         <p>
           And seriously, thank you. We‘re counting on folks like you to help turn the tide in November and we’re grateful for your help.
