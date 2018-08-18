@@ -35,7 +35,7 @@ function getUsersAdoptedVoters(userId, callback) {
     });
 }
 
-function adoptRandomVoter(adopterId, numVoters, callback) {
+function adoptRandomVoter(adopterId, numVoters, districtId, callback) {
   if (allowedVoterBulkCount.includes(numVoters) !== true){
     //user requested a weird number of voters, deny!
     console.error("invalid number of voters requested %s", numVoters);
@@ -54,14 +54,15 @@ function adoptRandomVoter(adopterId, numVoters, callback) {
     }
 
     let numToAdopt = Math.min(numVoters, numCanAdopt);
-    _adoptSomeVoters(adopterId, numToAdopt, callback);
+    _adoptSomeVoters(adopterId, numToAdopt, districtId, callback);
   });
 }
 
-function _adoptSomeVoters(adopterId, numVoters, callback) {
+function _adoptSomeVoters(adopterId, numVoters, districtId, callback) {
   db('voters')
     .count()
     .where('adopter_user_id', null)
+    .where('district_id', districtId)
     .then(function(results) {
       let availableVoterCount = results[0].count;
       if (availableVoterCount < numVoters) {
@@ -72,6 +73,7 @@ function _adoptSomeVoters(adopterId, numVoters, callback) {
 
       db('voters')
         .where('adopter_user_id', null)
+        .where('district_id', districtId)
         .orderByRaw(adoptionOrder)
         .limit(numVoters)
         .then(function(voters) {
@@ -98,7 +100,7 @@ function _adoptSomeVoters(adopterId, numVoters, callback) {
               }
             })
             .then(function() {
-              slackService.publishToSlack('A user adopted ' + numVoters + ' voters.');
+              slackService.publishToSlack('The user whose auth0id ends in ' + adopterId.substr(adopterId.length - 5) + ' adopted ' + numVoters + ' voters in ' + districtId + '.')
             })
             .catch(err => {
               console.error(err);

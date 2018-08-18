@@ -13,7 +13,7 @@ export class AdoptVoter extends Component {
     this.state = { adopting: false, district: ''};
   }
 
-  adoptVoter(numVoters) {
+  adoptVoter(numVoters, district_id) {
     this.setState({adopting: true});
     let user_id = localStorage.getItem('user_id');
     axios({
@@ -22,7 +22,8 @@ export class AdoptVoter extends Component {
       url: `${process.env.REACT_APP_API_URL}/voter/adopt-random`,
       data: {
           adopterId: user_id,
-          numVoters: numVoters
+          numVoters: numVoters,
+          districtId: district_id
         }
       })
       .then(res => {
@@ -82,7 +83,7 @@ export class AdoptVoter extends Component {
       content = (
         <button
           disabled={this.state.adopting ? true : false}
-          onClick={() => this.adoptVoter(5)}
+          onClick={() => this.adoptVoter(5, this.state.district.district_id)}
           className="btn btn-primary btn-lg w-100">
             Adopt <span className="reset-num">5</span> Voters
         </button>
