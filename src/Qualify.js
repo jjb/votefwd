@@ -12,7 +12,6 @@ export class Qualify extends Component {
     this.state = {
       nameFormVal: '',
       zipFormVal: '',
-      zipDetails: '',
       gRecaptchaResponse: '',
       facebookProfileVal: '',
       twitterProfileVal: '',
@@ -64,7 +63,7 @@ export class Qualify extends Component {
     event.preventDefault();
   }
 
-  checkZip(zip, callback) {
+  checkZip(zip) {
     axios({
       method: 'GET',
       headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
@@ -324,14 +323,12 @@ export class Qualify extends Component {
       <div className="p-4">
         <h2>Thanks for signing up!</h2>
         <p>
-          We‘ll send you an email soon with details on how to get started writing letters to infrequent voters in {this.state.district}.
-        </p>
-        <p>We automatically selected this one for you because it’s geographically closest to your ZIP code. You’ll be able to choose a different one at any time.
-        </p>
+          We‘ll send you an email soon with details on how to get started writing letters to infrequent voters in {this.props.user.current_district}.*         </p>
         <p>
-          And seriously, thank you. We‘re counting on folks like you to help turn the tide in November and we’re grateful for your help.
+          And seriously, <strong>thank you</strong>. We’re counting on folks like you to help turn the tide in November and we’re grateful for your help.
         </p>
         <p><strong>- Scott and the Vote Forward Team</strong></p>
+        <p>* {this.props.user.current_district} is our closest target district to your ZIP code. You can change this later if you’d prefer to write letters to voters in a different district.</p>
         <div className="text-center p-4">
           <img src="/images/bg-masthead.png" className="w-50" alt=""/>
         </div>
