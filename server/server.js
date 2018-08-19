@@ -436,7 +436,7 @@ router.route('/s/users')
 
 router.route('/s/stats')
   .get(checkJwt, checkAdmin, function(req, res) {
-    voterService.getVoterSummaryByState(function(error, summary) {
+    voterService.getVoterSummaryByDistrict(function(error, summary) {
       if (error) {
         console.error(error);
         res.status(500);

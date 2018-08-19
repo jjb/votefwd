@@ -250,10 +250,10 @@ function makePledge(code, callback) {
   });
 }
 
-function getVoterSummaryByState(callback) {
+function getVoterSummaryByDistrict(callback) {
   db('voters')
     .select(
-      'state',
+      'district_id',
       db.raw('sum(available) as available'),
       db.raw('sum(adopted) as adopted'),
       db.raw('sum(prepped) as prepped'),
@@ -261,7 +261,7 @@ function getVoterSummaryByState(callback) {
     )
     .from(function() {
       this.select(
-        'state',
+        'district_id',
         db.raw(`
           case when adopted_at is null
                 and confirmed_prepped_at is null
@@ -292,7 +292,7 @@ function getVoterSummaryByState(callback) {
         .from('voters')
         .as('stats')
     })
-    .groupBy('state')
+    .groupBy('district_id')
     .then(function(results) {
       results = results.map(r => {
         r.available = parseInt(r.available);
@@ -401,6 +401,6 @@ module.exports = {
   undoConfirmPrepped,
   makePledge,
   getAdoptedVoterSummary,
-  getVoterSummaryByState,
+  getVoterSummaryByDistrict,
   _prepForTests
 }
