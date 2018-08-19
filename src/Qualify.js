@@ -79,7 +79,7 @@ export class Qualify extends Component {
       else {
         this.setState({ zipError: false });
         this.props.updateUser('zip', zip);
-        this.props.updateUser('district', res.data);
+        this.props.updateUser('current_district', res.data);
       }
     })
     .catch(err => {
@@ -319,16 +319,18 @@ export class Qualify extends Component {
       </div>
     );
 
+    let district = this.props.user.current_district;
     let thankYou = (
       <div className="p-4">
         <h2>Thanks for signing up!</h2>
         <p>
-          We‘ll send you an email soon with details on how to get started writing letters to infrequent voters in {this.props.user.current_district}.*         </p>
+          We‘ll send you an email soon with details on how to get started writing letters to infrequent voters in {district}.*
+        </p>
         <p>
           And seriously, <strong>thank you</strong>. We’re counting on folks like you to help turn the tide in November and we’re grateful for your help.
         </p>
         <p><strong>- Scott and the Vote Forward Team</strong></p>
-        <p>* {this.props.user.current_district} is our closest target district to your ZIP code. You can change this later if you’d prefer to write letters to voters in a different district.</p>
+        <p>* {district} is our closest target district to your ZIP code. You can change this later if you’d prefer to write letters to voters in a different district.</p>
         <div className="text-center p-4">
           <img src="/images/bg-masthead.png" className="w-50" alt=""/>
         </div>
