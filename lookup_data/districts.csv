@@ -1,9 +1,9 @@
-district_id,state,state_abbr,district_num,description,lat ,long, coordinates
-AZ02,Arizona,AZ,02,Description of AZ's congressional district 02.,32.61,-110.48,"32.61,-110.48"
-TX23,Texas,TX,23,Description of TX's congressional district 23.,31.4,-103.52,"31.4,-103.52"
-MN02,Minnesota,MN,02,Description of MN's congressional district 02.,44.74,-93.1,"44.74,-93.1"
-FL27,Florida,FL,27,Description of FL's congressional district 27.,25.69,-80.27,"25.69,-80.27"
-CA10,California,CA,10,Description of CA's congressional district 10.,37.65,-121.02,"37.65,-121.02"
-PA10,Pennsylvania,PA,10,Description of PA's congressional district 10.,40.28,-76.91,"40.28,-76.91"
-OH12,Ohio,OH,12,Description of OH's congressional district 12.,40.12,-82.94,"40.12,-82.94"
-GA06,Georgia,GA,06,Description of GA's congressional district 06.,34.04,-84.37,"34.04,-84.37"
+district_id,state,state_abbr,district_num,description,lat ,long, coordinates,return_address,ra_city,ra_state,ra_zip
+AZ02,Arizona,AZ,02,Hillary Clinton beat Donald Trump in AZ-02 by 4.9%.,32.61,-110.48,"32.61,-110.48",,,,
+TX23,Texas,TX,23,Description of TX's congressional district 23.,31.4,-103.52,"31.4,-103.52",,,,
+MN02,Minnesota,MN,02,Description of MN's congressional district 02.,44.74,-93.1,"44.74,-93.1",,,,
+FL27,Florida,FL,27,Description of FL's congressional district 27.,25.69,-80.27,"25.69,-80.27",,,,
+CA10,California,CA,10,Description of CA's congressional district 10.,37.65,-121.02,"37.65,-121.02",,,,
+PA10,Pennsylvania,PA,10,Description of PA's congressional district 10.,40.28,-76.91,"40.28,-76.91",,,,
+OH12,Ohio,OH,12,Description of OH's congressional district 12.,40.12,-82.94,"40.12,-82.94",829 Bethel Road #137,Columbus,OH,43214
+GA06,Georgia,GA,06,Description of GA's congressional district 06.,34.04,-84.37,"34.04,-84.37",2870 Peachtree Road #172,Atlanta,GA,30305

@@ -3,14 +3,14 @@ DO $$
 DECLARE
   experimentid integer;
   populationtotal integer;
-  votercount integer := 2000;
+  votercount integer := 100;
 
 BEGIN
 
   -- DESCRIBE THE EXPERIMENT
 
   INSERT INTO experiment VALUES
-    (DEFAULT, 'GA06', 'Midterm; propensity 5-50, Dem likelihood 85-100.')
+    (DEFAULT, 'GA06-2', 'Midterm; propensity 5-45, Dem likelihood 90-100.')
     RETURNING id INTO experimentid;
 
   RAISE NOTICE 'Registered experiment as id: %', experimentid;
@@ -39,7 +39,6 @@ BEGIN
     SELECT voter_id FROM experiment_voter
     WHERE experiment_id = experimentid
     AND cohort is null
-    ORDER BY RANDOM()
   );
 
   -- GRAB SOME VOTERS AT RANDOM AND UPDATE THEIR DESIGNATIONS
@@ -69,7 +68,8 @@ BEGIN
       state,
       zip,
       age,
-      gender
+      gender,
+      district_id
     )
   SELECT dwid,
     first_name,
@@ -81,7 +81,8 @@ BEGIN
     mail_address_state,
     mail_address_zip,
     age::text::int,
-    gender
+    gender,
+    'GA06'
   FROM catalist_raw
   JOIN experiment_voter
   ON experiment_voter.voter_id = catalist_raw.dwid
