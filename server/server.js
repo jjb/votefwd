@@ -250,8 +250,8 @@ router.route('/user')
       .then(res.status(201).send('Stored ZIP code.'))
       .catch(err=> {console.error('ERROR: ', err)})
     }
-    if (req.body.district) {
-      query.update('current_district', req.body.district)
+    if (req.body.current_district) {
+      query.update('current_district', req.body.current_district)
       .then(res.status(201).send('Stored current district.'))
       .catch(err=> {console.error('ERROR: ', err)})
     }
