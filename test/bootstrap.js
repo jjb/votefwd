@@ -72,41 +72,50 @@ before('Adding voter data to the database', function() {
   var full = context.users.full;
   return db('voters')
     .insert([{
-      hashid: 'test-hash-id-0'
+      hashid: 'test-hash-id-0',
+      district_id: 'GA06'
     }, {
       hashid: 'test-hash-id-1',
       adopter_user_id: user.auth0_id,
-      adopted_at: db.fn.now()
+      adopted_at: db.fn.now(),
+      district_id: 'GA06'
     }, {
       hashid: 'test-hash-id-2',
       adopter_user_id: user.auth0_id,
-      adopted_at: db.fn.now()
+      adopted_at: db.fn.now(),
+      district_id: 'GA06'
     }, {
-      hashid: 'test-hash-id-3'
+      hashid: 'test-hash-id-3',
+      district_id: 'GA06'
     }, {
       hashid: 'test-hash-id-4',
       adopter_user_id: full.auth0_id,
-      adopted_at: db.fn.now()
+      adopted_at: db.fn.now(),
+      district_id: 'GA06'
     }, {
       hashid: 'test-hash-id-5',
       adopter_user_id: full.auth0_id,
       adopted_at: db.fn.now(),
-      confirmed_prepped_at: db.fn.now()
+      confirmed_prepped_at: db.fn.now(),
+      district_id: 'GA06'
     }, {
       hashid: 'test-hash-id-6',
       adopter_user_id: full.auth0_id,
       adopted_at: db.fn.now(),
-      confirmed_prepped_at: db.fn.now()
+      confirmed_prepped_at: db.fn.now(),
+      district_id: 'GA06'
     }, {
       hashid: 'test-hash-id-7',
       adopter_user_id: full.auth0_id,
       adopted_at: db.fn.now(),
       confirmed_prepped_at: db.fn.now(),
-      confirmed_sent_at: db.fn.now()
+      confirmed_sent_at: db.fn.now(),
+      district_id: 'GA06'
     }, {
       hashid: 'test-hash-id-8',
       adopter_user_id: full.auth0_id,
-      adopted_at: db.fn.now()
+      adopted_at: db.fn.now(),
+      district_id: 'GA06'
     }])
     .returning('*')
     .tap(function(result) {
