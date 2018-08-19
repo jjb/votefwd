@@ -110,32 +110,59 @@ function generateCoverPageHtmlForVoters(voters) {
   return html;
 }
 
-function generateHtmlForVoter(voter) {
-  // takes a voter and makes a html template for them to be made into a pdf
-  var voterId = voter.id;
-  var datestamp = dateStamp();
-  var hashId = hashids.encode(voterId);
-  var pledgeUrl = `${process.env.REACT_APP_URL}/pledge`;
-  var template = fs.readFileSync('./templates/letter.html', 'utf8');
-  var uncompiledTemplate = Handlebars.compile(template);
-  var salutation;
-  if (voter.gender === 'M') {
-    salutation = "Mr."
-  } else if (voter.gender === 'F') {
-    salutation = "Ms."
-  } else { salutation = null };
-  var fullName = [salutation, voter.first_name, voter.middle_name, voter.last_name, voter.suffix].filter(Boolean).join(" ");
-  var fullAddress = voter.address + ', ' + voter.city + ', ' + voter.state + ' ' + voter.zip;
-  var context = {
-    voterId: voterId,
-    voterName: fullName,
-    voterAddress: fullAddress,
-    datestamp: datestamp,
-    hashId: hashId,
-    pledgeUrl: pledgeUrl
-    };
-  var html = uncompiledTemplate(context);
-  return html;
+// gets return address for voter's district
+function getReturnAddressForVoter(voter, callback) {
+  var returnAddress;
+  db('voters')
+    .join('districts', 'voters.district_id', '=', 'districts.district_id')
+    .select(
+      'districts.return_address',
+      'districts.ra_city',
+      'districts.ra_state',
+      'districts.ra_zip'
+    )
+    .where('voters.id', voter.id)
+    .limit(1)
+    .then(function(result) {
+      returnAddress=
+        result[0].return_address + ', ' +
+        result[0].ra_city + ', ' +
+        result[0].ra_state + ' ' +
+        result[0].ra_zip;
+      callback(returnAddress);
+    })
+    .catch(err=> {
+      console.error('ERROR: ', err);
+    });
+}
+
+function generateHtmlForVoter(voter, callback) {
+  getReturnAddressForVoter(voter, function(returnAddress) {
+    // takes a voter and makes a html template for them to be made into a pdf
+    var voterId = voter.id;
+    var hashId = hashids.encode(voterId);
+    var pledgeUrl = `${process.env.REACT_APP_URL}/pledge`;
+    var template = fs.readFileSync('./templates/letter.html', 'utf8');
+    var uncompiledTemplate = Handlebars.compile(template);
+    var salutation;
+    if (voter.gender === 'M' || voter.gender === 'male') {
+      salutation = "Mr."
+    } else if (voter.gender === 'F' || voter.gender === 'female') {
+      salutation = "Ms."
+    } else { salutation = null };
+    var fullName = [salutation, voter.first_name, voter.middle_name, voter.last_name, voter.suffix].filter(Boolean).join(" ");
+    var fullAddress = voter.address + ', ' + voter.city + ', ' + voter.state + ' ' + voter.zip;
+    var context = {
+      voterId: voterId,
+      voterName: fullName,
+      voterAddress: fullAddress,
+      returnAddress: returnAddress,
+      hashId: hashId,
+      pledgeUrl: pledgeUrl
+      };
+    var html = uncompiledTemplate(context);
+    callback(html);
+  });
 }
 
 function generatePdfFromBulkHtml(html, numvoters, callback) {
@@ -159,23 +186,23 @@ function generatePdfForVoter(voter, callback) {
   var uuid = uuidv4();
   var datestamp = dateStamp();
   var hashId = hashids.encode(voter.id);
-  var html = generateHtmlForVoter(voter)
-
-  var options = { format: 'Letter' };
-  const tmpdir = os.tmpdir();
-  const remotefileName = datestamp + '-' + uuid + '-letter.pdf'
-  const downloadFileName = datestamp + '-' + voter.last_name + '-VoteForward-letter.pdf';
-  const filePath = tmpdir + '/' + remotefileName;
-  pdf.create(html).toFile(filePath, function(err, response){
-    if(err) {
-      console.error('ERROR:', err);
-    }
-    var storageArgs = {
-      downloadFileName: downloadFileName,
-      remotefileName: remotefileName,
-      hashId: hashId
-    }
-    callback(response, voter, storageArgs);
+  var html = generateHtmlForVoter(voter, function(html) {
+    var options = { format: 'Letter' };
+    const tmpdir = os.tmpdir();
+    const remotefileName = datestamp + '-' + uuid + '-letter.pdf'
+    const downloadFileName = datestamp + '-' + voter.last_name + '-VoteForward-letter.pdf';
+    const filePath = tmpdir + '/' + remotefileName;
+    pdf.create(html).toFile(filePath, function(err, response){
+      if(err) {
+        console.error('ERROR:', err);
+      }
+      var storageArgs = {
+        downloadFileName: downloadFileName,
+        remotefileName: remotefileName,
+        hashId: hashId
+      }
+      callback(response, voter, storageArgs);
+    });
   });
 }
 
