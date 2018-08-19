@@ -10,4 +10,6 @@ SET
  twitter_profile_url = null,
  facebook_profile_url = null,
  linkedin_profile_url = null,
- why_write_letters = null
+ why_write_letters = null,
+ current_district = null
+
