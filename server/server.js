@@ -330,6 +330,18 @@ router.route('/lookup-zip')
 /**
  * Look up a district.
  */
+router.route('/get-districts')
+  .get(checkJwt, function(req, res) {
+    db('districts')
+      .then(function(result) {
+          res.json(result);
+        })
+      .catch(err => {console.error(err);})
+  });
+
+/**
+ * Look up a district.
+ */
 router.route('/lookup-district')
   .get(checkJwt, function(req, res) {
     db('districts')

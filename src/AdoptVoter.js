@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
+import { DistrictPicker } from './DistrictPicker';
 import loading from './loading.svg';
 
 export class AdoptVoter extends Component {
@@ -10,7 +11,8 @@ export class AdoptVoter extends Component {
 
     this.adoptVoter = this.adoptVoter.bind(this);
     this.lookupDistrict= this.lookupDistrict.bind(this);
-    this.state = { adopting: false, district: ''};
+    this.toggleDistrictPicker = this.toggleDistrictPicker.bind(this);
+    this.state = { adopting: false, district: '', pickingDistrict: false};
   }
 
   adoptVoter(numVoters, district_id) {
@@ -33,6 +35,11 @@ export class AdoptVoter extends Component {
       .catch(err => {
         console.error(err);
     })
+  }
+
+  toggleDistrictPicker() {
+    let districtPickerState = this.state.pickingDistrict
+    this.setState({pickingDistrict: !districtPickerState})
   }
 
   lookupDistrict(districtid) {
@@ -99,9 +106,14 @@ export class AdoptVoter extends Component {
           <div className="col-lg-6 order-lg-1 showcase-text bg-light p-5">
             <div className="p-2 p-5-m">
               <h1>Help Flip {this.props.district} Blue</h1>
+              <button onClick={this.toggleDistrictPicker}>
+                Change Districts
+              </button>
+              { this.state.pickingDistrict && <DistrictPicker/>}
               <p className="u-highlight mb-3">
                 {this.state.district.description}
               </p>
+              {this.state.pickingDistrict && <div>hi</div>}
               <p className="mb-3">
                 <span className="small">Return address:</span>
                 <br />Your first name & last initial
