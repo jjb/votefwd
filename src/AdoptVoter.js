@@ -89,29 +89,31 @@ export class AdoptVoter extends Component {
           <div className="col-lg-6 order-lg-2 dashboard--call-to-action px-3 py-4" />
           <div className="col-lg-6 order-lg-1 showcase-text bg-light p-5">
             <div className="p-2 p-5-m">
-              <h1>Help Flip {this.state.district.district_id} Blue</h1>
-              <button onClick={this.toggleDistrictPicker}>
-                Choose a Different District
-              </button>
-              { this.state.pickingDistrict &&
+              { this.state.pickingDistrict ? (
                 <DistrictPicker
                   updateDistrict={this.props.updateDistrict}
                 />
-              }
-              <p className="u-highlight mb-3">
-                {this.state.district.description}
-              </p>
-              {this.state.pickingDistrict && <div>hi</div>}
-              <p className="mb-3">
-                <span className="small">Return address:</span>
-                <br />Your first name & last initial
-                <br />2870 Peachtree Road, #172
-                <br />Atlanta, GA 30305
-              </p>
-              <p className="mt-4 mb-3 small">
-                Voters you adopt won‘t be assigned to anyone else, so by adopting them, you’re committing to send the letters.
-              </p>
-              {content}
+              ) : (
+              <React.Fragment>
+                <h1>Help Flip {this.state.district.district_id} Blue</h1>
+                <button onClick={this.toggleDistrictPicker}>
+                  Choose a Different District
+                </button>
+                <p className="u-highlight mb-3">
+                  {this.state.district.description}
+                </p>
+                <p className="mb-3">
+                  <span className="small">Return address:</span>
+                  <br />Your first name & last initial
+                  <br />{this.state.district.return_address}
+                  <br />Atlanta, GA 30305
+                </p>
+                <p className="mt-4 mb-3 small">
+                  Voters you adopt won‘t be assigned to anyone else, so by adopting them, you’re committing to send the letters.
+                </p>
+                {content}
+              </React.Fragment>
+              )}
             </div>
           </div>
         </div>
