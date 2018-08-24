@@ -92,26 +92,18 @@ export class AdoptVoter extends Component {
               { this.state.pickingDistrict ? (
                 <DistrictPicker
                   updateDistrict={this.props.updateDistrict}
+                  toggleDistrictPicker={this.toggleDistrictPicker}
                 />
               ) : (
               <React.Fragment>
-                <h1>Help Flip {this.state.district.district_id} Blue</h1>
-                <button onClick={this.toggleDistrictPicker}>
-                  Choose a Different District
+                <h1>You’re Helping Flip {this.state.district.district_id} Blue</h1>
+                <button
+                    className="btn btn-secondary mb-3"
+                    onClick={this.toggleDistrictPicker}>
+                  Switch District
                 </button>
                 <p className="u-highlight mb-3">
                   {this.state.district.description}
-                </p>
-                <p className="mb-3">
-                  <span className="small">Return address:</span>
-                  <br />Your first name & last initial
-                  <br />{this.state.district.return_address}
-                  <br />
-                    {this.state.district.ra_city},
-                    &nbsp;
-                    {this.state.district.ra_state}
-                    &nbsp;
-                    {this.state.district.ra_zip}
                 </p>
                 <p className="mt-4 mb-3 small">
                   Voters you adopt won‘t be assigned to anyone else, so by adopting them, you’re committing to send the letters.
