@@ -106,7 +106,12 @@ export class AdoptVoter extends Component {
                   <span className="small">Return address:</span>
                   <br />Your first name & last initial
                   <br />{this.state.district.return_address}
-                  <br />Atlanta, GA 30305
+                  <br />
+                    {this.state.district.ra_city},
+                    &nbsp;
+                    {this.state.district.ra_state}
+                    &nbsp;
+                    {this.state.district.ra_zip}
                 </p>
                 <p className="mt-4 mb-3 small">
                   Voters you adopt won‘t be assigned to anyone else, so by adopting them, you’re committing to send the letters.
