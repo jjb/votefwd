@@ -1,4 +1,4 @@
-// src/Dashboard.js
+//src/Dashboard.js
 
 import React, { Component } from 'react';
 import axios from 'axios';
@@ -18,36 +18,65 @@ class Dashboard extends Component {
     this.handleConfirmPrepped = this.handleConfirmPrepped.bind(this);
     this.handleUndoConfirmPrepped = this.handleUndoConfirmPrepped.bind(this);
     this.handleUndoConfirmSent = this.handleUndoConfirmSent.bind(this);
-    this.state = { voters: [], user: {}, isQualified: false, enoughVoters: '' }
+    this.getCurrentUser = this.getCurrentUser.bind(this);
+    this.getCurrentDistrict = this.getCurrentDistrict.bind(this);
+    this.updateDistrict = this.updateDistrict.bind(this);
+    this.isLoggedIn = this.isLoggedIn.bind(this);
+    this.state =
+      { voters: [],
+        user: {},
+        currentDistrict: {},
+        isQualified: false,
+        enoughVoters: ''
+      }
   }
 
-  // TODO: Probably abstract this out
-  getCurrentUser() {
-    let user_id = localStorage.getItem('user_id');
-    if (user_id) {
-      axios({
-        method: 'GET',
-        headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
-        url: `${process.env.REACT_APP_API_URL}/user`,
-        params: { auth0_id: user_id }
-        })
-        .then(res => {
-          let user = res.data[0];
-          this.setState({ user: res.data[0] })
-
-          // TODO: Return to here and find better way of abstracting qualification
-          if (!this.isQualified(user)) {
-            history.replace('/verify');
-          }
-        })
-        .catch(err => {
-          console.error(err)
-        });
+  isLoggedIn() {
+    if (localStorage.getItem('user_id')) {
       return true;
     }
     else {
       return false;
     }
+  }
+
+  // TODO: Probably abstract this out
+  getCurrentUser() {
+    axios({
+      method: 'GET',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
+      url: `${process.env.REACT_APP_API_URL}/user`,
+      params: { auth0_id: localStorage.getItem('user_id')}
+      })
+      .then(res => {
+        let user = res.data[0];
+        this.setState(
+          { user: user },
+          () => {this.getCurrentDistrict(this.state.user.current_district)}
+        )
+        // TODO: Return to here and find better way of abstracting qualification
+        if (!this.isQualified(user)) {
+          history.replace('/verify');
+        }
+      })
+      .catch(err => {
+        console.error(err)
+      });
+  }
+
+  getCurrentDistrict(districtId) {
+    axios({
+      method: 'GET',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
+      url: `${process.env.REACT_APP_API_URL}/lookup-district`,
+      params: {district_id: districtId }
+      })
+      .then(res => {
+        this.setState({ currentDistrict: res.data[0]});
+      })
+      .catch(err => {
+        console.error(err);
+    })
   }
 
   // TODO: abstract this out
@@ -57,6 +86,24 @@ class Dashboard extends Component {
     } else {
       return false;
     }
+  }
+
+  updateDistrict(newDistrictId) {
+    let data = {}
+    data['auth0_id'] = localStorage.getItem('user_id');
+    data['current_district'] = newDistrictId;
+    axios({
+      method: 'POST',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
+      url: `${process.env.REACT_APP_API_URL}/user`,
+      data: data
+    })
+    .then(() => {
+      this.getCurrentDistrict(newDistrictId);
+    })
+    .catch(err => {
+      console.error(err);
+    });
   }
 
   getAdoptedVoters() {
@@ -190,10 +237,10 @@ class Dashboard extends Component {
   }
 
   componentWillMount(){
-    this.getCurrentUser();
-    if (!this.getCurrentUser()) {
+    if (!this.isLoggedIn()) {
       history.replace('/');
     }
+    this.getCurrentUser();
     this.getAdoptedVoters();
     this.checkEnoughVoters();
   }
@@ -205,7 +252,8 @@ class Dashboard extends Component {
       { this.props.auth.isAuthenticated() ? (
         <div>
           <AdoptVoter
-              district={this.state.user.current_district}
+              currentDistrict={this.state.currentDistrict}
+              updateDistrict={this.updateDistrict}
               handleAdoptedVoter={this.handleAdoptedVoter}
               enoughVoters={this.state.enoughVoters}
             />

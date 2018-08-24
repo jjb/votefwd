@@ -10,9 +10,8 @@ export class AdoptVoter extends Component {
     super(props);
 
     this.adoptVoter = this.adoptVoter.bind(this);
-    this.lookupDistrict= this.lookupDistrict.bind(this);
     this.toggleDistrictPicker = this.toggleDistrictPicker.bind(this);
-    this.state = { adopting: false, district: '', pickingDistrict: false};
+    this.state = { adopting: false, district: {}, pickingDistrict: false};
   }
 
   adoptVoter(numVoters, district_id) {
@@ -42,24 +41,9 @@ export class AdoptVoter extends Component {
     this.setState({pickingDistrict: !districtPickerState})
   }
 
-  lookupDistrict(districtid) {
-    axios({
-      method: 'GET',
-      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
-      url: `${process.env.REACT_APP_API_URL}/lookup-district`,
-      params: {district_id: districtid.toString()}
-      })
-      .then(res => {
-        this.setState({ district: res.data[0]});
-      })
-      .catch(err => {
-        console.error(err);
-    })
-  }
-
-  componentWillReceiveProps() {
-    if (this.props.district) {
-      this.lookupDistrict(this.props.district);
+  componentWillReceiveProps(props) {
+    if (props.currentDistrict) {
+      this.setState({ district: props.currentDistrict });
     }
   }
 
@@ -105,11 +89,15 @@ export class AdoptVoter extends Component {
           <div className="col-lg-6 order-lg-2 dashboard--call-to-action px-3 py-4" />
           <div className="col-lg-6 order-lg-1 showcase-text bg-light p-5">
             <div className="p-2 p-5-m">
-              <h1>Help Flip {this.props.district} Blue</h1>
+              <h1>Help Flip {this.state.district.district_id} Blue</h1>
               <button onClick={this.toggleDistrictPicker}>
-                Change Districts
+                Choose a Different District
               </button>
-              { this.state.pickingDistrict && <DistrictPicker/>}
+              { this.state.pickingDistrict &&
+                <DistrictPicker
+                  updateDistrict={this.props.updateDistrict}
+                />
+              }
               <p className="u-highlight mb-3">
                 {this.state.district.description}
               </p>

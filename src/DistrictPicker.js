@@ -1,5 +1,5 @@
 // src/DistrictPicker.js
-//
+
 import React, { Component } from 'react';
 import axios from 'axios';
 
@@ -8,6 +8,7 @@ class DistrictItem extends Component {
     return (
       <li>
         {this.props.district.district_id}
+        <button onClick={this.props.updateDistrict.bind(this, this.props.district.district_id)}>Select</button>
       </li>
     )
   }
@@ -17,13 +18,8 @@ export class DistrictPicker extends Component {
   constructor(props) {
     super(props);
 
-    this.updateDistrict = this.updateDistrict.bind(this);
     this.getDistricts = this.getDistricts.bind(this);
     this.state = { districts: [] };
-  }
-
-  updateDistrict() {
-    console.log('hi');
   }
 
   getDistricts() {
@@ -55,6 +51,7 @@ export class DistrictPicker extends Component {
               <DistrictItem
                 key={district.id}
                 district={district}
+                updateDistrict={this.props.updateDistrict}
               />
             )}
           </p>
