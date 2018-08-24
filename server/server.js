@@ -328,10 +328,10 @@ router.route('/lookup-zip')
   });
 
 /**
- * Look up a district.
+ * Get all the districts Vote Forward is targeting.
  */
 router.route('/get-districts')
-  .get(checkJwt, function(req, res) {
+  .get(function(req, res) {
     db('districts')
       .then(function(result) {
           res.json(result);
