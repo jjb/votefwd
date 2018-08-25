@@ -109,6 +109,7 @@ function generateCoverPageHtmlForVoters(voters) {
   var template = fs.readFileSync('./templates/coverpage.html', 'utf8');
   var uncompiledTemplate = Handlebars.compile(template);
   var processedVoters = [];
+  var returnAddresses = [];
   voters.forEach(function(voter) {
     if (voter.gender == 'male') {
       voter.salutation = 'MR';
@@ -118,8 +119,15 @@ function generateCoverPageHtmlForVoters(voters) {
     }
     processedVoters.push(voter);
   });
+  voters.forEach(function(voter) {
+    var returnAddress = getReturnAddressForVoter(voter);
+    if (returnAddresses.indexOf(returnAddress) === -1) {
+      returnAddresses.push(returnAddress);
+    }
+  });
   var context = {
       voters: processedVoters,
+      returnAddresses: returnAddresses
     };
   var html = uncompiledTemplate(context);
   return html;

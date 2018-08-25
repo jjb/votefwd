@@ -26,8 +26,16 @@
             </g>
         </g>
     </svg>
-    <p>Thank you for writing letters to flip Congress blue!</p>
-    <p>{{voters.length}} voters in this bulk download:</p>
+    <p>Thank you for writing letters to help flip Congress blue!</p>
+    <p>Return address(es) for your letters to the voters in this file. These are also at the bottom of each letter for easy reference.</p>
+      <ul>
+        {{#each returnAddresses}}
+        <li>
+          Your first name and last initial, {{this}}
+        </li>
+        {{/each}}
+      </ul>
+    <p>Names and addresses of the {{voters.length}} voters in this file. These are also at the bottom of each letter for easy reference.</p>
     <ul>
       {{#each voters}}
       <li>
