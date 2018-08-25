@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import { DistrictPicker } from './DistrictPicker';
 import loading from './loading.svg';
 
 export class AdoptVoter extends Component {
@@ -10,8 +9,7 @@ export class AdoptVoter extends Component {
     super(props);
 
     this.adoptVoter = this.adoptVoter.bind(this);
-    this.toggleDistrictPicker = this.toggleDistrictPicker.bind(this);
-    this.state = { adopting: false, district: {}, pickingDistrict: false};
+    this.state = { adopting: false, district: {} };
   }
 
   adoptVoter(numVoters, district_id) {
@@ -36,13 +34,8 @@ export class AdoptVoter extends Component {
     })
   }
 
-  toggleDistrictPicker() {
-    let districtPickerState = this.state.pickingDistrict
-    this.setState({pickingDistrict: !districtPickerState})
-  }
-
   componentWillReceiveProps(props) {
-    if (props.currentDistrict) {
+    if (props.currentDistrict.district_id) {
       this.setState({ district: props.currentDistrict });
     }
   }
@@ -89,28 +82,14 @@ export class AdoptVoter extends Component {
           <div className="col-lg-6 order-lg-2 dashboard--call-to-action px-3 py-4" />
           <div className="col-lg-6 order-lg-1 showcase-text bg-light p-5">
             <div className="p-2 p-5-m">
-              { this.state.pickingDistrict ? (
-                <DistrictPicker
-                  updateDistrict={this.props.updateDistrict}
-                  toggleDistrictPicker={this.toggleDistrictPicker}
-                />
-              ) : (
-              <React.Fragment>
-                <h1>You’re Helping Flip {this.state.district.district_id} Blue</h1>
-                <button
-                    className="btn btn-secondary mb-3"
-                    onClick={this.toggleDistrictPicker}>
-                  Switch District
-                </button>
-                <p className="u-highlight mb-3">
-                  {this.state.district.description}
-                </p>
-                <p className="mt-4 mb-3 small">
-                  Voters you adopt won‘t be assigned to anyone else, so by adopting them, you’re committing to send the letters.
-                </p>
-                {content}
-              </React.Fragment>
-              )}
+              <h1>You’re Helping Flip {this.state.district.district_id} Blue</h1>
+              <p className="u-highlight mb-3">
+                {this.state.district.description}
+              </p>
+              <p className="mt-4 mb-3 small">
+                Voters you adopt won‘t be assigned to anyone else, so by adopting them, you’re committing to send the letters.
+              </p>
+              {content}
             </div>
           </div>
         </div>

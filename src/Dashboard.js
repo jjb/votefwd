@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import history from './history';
 import { AdoptVoter } from './AdoptVoter';
+import { DistrictPicker } from './DistrictPicker';
 import { Header } from './Header';
 import { Login } from './Login';
 import { VoterList } from './VoterList';
@@ -21,13 +22,15 @@ class Dashboard extends Component {
     this.getCurrentUser = this.getCurrentUser.bind(this);
     this.getCurrentDistrict = this.getCurrentDistrict.bind(this);
     this.updateDistrict = this.updateDistrict.bind(this);
+    this.toggleDistrictPicker = this.toggleDistrictPicker.bind(this);
     this.isLoggedIn = this.isLoggedIn.bind(this);
     this.state =
       { voters: [],
         user: {},
         currentDistrict: {},
         isQualified: false,
-        enoughVoters: ''
+        enoughVoters: '',
+        pickingDistrict: false
       }
   }
 
@@ -65,19 +68,35 @@ class Dashboard extends Component {
   }
 
   getCurrentDistrict(districtId) {
-    axios({
-      method: 'GET',
-      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
-      url: `${process.env.REACT_APP_API_URL}/lookup-district`,
-      params: {district_id: districtId }
+    if (districtId) {
+      axios({
+        method: 'GET',
+        headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
+        url: `${process.env.REACT_APP_API_URL}/lookup-district`,
+        params: {district_id: districtId }
+        })
+        .then(res => {
+          if (res.data.length === 0) {
+            this.setState({ pickingDistrict: true })
+          }
+          else {
+            this.setState({ currentDistrict: res.data[0]});
+          }
+        })
+        .catch(err => {
+          console.error(err);
       })
-      .then(res => {
-        this.setState({ currentDistrict: res.data[0]});
-      })
-      .catch(err => {
-        console.error(err);
-    })
+    }
+    else {
+      this.setState({ pickingDistrict: true });
+    }
   }
+
+  toggleDistrictPicker() {
+    let districtPickerState = this.state.pickingDistrict
+    this.setState({pickingDistrict: !districtPickerState})
+  }
+
 
   // TODO: abstract this out
   isQualified(user) {
@@ -251,12 +270,25 @@ class Dashboard extends Component {
       <Header auth={this.props.auth} />
       { this.props.auth.isAuthenticated() ? (
         <div>
-          <AdoptVoter
-              currentDistrict={this.state.currentDistrict}
+          { !this.state.pickingDistrict ? (
+            <React.Fragment>
+              <button
+                  className="btn btn-secondary mb-3"
+                  onClick={this.toggleDistrictPicker}>
+                Switch District
+              </button>
+              <AdoptVoter
+                  currentDistrict={this.state.currentDistrict}
+                  handleAdoptedVoter={this.handleAdoptedVoter}
+                  enoughVoters={this.state.enoughVoters}
+                />
+            </React.Fragment>
+          ) : (
+            <DistrictPicker
               updateDistrict={this.updateDistrict}
-              handleAdoptedVoter={this.handleAdoptedVoter}
-              enoughVoters={this.state.enoughVoters}
+              toggleDistrictPicker={this.toggleDistrictPicker}
             />
+          )}
           <div className="container-fluid py-5">
             <VoterList
               voters={this.state.voters}

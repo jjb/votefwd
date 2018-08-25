@@ -52,13 +52,8 @@ export class DistrictPicker extends Component {
     return (
       <div className="border">
         <div className="p-4">
-          <button
-              className="btn btn-secondary"
-              onClick={this.props.toggleDistrictPicker}>
-            Close
-          </button>
           <h4 className="mb-3">Choose Your Target District</h4>
-          <p>Most volunteers choose a nearby district, but feel free to choose a different one if you prefer — perhaps to support a candidate you particularly admire, or a district near where you grew up.</p>
+          <p>Most volunteers choose a district (relatively) close to home, but feel free to choose a different one if you prefer — perhaps to support a candidate you particularly admire, or a district near where you grew up.</p>
           <div>
             {this.state.districts.map(district =>
               <DistrictItem
