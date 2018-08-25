@@ -299,7 +299,7 @@ router.route('/enough-voters')
   });
 
 /**
- * Look up a ZIP code.
+ * Find the closest target district to a given ZIP code.
  */
 router.route('/lookup-zip')
   .get(checkJwt, function(req, res) {
