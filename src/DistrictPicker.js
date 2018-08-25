@@ -11,13 +11,19 @@ class DistrictItem extends Component {
 
   render() {
     return (
-      <div>
-        <h2>{this.props.district.district_id}</h2>
-        <p className="small">{this.props.district.description}</p>
-        <button className="btn btn-secondary"
-            onClick={(e) => this.selectDistrictAndClose(this.props.district.district_id)}>
-          Select
-        </button>
+      <div className="col-lg-3">
+        <div className="card district--card mb-3">
+          <div className="card-body">
+            <h3>{this.props.district.district_id}</h3>
+            <p className="small">{this.props.district.description}</p>
+          </div>
+          <div className="card-footer">
+            <button className="btn btn-primary"
+                onClick={(e) => this.selectDistrictAndClose(this.props.district.district_id)}>
+              Select
+            </button>
+          </div>
+        </div>
       </div>
     )
   }
@@ -54,7 +60,7 @@ export class DistrictPicker extends Component {
         <div className="p-4">
           <h4 className="mb-3">Choose Your Target District</h4>
           <p>Most volunteers choose a district (relatively) close to home, but feel free to choose a different one if you prefer — perhaps to support a candidate you particularly admire, or a district near where you grew up.</p>
-          <div>
+          <div className="row">
             {this.state.districts.map(district =>
               <DistrictItem
                 key={district.id}

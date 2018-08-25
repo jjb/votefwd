@@ -2688,6 +2688,9 @@ table.table tr:first-child td {
   background-repeat: no-repeat, repeat;
   background-position: center center; }
 
+.district--card .card-body {
+  min-height: 310px; }
+
 .footer {
   padding-top: 4rem;
   padding-bottom: 4rem; }
