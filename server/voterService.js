@@ -100,7 +100,7 @@ function _adoptSomeVoters(adopterId, numVoters, districtId, callback) {
               }
             })
             .then(function() {
-              slackService.publishToSlack('The user whose auth0id ends in ' + adopterId.substr(adopterId.length - 5) + ' adopted ' + numVoters + ' voters in ' + districtId + '.')
+              slackService.publishToSlack('A user adopted ' + numVoters + ' voters in ' + districtId + '.')
             })
             .catch(err => {
               console.error(err);
