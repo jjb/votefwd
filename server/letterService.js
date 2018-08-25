@@ -111,10 +111,10 @@ function generateCoverPageHtmlForVoters(voters) {
   var processedVoters = [];
   voters.forEach(function(voter) {
     if (voter.gender == 'male') {
-      voter.salutation = 'Mr.';
+      voter.salutation = 'MR';
     }
     else if (voter.gender == 'female') {
-      voter.salutation = 'Ms.';
+      voter.salutation = 'MS';
     }
     processedVoters.push(voter);
   });
@@ -129,7 +129,7 @@ function generateCoverPageHtmlForVoters(voters) {
 function getReturnAddressForVoter(voter) {
   let returnAddress = returnAddresses[voter.district_id];
   if (returnAddress) {
-    return returnAddress;
+    return returnAddress.toUpperCase();
   }
   else {
     return null;
