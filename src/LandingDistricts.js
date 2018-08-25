@@ -6,8 +6,13 @@ import axios from 'axios';
 class DistrictItem extends Component {
   render() {
     return (
-      <div className="col-3 display-4 text-primary">
+      <div className="col-3">
+        <h3 className="display-4 text-primary">
         {this.props.district.district_id}
+        </h3>
+        <p className="small">
+          {this.props.district.description}
+        </p>
       </div>
     );
   }
@@ -46,7 +51,7 @@ export class LandingDistricts extends Component {
       <div className="container">
         <div className="row pt-5 text-center">
           <div className="col-12">
-            <h3 className="mb-5">Available Districts</h3>
+            <h3 className="mb-5">Target Districts</h3>
           </div>
           {this.state.districts.map(district => (
             <DistrictItem key={district.id} district={district} />

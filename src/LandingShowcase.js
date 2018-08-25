@@ -2,6 +2,8 @@
 // Landing Page Showcase Blocks
 
 import React, { Component } from 'react';
+import { LandingDistricts } from './LandingDistricts';
+
 class LandingIcons extends Component {
 	render() {
 		return (
@@ -141,6 +143,7 @@ export class LandingShowcase extends Component {
 		return (
       <div>
         <LandingIcons />
+        <LandingDistricts />
         <LandingCallouts />
         <LandingTestimonials />
       </div>
