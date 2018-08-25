@@ -82,7 +82,7 @@ export class AdoptVoter extends Component {
           <div className="col-lg-6 order-lg-2 dashboard--call-to-action px-3 py-4" />
           <div className="col-lg-6 order-lg-1 showcase-text bg-light p-5">
             <div className="p-2 p-5-m">
-              <h3>You’re Helping Flip {this.state.district.district_id} Blue</h3>
+              <h3>You’re Helping Flip {this.state.district.district_id} Blue <button className="btn btn-link" onClick={this.props.toggleDistrictPicker}>Switch District</button></h3>
               <p className="u-highlight mb-3">
                 {this.state.district.description}
               </p>

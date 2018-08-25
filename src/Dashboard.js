@@ -272,15 +272,11 @@ class Dashboard extends Component {
         <div>
           { !this.state.pickingDistrict ? (
             <React.Fragment>
-              <button
-                  className="btn btn-secondary mb-3"
-                  onClick={this.toggleDistrictPicker}>
-                Switch District
-              </button>
               <AdoptVoter
                   currentDistrict={this.state.currentDistrict}
                   handleAdoptedVoter={this.handleAdoptedVoter}
                   enoughVoters={this.state.enoughVoters}
+                  toggleDistrictPicker={this.toggleDistrictPicker}
                 />
             </React.Fragment>
           ) : (
