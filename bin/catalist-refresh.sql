@@ -5,7 +5,7 @@ DECLARE
   experimentid integer := 2;
 
   populationtotal integer;
-  votercount integer := 3000;
+  votercount integer := 14000;
   timestamp timestamp := now();
 
 BEGIN
@@ -41,7 +41,8 @@ BEGIN
       state,
       zip,
       age,
-      gender
+      gender,
+      district_id
     )
   SELECT dwid,
     first_name,
@@ -53,7 +54,8 @@ BEGIN
     mail_address_state,
     mail_address_zip,
     age::text::int,
-    gender
+    gender,
+    'GA06'
   FROM catalist_raw
   JOIN experiment_voter
   ON experiment_voter.voter_id = catalist_raw.dwid
