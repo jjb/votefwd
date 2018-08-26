@@ -29,7 +29,7 @@ const returnAddresses = {
   'TX23': '476 S Bibb Ave Ste C #308, Eagle Pass, TX 78852',
   'MN02': '7635 W 148th St. #TBD, Apple Valley, MN 55124',
   'FL27': '7742 N Kendall Dr #323, Kendall, FL 33156',
-  'CA10': '1169 S Main St #TBD, Manteca, CA 95337',
+  'CA10': '1169 S Main St #331, Manteca, CA 95337',
   'PA10': '1784 East 3rd Street #TBD, Williamsport, PA 17701'
 }
 
