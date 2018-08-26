@@ -2,10 +2,10 @@ DO $$
 
 DECLARE
   -- SET THIS BY INSPECTING THE EXPERIMENTS TABLE --
-  experimentid integer := 2;
+  experimentid integer := 1;
 
   populationtotal integer;
-  votercount integer := 14000;
+  votercount integer := 8356;
   timestamp timestamp := now();
 
 BEGIN
@@ -15,7 +15,8 @@ BEGIN
 
   UPDATE experiment_voter
   SET cohort = 'TEST',
-      updated_at = timestamp
+      updated_at = timestamp,
+      experiment_id = 10
   WHERE experiment_voter.voter_id IN
   (
     SELECT voter_id FROM experiment_voter
@@ -55,7 +56,7 @@ BEGIN
     mail_address_zip,
     age::text::int,
     gender,
-    'GA06'
+    'OH12'
   FROM catalist_raw
   JOIN experiment_voter
   ON experiment_voter.voter_id = catalist_raw.dwid
