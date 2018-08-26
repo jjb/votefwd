@@ -22,7 +22,9 @@ BEGIN
   SELECT dwid, experimentid
   FROM catalist_raw
   WHERE state='AZ'
-  AND congressional_district='2';
+  AND congressional_district='2'
+  -- THIS IS A DUPlICATE RECORD, ALSO PRESENT IN THE GA06 FILE
+  AND dwid !='167302951';
 
   -- COUNT HOW MANY NEWLY ELIGIBLE VOTERS WE ADDED --
 
@@ -89,7 +91,8 @@ BEGIN
   ON experiment_voter.voter_id = catalist_raw.dwid
   WHERE experiment_voter.cohort = 'TEST'
   AND state='AZ'
-  AND congressional_district='2';
+  AND congressional_district='2'
+  AND catalist_raw.dwid!='167302951';
 
   RAISE NOTICE 'Populated voters table with new TEST voters.';
 
