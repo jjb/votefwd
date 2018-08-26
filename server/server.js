@@ -75,7 +75,7 @@ router.route('/voters')
 
 router.route('/voter/adopt-random')
   .post(checkJwt, function(req, res) {
-    voterService.adoptRandomVoter(req.body.adopterId, req.body.numVoters, function(error, voters) {
+    voterService.adoptRandomVoter(req.body.adopterId, req.body.numVoters, req.body.districtId, function(error, voters) {
       if (error) {
         console.error(error);
         res.status(500).end();
@@ -250,6 +250,11 @@ router.route('/user')
       .then(res.status(201).send('Stored ZIP code.'))
       .catch(err=> {console.error('ERROR: ', err)})
     }
+    if (req.body.current_district) {
+      query.update('current_district', req.body.current_district)
+      .then(res.status(201).send('Stored current district.'))
+      .catch(err=> {console.error('ERROR: ', err)})
+    }
     if (req.body.accepted_code_at) {
       query.update('accepted_code_at', db.fn.now())
       .then(query.update('accepted_terms_at', db.fn.now()))
@@ -289,6 +294,64 @@ router.route('/enough-voters')
           res.json(false);
         }
         else res.json(true);
+      })
+      .catch(err => {console.error(err);})
+  });
+
+/**
+ * Find the closest target district to a given ZIP code.
+ */
+router.route('/lookup-zip')
+  .get(checkJwt, function(req, res) {
+    db('lu_zip')
+      .where({ zip: req.query.zip })
+      .then(function(result) {
+        if (result.length === 0) {
+          res.json(false);
+        } else {
+          const ziplat = result[0].lat;
+          const ziplong = result[0].long;
+          const distanceString = `point(${ziplat}, ${ziplong}) <-> point(districts.coordinates) as distance`;
+          let nearestDistrict;
+          db('districts')
+            .select('district_id', db.raw(distanceString))
+            .orderBy('distance', 'asc')
+            .limit(1)
+          .then(function(result) {
+            nearestDistrict = result[0].district_id;
+            res.json(nearestDistrict);
+          })
+          .catch(err => {console.error(err);});
+        }
+      })
+      .catch(err => {console.error(err);})
+  });
+
+/**
+ * Get all the districts Vote Forward is targeting.
+ */
+router.route('/get-districts')
+  .get(function(req, res) {
+    db('districts')
+      .then(function(result) {
+          res.json(result);
+        })
+      .catch(err => {console.error(err);})
+  });
+
+/**
+ * Look up a district.
+ */
+router.route('/lookup-district')
+  .get(checkJwt, function(req, res) {
+    db('districts')
+      .where({ district_id: req.query.district_id })
+      .then(function(result) {
+        if (result.length === 0) {
+          res.json(false);
+        } else {
+          res.json(result);
+        }
       })
       .catch(err => {console.error(err);})
   });
@@ -385,7 +448,7 @@ router.route('/s/users')
 
 router.route('/s/stats')
   .get(checkJwt, checkAdmin, function(req, res) {
-    voterService.getVoterSummaryByState(function(error, summary) {
+    voterService.getVoterSummaryByDistrict(function(error, summary) {
       if (error) {
         console.error(error);
         res.status(500);

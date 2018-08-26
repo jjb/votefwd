@@ -9,10 +9,10 @@ export class AdoptVoter extends Component {
     super(props);
 
     this.adoptVoter = this.adoptVoter.bind(this);
-    this.state = { adopting: false };
+    this.state = { adopting: false, district: {} };
   }
 
-  adoptVoter(numVoters) {
+  adoptVoter(numVoters, district_id) {
     this.setState({adopting: true});
     let user_id = localStorage.getItem('user_id');
     axios({
@@ -21,7 +21,8 @@ export class AdoptVoter extends Component {
       url: `${process.env.REACT_APP_API_URL}/voter/adopt-random`,
       data: {
           adopterId: user_id,
-          numVoters: numVoters
+          numVoters: numVoters,
+          districtId: district_id
         }
       })
       .then(res => {
@@ -31,6 +32,12 @@ export class AdoptVoter extends Component {
       .catch(err => {
         console.error(err);
     })
+  }
+
+  componentWillReceiveProps(props) {
+    if (props.currentDistrict.district_id) {
+      this.setState({ district: props.currentDistrict });
+    }
   }
 
   render() {
@@ -60,12 +67,13 @@ export class AdoptVoter extends Component {
       content = (
         <button
           disabled={this.state.adopting ? true : false}
-          onClick={() => this.adoptVoter(5)}
+          onClick={() => this.adoptVoter(5, this.state.district.district_id)}
           className="btn btn-primary btn-lg w-100">
             Adopt <span className="reset-num">5</span> Voters
         </button>
       )
     }
+
     return (
       <div className="container-fluid p-0">
         <div className="row no-gutters position-relative">
@@ -74,17 +82,9 @@ export class AdoptVoter extends Component {
           <div className="col-lg-6 order-lg-2 dashboard--call-to-action px-3 py-4" />
           <div className="col-lg-6 order-lg-1 showcase-text bg-light p-5">
             <div className="p-2 p-5-m">
-              <h1>Send Letters to Georgia Voters</h1>
+              <h3>You’re Helping Flip {this.state.district.district_id} Blue <button className="btn btn-link" onClick={this.props.toggleDistrictPicker}>Switch District</button></h3>
               <p className="u-highlight mb-3">
-                Mid-term election for U.S. House of Representatives
-                <br />Georgia's 6th District, Tuesday, November 6, 2018
-                <br />Target: unlikely voters; very likely to choose the Democrat if they turn out
-              </p>
-              <p className="mb-3">
-                <span className="small">Return address:</span>
-                <br />Your first name & last initial
-                <br />2870 Peachtree Road, #172
-                <br />Atlanta, GA 30305
+                {this.state.district.description}
               </p>
               <p className="mt-4 mb-3 small">
                 Voters you adopt won‘t be assigned to anyone else, so by adopting them, you’re committing to send the letters.

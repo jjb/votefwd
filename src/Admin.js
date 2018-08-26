@@ -150,6 +150,17 @@ class UserTable extends Component {
         return (row.email || '').startsWith(filter.value);
       }
     }, {
+      Header: 'District',
+      accessor: 'current_district',
+      filterable: true,
+      filterMethod: (filter, row, column) => {
+        return (row.current_district || '')
+          .trim()
+          .toLowerCase()
+          .split(/\W+/)
+          .some(current_district => current_district.startsWith(filter.value.toLowerCase()));
+      }
+    }, {
       id: 's',
       Header: 'Signup date',
       accessor: s => {

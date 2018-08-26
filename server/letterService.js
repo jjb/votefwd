@@ -18,6 +18,21 @@ const storage = new Storage({
 const bucketName = process.env.REACT_APP_CLOUD_STORAGE_BUCKET_NAME;
 const voterBucket = storage.bucket(bucketName);
 
+// Hard-coding return addresses temporarily, so we can launch multiple-district support
+// Couldn't figure out how to get from DB inside synchronous generation
+// functions. TODO: get these from the database.
+
+const returnAddresses = {
+  'OH12': '829 Bethel Road #137, Columbus, OH 43214',
+  'GA06': '2870 Peachtree Road #172, Atlanta, GA 30305',
+  'AZ02': '1517 N Wilmot Rd #TBD, Tucson, AZ 85712',
+  'TX23': '476 S Bibb Ave Ste C #308, Eagle Pass, TX 78852',
+  'MN02': '7635 W 148th St. #TBD, Apple Valley, MN 55124',
+  'FL27': '7742 N Kendall Dr #323, Kendall, FL 33156',
+  'CA10': '1169 S Main St #331, Manteca, CA 95337',
+  'PA10': '1784 East 3rd Street #TBD, Williamsport, PA 17701'
+}
+
 function dateStamp() {
   var newDate = new Date();
   var DateString;
@@ -94,34 +109,74 @@ function generateCoverPageHtmlForVoters(voters) {
   var template = fs.readFileSync('./templates/coverpage.html', 'utf8');
   var uncompiledTemplate = Handlebars.compile(template);
   var processedVoters = [];
+  var returnAddresses = [];
   voters.forEach(function(voter) {
     if (voter.gender == 'male') {
-      voter.salutation = 'Mr.';
+      voter.salutation = 'MR';
     }
     else if (voter.gender == 'female') {
-      voter.salutation = 'Ms.';
+      voter.salutation = 'MS';
     }
     processedVoters.push(voter);
   });
+  voters.forEach(function(voter) {
+    var returnAddress = getReturnAddressForVoter(voter);
+    if (returnAddresses.indexOf(returnAddress) === -1) {
+      returnAddresses.push(returnAddress);
+    }
+  });
   var context = {
       voters: processedVoters,
+      returnAddresses: returnAddresses
     };
   var html = uncompiledTemplate(context);
   return html;
 }
 
+// gets return address for voter's district
+function getReturnAddressForVoter(voter) {
+  let returnAddress = returnAddresses[voter.district_id];
+  if (returnAddress) {
+    return returnAddress.toUpperCase();
+  }
+  else {
+    return null;
+  }
+  //db.from('districts')
+    //.select(
+      //'districts.return_address',
+      //'districts.ra_city',
+      //'districts.ra_state',
+      //'districts.ra_zip'
+    //)
+    //.where('districts.district_id', voter.district_id)
+    //.limit(1)
+    //.then(function(result) {
+      //returnAddress=
+        //result[0].return_address + ', ' +
+        //result[0].ra_city + ', ' +
+        //result[0].ra_state + ' ' +
+        //result[0].ra_zip;
+      //callback(returnAddress);
+      //return returnAddress;
+    //})
+    //.catch(err=> {
+      //console.error('ERROR: ', err);
+    //});
+}
+
 function generateHtmlForVoter(voter) {
+  let returnAddress = getReturnAddressForVoter(voter);
   // takes a voter and makes a html template for them to be made into a pdf
   var voterId = voter.id;
-  var datestamp = dateStamp();
   var hashId = hashids.encode(voterId);
   var pledgeUrl = `${process.env.REACT_APP_URL}/pledge`;
   var template = fs.readFileSync('./templates/letter.html', 'utf8');
   var uncompiledTemplate = Handlebars.compile(template);
   var salutation;
-  if (voter.gender === 'M') {
+  if (voter.gender === 'M' || voter.gender === 'male') {
     salutation = "Mr."
-  } else if (voter.gender === 'F') {
+  } else if (voter.gender === 'F' || voter.gender === 'female') {
     salutation = "Ms."
   } else { salutation = null };
   var fullName = [salutation, voter.first_name, voter.middle_name, voter.last_name, voter.suffix].filter(Boolean).join(" ");
@@ -130,12 +185,12 @@ function generateHtmlForVoter(voter) {
     voterId: voterId,
     voterName: fullName,
     voterAddress: fullAddress,
-    datestamp: datestamp,
+    returnAddress: returnAddress,
     hashId: hashId,
     pledgeUrl: pledgeUrl
     };
   var html = uncompiledTemplate(context);
-  return html;
+  return(html);
 }
 
 function generatePdfFromBulkHtml(html, numvoters, callback) {
@@ -159,8 +214,7 @@ function generatePdfForVoter(voter, callback) {
   var uuid = uuidv4();
   var datestamp = dateStamp();
   var hashId = hashids.encode(voter.id);
-  var html = generateHtmlForVoter(voter)
-
+  var html = generateHtmlForVoter(voter);
   var options = { format: 'Letter' };
   const tmpdir = os.tmpdir();
   const remotefileName = datestamp + '-' + uuid + '-letter.pdf'

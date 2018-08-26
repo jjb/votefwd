@@ -2,6 +2,8 @@
 // Landing Page Showcase Blocks
 
 import React, { Component } from 'react';
+import { LandingDistricts } from './LandingDistricts';
+
 class LandingIcons extends Component {
 	render() {
 		return (
@@ -105,9 +107,9 @@ class LandingCallouts extends Component {
               }}
             />
             <div className="col-lg-6 my-auto showcase-text">
-              <h2>Next Stop: Ohio</h2>
+              <h2>Refined in Ohio</h2>
               <p className="lead mb-0">
-                We‘re currently writing letters to Ohio to boost turnout in the special election for the House of Representatives in the 12th district on August 7. A Democratic win will bring us one seat closer to winning the House. We need your help! Will you send some letters?
+                Our volunteers wrote more than four thousand letters to infrequent Ohio voters to boost turnout in the special election for the House of Representatives in the 12th district on August 7. This election in a historically deep-red district remains too close to call. We expect to have the necessary data to assess the impact our campaign in mid-September.
               </p>
             </div>
           </div>
@@ -141,6 +143,7 @@ export class LandingShowcase extends Component {
 		return (
       <div>
         <LandingIcons />
+        <LandingDistricts />
         <LandingCallouts />
         <LandingTestimonials />
       </div>

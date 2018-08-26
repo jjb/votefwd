@@ -35,7 +35,7 @@ function getUsersAdoptedVoters(userId, callback) {
     });
 }
 
-function adoptRandomVoter(adopterId, numVoters, callback) {
+function adoptRandomVoter(adopterId, numVoters, districtId, callback) {
   if (allowedVoterBulkCount.includes(numVoters) !== true){
     //user requested a weird number of voters, deny!
     console.error("invalid number of voters requested %s", numVoters);
@@ -54,14 +54,15 @@ function adoptRandomVoter(adopterId, numVoters, callback) {
     }
 
     let numToAdopt = Math.min(numVoters, numCanAdopt);
-    _adoptSomeVoters(adopterId, numToAdopt, callback);
+    _adoptSomeVoters(adopterId, numToAdopt, districtId, callback);
   });
 }
 
-function _adoptSomeVoters(adopterId, numVoters, callback) {
+function _adoptSomeVoters(adopterId, numVoters, districtId, callback) {
   db('voters')
     .count()
     .where('adopter_user_id', null)
+    .where('district_id', districtId)
     .then(function(results) {
       let availableVoterCount = results[0].count;
       if (availableVoterCount < numVoters) {
@@ -72,6 +73,7 @@ function _adoptSomeVoters(adopterId, numVoters, callback) {
 
       db('voters')
         .where('adopter_user_id', null)
+        .where('district_id', districtId)
         .orderByRaw(adoptionOrder)
         .limit(numVoters)
         .then(function(voters) {
@@ -98,7 +100,7 @@ function _adoptSomeVoters(adopterId, numVoters, callback) {
               }
             })
             .then(function() {
-              slackService.publishToSlack('A user adopted ' + numVoters + ' voters.');
+              slackService.publishToSlack('A user adopted ' + numVoters + ' voters in ' + districtId + '.')
             })
             .catch(err => {
               console.error(err);
@@ -248,10 +250,10 @@ function makePledge(code, callback) {
   });
 }
 
-function getVoterSummaryByState(callback) {
+function getVoterSummaryByDistrict(callback) {
   db('voters')
     .select(
-      'state',
+      'district_id',
       db.raw('sum(available) as available'),
       db.raw('sum(adopted) as adopted'),
       db.raw('sum(prepped) as prepped'),
@@ -259,7 +261,7 @@ function getVoterSummaryByState(callback) {
     )
     .from(function() {
       this.select(
-        'state',
+        'district_id',
         db.raw(`
           case when adopted_at is null
                 and confirmed_prepped_at is null
@@ -290,7 +292,7 @@ function getVoterSummaryByState(callback) {
         .from('voters')
         .as('stats')
     })
-    .groupBy('state')
+    .groupBy('district_id')
     .then(function(results) {
       results = results.map(r => {
         r.available = parseInt(r.available);
@@ -399,6 +401,6 @@ module.exports = {
   undoConfirmPrepped,
   makePledge,
   getAdoptedVoterSummary,
-  getVoterSummaryByState,
+  getVoterSummaryByDistrict,
   _prepForTests
 }
