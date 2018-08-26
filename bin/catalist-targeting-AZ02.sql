@@ -11,7 +11,7 @@ BEGIN
   -- DESCRIBE THE EXPERIMENT
 
   INSERT INTO experiment VALUES
-    (DEFAULT, 'TX23', 'Propensity 5-45, Dem partisanship > 90.')
+    (DEFAULT, 'AZ02', 'Propensity 5-45, Dem partisanship > 90, Spanish score unknown or <60.')
     RETURNING id INTO experimentid;
 
   RAISE NOTICE 'Registered experiment as id: %', experimentid;
@@ -21,8 +21,8 @@ BEGIN
   INSERT INTO experiment_voter (voter_id, experiment_id)
   SELECT dwid, experimentid
   FROM catalist_raw
-  WHERE state='TX'
-  AND congressional_district='23';
+  WHERE state='AZ'
+  AND congressional_district='2';
 
   -- COUNT HOW MANY NEWLY ELIGIBLE VOTERS WE ADDED --
 
@@ -83,13 +83,13 @@ BEGIN
     mail_address_zip,
     age::text::int,
     gender,
-    'TX23'
+    'AZ02'
   FROM catalist_raw
   JOIN experiment_voter
   ON experiment_voter.voter_id = catalist_raw.dwid
   WHERE experiment_voter.cohort = 'TEST'
-  AND state='TX'
-  AND congressional_district='23';
+  AND state='AZ'
+  AND congressional_district='2';
 
   RAISE NOTICE 'Populated voters table with new TEST voters.';
 
