@@ -84,12 +84,12 @@ describe('userService', function() {
       });
     });
 
-    it('should offer 2000 voters to a super-qualified user', function(done) {
+    it('should offer 5000 voters to a super-qualified user', function(done) {
       userService.canAdoptMoreVoters(this.users.superqual.auth0_id, function(error, numAdoptees) {
         if (error) {
           return done(error);
         }
-        expect(numAdoptees).to.eql(2000);
+        expect(numAdoptees).to.eql(5000);
         done();
       });
     });
