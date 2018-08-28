@@ -30,7 +30,7 @@ const returnAddresses = {
   'MN02': '7635 W 148th St. #TBD, Apple Valley, MN 55124',
   'FL27': '7742 N Kendall Dr #323, Kendall, FL 33156',
   'CA10': '1169 S Main St #331, Manteca, CA 95337',
-  'PA10': '1784 East 3rd Street #TBD, Williamsport, PA 17701'
+  'PA10': '1784 East 3rd Street #162, Williamsport, PA 17701'
 }
 
 function dateStamp() {
