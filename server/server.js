@@ -299,6 +299,19 @@ router.route('/enough-voters')
   });
 
 /**
+ * Look up the details for a ZIP code.
+ */
+router.route('/lookup-zip-details')
+  .get(function(req, res) {
+    db('lu_zip')
+      .where({ zip: req.query.zip })
+      .then(function(result) {
+        res.json(result);
+      })
+      .catch(err => {console.error(err);});
+  });
+
+/**
  * Find the closest target district to a given ZIP code.
  */
 router.route('/lookup-zip')

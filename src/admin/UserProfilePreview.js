@@ -2,17 +2,39 @@
 // Admin : User Preview Modal Content
 
 import React, { Component } from 'react';
+import axios from 'axios';
 
 export class UserProfilePreview extends Component {
 	constructor(props) {
 		super(props);
 		this.escModal = this.escModal.bind(this);
+		this.state = { city: '', state: '' };
 	}
 
 	escModal(event) {
 	  if (event.keyCode === 27) {
       this.props.closeModal();
     }
+  }
+
+  getAndSetLocation() {
+    console.log(this.props.user.zip);
+    axios({
+      method: 'GET',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
+      url: `${process.env.REACT_APP_API_URL}/lookup-zip-details`,
+      params: { zip: this.props.user.zip }
+    })
+    .then(res => {
+      this.setState({city: res.data[0].city, state: res.data[0].state});
+    })
+    .catch(err => {
+      console.error(err);
+    });
+  }
+
+  componentWillMount() {
+    this.getAndSetLocation();
   }
 
   componentDidMount(){
@@ -98,9 +120,10 @@ export class UserProfilePreview extends Component {
 
 								{this.props.user.zip &&
 									<tr>
-										<td width="30%">Zip Code</td>
+										<td width="30%">Location</td>
 										<td>
-											{this.props.user.zip}
+                    {this.state.city && <span>{this.state.city}, {this.state.state} </span>}
+                    {this.props.user.zip}
 										</td>
 									</tr>
 								}
