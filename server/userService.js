@@ -52,7 +52,8 @@ function updateEmail(auth0_id, newEmail) {
 function updateUserQualifiedState(auth0_id, qualState, callback){
   // takes an auth0_id of a user and a qualStateValue from QualStateEnum
   // and gives the user that state.
-  // This function should only be called by admins and verified through a middlewear.
+  // This function should only be called by admins and verified through
+  // a middleware.
 
   // check that we have a valid qual state
   var newState = QualStateEnum[qualState];
@@ -99,7 +100,7 @@ function notifyUserOfNewQualifiedState(user, newState){
   } else if ((user['qual_state'] == QualStateEnum.pre_qualified || user['qual_state'] == QualStateEnum.qualified) && newState == QualStateEnum.super_qualified) {
     if (process.env.NODE_ENV !== 'test') {
       //notify users when promoted to super_qualified
-      emailService.sendEmail('super_qualified', user, 'You are approved to adopt large numbers of voters.');
+      emailService.sendEmail('super_qualified', user, 'You\'re approved to adopt large numbers of voters.');
     }
     return 'sent super_qualified email';
   }

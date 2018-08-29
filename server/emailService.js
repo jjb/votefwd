@@ -44,7 +44,7 @@ function sendEmail(templateName, context, subject){
           Data: subject
          }
         },
-      Source: 'scott@votefwd.org', /* required */
+      Source: 'Scott Forman <scott@votefwd.org>', /* required */
       ReplyToAddresses: [
           'scott@votefwd.org',
         /* more items */
