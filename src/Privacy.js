@@ -24,8 +24,8 @@ class Privacy extends Component {
         <div className="container">
         <div className="row col-lg-8 m-auto">
           <div className="text-body h-100 mt-4 mb-4 text-lg-left">
-            <p>Vote Forward is a federally registered 527 committee that encourages voter turnout and helps volunteers elect candidates who reflect our values through a variety of activities aimed at influencing the outcome of the next election.</p>
-            <p>This website, <a href="https://votefwd.org">votefwd.org</a> (the “Site”) is operated by Vote Forward PAC 2018. (“We” or “Us” or “Vote Forward”). We strive to protect your privacy and treat your privacy as we do our own. We wrote this privacy policy to let you know how we treat your personal information – and to show you all the ways we work to keep it safe and private.</p>
+            <p>Vote Forward is an independent organization that encourages voter turnout and helps volunteers elect candidates who reflect our values through a variety of activities aimed at influencing the outcome of the next election.</p>
+            <p>This website, <a href="https://votefwd.org">votefwd.org</a> (the “Site”) is operated by Vote Forward. (“We” or “Us” or “Vote Forward”). We strive to protect your privacy and treat your privacy as we do our own. We wrote this privacy policy to let you know how we treat your personal information – and to show you all the ways we work to keep it safe and private.</p>
             <p>If at any time you would like to unsubscribe from our email list, you may do so by filling out the form at <a href="http://bit.ly/votefwd-unsubscribe">bit.ly/votefwd-unsubscribe</a>. The Site is directed to users in the United States only.</p>
             <p>Vote Forward will send you updates by email.</p>
             <p>We do not share the information you’ve given us with unaffiliated groups without your explicit permission. We may share some of your personal information with the following affiliated groups:</p>

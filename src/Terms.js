@@ -26,7 +26,7 @@ class Terms extends Component {
       <div className="text-body h-100 mt-4 mb-4 text-lg-left">
 
       <h5>Ownership of Site; Agreement to Terms of Use</h5>
-        <p>These Terms and Conditions of Use (the “Terms of Use”) apply to the Vote Forward web site located at <a href="https://votefwd.org">https://votefwd.org</a>, and all associated sites linked to <a href="https://votefwd.org">https://votefwd.org</a> by Vote Forward and its subsidiaries and affiliates (collectively, the "Site"). The Site is the property of Vote Forward PAC 2018. (“Vote Forward”) and its licensors. <strong>BY USING THE SITE, YOU AGREE TO THESE TERMS OF USE; IF YOU DO NOT AGREE, DO NOT USE THE SITE.</strong></p>
+        <p>These Terms and Conditions of Use (the “Terms of Use”) apply to the Vote Forward web site located at <a href="https://votefwd.org">https://votefwd.org</a>, and all associated sites linked to <a href="https://votefwd.org">https://votefwd.org</a> by Vote Forward and its subsidiaries and affiliates (collectively, the "Site"). The Site is the property of Vote Forward. (“Vote Forward”) and its licensors. <strong>BY USING THE SITE, YOU AGREE TO THESE TERMS OF USE; IF YOU DO NOT AGREE, DO NOT USE THE SITE.</strong></p>
         <p>Vote Forward reserves the right, at its sole discretion, to change, modify, add or remove portions of these Terms of Use, at any time. It is your responsibility to check these Terms of Use periodically for changes. Your continued use of the Site following the posting of changes will mean that you accept and agree to the changes. As long as you comply with these Terms of Use, Vote Forward grants you a personal, non-exclusive, non-transferable, limited privilege to enter and use the Site.</p>
 
       <h5>Content</h5>
