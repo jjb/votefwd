@@ -109,7 +109,7 @@ class LandingCallouts extends Component {
             <div className="col-lg-6 my-auto showcase-text">
               <h2>Refined in Ohio</h2>
               <p className="lead mb-0">
-                Our volunteers wrote more than four thousand letters to infrequent Ohio voters to boost turnout in the special election for the House of Representatives in the 12th district on August 7. This election in a historically deep-red district remains too close to call. We expect to have the necessary data to assess the impact our campaign in mid-September.
+                Our volunteers wrote more than four thousand letters to infrequent Ohio voters to boost turnout in the special election for the House of Representatives in the 12th district on August 7. Although Danny O’Connor did not ultimately prevail, this election in a historically deep-red district was extremely close. We expect to have the necessary data to assess the impact our campaign in mid-September, and we’re continuing to stockpile letters for the rematch in November.
               </p>
             </div>
           </div>
