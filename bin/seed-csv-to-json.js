@@ -7,17 +7,19 @@ var filePath = '../seed_data/seed-voters.csv';
 var file = fs.readFileSync(filePath, 'utf8');
 var records = parse(file, {columns: true});
 
-var processedRecords = records.map(record => 
+var processedRecords = records.map(record =>
   ({
-    first_name: record['First Name'], 
-    last_name: record['Last Name'],
-    middle_name: record['Middle Name'],
-    address: record['Residential Address'], 
-    city: record['Residential City'], 
-    state: record['Residential State'], 
-    zip: record['Residential ZIP'],
-    date_of_birth: record['Date of Birth'],
-    gender: record['Gender']
+    first_name: record['first_name'],
+    last_name: record['last_name'],
+    middle_name: record['middle_name'],
+    suffix: record['suffix'],
+    gender: record['gender'],
+    registration_id: record['registration_id'],
+    address: record['address'],
+    city: record['city'],
+    state: record['state'],
+    zip: record['zip'],
+    district_id: record['district_id']
   })
 );
 
