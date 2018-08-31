@@ -30,7 +30,10 @@ BEGIN
   AND dwid !='43105513'
   AND dwid !='196212835'
   AND dwid !='989623000'
-  AND dwid !='989621330';
+  AND dwid !='989621330'
+  AND dwid !='196245157'
+  AND dwid !='9346244';
+
 
   -- COUNT HOW MANY NEWLY ELIGIBLE VOTERS WE ADDED --
 
@@ -103,7 +106,9 @@ BEGIN
   AND dwid !='43105513'
   AND dwid !='196212835'
   AND dwid !='989623000'
-  AND dwid !='989621330';
+  AND dwid !='989621330'
+  AND dwid !='196245157'
+  AND dwid !='9346244';
 
   RAISE NOTICE 'Populated voters table with new TEST voters.';
 
