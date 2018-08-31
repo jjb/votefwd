@@ -24,7 +24,9 @@ BEGIN
   WHERE state='PA'
   AND congressional_district='10'
   -- THIS IS A DUPlICATE RECORD, ALSO PRESENT IN THE AZ02 FILE
-  AND dwid !='147194711';
+  AND dwid !='147194711'
+  -- THIS IS A DUPlICATE RECORD, ALSO PRESENT IN THE OH12 FILE
+  AND dwid !='35527938';
 
   -- COUNT HOW MANY NEWLY ELIGIBLE VOTERS WE ADDED --
 
@@ -91,7 +93,10 @@ BEGIN
   ON experiment_voter.voter_id = catalist_raw.dwid
   WHERE experiment_voter.cohort = 'TEST'
   AND state='PA'
-  AND congressional_district='10';
+  AND congressional_district='10'
+  AND catalist_raw.dwid!='147194711'
+  AND catalist_raw.dwid!='35527938';
+
 
   RAISE NOTICE 'Populated voters table with new TEST voters.';
 
