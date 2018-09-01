@@ -31,7 +31,8 @@ const returnAddresses = {
   'FL27': '7742 N Kendall Dr #323, Kendall, FL 33156',
   'CA10': '1169 S Main St #331, Manteca, CA 95337',
   'PA10': '1784 East 3rd Street #162, Williamsport, PA 17701',
-  'TX32': '224 W Campbell Rd #203, Richardson, TX 75080'
+  'TX32': '224 W Campbell Rd #203, Richardson, TX 75080',
+  'KS03': '119 N Parker St #184, Olathe, KS 66061'
 }
 
 function dateStamp() {
