@@ -28,7 +28,11 @@ BEGIN
   AND dwid !='259565078'
   AND dwid !='285595961'
   AND dwid !='343708040'
-  AND dwid !='334143359';
+  AND dwid !='334143359'
+  AND dwid !='11511401'
+  AND dwid !='285703740'
+  AND dwid !='305524499'
+  AND dwid !='285604891';
 
   -- COUNT HOW MANY NEWLY ELIGIBLE VOTERS WE ADDED --
 
@@ -99,7 +103,11 @@ BEGIN
   AND dwid !='259565078'
   AND dwid !='285595961'
   AND dwid !='343708040'
-  AND dwid !='334143359';
+  AND dwid !='334143359'
+  AND dwid !='11511401'
+  AND dwid !='285703740'
+  AND dwid !='305524499'
+  AND dwid !='285604891';
 
   RAISE NOTICE 'Populated voters table with new TEST voters.';
 
