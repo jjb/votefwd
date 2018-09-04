@@ -5,6 +5,7 @@ node_modules/
 *.env*
 build/
 voter_data/
+results/
 googleappcreds*.json
 .DS_Store
 cloud_sql_proxy
