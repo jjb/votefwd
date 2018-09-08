@@ -17,6 +17,7 @@ class Dashboard extends Component {
     this.handleAdoptedVoter = this.handleAdoptedVoter.bind(this);
     this.handleConfirmSent = this.handleConfirmSent.bind(this);
     this.handleConfirmPrepped = this.handleConfirmPrepped.bind(this);
+    this.handleConfirmAllPrepped = this.handleConfirmAllPrepped.bind(this);
     this.handleUndoConfirmPrepped = this.handleUndoConfirmPrepped.bind(this);
     this.handleUndoConfirmSent = this.handleUndoConfirmSent.bind(this);
     this.getCurrentUser = this.getCurrentUser.bind(this);
@@ -175,6 +176,12 @@ class Dashboard extends Component {
     })
   }
 
+  handleConfirmAllPrepped() {
+    for (var i = 0; i < this.state.voters.length; i++){
+      this.handleConfirmPrepped(this.state.voters[i]);
+    }
+  }
+
   handleUndoConfirmPrepped(voter) {
     axios({
       method: 'PUT',
@@ -288,6 +295,7 @@ class Dashboard extends Component {
           <div className="container-fluid py-5">
             <VoterList
               voters={this.state.voters}
+              markAllPrepped={this.handleConfirmAllPrepped}
               confirmPrepped={this.handleConfirmPrepped}
               undoConfirmPrepped={this.handleUndoConfirmPrepped}
               undoConfirmSent={this.handleUndoConfirmSent}
