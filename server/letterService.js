@@ -53,7 +53,6 @@ function generatePdfForVoters(voters, callback) {
     html = generateHtmlForVoter(voters[0]);
   }
   else {
-    let pdf_filenames = [];
     html += generateCoverPageHtmlForVoters(voters);
     for (var i = 0; i < voters.length; i++) {
       html += generateHtmlForVoter(voters[i]);
@@ -171,7 +170,7 @@ function generatePdfFromHtml(html, voters, callback) {
   const uuid = uuidv4();
   const remotefileName = datestamp + '-' + uuid + '-letter.pdf'
   const filePath = tmpdir + '/' + remotefileName;
-  const options = { format: 'Letter', timeout: '100000' };
+  const options = { "format": "Letter", "timeout": "100000" };
   let downloadFileName;
   if (voters.length === 1) {
     const lastName = voters[0].last_name;
