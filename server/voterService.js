@@ -118,7 +118,19 @@ function _adoptSomeVoters(adopterId, numVoters, districtId, callback) {
     });
 }
 
+function downloadLetterToVoter(voterId, callback) {
+  db('voters')
+    .where('id', voterId)
+    .then(function(voters) {
+      letterService.generatePdfForVoter(voters[0], callback)
+    })
+    .catch(err => {
+      console.error(err);
+    });
+}
+
 function downloadAllLetters(userId, callback) {
+  // Downloads all not-yet-prepped letters for a user
   db('voters')
     .where('adopter_user_id', userId)
     .where('confirmed_prepped_at', null)
@@ -393,6 +405,7 @@ function _prepForTests() {
 module.exports = {
   getVoterById,
   getUsersAdoptedVoters,
+  downloadLetterToVoter,
   downloadAllLetters,
   adoptRandomVoter,
   confirmSent,
