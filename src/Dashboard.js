@@ -30,7 +30,6 @@ class Dashboard extends Component {
         user: {},
         currentDistrict: {},
         isQualified: false,
-        enoughVoters: '',
         pickingDistrict: false
       }
   }
@@ -248,27 +247,12 @@ class Dashboard extends Component {
     })
   }
 
-  checkEnoughVoters() {
-    axios({
-      method: 'GET',
-      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
-      url: `${process.env.REACT_APP_API_URL}/enough-voters`
-    })
-    .then(res => {
-      this.setState({ enoughVoters: res.data });
-    })
-    .catch(err => {
-      console.error(err);
-    });
-  }
-
   componentWillMount(){
     if (!this.isLoggedIn()) {
       history.replace('/');
     }
     this.getCurrentUser();
     this.getAdoptedVoters();
-    this.checkEnoughVoters();
   }
 
   render() {
@@ -282,8 +266,8 @@ class Dashboard extends Component {
               <AdoptVoter
                   currentDistrict={this.state.currentDistrict}
                   handleAdoptedVoter={this.handleAdoptedVoter}
-                  enoughVoters={this.state.enoughVoters}
                   toggleDistrictPicker={this.toggleDistrictPicker}
+                  user={this.state.user}
                 />
             </React.Fragment>
           ) : (

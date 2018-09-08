@@ -41,36 +41,35 @@ export class AdoptVoter extends Component {
   }
 
   render() {
-    let content;
+    let adoptionButtons;
     if (this.state.adopting) {
-      content = (
+      adoptionButtons = (
         <div
           className="alert alert-success alert-progress pl-5"
           role="alert">
-          <img src={loading} alt="loading" className="ml-5 mr-3" /> Assigning 5 voters to you. This may take a moment.
-        </div>
-      )
-    } else if (!this.props.enoughVoters) {
-      content = (
-        <div>
-          <p className="text-danger">
-            All targeted voters have been adopted! We’re loading more data, so please check back soon.
-          </p>
-          <button
-            disabled={true}
-            className="btn btn-secondary btn-lg w-100">
-              Adopt <span className="reset-num">5</span> Voters
-          </button>
+          <img src={loading} alt="loading" className="ml-5 mr-3" /> Assigning voters to you. This may take a moment.
         </div>
       )
     } else {
-      content = (
-        <button
-          disabled={this.state.adopting ? true : false}
-          onClick={() => this.adoptVoter(5, this.state.district.district_id)}
-          className="btn btn-primary btn-lg w-100">
-            Adopt <span className="reset-num">5</span> Voters
-        </button>
+      adoptionButtons = (
+        <div className="row">
+          <div className="col-md">
+            <button
+              disabled={this.state.adopting ? true : false}
+              onClick={() => this.adoptVoter(5, this.state.district.district_id)}
+              className="btn btn-primary btn-lg w-100 mt-1">
+                Adopt <span className="reset-num">5</span> Voters
+            </button>
+          </div>
+          <div className="col-md">
+            <button
+              disabled={this.state.adopting ? true : false}
+              onClick={() => this.adoptVoter(25, this.state.district.district_id)}
+              className="btn btn-primary btn-lg w-100 mt-1">
+                Adopt <span className="reset-num">25</span> Voters
+            </button>
+          </div>
+        </div>
       )
     }
 
@@ -89,7 +88,7 @@ export class AdoptVoter extends Component {
               <p className="mt-4 mb-3 small">
                 Voters you adopt won‘t be assigned to anyone else, so by adopting them, you’re committing to send the letters.
               </p>
-              {content}
+              {adoptionButtons}
             </div>
           </div>
         </div>
