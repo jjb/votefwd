@@ -47,23 +47,19 @@ function dateStamp() {
 var hashids = new Hashids(process.env.REACT_APP_HASHID_SALT, 6,
   process.env.REACT_APP_HASHID_DICTIONARY);
 
-function generateBulkPdfForVoters(voters, callback) {
-  // wrapper function to take a list of voters and make one pdf for all of them.
-  var pdf_filenames = [];
-  var html = ''
-  html += generateCoverPageHtmlForVoters(voters);
-  for (var i = 0; i < voters.length; i++){
-    html += generateHtmlForVoter(voters[i]);
+function generatePdfForVoters(voters, callback) {
+  let html;
+  if (voters.length === 1) {
+    html = generateHtmlForVoter(voters[0]);
   }
-  generatePdfFromBulkHtml(html, voters.length, function(response, downloadFileName){
-      var filename = response.filename ? response.filename : '';
-      callback(filename, downloadFileName);
-  });
-}
-
-function generatePdfForVoter(voter, callback) {
-  let html = generateHtmlForVoter(voter);
-  generatePdfFromBulkHtml(html, voter.length, function(response, downloadFileName){
+  else {
+    var pdf_filenames = [];
+    html += generateCoverPageHtmlForVoters(voters);
+    for (var i = 0; i < voters.length; i++){
+      html += generateHtmlForVoter(voters[i]);
+    }
+  }
+  generatePdfFromHtml(html, voters.length, function(response, downloadFileName){
       var filename = response.filename ? response.filename : '';
       callback(filename, downloadFileName);
   });
@@ -158,16 +154,21 @@ function generateHtmlForVoter(voter) {
   return(html);
 }
 
-function generatePdfFromBulkHtml(html, numvoters, callback) {
-  // takes a bunch of merged html templates and makes them into a pdf
-  var uuid = uuidv4();
-  var datestamp = dateStamp();
-
+function generatePdfFromHtml(html, numvoters, callback) {
   const tmpdir = os.tmpdir();
+  const datestamp = dateStamp();
+  const uuid = uuidv4();
   const remotefileName = datestamp + '-' + uuid + '-letter.pdf'
-  const downloadFileName = datestamp + '-votefwd-letters-batch-of-' + numvoters + '.pdf';
   const filePath = tmpdir + '/' + remotefileName;
-  pdf.create(html, {timeout: '100000'}).toFile(filePath, function(err, response){
+  const options = { format: 'Letter', timeout: '100000' };
+  let downloadFileName;
+  if (numvoters === 1) {
+    downloadFileName = datestamp + '-' + 'LASTNAME' + '-VoteForward-letter.pdf';
+  }
+  else {
+    downloadFileName = datestamp + '-votefwd-letters-batch-of-' + numvoters + '.pdf';
+  }
+  pdf.create(html, options).toFile(filePath, function(err, response){
     if(err) {
       console.error('ERROR:', err);
     }
@@ -175,25 +176,6 @@ function generatePdfFromBulkHtml(html, numvoters, callback) {
   });
 }
 
-//function generatePdfForVoter(voter, callback) {
-  //var uuid = uuidv4();
-  //var datestamp = dateStamp();
-  //var hashId = hashids.encode(voter.id);
-  //var html = generateHtmlForVoter(voter);
-  //var options = { format: 'Letter' };
-  //const tmpdir = os.tmpdir();
-  //const remotefileName = datestamp + '-' + uuid + '-letter.pdf'
-  //const downloadFileName = datestamp + '-' + voter.last_name + '-VoteForward-letter.pdf';
-  //const filePath = tmpdir + '/' + remotefileName;
-  //pdf.create(html, {timeout: '100000'}).toFile(filePath, function(err, response){
-    //if(err) {
-      //console.error('ERROR:', err);
-    //}
-    //callback(response, downloadFileName);
-  //});
-//}
-
 module.exports = {
-  generateBulkPdfForVoters,
-  generatePdfForVoter,
+  generatePdfForVoters
 }

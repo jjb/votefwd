@@ -121,8 +121,8 @@ function _adoptSomeVoters(adopterId, numVoters, districtId, callback) {
 function downloadLetterToVoter(voterId, callback) {
   db('voters')
     .where('id', voterId)
-    .then(function(voters) {
-      letterService.generatePdfForVoter(voters[0], callback)
+    .then(function(voter) {
+      letterService.generatePdfForVoters(voter, callback)
     })
     .catch(err => {
       console.error(err);
@@ -135,7 +135,7 @@ function downloadAllLetters(userId, callback) {
     .where('adopter_user_id', userId)
     .where('confirmed_prepped_at', null)
     .then(function(voters) {
-      letterService.generateBulkPdfForVoters(voters, callback)
+      letterService.generatePdfForVoters(voters, callback)
     })
     .catch(err => {
       console.error(err);
