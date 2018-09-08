@@ -283,21 +283,6 @@ router.route('/user')
     }
   });
 
-// Publicly available stats
-router.route('/enough-voters')
-  .get(checkJwt, function(req, res) {
-    db('voters')
-      .then(function(result) {
-        let availableCount = result.filter(voter =>
-          !voter.adopter_user_id && !voter.adopted_at && !voter.confirmed_prepped_at && !voter.confirmed_sent_at).length;
-        if (availableCount < 5) {
-          res.json(false);
-        }
-        else res.json(true);
-      })
-      .catch(err => {console.error(err);})
-  });
-
 /**
  * Look up the details for a ZIP code.
  */
