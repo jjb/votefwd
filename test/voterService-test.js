@@ -27,7 +27,7 @@ describe('voterService', function() {
     });
 
     it('should do nothing if user is not allowed to adopt more voters', function(done) {
-      voterService.adoptRandomVoter(this.users.full, 15, 'GA06', function(error, adoptees) {
+      voterService.adoptRandomVoter(this.users.full, 25, 'GA06', function(error, adoptees) {
         expect(adoptees.length).to.eql(0);
         done();
       });
