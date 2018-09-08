@@ -85,6 +85,9 @@ function _adoptSomeVoters(adopterId, numVoters, districtId, callback) {
               updated_at: db.fn.now()
             })
             .then(function() {
+              callback(null, voters)
+            })
+            .then(function() {
               slackService.publishToSlack('A user adopted ' + numVoters + ' voters in ' + districtId + '.')
             })
             .catch(err => {
