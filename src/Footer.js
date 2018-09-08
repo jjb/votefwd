@@ -12,7 +12,7 @@ export class Footer extends Component {
 					<div className="col-lg-6 h-100 text-center text-lg-left my-auto">
 					<p className="text-white small mb-4 mb-lg-0">Copyright &copy; Vote Forward 2018. All Rights Reserved.</p>
 			    <p className="text-white link small">
-            <a href="/privacy-policy">Privacy Policy</a> &#9702; <a href="/terms-of-use">Terms of Use</a> &#9702; <a target="_blank" href="https://bit.ly/votefwd-contact">Contact</a>
+            <a href="/privacy-policy">Privacy Policy</a> &#9702; <a href="/terms-of-use">Terms of Use</a> &#9702; <a target="_blank" rel="noopener noreferrer" href="https://bit.ly/votefwd-contact">Contact</a>
           </p>
 					</div>
 					<div className="col-lg-6 h-100 text-center text-lg-right my-auto">

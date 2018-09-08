@@ -120,7 +120,12 @@ export class VoterList extends Component {
     super(props)
 
     this.downloadBundle = this.downloadBundle.bind(this);
-    this.state= { downloadingBundle: false };
+    this.markAllPrepped= this.markAllPrepped.bind(this);
+    this.cancelMarkAllPrepped = this.cancelMarkAllPrepped.bind(this);
+    this.state= { 
+      downloadingBundle: false,
+      markingAllPrepped: false
+    };
   }
 
   downloadBundle() {
@@ -141,6 +146,15 @@ export class VoterList extends Component {
     });
   }
 
+  markAllPrepped() {
+    this.props.markAllPrepped();
+    this.cancelMarkAllPrepped();
+  }
+
+  cancelMarkAllPrepped() {
+    this.setState({markingAllPrepped: false});
+  }
+
   render() {
     let toPrep = this.props.voters.filter(voter => !voter.confirmed_prepped_at);
     let toSend = this.props.voters.filter(voter => voter.confirmed_prepped_at && !voter.confirmed_sent_at);
@@ -151,6 +165,23 @@ export class VoterList extends Component {
         <div className="alert alert-warning mt-3 mb-3 center" role="alert">Preparing batch to download...this may take a minute.</div>
       );
     }
+    let allPreppedButton;
+    if (!this.state.markingAllPrepped) {
+      allPreppedButton = (
+        <button disabled={this.state.downloadingBundle ? true : false} className="btn btn-light btn-sm" onClick={() => this.setState({markingAllPrepped: true})}>
+          <i className="fa fa-check"></i> All prepared 
+        </button>
+      )
+    }
+    else {
+      allPreppedButton = (
+        <div className="alert alert-warning mt-3 mb-3 center" role="alert">
+          Are you sure?
+          <button onClick={this.markAllPrepped}>Yes, all prepared!</button>
+          <button onClick={this.cancelMarkAllPrepped}>Cancel</button>
+        </div>
+      )
+    }
     return (
       <div className="px-5 pb-5">
         <h2 className="pt-2 mb-4">Your letters</h2>
@@ -160,9 +191,12 @@ export class VoterList extends Component {
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <span><strong>Letters to Prepare</strong> ({toPrep.length})</span>
                 {toPrep.length > 1 &&
-                  <button disabled={this.state.downloadingBundle ? true : false} className="btn btn-light btn-sm" onClick={this.downloadBundle}>
-                    <i className="icon-arrow-down-circle icons"></i> Download all
-                  </button>
+                  <React.Fragment>
+                    <button disabled={this.state.downloadingBundle ? true : false} className="btn btn-light btn-sm" onClick={this.downloadBundle}>
+                      <i className="icon-arrow-down-circle icons"></i> Download all
+                    </button>
+                    {allPreppedButton}
+                  </React.Fragment>
                 }
               </div>
               {alertContent}
