@@ -53,9 +53,9 @@ function generatePdfForVoters(voters, callback) {
     html = generateHtmlForVoter(voters[0]);
   }
   else {
-    var pdf_filenames = [];
+    let pdf_filenames = [];
     html += generateCoverPageHtmlForVoters(voters);
-    for (var i = 0; i < voters.length; i++){
+    for (var i = 0; i < voters.length; i++) {
       html += generateHtmlForVoter(voters[i]);
     }
   }
@@ -131,6 +131,7 @@ function generateHtmlForVoter(voter) {
   // takes a voter and makes a html template for them to be made into a pdf
   var voterId = voter.id;
   var hashId = hashids.encode(voterId);
+  storeHashIdForVoter(voter, hashId);
   var pledgeUrl = `${process.env.REACT_APP_URL}/pledge`;
   var template = fs.readFileSync('./templates/letter.html', 'utf8');
   var uncompiledTemplate = Handlebars.compile(template);
@@ -153,6 +154,16 @@ function generateHtmlForVoter(voter) {
   var html = uncompiledTemplate(context);
   return(html);
 }
+
+function storeHashIdForVoter(voter, hashid) {
+  db('voters')
+    .where('id', voter.id)
+    .update('hashid', hashid)
+    .catch(err=> {
+      console.error('ERROR: ' , err);
+    });
+}
+
 
 function generatePdfFromHtml(html, numvoters, callback) {
   const tmpdir = os.tmpdir();

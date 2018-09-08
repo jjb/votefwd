@@ -70,7 +70,6 @@ function _adoptSomeVoters(adopterId, numVoters, districtId, callback) {
         callback(null, []);
         return;
       }
-
       db('voters')
         .where('adopter_user_id', null)
         .where('district_id', districtId)
@@ -84,20 +83,6 @@ function _adoptSomeVoters(adopterId, numVoters, districtId, callback) {
               adopter_user_id: adopterId,
               adopted_at: db.fn.now(),
               updated_at: db.fn.now()
-            })
-            .then(function() {
-              var voters_to_return = [];
-              for (var i = 0; i < voters.length; i++){
-                var voter = voters[i];
-                var num_finished_calls = 0;
-                letterService.generateAndStorePdfForVoter(voter, function(voter) {
-                  num_finished_calls += 1;
-                  voters_to_return.push(voter)
-                  if (num_finished_calls === voters.length){
-                    callback(null, voters_to_return);
-                  }
-                });
-              }
             })
             .then(function() {
               slackService.publishToSlack('A user adopted ' + numVoters + ' voters in ' + districtId + '.')
