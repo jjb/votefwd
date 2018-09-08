@@ -168,17 +168,21 @@ export class VoterList extends Component {
     let allPreppedButton;
     if (!this.state.markingAllPrepped) {
       allPreppedButton = (
-        <button disabled={this.state.downloadingBundle ? true : false} className="btn btn-light btn-sm" onClick={() => this.setState({markingAllPrepped: true})}>
+        <button disabled={this.state.downloadingBundle ? true : false} className="btn btn-light btn-sm ml-2" onClick={() => this.setState({markingAllPrepped: true})}>
           <i className="fa fa-check"></i> All prepared 
         </button>
       )
     }
     else {
       allPreppedButton = (
-        <div className="alert alert-warning mt-3 mb-3 center" role="alert">
-          Are you sure?
-          <button onClick={this.markAllPrepped}>Yes, all prepared!</button>
-          <button onClick={this.cancelMarkAllPrepped}>Cancel</button>
+        <div className="alert alert-warning ml-3" role="alert">
+          <p>Are you sure?</p>
+          <button className="btn btn-success btn-sm mr-2" onClick={this.markAllPrepped}>
+            <i className="fa fa-check"></i> Yes!
+          </button>
+          <button className="btn btn-danger btn-sm" onClick={this.cancelMarkAllPrepped}>
+            <i className="fa fa-times"></i> Cancel
+          </button>
         </div>
       )
     }
@@ -244,7 +248,7 @@ export class VoterList extends Component {
             <ul className="list-group">
               {alreadySent.length < 1 &&
                 <li className="list-group-item disabled text-center py-5 bg-light">
-                  You haven't sent any letters yet.
+                  You haven’t sent any letters yet.
                 </li>
               }
               {alreadySent.map(voter =>
