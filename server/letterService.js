@@ -59,7 +59,7 @@ function generatePdfForVoters(voters, callback) {
       html += generateHtmlForVoter(voters[i]);
     }
   }
-  generatePdfFromHtml(html, voters.length, function(response, downloadFileName){
+  generatePdfFromHtml(html, voters, function(response, downloadFileName){
       var filename = response.filename ? response.filename : '';
       callback(filename, downloadFileName);
   });
@@ -165,7 +165,7 @@ function storeHashIdForVoter(voter, hashid) {
 }
 
 
-function generatePdfFromHtml(html, numvoters, callback) {
+function generatePdfFromHtml(html, voters, callback) {
   const tmpdir = os.tmpdir();
   const datestamp = dateStamp();
   const uuid = uuidv4();
@@ -173,11 +173,12 @@ function generatePdfFromHtml(html, numvoters, callback) {
   const filePath = tmpdir + '/' + remotefileName;
   const options = { format: 'Letter', timeout: '100000' };
   let downloadFileName;
-  if (numvoters === 1) {
-    downloadFileName = datestamp + '-' + 'LASTNAME' + '-VoteForward-letter.pdf';
+  if (voters.length === 1) {
+    const lastName = voters[0].last_name;
+    downloadFileName = datestamp + '-' + lastName + '-VoteForward-letter.pdf';
   }
   else {
-    downloadFileName = datestamp + '-votefwd-letters-batch-of-' + numvoters + '.pdf';
+    downloadFileName = datestamp + '-votefwd-letters-batch-of-' + voters.length + '.pdf';
   }
   pdf.create(html, options).toFile(filePath, function(err, response){
     if(err) {
