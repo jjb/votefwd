@@ -8,7 +8,7 @@ var letterService = require('./letterService');
 var slackService = require('./slackService');
 var userService = require('./userService');
 
-const allowedVoterBulkCount = [1, 25, 50];
+const allowedVoterBulkCount = [1, 5, 25, 50];
 let adoptionOrder = 'RANDOM()';
 
 function getVoterById(voterId, callback) {
