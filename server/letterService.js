@@ -45,7 +45,7 @@ function generatePdfForVoters(voters, callback) {
     html = generateHtmlForVoter(voters[0]);
   }
   else {
-    html += generateCoverPageHtmlForVoters(voters);
+    html = generateCoverPageHtmlForVoters(voters);
     for (var i = 0; i < voters.length; i++) {
       html += generateHtmlForVoter(voters[i]);
     }
@@ -160,10 +160,6 @@ function generatePdfFromHtml(html, voters, callback) {
   const uuid = uuidv4();
   const remotefileName = datestamp + '-' + uuid + '-letter.pdf'
   const filePath = tmpdir + '/' + remotefileName;
-  const options = {
-    format: 'Letter',
-    timeout: '100000'
-  };
   let downloadFileName;
   if (voters.length === 1) {
     const lastName = voters[0].last_name;
@@ -172,7 +168,7 @@ function generatePdfFromHtml(html, voters, callback) {
   else {
     downloadFileName = datestamp + '-votefwd-letters-batch-of-' + voters.length + '.pdf';
   }
-  pdf.create(html, options).toFile(filePath, function(err, response){
+  pdf.create(html, { format: 'Letter', timeout: '100000' }).toFile(filePath, function(err, response){
     if(err) {
       console.error('ERROR:', err);
     }
