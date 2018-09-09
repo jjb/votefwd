@@ -40,9 +40,8 @@ class VoterRecord extends Component {
 
     if (!voter.confirmed_prepped_at) {
       voterDownloadButton = (
-        <button className="btn btn-sm" onClick={() => {this.downloadLetterForVoter(voter.id)}}>
-            <i className="icon-download icons"></i>
-            Download letter
+        <button className="btn btn-sm btn-link" onClick={() => {this.downloadLetterForVoter(voter.id)}}>
+          <i className="icon-arrow-down-circle icons"></i> Download letter
         </button>
       );
       voterActions = (
