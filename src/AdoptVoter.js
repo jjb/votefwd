@@ -2,7 +2,6 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
-import loading from './loading.svg';
 
 export class AdoptVoter extends Component {
   constructor(props) {
@@ -26,8 +25,10 @@ export class AdoptVoter extends Component {
         }
       })
       .then(res => {
-        this.props.handleAdoptedVoter(res.data.voters);
-        this.setState({adopting: false});
+        setTimeout(function() {
+          this.props.handleAdoptedVoter(res.data.voters);
+          this.setState({adopting: false});
+        }.bind(this), 500);
       })
       .catch(err => {
         console.error(err);
@@ -41,38 +42,6 @@ export class AdoptVoter extends Component {
   }
 
   render() {
-    let adoptionButtons;
-    if (this.state.adopting) {
-      adoptionButtons = (
-        <div
-          className="alert alert-success alert-progress pl-5"
-          role="alert">
-          <img src={loading} alt="loading" className="ml-5 mr-3" /> Assigning voters to you. This may take a moment.
-        </div>
-      )
-    } else {
-      adoptionButtons = (
-        <div className="row">
-          <div className="col-md">
-            <button
-              disabled={this.state.adopting ? true : false}
-              onClick={() => this.adoptVoter(5, this.state.district.district_id)}
-              className="btn btn-primary btn-lg w-100 mt-1">
-                Adopt <span className="reset-num">5</span> Voters
-            </button>
-          </div>
-          <div className="col-md">
-            <button
-              disabled={this.state.adopting ? true : false}
-              onClick={() => this.adoptVoter(25, this.state.district.district_id)}
-              className="btn btn-primary btn-lg w-100 mt-1">
-                Adopt <span className="reset-num">25</span> Voters
-            </button>
-          </div>
-        </div>
-      )
-    }
-
     return (
       <div className="container-fluid p-0">
         <div className="row no-gutters position-relative">
@@ -88,7 +57,24 @@ export class AdoptVoter extends Component {
               <p className="mt-4 mb-3 small">
                 Voters you adopt won‘t be assigned to anyone else, so by adopting them, you’re committing to send the letters.
               </p>
-              {adoptionButtons}
+              <div className="row">
+                <div className="col-md">
+                  <button
+                    disabled={this.state.adopting ? true : false}
+                    onClick={() => this.adoptVoter(5, this.state.district.district_id)}
+                    className="btn btn-primary btn-lg w-100 mt-1">
+                      Adopt <span className="reset-num">5</span> Voters
+                  </button>
+                </div>
+                <div className="col-md">
+                  <button
+                    disabled={this.state.adopting ? true : false}
+                    onClick={() => this.adoptVoter(25, this.state.district.district_id)}
+                    className="btn btn-primary btn-lg w-100 mt-1">
+                      Adopt <span className="reset-num">25</span> Voters
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
         </div>

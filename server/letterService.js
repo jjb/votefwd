@@ -4,19 +4,11 @@
 var db = require('./db');
 var pdf = require('html-pdf');
 var Hashids = require('hashids');
-var Storage = require('@google-cloud/storage');
 var Handlebars = require('handlebars');
 var uuidv4 = require('uuid/v4');
 var fs = require('fs');
 var os = require('os');
 var URL = require('url');
-
-// Google cloud storage setup needed for getting and storing files
-const storage = new Storage({
-  keyFilename: './googleappcreds.json'
-})
-const bucketName = process.env.REACT_APP_CLOUD_STORAGE_BUCKET_NAME;
-const voterBucket = storage.bucket(bucketName);
 
 // Hard-coding return addresses temporarily, so we can launch multiple-district support
 // Couldn't figure out how to get from DB inside synchronous generation
@@ -44,63 +36,21 @@ function dateStamp() {
   return DateString;
 }
 
-function getSignedUrl(url, callback) {
-  let path = URL.parse(url).path
-  let fileName = path.substr(path.lastIndexOf('/') + 1);
-  let GCPFile = voterBucket.file(fileName);
-  getSignedUrlForGCPFile(GCPFile, function(plea_letter_url) {
-    callback(plea_letter_url)
-  })
-}
-
-function getSignedUrlForGCPFile(gcpFileObject, callback) {
-  /*
-  Takes a gcp file object and applies a static config to create a signed url.
-  Inputs:
-    gcpFileObject - an instance of  https://cloud.google.com/nodejs/docs/reference/storage/1.6.x/File
-  Returns:
-    A callback with a signed url https://cloud.google.com/nodejs/docs/reference/storage/1.6.x/File#getSignedUrl
-    or an error
-  */
-
-  // Set a date two days in a future
-  var expDate = new Date();
-  expDate.setDate(expDate.getDate() + 2);
-
-  var config = {
-      action: 'read',
-      expires: expDate,
-  }
-
-  gcpFileObject.getSignedUrl(config, function(err, url) {
-    if (err) {
-      console.error(err);
-      return;
-    };
-
-    callback(url);
-  });
-}
-
 var hashids = new Hashids(process.env.REACT_APP_HASHID_SALT, 6,
   process.env.REACT_APP_HASHID_DICTIONARY);
 
-function generateAndStorePdfForVoter(voter, callback) {
-  // wrapper function to generate and store a pdf for a voter
-  generatePdfForVoter(voter, function(response, voter, storageArgs){
-    storePdfForVoter(response, voter, storageArgs, callback);
-  });
-}
-
-function generateBulkPdfForVoters(voters, callback) {
-  // wrapper function to take a list of voters and make one pdf for all of them.
-  var pdf_filenames = [];
-  var html = ''
-  html += generateCoverPageHtmlForVoters(voters);
-  for (var i = 0; i < voters.length; i++){
-    html += generateHtmlForVoter(voters[i]);
+function generatePdfForVoters(voters, callback) {
+  let html;
+  if (voters.length === 1) {
+    html = generateHtmlForVoter(voters[0]);
   }
-  generatePdfFromBulkHtml(html, voters.length, function(response, downloadFileName){
+  else {
+    html = generateCoverPageHtmlForVoters(voters);
+    for (var i = 0; i < voters.length; i++) {
+      html += generateHtmlForVoter(voters[i]);
+    }
+  }
+  generatePdfFromHtml(html, voters, function(response, downloadFileName){
       var filename = response.filename ? response.filename : '';
       callback(filename, downloadFileName);
   });
@@ -169,9 +119,9 @@ function getReturnAddressForVoter(voter) {
 
 function generateHtmlForVoter(voter) {
   let returnAddress = getReturnAddressForVoter(voter);
-  // takes a voter and makes a html template for them to be made into a pdf
   var voterId = voter.id;
   var hashId = hashids.encode(voterId);
+  storeHashIdForVoter(voter, hashId);
   var pledgeUrl = `${process.env.REACT_APP_URL}/pledge`;
   var template = fs.readFileSync('./templates/letter.html', 'utf8');
   var uncompiledTemplate = Handlebars.compile(template);
@@ -195,16 +145,30 @@ function generateHtmlForVoter(voter) {
   return(html);
 }
 
-function generatePdfFromBulkHtml(html, numvoters, callback) {
-  // takes a bunch of merged html templates and makes them into a pdf
-  var uuid = uuidv4();
-  var datestamp = dateStamp();
+function storeHashIdForVoter(voter, hashid) {
+  db('voters')
+    .where('id', voter.id)
+    .update('hashid', hashid)
+    .catch(err=> {
+      console.error('ERROR: ' , err);
+    });
+}
 
+function generatePdfFromHtml(html, voters, callback) {
   const tmpdir = os.tmpdir();
+  const datestamp = dateStamp();
+  const uuid = uuidv4();
   const remotefileName = datestamp + '-' + uuid + '-letter.pdf'
-  const downloadFileName = datestamp + '-votefwd-letters-batch-of-' + numvoters + '.pdf';
   const filePath = tmpdir + '/' + remotefileName;
-  pdf.create(html, {timeout: '100000'}).toFile(filePath, function(err, response){
+  let downloadFileName;
+  if (voters.length === 1) {
+    const lastName = voters[0].last_name;
+    downloadFileName = datestamp + '-' + lastName + '-VoteForward-letter.pdf';
+  }
+  else {
+    downloadFileName = datestamp + '-votefwd-letters-batch-of-' + voters.length + '.pdf';
+  }
+  pdf.create(html, { format: 'Letter', timeout: '100000' }).toFile(filePath, function(err, response){
     if(err) {
       console.error('ERROR:', err);
     }
@@ -212,73 +176,6 @@ function generatePdfFromBulkHtml(html, numvoters, callback) {
   });
 }
 
-function generatePdfForVoter(voter, callback) {
-  var uuid = uuidv4();
-  var datestamp = dateStamp();
-  var hashId = hashids.encode(voter.id);
-  var html = generateHtmlForVoter(voter);
-  var options = { format: 'Letter' };
-  const tmpdir = os.tmpdir();
-  const remotefileName = datestamp + '-' + uuid + '-letter.pdf'
-  const downloadFileName = datestamp + '-' + voter.last_name + '-VoteForward-letter.pdf';
-  const filePath = tmpdir + '/' + remotefileName;
-  pdf.create(html).toFile(filePath, function(err, response){
-    if(err) {
-      console.error('ERROR:', err);
-    }
-    var storageArgs = {
-      downloadFileName: downloadFileName,
-      remotefileName: remotefileName,
-      hashId: hashId
-    }
-    callback(response, voter, storageArgs);
-  });
-}
-
-function storePdfForVoter(response, voter, storageArgs, callback){
-  const uploadOptions =
-            {
-                gzip: true,
-                contentType: 'application/pdf',
-                contentDisposition: 'attachment',
-                metadata: {
-                    contentType: 'application/pdf',
-                    contentDisposition: `attachment; filename='${storageArgs["downloadFileName"]}'`,
-                },
-                headers: {
-                    contentType: 'application/pdf',
-                    contentDisposition: 'attachment',
-                }
-            };
-
-  storage
-    .bucket(bucketName)
-    .upload(response.filename, uploadOptions)
-    .then((response) => {
-      var gcpFile = response[0];
-      getSignedUrlForGCPFile(gcpFile, function(plea_letter_url) {
-        voter['plea_letter_url'] = encodeURI(plea_letter_url);
-        callback(voter);
-      });
-    })
-    .then(() => {
-      let pleaLetterUrl = 'http://storage.googleapis.com/' + bucketName + '/' + storageArgs["remotefileName"];
-      db('voters')
-        .where('id', voter.id)
-        .update('plea_letter_url', pleaLetterUrl)
-        .update('hashid', storageArgs["hashId"])
-        .catch(err=> {
-          console.error('ERROR: ', err);
-        });
-    })
-    .catch(err => {
-      console.error('ERROR: ', err);
-    });
-}
-
 module.exports = {
-  generateAndStorePdfForVoter,
-  generateBulkPdfForVoters,
-  generatePdfForVoter,
-  getSignedUrl
+  generatePdfForVoters
 }

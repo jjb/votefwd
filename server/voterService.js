@@ -27,7 +27,6 @@ function getUsersAdoptedVoters(userId, callback) {
   db('voters')
     .where('adopter_user_id', userId)
     .then(function(result) {
-      //TODO: process the voter array to return signed PDF urls
       callback(result);
     })
     .catch(err => {
@@ -70,7 +69,6 @@ function _adoptSomeVoters(adopterId, numVoters, districtId, callback) {
         callback(null, []);
         return;
       }
-
       db('voters')
         .where('adopter_user_id', null)
         .where('district_id', districtId)
@@ -86,18 +84,7 @@ function _adoptSomeVoters(adopterId, numVoters, districtId, callback) {
               updated_at: db.fn.now()
             })
             .then(function() {
-              var voters_to_return = [];
-              for (var i = 0; i < voters.length; i++){
-                var voter = voters[i];
-                var num_finished_calls = 0;
-                letterService.generateAndStorePdfForVoter(voter, function(voter) {
-                  num_finished_calls += 1;
-                  voters_to_return.push(voter)
-                  if (num_finished_calls === voters.length){
-                    callback(null, voters_to_return);
-                  }
-                });
-              }
+              callback(null, voters)
             })
             .then(function() {
               slackService.publishToSlack('A user adopted ' + numVoters + ' voters in ' + districtId + '.')
@@ -118,12 +105,24 @@ function _adoptSomeVoters(adopterId, numVoters, districtId, callback) {
     });
 }
 
+function downloadLetterToVoter(voterId, callback) {
+  db('voters')
+    .where('id', voterId)
+    .then(function(voter) {
+      letterService.generatePdfForVoters(voter, callback)
+    })
+    .catch(err => {
+      console.error(err);
+    });
+}
+
 function downloadAllLetters(userId, callback) {
+  // Downloads all not-yet-prepped letters for a user
   db('voters')
     .where('adopter_user_id', userId)
     .where('confirmed_prepped_at', null)
     .then(function(voters) {
-      letterService.generateBulkPdfForVoters(voters, callback)
+      letterService.generatePdfForVoters(voters, callback)
     })
     .catch(err => {
       console.error(err);
@@ -393,6 +392,7 @@ function _prepForTests() {
 module.exports = {
   getVoterById,
   getUsersAdoptedVoters,
+  downloadLetterToVoter,
   downloadAllLetters,
   adoptRandomVoter,
   confirmSent,

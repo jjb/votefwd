@@ -8,46 +8,27 @@ import download from 'js-file-download';
 class VoterRecord extends Component {
   constructor(props) {
     super(props)
-
-    this.state = { signedUrl: ''}
-    this.getSignedUrl = this.getSignedUrl.bind(this);
+    this.state = { downloadingLetter : false }
   }
 
-  getSignedUrl(rawUrl) {
+  downloadLetterForVoter(voter_id) {
     axios({
+     method: 'GET',
       headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
-      method: 'GET',
-      url: `${process.env.REACT_APP_API_URL}/voter/signed-letter-url`,
-      params: { url: rawUrl }
+      url: `${process.env.REACT_APP_API_URL}/voters/downloadLetter`,
+      params: { voter_id: voter_id },
+      responseType: "blob"
     })
     .then(res => {
-      this.setState({ signedUrl: res.data });
+      download(res.data, res.headers.filename);
     })
     .catch(err => {
       console.error(err);
     });
   }
 
-  componentWillMount() {
-    // This is a kludge, a lame way of checking whether the url is signed
-    // yet. On initial adoption, it comes back already signed, but on
-    // subsequent page loads, it does not currently, so, check.
-    // TODO: change `getAdoptedVotersForUser` in voter service
-    // to always send back signed Urls.
-    if ( !this.props.voter.plea_letter_url ) {
-      return;
-    }
-    else if (this.props.voter.plea_letter_url.length > 150) {
-      this.setState({ signedUrl: this.props.voter.plea_letter_url })
-    }
-    else {
-      this.getSignedUrl(this.props.voter.plea_letter_url);
-    }
-  }
-
   render() {
     let voter = this.props.voter;
-    let filename = "VoteForward_PleaLetter_" + voter.last_name + '.pdf';
     let voterActions;
     let voterDownloadButton;
 
@@ -59,12 +40,9 @@ class VoterRecord extends Component {
 
     if (!voter.confirmed_prepped_at) {
       voterDownloadButton = (
-        <a className="small"
-          download={filename}
-          href={this.state.signedUrl}>
-            <i className="icon-download icons"></i>
-            Download letter
-        </a>
+        <button className="btn btn-sm btn-link" onClick={() => {this.downloadLetterForVoter(voter.id)}}>
+          <i className="icon-arrow-down-circle icons"></i> Download letter
+        </button>
       );
       voterActions = (
         <div>

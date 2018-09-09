@@ -87,6 +87,23 @@ router.route('/voter/adopt-random')
     });
   });
 
+router.route('/voters/downloadLetter')
+  .get(checkJwt, function(req, res) {
+    voterService.downloadLetterToVoter(req.query.voter_id,
+      function(filepath, downloadFileName) {
+        res.header('Access-Control-Expose-Headers', "Filename");
+        res.header('Filename', downloadFileName);
+        res.download(filepath, downloadFileName, function (err) {
+           if (err) {
+              console.log("Error downloading letter.");
+              console.log(err);
+           } else {
+              console.log("Success downloading letter.");
+           }
+        });
+      });
+  });
+
 router.route('/voters/downloadAllLetters')
   .get(checkJwt, function(req, res) {
     voterService.downloadAllLetters(req.query.user_id,
