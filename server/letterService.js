@@ -127,7 +127,6 @@ function getReturnAddressForVoter(voter) {
 
 function generateHtmlForVoter(voter) {
   let returnAddress = getReturnAddressForVoter(voter);
-  // takes a voter and makes a html template for them to be made into a pdf
   var voterId = voter.id;
   var hashId = hashids.encode(voterId);
   storeHashIdForVoter(voter, hashId);
@@ -163,14 +162,16 @@ function storeHashIdForVoter(voter, hashid) {
     });
 }
 
-
 function generatePdfFromHtml(html, voters, callback) {
   const tmpdir = os.tmpdir();
   const datestamp = dateStamp();
   const uuid = uuidv4();
   const remotefileName = datestamp + '-' + uuid + '-letter.pdf'
   const filePath = tmpdir + '/' + remotefileName;
-  const options = { "format": "Letter", "timeout": "100000" };
+  const options = {
+    "format": "Letter",
+    "timeout": "100000"
+  };
   let downloadFileName;
   if (voters.length === 1) {
     const lastName = voters[0].last_name;
