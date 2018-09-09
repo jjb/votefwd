@@ -4,19 +4,11 @@
 var db = require('./db');
 var pdf = require('html-pdf');
 var Hashids = require('hashids');
-var Storage = require('@google-cloud/storage');
 var Handlebars = require('handlebars');
 var uuidv4 = require('uuid/v4');
 var fs = require('fs');
 var os = require('os');
 var URL = require('url');
-
-// Google cloud storage setup needed for getting and storing files
-const storage = new Storage({
-  keyFilename: './googleappcreds.json'
-})
-const bucketName = process.env.REACT_APP_CLOUD_STORAGE_BUCKET_NAME;
-const voterBucket = storage.bucket(bucketName);
 
 // Hard-coding return addresses temporarily, so we can launch multiple-district support
 // Couldn't figure out how to get from DB inside synchronous generation
@@ -169,8 +161,8 @@ function generatePdfFromHtml(html, voters, callback) {
   const remotefileName = datestamp + '-' + uuid + '-letter.pdf'
   const filePath = tmpdir + '/' + remotefileName;
   const options = {
-    "format": "Letter",
-    "timeout": "100000"
+    format: 'Letter',
+    timeout: '100000'
   };
   let downloadFileName;
   if (voters.length === 1) {
