@@ -29,7 +29,6 @@ class VoterRecord extends Component {
 
   render() {
     let voter = this.props.voter;
-    //let filename = 'VoteForward_PleaLetter_' + voter.last_name + '.pdf';
     let voterActions;
     let voterDownloadButton;
 
