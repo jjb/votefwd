@@ -27,7 +27,6 @@ function getUsersAdoptedVoters(userId, callback) {
   db('voters')
     .where('adopter_user_id', userId)
     .then(function(result) {
-      //TODO: process the voter array to return signed PDF urls
       callback(result);
     })
     .catch(err => {
