@@ -5,7 +5,7 @@
     <style>
       a { color: black; }
       .bold { font-weight: bold;}
-      .logo { width: 8em; margin-bottom: 1.25em; margin-left: -0.9em;}
+      .logo { width: 8em; margin-bottom: 1.25em; margin-left: -0.75em;}
       #salutation {margin-bottom: 2em;}
       #prompt {margin-bottom: 4.25em;}
       #closing {margin-bottom: 4em;}
@@ -15,7 +15,7 @@
   </head>
   <div class="pagebreak"> </div>
   <body>
-    <div class="letter" style="font-family: sans-serif; padding-top: 5em; margin-right: 5em; margin-left: 5em;">
+    <div class="letter" style="font-family: sans-serif; padding-top: 4.5em; margin-right: 5em; margin-left: 5em;">
       <svg class="logo" width="200px" height="63px" viewBox="0 0 2000 630" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
         <g id="letter-logo" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
             <g id="Logo-Group" fill="#000000">
@@ -31,12 +31,12 @@
       <p id="prompt">I have pledged to vote in every election, because</p>
       <p>There’s an extremely important election on Tuesday, November 6, 2018. <span class="bold">Will you please join me in casting a ballot?</span></p>
       <p>I’m not asking you to vote for particular candidates, only to be a voter, so our elected representatives are accountable to all of us.</p>
-      <p>You can visit <a href="votefwd.org/vote">votefwd.org/vote</a> for more info. Then, on 11/6, please cast your ballot and make your voice heard!</p>
+      <p>Visit <a href="votefwd.org/vote">votefwd.org/vote</a> for more info about the election. Then cast your ballot on 11/6 and make your voice heard. Thank you!</p>
       <p id="closing">Sincerely,</p>
-      <p id="info">A volunteer sent this letter via Vote Forward, an independent organization that connects citizens to one another to increase voter turnout, especially among Democrats. Visit www.votefwd.org to learn more.</p>
+      <p id="info">A volunteer sent this letter via Vote Forward, an independent organization that connects citizens to one another to increase voter turnout, especially among Democrats.</p>
       <p id="footer">
         Prepared for: {{voterName}} at {{voterAddress}}<br>
-        Return to: {{returnAddress}} | Pledge code: {{hashId}}
+        Return to: {{returnAddress}} &bull; Code: <span class="bold">{{hashId}}</span>
       </p>
     </div>
   </body>
