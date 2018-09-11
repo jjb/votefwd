@@ -94,13 +94,13 @@ function notifyUserOfNewQualifiedState(user, newState){
   if (user['qual_state'] == QualStateEnum.pre_qualified && newState == QualStateEnum.qualified) {
     //notify users when promoted to qualified
     if (process.env.NODE_ENV !== 'test') {
-      emailService.sendEmail('qualified', user, 'You\'re approved to send letters on Vote Forward!');
+      emailService.sendEmail('qualified', user, 'You\'re approved to send letters on Vote Forward');
     }
     return 'sent qualified email';
   } else if ((user['qual_state'] == QualStateEnum.pre_qualified || user['qual_state'] == QualStateEnum.qualified) && newState == QualStateEnum.super_qualified) {
     if (process.env.NODE_ENV !== 'test') {
       //notify users when promoted to super_qualified
-      emailService.sendEmail('super_qualified', user, 'You\'re approved to adopt large numbers of voters.');
+      emailService.sendEmail('super_qualified', user, 'You\'re a super-volunteer on Vote Forward!');
     }
     return 'sent super_qualified email';
   }
