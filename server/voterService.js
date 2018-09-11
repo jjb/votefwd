@@ -141,9 +141,6 @@ function confirmPrepped(voterId, callback) {
         callback(voter);
       })
     })
-    .then(function() {
-      slackService.publishToSlack('A user marked a letter prepped.');
-    })
     .catch(err => {
       console.error(err)
     });
@@ -160,9 +157,6 @@ function undoConfirmPrepped(voterId, callback) {
       getVoterById(voterId, function(voter) {
         callback(voter);
       })
-    })
-    .then(function() {
-      slackService.publishToSlack('A user marked a letter *not* prepped.');
     })
     .catch(err => {
       console.error(err)
@@ -181,9 +175,6 @@ function confirmSent(voterId, callback) {
         callback(voter);
       })
     })
-    .then(function() {
-      slackService.publishToSlack('A user marked a letter sent.');
-    })
     .catch(err => {
       console.error(err)
     });
@@ -200,9 +191,6 @@ function undoConfirmSent(voterId, callback) {
       getVoterById(voterId, function(voter) {
         callback(voter);
       })
-    })
-    .then(function() {
-      slackService.publishToSlack('A user marked a letter *not* sent.');
     })
     .catch(err => {
       console.error(err)
