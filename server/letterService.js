@@ -24,7 +24,9 @@ const returnAddresses = {
   'CA10': '1169 S Main St #331, Manteca, CA 95337',
   'PA10': '1784 East 3rd Street #162, Williamsport, PA 17701',
   'TX32': '224 W Campbell Rd #203, Richardson, TX 75080',
-  'KS03': '119 N Parker St #184, Olathe, KS 66061'
+  'KS03': '119 N Parker St #184, Olathe, KS 66061',
+  'CA48': '1024 Bayside Dr #538, Newport Beach, CA 92660',
+  'CA10': '1169 S Main St #331, Manteca, CA 95337'
 }
 
 function dateStamp() {
