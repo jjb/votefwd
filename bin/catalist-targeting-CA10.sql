@@ -3,7 +3,7 @@ DO $$
 DECLARE
   experimentid integer;
   populationtotal integer;
-  controlcount integer:= 4000;
+  controlcount integer:= 10000;
   targetcount integer;
 
 BEGIN
