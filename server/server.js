@@ -6,7 +6,6 @@ var cors = require('cors');
 var path = require('path');
 var bodyParser = require('body-parser');
 var pdf = require('html-pdf');
-var Storage = require('@google-cloud/storage');
 var Handlebars = require('handlebars');
 var Hashids = require('hashids');
 var uuidv4 = require('uuid/v4');
