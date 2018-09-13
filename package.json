@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "auth0-js": "^9.6.1",
+    "async": "^2.6.1",
     "aws-sdk": "^2.273.1",
     "axios": "^0.18.0",
     "body-parser": "^1.18.3",
@@ -58,7 +59,6 @@
     "clear-quals": "psql -f bin/clear-user-qualifications.sql votefwd"
   },
   "devDependencies": {
-    "async": "^2.6.1",
     "chai": "^4.1.2",
     "chai-sorted": "^0.2.0",
     "mocha": "^5.2.0",

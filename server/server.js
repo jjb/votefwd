@@ -89,7 +89,13 @@ router.route('/voter/adopt-random')
 router.route('/voters/downloadLetter')
   .get(checkJwt, function(req, res) {
     voterService.downloadLetterToVoter(req.query.voter_id,
-      function(filepath, downloadFileName) {
+      function(err, filepath, downloadFileName) {
+        if (err) {
+          res.status(500).send('Error generating file');
+          console.error('Error generating file for one voter');
+          console.error(err);
+          return;
+        }
         res.header('Access-Control-Expose-Headers', "Filename");
         res.header('Filename', downloadFileName);
         res.download(filepath, downloadFileName, function (err) {
@@ -106,7 +112,13 @@ router.route('/voters/downloadLetter')
 router.route('/voters/downloadAllLetters')
   .get(checkJwt, function(req, res) {
     voterService.downloadAllLetters(req.query.user_id,
-      function(filepath, downloadFileName) {
+      function(err, filepath, downloadFileName) {
+        if (err) {
+          res.status(500).send('Error generating file');
+          console.error('Error generating file for multiple voters');
+          console.error(err);
+          return;
+        }
         res.header('Access-Control-Expose-Headers', "Filename");
         res.header('Filename', downloadFileName);
         res.download(filepath, downloadFileName, function (err) {
