@@ -9,6 +9,8 @@ var uuidv4 = require('uuid/v4');
 var fs = require('fs');
 var os = require('os');
 var URL = require('url');
+var util = require('./util');
+var semaphore = require('semaphore');
 
 // Hard-coding return addresses temporarily, so we can launch multiple-district support
 // Couldn't figure out how to get from DB inside synchronous generation
@@ -156,6 +158,12 @@ function storeHashIdForVoter(voter, hashid) {
     });
 }
 
+const generateSemaphore = semaphore(parseInt(process.env.PDF_GEN_LIMIT || '20'));
+
+function _setSemaphoreCapacity(capacity) {
+  generateSemaphore.capacity = capacity;
+}
+
 function generatePdfFromHtml(html, voters, callback) {
   const tmpdir = os.tmpdir();
   const datestamp = dateStamp();
@@ -170,14 +178,21 @@ function generatePdfFromHtml(html, voters, callback) {
   else {
     downloadFileName = datestamp + '-votefwd-letters-batch-of-' + voters.length + '.pdf';
   }
-  pdf.create(html, { format: 'Letter', timeout: '100000' }).toFile(filePath, function(err, response){
-    if(err) {
-      console.error('ERROR:', err);
-    }
-    callback(response, downloadFileName);
+  generateSemaphore.take(function () {
+    pdf.create(html, { format: 'Letter', timeout: '100000' }).toFile(filePath, function(err, response) {
+      generateSemaphore.leave();
+
+      if(err) {
+        console.error('ERROR:', err);
+      }
+
+      callback(response, downloadFileName);
+    });
   });
 }
 
 module.exports = {
-  generatePdfForVoters
+  generatePdfForVoters,
+  _generatePdfFromHtml: util.exposeForTests('_generatePdfFromHtml', generatePdfFromHtml),
+  _setSemaphoreCapacity: util.exposeForTests('_setSemaphoreCapacity', _setSemaphoreCapacity),
 }

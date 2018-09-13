@@ -44,6 +44,7 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "^1.1.4",
     "react-table": "^6.8.6",
+    "semaphore": "^1.1.0",
     "slack-notify": "^0.1.6",
     "uuid": "^3.3.2"
   },
@@ -59,7 +60,9 @@
     "clear-quals": "psql -f bin/clear-user-qualifications.sql votefwd"
   },
   "devDependencies": {
+    "async": "^2.6.1",
     "chai": "^4.1.2",
+    "chai-sorted": "^0.2.0",
     "mocha": "^5.2.0",
     "request": "^2.87.0"
   }

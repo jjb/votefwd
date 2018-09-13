@@ -78,6 +78,12 @@ them if you need to. (We do so in deployed environments):
   	REACT_APP_HASHID_SALT=<ANY_STRING_OR_BLANK>
   	REACT_APP_HASHID_DICTIONARY=<CHARACTER SET>
 
+We limit the number of PDFs that can be generated concurrently to prevent the
+PDF generation processes from using up all memory on the VM.  The sensible
+default is 20, but you can override it to anything you want:
+
+    PDF_GEN_LIMIT=<AN INTEGER>
+
 #### Google Cloud Platform Storage
 
 We use GCP to store PDFs of generated plea letters. Email `scott@votefwd.org` to request access to the project on GCP. Then visit the [GCP console](https://console.cloud.google.com/apis/credentials?project=voteforward-198801) and create a JSON `service account key`. Move this file to the root directory of your repo and rename it `googleappcreds.json`.
