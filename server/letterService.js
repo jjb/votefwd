@@ -1,6 +1,7 @@
  //letterService.js
 'use strict'
 
+var async = require('async');
 var db = require('./db');
 var pdf = require('html-pdf');
 var Hashids = require('hashids');
@@ -11,25 +12,6 @@ var os = require('os');
 var URL = require('url');
 var util = require('./util');
 var semaphore = require('semaphore');
-
-// Hard-coding return addresses temporarily, so we can launch multiple-district support
-// Couldn't figure out how to get from DB inside synchronous generation
-// functions. TODO: get these from the database.
-
-const returnAddresses = {
-  'OH12': '829 Bethel Road #137, Columbus, OH 43214',
-  'GA06': '2870 Peachtree Road #172, Atlanta, GA 30305',
-  'AZ02': '1517 N Wilmot Rd #121, Tucson, AZ 85712',
-  'TX23': '224 W Campbell Rd #203, Richardson, TX 75080',
-  'MN02': '7635 W 148th St #104, Apple Valley, MN 55124',
-  'FL27': '7742 N Kendall Dr #323, Kendall, FL 33156',
-  'CA10': '1169 S Main St #331, Manteca, CA 95337',
-  'PA10': '1784 East 3rd Street #162, Williamsport, PA 17701',
-  'TX32': '224 W Campbell Rd #203, Richardson, TX 75080',
-  'KS03': '119 N Parker St #184, Olathe, KS 66061',
-  'CA48': '1024 Bayside Dr #538, Newport Beach, CA 92660',
-  'CA10': '1169 S Main St #331, Manteca, CA 95337'
-}
 
 function dateStamp() {
   var newDate = new Date();
@@ -44,23 +26,35 @@ var hashids = new Hashids(process.env.REACT_APP_HASHID_SALT, 6,
   process.env.REACT_APP_HASHID_DICTIONARY);
 
 function generatePdfForVoters(voters, callback) {
-  let html;
-  if (voters.length === 1) {
-    html = generateHtmlForVoter(voters[0]);
-  }
-  else {
-    html = generateCoverPageHtmlForVoters(voters);
-    for (var i = 0; i < voters.length; i++) {
-      html += generateHtmlForVoter(voters[i]);
+  generateCoverPageHtmlForVoters(voters, function (err, html) {
+    if (err) {
+      callback(err);
+      return;
     }
-  }
-  generatePdfFromHtml(html, voters, function(response, downloadFileName){
-      var filename = response.filename ? response.filename : '';
-      callback(filename, downloadFileName);
+    // Chose to limit parallel queries to 5 just to lighten the load on the db
+    async.mapLimit(voters, 5, generateHtmlForVoter, function (err, results) {
+      if (err) {
+        callback(err);
+        return;
+      }
+      html = html + results.join('');
+      generatePdfFromHtml(html, voters, function(err, response, downloadFileName) {
+        var filename = (response && response.filename) ? response.filename : '';
+        callback(err, filename, downloadFileName);
+      });
+    });
   });
 }
 
-function generateCoverPageHtmlForVoters(voters) {
+function generateCoverPageHtmlForVoters(voters, callback) {
+  // Return an empty string so that no cover page is generated. This function is
+  // meant to be called whether we need a cover page or not, and it gets to be
+  // the decider.
+  if (voters.length === 1) {
+    callback(null, '');
+    return;
+  }
+
   // given a list of voters from the db, make a cover page that has their names and addresses.
   var template = fs.readFileSync('./templates/coverpage.html', 'utf8');
   var uncompiledTemplate = Handlebars.compile(template);
@@ -75,78 +69,83 @@ function generateCoverPageHtmlForVoters(voters) {
     }
     processedVoters.push(voter);
   });
-  voters.forEach(function(voter) {
-    var returnAddress = getReturnAddressForVoter(voter);
-    if (returnAddresses.indexOf(returnAddress) === -1) {
-      returnAddresses.push(returnAddress);
+  // Chose to limit parallel queries to 5 just to lighten the load on the db
+  async.mapLimit(voters, 5, getReturnAddressForVoter, function (err, results) {
+    if (err) {
+      callback(err);
+      return;
     }
-  });
-  var context = {
+    results.forEach(function(returnAddress) {
+      if (returnAddress && returnAddresses.indexOf(returnAddress) === -1) {
+        returnAddresses.push(returnAddress);
+      }
+    });
+    var context = {
       voters: processedVoters,
       returnAddresses: returnAddresses
     };
-  var html = uncompiledTemplate(context);
-  return html;
+    var html = uncompiledTemplate(context);
+    callback(null, html);
+  });
 }
 
 // gets return address for voter's district
-function getReturnAddressForVoter(voter) {
-  let returnAddress = returnAddresses[voter.district_id];
-  if (returnAddress) {
-    return returnAddress.toUpperCase();
-  }
-  else {
-    return null;
-  }
-  //db.from('districts')
-    //.select(
-      //'districts.return_address',
-      //'districts.ra_city',
-      //'districts.ra_state',
-      //'districts.ra_zip'
-    //)
-    //.where('districts.district_id', voter.district_id)
-    //.limit(1)
-    //.then(function(result) {
-      //returnAddress=
-        //result[0].return_address + ', ' +
-        //result[0].ra_city + ', ' +
-        //result[0].ra_state + ' ' +
-        //result[0].ra_zip;
-      //callback(returnAddress);
-      //return returnAddress;
-    //})
-    //.catch(err=> {
-      //console.error('ERROR: ', err);
-    //});
+function getReturnAddressForVoter(voter, callback) {
+  db.from('districts')
+    .first(
+      'return_address',
+      'ra_city',
+      'ra_state',
+      'ra_zip'
+    )
+    .where('district_id', voter.district_id)
+    .limit(1)
+    .then(function (result) {
+      if (!result) {
+        callback(`No district found for ${voter.district_id}`);
+        return;
+      }
+      const returnAddress =
+        `${result.return_address}, ${result.ra_city}, ${result.ra_state} ${result.ra_zip}`
+        .toUpperCase();
+      callback(null, returnAddress);
+    })
+    .catch(err => {
+      callback(err);
+    });
 }
 
-function generateHtmlForVoter(voter) {
-  let returnAddress = getReturnAddressForVoter(voter);
-  var voterId = voter.id;
-  var hashId = hashids.encode(voterId);
-  storeHashIdForVoter(voter, hashId);
-  var pledgeUrl = `${process.env.REACT_APP_URL}/pledge`;
-  var template = fs.readFileSync('./templates/letter.html', 'utf8');
-  var uncompiledTemplate = Handlebars.compile(template);
-  var salutation;
-  if (voter.gender === 'M' || voter.gender === 'male') {
-    salutation = "Mr."
-  } else if (voter.gender === 'F' || voter.gender === 'female') {
-    salutation = "Ms."
-  } else { salutation = null };
-  var fullName = [salutation, voter.first_name, voter.middle_name, voter.last_name, voter.suffix].filter(Boolean).join(" ");
-  var fullAddress = voter.address + ', ' + voter.city + ', ' + voter.state + ' ' + voter.zip;
-  var context = {
-    voterId: voterId,
-    voterName: fullName,
-    voterAddress: fullAddress,
-    returnAddress: returnAddress,
-    hashId: hashId,
-    pledgeUrl: pledgeUrl
+function generateHtmlForVoter(voter, callback) {
+  getReturnAddressForVoter(voter, function (err, returnAddress) {
+    if (err) {
+      callback(err);
+      return;
+    }
+    var voterId = voter.id;
+    var hashId = hashids.encode(voterId);
+    storeHashIdForVoter(voter, hashId);
+    var pledgeUrl = `${process.env.REACT_APP_URL}/pledge`;
+    var template = fs.readFileSync('./templates/letter.html', 'utf8');
+    var uncompiledTemplate = Handlebars.compile(template);
+    var salutation;
+    if (voter.gender === 'M' || voter.gender === 'male') {
+      salutation = "Mr."
+    } else if (voter.gender === 'F' || voter.gender === 'female') {
+      salutation = "Ms."
+    } else { salutation = null };
+    var fullName = [salutation, voter.first_name, voter.middle_name, voter.last_name, voter.suffix].filter(Boolean).join(" ");
+    var fullAddress = voter.address + ', ' + voter.city + ', ' + voter.state + ' ' + voter.zip;
+    var context = {
+      voterId: voterId,
+      voterName: fullName,
+      voterAddress: fullAddress,
+      returnAddress: returnAddress,
+      hashId: hashId,
+      pledgeUrl: pledgeUrl
     };
-  var html = uncompiledTemplate(context);
-  return(html);
+    var html = uncompiledTemplate(context);
+    callback(null, html);
+  });
 }
 
 function storeHashIdForVoter(voter, hashid) {
@@ -182,11 +181,13 @@ function generatePdfFromHtml(html, voters, callback) {
     pdf.create(html, { format: 'Letter', timeout: '100000' }).toFile(filePath, function(err, response) {
       generateSemaphore.leave();
 
-      if(err) {
+      if (err) {
         console.error('ERROR:', err);
+        callback(err);
+        return;
       }
 
-      callback(response, downloadFileName);
+      callback(null, response, downloadFileName);
     });
   });
 }
@@ -194,5 +195,6 @@ function generatePdfFromHtml(html, voters, callback) {
 module.exports = {
   generatePdfForVoters,
   _generatePdfFromHtml: util.exposeForTests('_generatePdfFromHtml', generatePdfFromHtml),
+  _getReturnAddressForVoter: util.exposeForTests('_getReturnAddressForVoter', getReturnAddressForVoter),
   _setSemaphoreCapacity: util.exposeForTests('_setSemaphoreCapacity', _setSemaphoreCapacity),
 }

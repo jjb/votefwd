@@ -28,8 +28,8 @@ describe('letterService', function() {
       var generate = function (num) {
         return function (cb) {
           letterService._generatePdfFromHtml(html, [{}, {}],
-            function(response, downloadFilename) {
-              cb(null, num, Date.now(), response, downloadFilename);
+            function(err, response, downloadFilename) {
+              cb(err, num, Date.now(), response, downloadFilename);
             }
           );
         };
@@ -47,6 +47,26 @@ describe('letterService', function() {
           return result[1];
         });
         expect(endTimes).to.be.sorted();
+        done();
+      });
+    });
+  });
+
+  describe('_getReturnAddressForVoter', function() {
+    it('should sent back a return address', function(done) {
+      letterService._getReturnAddressForVoter({
+        district_id: 'FL27'
+      }, function (err, address) {
+        expect(address).to.eql('7742 N KENDALL DR #323, KENDALL, FL 33156');
+        done();
+      });
+    });
+
+    it('should respond will error if not found', function(done) {
+      letterService._getReturnAddressForVoter({
+        district_id: 'NON_EXISTANT'
+      }, function (err, address) {
+        expect(err).to.eql('No district found for NON_EXISTANT');
         done();
       });
     });
