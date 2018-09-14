@@ -108,7 +108,7 @@ export class Masthead extends Component {
 							<span className="mr-1">Received a letter?</span>
 							<Link href="/vote" hoverDark>
 								Click here
-							</Link>
+							</Link>.
 						</p>
 					</div>
 					</div>
