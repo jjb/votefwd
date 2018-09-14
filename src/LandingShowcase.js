@@ -128,7 +128,7 @@ class LandingTestimonials extends Component {
           <div className="row">
             <div className="col-8 mx-auto">
               <p className="lead mb-4">
-                Vote Forward was started in 2017 by a group of <a href="https://en.wikipedia.org/wiki/Opower">Opower</a> alumni. We believe our democracy depends on electing a Democratic congress in 2018, so we’re volunteering our time and expertise to achieve this goal. The most important thing you can do to help is to <strong>send letters</strong>, but you can also make a donation to help us build the campaign at <a href="https://secure.actblue.com/donate/vote-forward">secure.actblue.com/donate/vote-forward</a>. Thank you!
+                Vote Forward began as an experiment conducted by Scott Forman [<a href="https://twitter.com/sjforman" target="_blank"><i className="fa fa-twitter" aria-hidden="true"></i></a> <a href="https://www.linkedin.com/in/scottforman" target="_blank"><i className="fa fa-linkedin" aria-hidden="true"></i></a>] in Alabama in 2017. Encouraged by the success of that experiment, Scott and a small group of friends and fellow <a href="https://en.wikipedia.org/wiki/Opower" target="_blank">Opower</a> alumni built this platform to empower volunteers to take easy and effective action. We believe our democracy depends on electing a Democratic congress, so we’re volunteering our time and expertise to achieve that goal.
               </p>
             </div>
           </div>
