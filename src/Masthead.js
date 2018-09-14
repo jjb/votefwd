@@ -7,6 +7,36 @@ import { Link } from './Link';
 import { Login } from './Login';
 
 export class Masthead extends Component {
+  constructor(props) {
+    super(props)
+
+    this.state = { showingPrivacyNotice: false };
+		this.escModal = this.escModal.bind(this);
+    this.showPrivacyNotice = this.showPrivacyNotice.bind(this);
+    this.hidePrivacyNotice = this.hidePrivacyNotice.bind(this);
+  }
+
+	escModal(event) {
+	  if (event.keyCode === 27) {
+	    this.hidePrivacyNotice();
+    }
+  }
+
+  hidePrivacyNotice() {
+    this.setState({ showingPrivacyNotice: false });
+  }
+
+  showPrivacyNotice() {
+    this.setState({ showingPrivacyNotice: true });
+  }
+
+  componentDidMount(){
+    document.addEventListener("keydown", this.escModal, false);
+  }
+  componentWillUnmount(){
+    document.removeEventListener("keydown", this.escModal, false);
+  }
+
 	render() {
 	  return (
 		<header className="landing--masthead px-lg-5">
@@ -44,6 +74,31 @@ export class Masthead extends Component {
                 (
                   <React.Fragment>
                     <Login auth={this.props.auth} buttonText="Sign Up Or Log In To Send Letters" />
+                    <p className="mt-1 small text-white">
+                      <a href="#" onClick={this.showPrivacyNotice}>
+                        Privacy Promise
+                      </a>
+                    </p>
+                    { this.state.showingPrivacyNotice &&
+                      <div className="modal" tabIndex="-1" role="dialog">
+                        <div className="modal-dialog" role="document">
+                          <div className="modal-content">
+                            <div className="modal-header">
+                              <h5 className="modal-title">Our Privacy Promise</h5>
+                              <button onClick={this.hidePrivacyNotice} type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                              </button>
+                            </div>
+                            <div className="modal-body">
+                              <p>We will never sell the personal information you share with us (including your name and email address) to anyone under any circumstances.</p>
+                            </div>
+                            <div className="modal-footer">
+                              <button onClick={this.hidePrivacyNotice} type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    }
                   </React.Fragment>
                 )
               }
@@ -51,9 +106,9 @@ export class Masthead extends Component {
           </div>
 						<p className="mt-3 text-white">
 							<span className="mr-1">Received a letter?</span>
-							<Link href="/pledge" hoverDark>
-								Click here to pledge to vote
-							</Link>.
+							<Link href="/vote" hoverDark>
+								Click here
+							</Link>
 						</p>
 					</div>
 					</div>
