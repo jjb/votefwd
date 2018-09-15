@@ -128,7 +128,7 @@ class LandingTestimonials extends Component {
           <div className="row">
             <div className="col-8 mx-auto">
               <p className="lead mb-4">
-                Vote Forward began as an experiment conducted by Scott Forman [<a href="https://twitter.com/sjforman" target="_blank"><i className="fa fa-twitter" aria-hidden="true"></i></a> <a href="https://www.linkedin.com/in/scottforman" target="_blank"><i className="fa fa-linkedin" aria-hidden="true"></i></a>] in Alabama in 2017. Encouraged by the success of that experiment, Scott and a small group of friends and fellow <a href="https://en.wikipedia.org/wiki/Opower" target="_blank">Opower</a> alumni built this platform to empower volunteers to take easy and effective action. We believe our democracy depends on electing a Democratic congress, so we’re volunteering our time and expertise to achieve that goal.
+                Vote Forward began as an experiment conducted by Scott Forman [<a href="https://twitter.com/sjforman" target="_blank" rel="noopener noreferrer"><i className="fa fa-twitter"></i></a> <a href="https://www.linkedin.com/in/scottforman" target="_blank" rel="noopener noreferrer"><i className="fa fa-linkedin"></i></a>] in Alabama in 2017. Encouraged by the success of that experiment, Scott and a small group of friends and fellow <a href="https://en.wikipedia.org/wiki/Opower" target="_blank" rel="noopener noreferrer">Opower</a> alumni built this platform to empower volunteers to take easy and effective action. We believe our democracy depends on electing a Democratic congress, so we’re volunteering our time and expertise to achieve that goal.
               </p>
             </div>
           </div>
