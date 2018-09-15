@@ -12,6 +12,7 @@ import Admin from './Admin';
 import Districts from './Districts';
 import Privacy from './Privacy';
 import Terms from './Terms';
+import Faq from './Faq';
 import history from './history';
 
 const auth = new Auth();
@@ -53,6 +54,7 @@ export const makeMainRoutes = () => {
           <AdminRoute exact path="/admin/districts" component={Districts} auth={auth} />
           <Route exact path="/privacy-policy" render={(props) => <Privacy auth={auth} {...props} />} />
           <Route exact path="/terms-of-use" render={(props) => <Terms auth={auth} {...props} />} />
+          <Route exact path="/faq" render={(props) => <Faq auth={auth} {...props} />} />
         </React.Fragment>
       </Router>
   );
