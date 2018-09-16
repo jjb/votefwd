@@ -7,9 +7,9 @@ class DistrictItem extends Component {
   render() {
     return (
       <div className="col-3">
-        <h3 className="display-4 text-primary">
-        {this.props.district.district_id}
-        </h3>
+        <a href={'/district/' + this.props.district.district_id} className="display-4 text-primary">
+          {this.props.district.district_id}
+        </a>
         <p className="small">
           {this.props.district.description}
         </p>
