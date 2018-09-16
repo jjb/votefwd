@@ -30,7 +30,7 @@ running via `launchctl`, you can see the post-install directions again with:
 Install git if necessary and clone the repo:
 
 	brew install git
-	git clone https://github.com/sjforman/votefwd.git
+	git clone git@github.com:sjforman/votefwd.git
 
 Install application dependencies using `npm`:
 
