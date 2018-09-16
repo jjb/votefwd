@@ -55,6 +55,8 @@ class DistrictMap extends Component {
       interactive: false
     });
 
+    const geojsonSource = "/districts/" + this.props.district.district_id.toUpperCase() + ".geojson";
+
     return (
       <div>
         <Map
@@ -67,7 +69,7 @@ class DistrictMap extends Component {
             width: "100%"
           }}>
           <GeoJSONLayer
-            data={'/districts/' + this.props.district.district_id.toUpperCase() + '.geojson'}
+            data={geojsonSource}
             type="fill"
             fillPaint={{
               "fill-color": "rgba(43,116,255,0.5)",
