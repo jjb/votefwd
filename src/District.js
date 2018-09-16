@@ -3,15 +3,24 @@
 import React, { Component } from 'react';
 import { Header } from './Header';
 import axios from 'axios';
+import { LandingDistricts } from './LandingDistricts';
 import { Footer } from './Footer';
 
 class DistrictView extends Component {
   render() {
     return (
-      <div className="container">
-        <div className="row pt-3">
-          <div className="col-6">
-            <h1 class="d-block">Flip <span class="highlight blue">{this.props.district.district_id}</span> Blue</h1>
+      <div className="container pt-5 pb-5 mb-5">
+        <div className="row">
+          <div className="col-12 mb-3">
+            <a href="/district">
+							<i className="fa fa-arrow-left"></i>
+              <span className="pl-1">All districts</span>
+            </a>
+          </div>
+        </div>
+        <div className="row h-100">
+          <div className="col-6 h-100">
+            <h1>Flip {this.props.district.district_id} Blue</h1>
             <h3>{this.props.district.state}</h3>
             <p>{this.props.district.description}</p>
             <div>
@@ -54,6 +63,8 @@ class District extends Component {
           params: {district_id: districtId }
           })
           .then(res => {
+            console.log(res);
+
             if (res.data.length !== 0) {
               console.log('*******',res.data[0]);
               this.setState({ currentDistrict: res.data[0]});
@@ -80,8 +91,9 @@ class District extends Component {
               <DistrictView district={this.state.currentDistrict} />
             </div>
           ) : (
-            <div>District not found!</div>
+            <LandingDistricts />
           )}
+          <Footer />
         </div>
       );
     }
