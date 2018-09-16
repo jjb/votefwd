@@ -62,7 +62,6 @@ variables:
 	REACT_APP_DATABASE_DIALECT=postgres
 	REACT_APP_RECAPTCHA_SITE_KEY=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
 	REACT_APP_RECAPTCHA_SECRET_KEY=6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
-	REACT_APP_CLOUD_STORAGE_BUCKET_NAME=voteforward
 	REACT_APP_SLACK_WEBHOOK_URL=<LEAVEBLANK>
 
 You might notice we have a REACT_APP_RECAPTCHA_SECRET but that is the [default google test one](https://developers.google.com/recaptcha/docs/faq), so this is not actually sensitive.
@@ -84,10 +83,6 @@ default is 20, but you can override it to anything you want:
 
     PDF_GEN_LIMIT=<AN INTEGER>
 
-#### Google Cloud Platform Storage
-
-We use GCP to store PDFs of generated plea letters. Email `scott@votefwd.org` to request access to the project on GCP. Then visit the [GCP console](https://console.cloud.google.com/apis/credentials?project=voteforward-198801) and create a JSON `service account key`. Move this file to the root directory of your repo and rename it `googleappcreds.json`.
-
 #### Auth0
 
 We use [Auth0](https://auth0.com/) for user authentication and management. You shouldn't need anything other than the (non-sensitive) `CLIENTID` in your `.env` file to make authentication work with your locally-running app. If you need access to the auth0 console, email `scott@votefwd.org`.
@@ -101,6 +96,14 @@ Run the migrations:
 "Seed" the database with anonymized voter records:
 
 	knex seed:run
+
+Load the ZIP lookup data:
+
+  \copy catalist_raw FROM ./voter_data/FILENAME.csv with (format csv, header true, delimiter ',');
+
+Load the district data:
+
+  \copy districts(district_id, state, state_abbr, district_num, description, lat, long, coordinates, return_address, ra_city, ra_state, ra_zip) from './lookup_data/districts.csv' with (FORMAT csv, header true, delimiter ',');
 
 These voter records consist of randomized names and addresses.
 
@@ -133,4 +136,3 @@ Make sure to update SCSS files and not the compiled CSS files. Note that buildin
 To compile, run this script in a second tab in your terminal:
 
 	npm run scss-compile
-
