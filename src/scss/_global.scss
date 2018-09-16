@@ -32,6 +32,7 @@ p {
 //  - Alerts
 //  - Backgrounds
 //  - Badges
+//  - Borders
 //  - Buttons
 //  - Form Inputs
 //  - Modals
@@ -114,6 +115,12 @@ p {
 .badge {
   padding: 0.5rem 0.75rem;
 }
+
+// Borders
+
+.bw-1 { border-width: 1px !important; }
+.bw-2 { border-width: 2px !important; }
+.bw-3 { border-width: 3px !important; }
 
 // Buttons
 

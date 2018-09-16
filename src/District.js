@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Header } from './Header';
 import axios from 'axios';
 import { LandingDistricts } from './LandingDistricts';
+import ReactMapboxGl, { Layer, Feature, GeoJSONLayer } from "react-mapbox-gl";
 import { Footer } from './Footer';
 
 class DistrictView extends Component {
@@ -18,8 +19,8 @@ class DistrictView extends Component {
             </a>
           </div>
         </div>
-        <div className="row h-100">
-          <div className="col-6 h-100">
+        <div className="row">
+          <div className="col-6">
             <h1>Flip {this.props.district.district_id} Blue</h1>
             <h3>{this.props.district.state}</h3>
             <p>{this.props.district.description}</p>
@@ -30,11 +31,65 @@ class DistrictView extends Component {
             </div>
           </div>
           <div className="col-6">
-            MAP GOES HERE
+            <DistrictMap district={this.props.district} />
+          </div>
+        </div>
+        <div className="row">
+          <div className="col-12 pt-3 mt-3 border-top bw-2">
+            <DistrictStats district={this.props.district} />
           </div>
         </div>
       </div>
     )
+  }
+}
+
+class DistrictMap extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const Map = ReactMapboxGl({
+      accessToken: "pk.eyJ1IjoiaGV5aXRzZ2FycmV0dCIsImEiOiIwdWt5ZlpjIn0.73b7Y47rgFnSD7QCNeS-zA",
+      interactive: false
+    });
+
+    return (
+      <div>
+        <Map
+          style="mapbox://styles/mapbox/light-v9"
+          center={[this.props.district.long, this.props.district.lat]}
+          zoom={[6]}
+          // onStyleLoad={this.onStyleLoad}
+          containerStyle={{
+            height: "50vh",
+            width: "100%"
+          }}>
+          <GeoJSONLayer
+            data={'/districts/' + this.props.district.district_id.toUpperCase() + '.geojson'}
+            type="fill"
+            fillPaint={{
+              "fill-color": "rgba(43,116,255,0.5)",
+              "fill-outline-color": "rgba(43,116,255,1)"
+            }}
+          />
+        </Map>
+      </div>
+    );
+  }
+}
+class DistrictStats extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div>
+        GIMME DEM STATS
+      </div>
+    );
   }
 }
 class District extends Component {
