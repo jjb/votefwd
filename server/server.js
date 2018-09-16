@@ -377,7 +377,17 @@ router.route('/lookup-district')
         voters_agg.voters_adopted,
         voters_agg.letters_prepped,
         voters_agg.letters_sent,
-        districts.*
+        districts.district_id,
+        districts.state,
+        districts.state_abbr,
+        districts.district_num,
+        districts.description,
+        districts.lat,
+        districts.long,
+        districts.return_address,
+        districts.ra_city,
+        districts.ra_state,
+        districts.ra_zip
         from districts
         left join users
         on districts.district_id = users.current_district
@@ -416,7 +426,7 @@ router.route('/lookup-district')
         ) voters_agg
         on districts.district_id = voters_agg.district_id
         where districts.district_id = ?
-        group by 2,3,4,5,6;`,
+        group by voters_agg.voters_available, voters_agg.voters_adopted, voters_agg.letters_prepped, voters_agg.letters_sent, districts.district_id, districts.state, districts.state_abbr, districts.district_num, districts.description, districts.lat, districts.long, districts.return_address, districts.ra_city, districts.ra_state, districts.ra_zip;`,
         [req.query.district_id, req.query.district_id]
         )
       .then(function(result) {
