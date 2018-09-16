@@ -2,6 +2,7 @@ import React from 'react';
 import { Redirect, Route, Router } from 'react-router-dom';
 import Home from './Home';
 import Dashboard from './Dashboard';
+import District from './District';
 import Loading from './Loading';
 import Login from './SecretLogin';
 import Auth from './Auth';
@@ -46,6 +47,7 @@ export const makeMainRoutes = () => {
             return <Loading {...props} />;
           }}/>
           <LoggedInRoute exact path="/dashboard" component={Dashboard} />
+          <Route exact path="/district" render={(props) => <District auth={auth} {...props} />} />
           <Route exact path="/secretlogin" render={(props) => <Login auth={auth} {...props} />} />
           <Route exact path="/pledge" render={(props) => <Pledge auth={auth} {...props} />} />
           <Route exact path="/vote" render={(props) => <Pledge auth={auth} {...props} />} />
