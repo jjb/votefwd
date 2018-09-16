@@ -52,31 +52,71 @@ function sampleExample() {
 	console.log(sample)
 }
 
-// TODO: Write a new experiment.
+var STATE = 'MN'
+var DISTRICT = '2'
+var EXPERIMENT_DESCRIPTION = 'Propensity 5-75, Dem partizanship > 90'
+var NUMBER_OF_CONTROLS = 10000;
+
 var Promise = require('bluebird');
-db.transaction(function(trx) {
-  console.log('Started transaction.')
-  var ids = db('experiment')
-      .transacting(trx)
-      .insert({name: 'CA10', description: 'Propensity 5-75, Dem partizanship > 90'})
-      .then(function(response) {
-        console.log("Response:", response);
+
+// Delete all experiment, just for convenience while developing.
+// TODO: Remove this before actually running.
+var del_resp = db('experiment_voter').delete().then(function(){
+  db('experiment').delete().then(function() {
+    db.transaction(function(trx) {
+      console.log('Started transaction.')
+      // TODO(scott): Pad the district (or don't).
+      var ids_response = db('experiment')
+          .transacting(trx)
+          .insert({name: STATE + DISTRICT, description: EXPERIMENT_DESCRIPTION}, 'id')
+          .catch(function(error) {
+            console.log(error);
+            console.log('Error creating experiment.');
+            trx.rollback();
+            process.exit(1);
+          });
+      ids_response.then(function(ids) {
+        console.log("Registered experiment with ID: ", ids[0]);
+        var experiment_id = ids[0];
+        // Find all voters from the district which are not yet part of an experiment. Note that
+        // in rare cases, a single voter might be in multiple districts.
+        db.raw("select dwid from catalist_raw left join experiment_voter on catalist_raw.dwid = experiment_voter.voter_id where experiment_voter.voter_id is NULL and catalist_raw.state='MN' and catalist_raw.congressional_district='2' order by RANDOM()")
+          .then(function(dwiws_result) {
+            var dwiws = dwiws_result.rows;
+            console.log('Found ' + dwiws.length + ' unassigned dwiw.');
+            var num_test = dwiws.length - NUMBER_OF_CONTROLS;
+            console.log('Assigning ' + num_test + ' to TEST, and ' + NUMBER_OF_CONTROLS + ' to CONTROL.');
+            var experiment_voters = dwiws.map(function (dwiw, index) {
+              var cohort = index <= num_test ? 'TEST' : 'CONTROL';
+              return {'experiment_id': experiment_id, 'voter_id': dwiw, 'cohort': cohort};
+            });
+            db('experiment_voter').transacting(trx).insert(experiment_voters).then(function() {
+              console.log('Inserted experiment voters.');
+              trx.commit();
+            })
+            .catch(function(err) {
+              console.error(err);
+              trx.rollback();
+              process.exit(1);
+            });
+          })
+          .catch(function(err) {
+            console.error(err);
+            trx.rollback();
+            process.exit(1);
+          });
       })
-      .then(trx.commit)
       .catch(trx.rollback);
-})
-.then(function(resp) {
-  console.log('Transaction complete.');
-})
-.catch(function(err) {
-  console.error(err);
+    })
+    .then(function(resp) {
+      console.log('Transaction complete.');
+      process.exit(0);
+    })
+    .catch(function(err) {
+      console.error(err);
+      process.exit(1);
+    });
+
+  });
 });
-
-
-// TODO: Write to experiment_voter all catalyst_raw voters based on state and district,
-// which are not already in experiment_voter (can have duplicates).
-// TODO: Log the number of experiment_voter records where cohort is null.
-// TODO: Set all to control where cohort is null.
-// TODO: Set to TARGET for randomly selected voters in experiment_voter based on experiment_id.
-// TODO: Add all new TREATMENT (TEST) experiment_voters to voters table.
 
