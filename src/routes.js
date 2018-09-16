@@ -48,6 +48,7 @@ export const makeMainRoutes = () => {
           }}/>
           <LoggedInRoute exact path="/dashboard" component={Dashboard} />
           <Route exact path="/district" render={(props) => <District auth={auth} {...props} />} />
+          <Route path="/district/:id" render={(props) => <District auth={auth} {...props} />} />
           <Route exact path="/secretlogin" render={(props) => <Login auth={auth} {...props} />} />
           <Route exact path="/pledge" render={(props) => <Pledge auth={auth} {...props} />} />
           <Route exact path="/vote" render={(props) => <Pledge auth={auth} {...props} />} />
