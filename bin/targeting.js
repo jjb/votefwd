@@ -2,24 +2,6 @@
 
 var db = require('../server/db');
 
-var voters = db.select().table('voters')
-  .then(function(result) {
-    return result;
-  });
-
-//console.log(voters.length);
-
-function updateVoterSuffix(dwid) {
-  db('voters')
-    .where('registration_id', dwid)
-    .update({
-      suffix: 'JRs'
-    })
-    .catch(err => {
-      console.error(err);
-    });
-}
-
 // Fisher–Yates Shuffle.
 // Author: Mike Bostock
 function shuffle(array) {
@@ -38,18 +20,6 @@ function shuffle(array) {
   }
 
   return array;
-}
-
-updateVoterSuffix(9912895);
-
-function sampleExample() {
-	var x = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
-	console.log(x)
-	shuffle(x)
-	console.log(x)
-
-	var sample = x.slice(0, 10);
-	console.log(sample)
 }
 
 var STATE = 'MN'
@@ -80,9 +50,10 @@ var del_resp = db('experiment_voter').delete().then(function(){
         var experiment_id = ids[0];
         // Find all voters from the district which are not yet part of an experiment. Note that
         // in rare cases, a single voter might be in multiple districts.
-        db.raw("select dwid from catalist_raw left join experiment_voter on catalist_raw.dwid = experiment_voter.voter_id where experiment_voter.voter_id is NULL and catalist_raw.state='MN' and catalist_raw.congressional_district='2' order by RANDOM()")
+        db.raw("select dwid from catalist_raw left join experiment_voter on catalist_raw.dwid = experiment_voter.voter_id where experiment_voter.voter_id is NULL and catalist_raw.state='MN' and catalist_raw.congressional_district='2'")
           .then(function(dwiws_result) {
             var dwiws = dwiws_result.rows;
+            shuffle(dwiws);
             console.log('Found ' + dwiws.length + ' unassigned dwiw.');
             var num_test = dwiws.length - NUMBER_OF_CONTROLS;
             console.log('Assigning ' + num_test + ' to TEST, and ' + NUMBER_OF_CONTROLS + ' to CONTROL.');
@@ -116,7 +87,6 @@ var del_resp = db('experiment_voter').delete().then(function(){
       console.error(err);
       process.exit(1);
     });
-
   });
 });
 
