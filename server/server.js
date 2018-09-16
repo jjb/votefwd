@@ -369,17 +369,78 @@ router.route('/get-districts')
  * Look up a district.
  */
 router.route('/lookup-district')
-  .get(checkJwt, function(req, res) {
-    db('districts')
-      .where({ district_id: req.query.district_id })
+  .get(rateLimits.lookupDistrictRateLimit, function(req, res) {
+    if (JSON.parse(req.query.get_adoption_details) == true){
+      db.raw(`select
+        count(users.id) as num_users_using_district,
+        voters_agg.voters_available,
+        voters_agg.voters_adopted,
+        voters_agg.letters_prepped,
+        voters_agg.letters_sent,
+        districts.*
+        from districts
+        left join users
+        on districts.district_id = users.current_district
+        left join (
+            select
+            sum(available) voters_available,
+            sum(adopted) voters_adopted,
+            sum(prepped) letters_prepped,
+            sum(sent) letters_sent,
+            district_id
+            from (
+                select
+                district_id,
+                case when adopted_at is null
+                    and confirmed_prepped_at is null
+                    and confirmed_sent_at is null then 1
+                    else 0
+                end as available,
+                case when adopted_at is not null
+                    and confirmed_prepped_at is null
+                    and confirmed_sent_at is null then 1
+                    else 0
+                end as adopted,
+                case when confirmed_prepped_at is not null
+                    and confirmed_sent_at is null then 1
+                    else 0
+                end as prepped,
+                case when confirmed_prepped_at is not null
+                    and confirmed_sent_at is not null then 1
+                    else 0
+                end as sent
+                from voters
+                where district_id = ?
+            ) voters_case
+            group by district_id
+        ) voters_agg
+        on districts.district_id = voters_agg.district_id
+        where districts.district_id = ?
+        group by 2,3,4,5,6;`,
+        [req.query.district_id, req.query.district_id]
+        )
       .then(function(result) {
-        if (result.length === 0) {
+      if (result['rows'].length === 0) {
           res.json(false);
         } else {
-          res.json(result);
+          res.json(result['rows']);
         }
       })
       .catch(err => {console.error(err);})
+    } else {
+      db('districts')
+        .where({ district_id: req.query.district_id })
+        .then(function(result) {
+          if (result.length === 0) {
+            res.json(false);
+          } else {
+            res.json(result);
+          }
+        })
+        .catch(err => {console.error(err);})
+    }
+
+
   });
 
 /**
