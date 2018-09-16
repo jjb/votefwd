@@ -12,8 +12,9 @@
 // Font Mixins
 @font-face {
     font-family: 'Cocogoose';
-    src: url('/fonts/Cocogoose.woff2') format('woff2'), url('/fonts/Cocogoose.woff') format('woff');
-    font-weight: 500;
+    src: url('/fonts/Cocogoose.woff2') format('woff2'),
+         url('/fonts/Cocogoose.woff') format('woff');
+    font-weight: normal;
     font-style: normal;
 }
 
