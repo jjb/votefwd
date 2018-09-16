@@ -439,8 +439,6 @@ router.route('/lookup-district')
         })
         .catch(err => {console.error(err);})
     }
-
-
   });
 
 /**
