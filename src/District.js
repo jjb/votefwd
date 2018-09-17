@@ -95,10 +95,10 @@ class DistrictMap extends Component {
 class DistrictStats extends Component {
   render() {
     // Calculate total letters to prepare
-    const totalClaimed =  parseInt(this.props.district.letters_sent) +
-                          parseInt(this.props.district.letters_prepped) +
-                          parseInt(this.props.district.voters_adopted);
-    const totalAvailable = totalClaimed + parseInt(this.props.district.voters_available);
+    const totalClaimed =  parseInt(this.props.district.letters_sent, 10) +
+                          parseInt(this.props.district.letters_prepped, 10) +
+                          parseInt(this.props.district.voters_adopted, 10);
+    const totalAvailable = totalClaimed + parseInt(this.props.district.voters_available, 10);
     const percentComplete = (totalClaimed/totalAvailable) * 100;
 
     return (
