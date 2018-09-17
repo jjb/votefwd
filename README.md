@@ -81,7 +81,12 @@ We limit the number of PDFs that can be generated concurrently to prevent the
 PDF generation processes from using up all memory on the VM.  The sensible
 default is 20, but you can override it to anything you want:
 
-    	PDF_GEN_LIMIT=<AN INTEGER>
+   	PDF_GEN_LIMIT=<AN INTEGER>
+
+To send data to Google Analytics, set up
+
+    REACT_APP_GA_TRACKING_ID=<A VALID GOOGLE TRACKING ID>
+    REACT_APP_GA_DEBUG=<true | false>
 
 #### Auth0
 
