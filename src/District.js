@@ -12,10 +12,10 @@ class DistrictView extends Component {
     return (
       <div className="container pt-5 pb-5 mb-5">
         <div className="row">
-          <div className="col-12 mb-3">
+          <div className="col-12 mb-4">
             <a href="/#target-districts">
 							<i className="fa fa-arrow-left"></i>
-              <span className="pl-2">Back to home</span>
+              <span className="pl-2">View all districts</span>
             </a>
           </div>
         </div>
@@ -24,18 +24,13 @@ class DistrictView extends Component {
             <h1>Flip {this.props.district.district_id} Blue</h1>
             <h3>{this.props.district.state}</h3>
             <p>{this.props.district.description}</p>
-            <div>
-              {this.props.district.lat}, {this.props.district.long}<br />
-              {this.props.district.return_address}<br />
-              {this.props.district.ra_city}, {this.props.district.ra_state} {this.props.district.ra_zip}<br />
-            </div>
           </div>
           <div className="col-6">
             <DistrictMap district={this.props.district} />
           </div>
         </div>
         <div className="row">
-          <div className="col-12 pt-3 mt-3 border-top bw-2">
+          <div className="col-12 pt-3 mt-3">
             <DistrictStats district={this.props.district} />
           </div>
         </div>
@@ -45,10 +40,6 @@ class DistrictView extends Component {
 }
 
 class DistrictMap extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const Map = ReactMapboxGl({
       accessToken: "pk.eyJ1IjoiaGV5aXRzZ2FycmV0dCIsImEiOiIwdWt5ZlpjIn0.73b7Y47rgFnSD7QCNeS-zA",
@@ -60,6 +51,7 @@ class DistrictMap extends Component {
     return (
       <div>
         <Map
+          // eslint-disable-next-line
           style="mapbox://styles/mapbox/light-v9"
           center={[this.props.district.long, this.props.district.lat]}
           zoom={[6]}
@@ -82,14 +74,26 @@ class DistrictMap extends Component {
   }
 }
 class DistrictStats extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
+    const totalClaimed = parseInt(this.props.district.letters_sent) + parseInt(this.props.district.letters_prepped);
+    const percentComplete = (totalClaimed/this.props.district.voters_available) * 100;
+    console.log(this.props.district);
+    console.log(percentComplete);
+    // const percentComplete=50;
     return (
-      <div>
-        GIMME DEM STATS
+      <div className="pt-3 pb-3 bw-2">
+        <h4 className="mb-3">Letter-writing progress</h4>
+        <div className="p-statusBar mb-3">
+          <div
+            className="p-statusBar_bar"
+            style={{
+              "width":percentComplete + '%'
+            }}
+          ></div>
+          <div className="p-statusBar_status">
+            <strong>{totalClaimed}</strong> letters prepared
+          </div>
+        </div>
       </div>
     );
   }
