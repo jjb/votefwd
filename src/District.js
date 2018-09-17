@@ -17,7 +17,7 @@ class DistrictCallToAction extends Component {
     return ( this.props.auth.isAuthenticated() ? (
       <div>
         <a
-          href="/dashboard"
+          href={'/dashboard/' + this.props.district.district_id}
           className="btn btn-primary btn-lg d-block"
         >
           Write letters to {this.props.district.state} voters
