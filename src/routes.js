@@ -47,6 +47,7 @@ export const makeMainRoutes = () => {
             return <Loading {...props} />;
           }}/>
           <LoggedInRoute exact path="/dashboard" component={Dashboard} />
+          <LoggedInRoute path="/dashboard/:districtId" component={Dashboard} />
           <Route exact path="/district" render={(props) => <District auth={auth} {...props} />} />
           <Route path="/district/:id" render={(props) => <District auth={auth} {...props} />} />
           <Route exact path="/secretlogin" render={(props) => <Login auth={auth} {...props} />} />

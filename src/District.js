@@ -98,11 +98,13 @@ class DistrictMap extends Component {
 }
 class DistrictStats extends Component {
   render() {
-    const totalClaimed = parseInt(this.props.district.letters_sent) + parseInt(this.props.district.letters_prepped);
-    const percentComplete = (totalClaimed/this.props.district.voters_available) * 100;
-    console.log(this.props.district);
-    console.log(percentComplete);
-    // const percentComplete=50;
+    // Calculate total letters to prepare
+    const totalClaimed =  parseInt(this.props.district.letters_sent) +
+                          parseInt(this.props.district.letters_prepped) +
+                          parseInt(this.props.district.voters_adopted);
+    const totalAvailable = totalClaimed + parseInt(this.props.district.voters_available);
+    const percentComplete = (totalClaimed/totalAvailable) * 100;
+
     return (
       <div className="pt-3 pb-3 bw-2">
         <h4 className="mb-3">{this.props.district.district_id} letter-writing progress</h4>
@@ -151,7 +153,6 @@ class District extends Component {
           })
           .then(res => {
             if (res.data.length !== 0) {
-              console.log('*******',res.data[0]);
               this.setState({ currentDistrict: res.data[0]});
             } else {
               this.setState({ districtNotFound: true });
