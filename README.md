@@ -81,7 +81,7 @@ We limit the number of PDFs that can be generated concurrently to prevent the
 PDF generation processes from using up all memory on the VM.  The sensible
 default is 20, but you can override it to anything you want:
 
-    PDF_GEN_LIMIT=<AN INTEGER>
+    	PDF_GEN_LIMIT=<AN INTEGER>
 
 #### Auth0
 
@@ -99,11 +99,11 @@ Run the migrations:
 
 Load the ZIP lookup data:
 
-  \copy catalist_raw FROM ./voter_data/FILENAME.csv with (format csv, header true, delimiter ',');
+  	\copy catalist_raw FROM ./voter_data/FILENAME.csv with (format csv, header true, delimiter ',');
 
 Load the district data:
 
-  \copy districts(district_id, state, state_abbr, district_num, description, lat, long, coordinates, return_address, ra_city, ra_state, ra_zip) from './lookup_data/districts.csv' with (FORMAT csv, header true, delimiter ',');
+ 	\copy districts(district_id, state, state_abbr, district_num, description, lat, long, coordinates, return_address, ra_city, ra_state, ra_zip) from './lookup_data/districts.csv' with (FORMAT csv, header true, delimiter ',');
 
 These voter records consist of randomized names and addresses.
 
