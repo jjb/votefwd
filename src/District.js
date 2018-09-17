@@ -9,10 +9,6 @@ import ReactMapboxGl, { GeoJSONLayer } from "react-mapbox-gl";
 import { Footer } from './Footer';
 
 class DistrictCallToAction extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return ( this.props.auth.isAuthenticated() ? (
       <div>
