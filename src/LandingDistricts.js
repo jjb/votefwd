@@ -60,16 +60,6 @@ export class LandingDistricts extends Component {
   render() {
     return (
       <div className="container pt-1 pb-5 mb-5">
-        {this.props.showNav && (
-          <div className="row">
-            <div className="col-12 mb-3">
-              <a href="/">
-                <i className="fa fa-arrow-left"></i>
-                <span className="pl-2">View all districts</span>
-              </a>
-            </div>
-          </div>
-        )}
         <h1
           id="target-districts"
           className="pt-3 mb-4 text-center"
