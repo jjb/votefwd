@@ -128,6 +128,9 @@ p {
 .bw-3 {
   border-width: 3px !important; }
 
+.highlight-border-top {
+  border-top: 8px solid #262D7D !important; }
+
 .btn {
   border: none;
   border-radius: 5px;
@@ -259,17 +262,6 @@ table.table tr:first-child td {
 .text-white a {
   color: white;
   text-decoration: underline; }
-
-.u-offscreen {
-  position: absolute;
-  left: -5000px; }
-
-.u-highlight {
-  border-left: 4px solid #FF4B4B;
-  padding-left: 1rem; }
-
-.u-quiet {
-  opacity: 0.75; }
 
 .fa {
   display: inline-block;
@@ -2586,6 +2578,31 @@ table.table tr:first-child td {
   margin: 0;
   overflow: visible;
   clip: auto; }
+
+.u-offscreen {
+  position: absolute;
+  left: -5000px; }
+
+.u-highlight {
+  border-left: 4px solid #FF4B4B;
+  padding-left: 1rem; }
+
+.u-quiet {
+  opacity: 0.75; }
+
+.reset-link {
+  color: #000; }
+  .reset-link:hover {
+    color: #000;
+    text-decoration: none; }
+
+.hover-grow {
+  vertical-align: middle;
+  transform: perspective(1px) translateZ(0);
+  transition-duration: 0.25s;
+  transition-property: transform; }
+  .hover-grow:hover {
+    transform: scale(1.05); }
 
 .landing--masthead {
   display: flex;

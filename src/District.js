@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { Header } from './Header';
 import axios from 'axios';
 import { LandingDistricts } from './LandingDistricts';
-import ReactMapboxGl, { Layer, Feature, GeoJSONLayer } from "react-mapbox-gl";
+import ReactMapboxGl, { GeoJSONLayer } from "react-mapbox-gl";
 import { Footer } from './Footer';
 
 class DistrictView extends Component {

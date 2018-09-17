@@ -6,21 +6,25 @@ import axios from 'axios';
 class DistrictItem extends Component {
   render() {
     return (
-      <div className="d-flex col-sm-12 col-md-4 col-lg-3 p-3">
-        <div className="bg-light border rounded">
-          <div className="bg-white pl-3 pr-3 pt-2 pb-2 rounded">
+      <a
+        href={'/district/' + this.props.district.district_id}
+        className="d-flex col-sm-12 col-md-4 col-lg-3 p-3 reset-link hover-grow"
+      >
+        <div className="bg-light border rounded highlight-border-top">
+          <div className="bg-white pl-3 pr-3 pt-3 pb-2 rounded">
             <h3>{this.props.district.state}</h3>
-            <h5 className="headline">
-              <a href={'/district/' + this.props.district.district_id} className="text-primary">
+            <h5 className="headline text-primary">
                 {this.props.district.district_id}
-              </a>
             </h5>
           </div>
-          <div className="small p-3">
-            {this.props.district.description}
+          <div className="p-3">
+            <p className="small">{this.props.district.description}</p>
+            <p className="small text-primary">
+              View district
+            </p>
           </div>
         </div>
-      </div>
+      </a>
     );
   }
 }
