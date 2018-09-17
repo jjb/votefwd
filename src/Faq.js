@@ -12,7 +12,7 @@ class QsAndAs extends Component {
 
           <div className="mb-5">
             <h1>Frequently Asked Questions </h1>
-            <p>If you have a question not addressed here, <a href="">contact us</a>.</p>
+            <p>If you have a question not addressed here, <a href="https://bit.ly/votefwd-contact">contact us</a>.</p>
           </div>
 
           <div className="mb-5">
