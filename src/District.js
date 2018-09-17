@@ -10,6 +10,7 @@ import { Footer } from './Footer';
 
 class DistrictCallToAction extends Component {
   render() {
+    const buttonText = "Sign up or log in to send letters to " + this.props.district.district_id;
     return ( this.props.auth.isAuthenticated() ? (
       <div>
         <a
@@ -20,7 +21,7 @@ class DistrictCallToAction extends Component {
         </a>
       </div>
     ) : (
-      <Login auth={this.props.auth} buttonText="Sign up or log in to send letters" />
+      <Login auth={this.props.auth} buttonText={buttonText} />
     ));
   }
 }
@@ -68,31 +69,31 @@ class DistrictLinks extends Component {
           <a href={this.props.district.url_ballotpedia}
               target="_blank"
               rel="noreferrer noopener">
-            Read about the race (Ballotpedia)
+            <i className="fa fa-external-link"></i> Read about the race (Ballotpedia)
           </a>
         </div>
 
-        <div className="link">
+        <div className="mt-1">
           <a href={this.props.district.url_wikipedia}
               target="_blank"
               rel="noreferrer noopener">
-            Read about the district (Wikipedia)
+            <i className="fa fa-external-link"></i> Read about the district (Wikipedia)
           </a>
         </div>
 
-        <div className="link">
+        <div className="mt-1">
           <a href={this.props.district.url_swingleft + '?utm_source=votefwd'}
               target="_blank"
               rel="noreferrer noopener">
-            Help other ways (Swing Left)
+						<i className="fa fa-external-link"></i> Help in other ways (Swing Left)
           </a>
         </div>
 
-        <div className="link">
+        <div className="mt-1">
           <a href={this.props.district.url_election_info}
               target="_blank"
               rel="noreferrer noopener">
-            Look up your polling place
+            <i className="fa fa-external-link"></i> Look up your polling place
           </a>
         </div>
       </div>
@@ -146,6 +147,7 @@ class DistrictStats extends Component {
 
     return (
       <div className="pt-3 pb-3 bw-2">
+        <p>So far <strong>{this.props.district.num_users_using_district}</strong> volunteers are stockpiling letters to {this.props.district.district_id}. They‘ve adopted {totalClaimed} voters, {percentComplete}% of the total available.</p>
         <h4 className="mb-3">{this.props.district.district_id} letter-writing progress</h4>
         <div className="p-statusBar mb-3">
           <div
@@ -155,7 +157,7 @@ class DistrictStats extends Component {
             }}
           ></div>
           <div className="p-statusBar_status">
-            <strong>{totalClaimed}</strong> letters prepared
+            <strong>{totalClaimed}</strong> voters adopted
           </div>
         </div>
       </div>
