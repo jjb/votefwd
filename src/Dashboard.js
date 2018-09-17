@@ -292,7 +292,7 @@ class Dashboard extends Component {
         </div>
       ) : (
           <div className="container">
-            <Login auth={this.props.auth} buttonText="Sign Up or Log In To Send Letters" />
+            <Login auth={this.props.auth} buttonText="Sign up or log in to send letters" />
           </div>
         )}
       <Footer />

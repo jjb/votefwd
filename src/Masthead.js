@@ -73,12 +73,21 @@ export class Masthead extends Component {
                 ) :
                 (
                   <React.Fragment>
-                    <Login auth={this.props.auth} buttonText="Sign Up Or Log In To Send Letters" />
-                    <p className="mt-1 small text-white">
-                      <a href="#privacy-notice" onClick={this.showPrivacyNotice}>
-                        Privacy Promise
-                      </a>
-                    </p>
+                    <div className="p-2">
+                      <div className="rounded p-2 bg-white">
+                        <Login auth={this.props.auth} buttonText="Sign up or log in to send letters" />
+                      </div>
+                      <p className="mt-3 small text-white">
+                        <a href="#privacy-notice" onClick={this.showPrivacyNotice}>
+                          Privacy Promise
+                        </a>
+                        <span className="pl-2 pr-2">•</span>
+                        <span className="mr-1">Received a letter?</span>
+                        <Link href="/vote" hoverDark>
+                          Click here
+                        </Link>.
+                      </p>
+                    </div>
                     { this.state.showingPrivacyNotice &&
                       <div className="modal" tabIndex="-1" role="dialog">
                         <div className="modal-dialog" role="document">
@@ -104,12 +113,6 @@ export class Masthead extends Component {
               }
             </div>
           </div>
-						<p className="mt-3 text-white">
-							<span className="mr-1">Received a letter?</span>
-							<Link href="/vote" hoverDark>
-								Click here
-							</Link>.
-						</p>
 					</div>
 					</div>
 				</div>

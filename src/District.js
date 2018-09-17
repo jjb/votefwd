@@ -4,8 +4,30 @@ import React, { Component } from 'react';
 import { Header } from './Header';
 import axios from 'axios';
 import { LandingDistricts } from './LandingDistricts';
+import { Login } from './Login';
 import ReactMapboxGl, { GeoJSONLayer } from "react-mapbox-gl";
 import { Footer } from './Footer';
+
+class DistrictCallToAction extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return ( this.props.auth.isAuthenticated() ? (
+      <div>
+        <a
+          href="/dashboard"
+          className="btn btn-primary btn-lg d-block"
+        >
+          Write letters to {this.props.district.state} voters
+        </a>
+      </div>
+    ) : (
+      <Login auth={this.props.auth} buttonText="Sign up or log in to send letters" />
+    ));
+  }
+}
 
 class DistrictView extends Component {
   render() {
@@ -21,9 +43,10 @@ class DistrictView extends Component {
         </div>
         <div className="row">
           <div className="col-6">
-            <h1>Flip {this.props.district.district_id} Blue</h1>
-            <h3>{this.props.district.state}</h3>
-            <p>{this.props.district.description}</p>
+            <h1 className="mb-0">Flip {this.props.district.district_id} Blue</h1>
+            <h4 className="u-quiet mb-4 font-weight-normal">{this.props.district.state}</h4>
+            <p className="mb-4">{this.props.district.description}</p>
+            <DistrictCallToAction auth={this.props.auth} district={this.props.district} />
           </div>
           <div className="col-6">
             <DistrictMap district={this.props.district} />
@@ -82,7 +105,7 @@ class DistrictStats extends Component {
     // const percentComplete=50;
     return (
       <div className="pt-3 pb-3 bw-2">
-        <h4 className="mb-3">Letter-writing progress</h4>
+        <h4 className="mb-3">{this.props.district.district_id} letter-writing progress</h4>
         <div className="p-statusBar mb-3">
           <div
             className="p-statusBar_bar"
@@ -146,7 +169,7 @@ class District extends Component {
           <Header auth={this.props.auth} />
           {!this.state.districtNotFound && this.state.currentDistrict ? (
             <div>
-              <DistrictView district={this.state.currentDistrict} />
+              <DistrictView district={this.state.currentDistrict} auth={this.props.auth} />
             </div>
           ) : (
             <LandingDistricts />

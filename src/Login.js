@@ -25,10 +25,10 @@ export class Login extends Component {
     const username = localStorage.getItem('uid');
 
     return (
-        <div>
+        <React.Fragment>
           {
             !isAuthenticated() && (
-              <button onClick={this.login.bind(this)} className="btn btn-danger btn-lg">
+              <button onClick={this.login.bind(this)} className="btn btn-primary btn-lg w-100">
                 {buttonText}
               </button>
             )
@@ -43,7 +43,7 @@ export class Login extends Component {
               </div>
             )
           }
-      </div>
+      </React.Fragment>
     );
   }
 }
