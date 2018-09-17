@@ -117,11 +117,12 @@ class District extends Component {
           method: 'GET',
           headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
           url: `${process.env.REACT_APP_API_URL}/lookup-district`,
-          params: {district_id: districtId }
+          params: {
+            district_id: districtId,
+            get_adoption_details: true
+          }
           })
           .then(res => {
-            console.log(res);
-
             if (res.data.length !== 0) {
               console.log('*******',res.data[0]);
               this.setState({ currentDistrict: res.data[0]});
@@ -130,12 +131,8 @@ class District extends Component {
             }
           })
           .catch(err => {
-            console.error(err);
             this.setState({ districtNotFound: true });
         })
-      }
-      else {
-        this.setState({ districtNotFound: true });
       }
     }
 
