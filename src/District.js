@@ -93,7 +93,7 @@ class DistrictLinks extends Component {
           <a href={this.props.district.url_election_info}
               target="_blank"
               rel="noreferrer noopener">
-            <i className="fa fa-external-link"></i> Look up your polling place
+            <i className="fa fa-external-link"></i> Look up a {this.props.district.state} polling place
           </a>
         </div>
       </div>
