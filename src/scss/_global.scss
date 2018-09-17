@@ -9,13 +9,13 @@ html, body, #root {
 }
 
 h1,
-h2 {
+h2,
+.headline {
   @include header-font;
   font-weight: normal;
   font-style: normal;
 }
 
-h3,
 h4,
 h5,
 h6 {

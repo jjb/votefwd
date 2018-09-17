@@ -13,9 +13,9 @@ class DistrictView extends Component {
       <div className="container pt-5 pb-5 mb-5">
         <div className="row">
           <div className="col-12 mb-3">
-            <a href="/district">
+            <a href="/#target-districts">
 							<i className="fa fa-arrow-left"></i>
-              <span className="pl-1">All districts</span>
+              <span className="pl-2">Back to home</span>
             </a>
           </div>
         </div>

@@ -6,13 +6,20 @@ import axios from 'axios';
 class DistrictItem extends Component {
   render() {
     return (
-      <div className="col-3">
-        <a href={'/district/' + this.props.district.district_id} className="display-4 text-primary">
-          {this.props.district.district_id}
-        </a>
-        <p className="small">
-          {this.props.district.description}
-        </p>
+      <div className="d-flex col-sm-12 col-md-4 col-lg-3 p-3">
+        <div className="bg-light border rounded">
+          <div className="bg-white pl-3 pr-3 pt-2 pb-2 rounded">
+            <h3>{this.props.district.state}</h3>
+            <h5 className="headline">
+              <a href={'/district/' + this.props.district.district_id} className="text-primary">
+                {this.props.district.district_id}
+              </a>
+            </h5>
+          </div>
+          <div className="small p-3">
+            {this.props.district.description}
+          </div>
+        </div>
       </div>
     );
   }
@@ -48,11 +55,24 @@ export class LandingDistricts extends Component {
 
   render() {
     return (
-      <div className="container">
-        <div className="row pt-5 text-center">
-          <div className="col-12">
-            <h3 className="mb-5">Target Districts</h3>
+      <div className="container pt-1 pb-5 mb-5">
+        {this.props.showNav && (
+          <div className="row">
+            <div className="col-12 mb-3">
+              <a href="/">
+                <i className="fa fa-arrow-left"></i>
+                <span className="pl-2">Back to home</span>
+              </a>
+            </div>
           </div>
+        )}
+        <h1
+          id="target-districts"
+          className="pt-3 mb-4 text-center"
+        >
+          Target Districts
+        </h1>
+        <div className="row">
           {this.state.districts.map(district => (
             <DistrictItem key={district.id} district={district} />
           ))}
