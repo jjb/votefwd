@@ -30,7 +30,7 @@ running via `launchctl`, you can see the post-install directions again with:
 Install git if necessary and clone the repo:
 
 	brew install git
-	git clone https://github.com/sjforman/votefwd.git
+	git clone git@github.com:sjforman/votefwd.git
 
 Install application dependencies using `npm`:
 
@@ -62,7 +62,6 @@ variables:
 	REACT_APP_DATABASE_DIALECT=postgres
 	REACT_APP_RECAPTCHA_SITE_KEY=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
 	REACT_APP_RECAPTCHA_SECRET_KEY=6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
-	REACT_APP_CLOUD_STORAGE_BUCKET_NAME=voteforward
 	REACT_APP_SLACK_WEBHOOK_URL=<LEAVEBLANK>
 
 You might notice we have a REACT_APP_RECAPTCHA_SECRET but that is the [default google test one](https://developers.google.com/recaptcha/docs/faq), so this is not actually sensitive.
@@ -82,11 +81,7 @@ We limit the number of PDFs that can be generated concurrently to prevent the
 PDF generation processes from using up all memory on the VM.  The sensible
 default is 20, but you can override it to anything you want:
 
-    PDF_GEN_LIMIT=<AN INTEGER>
-
-#### Google Cloud Platform Storage
-
-We use GCP to store PDFs of generated plea letters. Email `scott@votefwd.org` to request access to the project on GCP. Then visit the [GCP console](https://console.cloud.google.com/apis/credentials?project=voteforward-198801) and create a JSON `service account key`. Move this file to the root directory of your repo and rename it `googleappcreds.json`.
+    	PDF_GEN_LIMIT=<AN INTEGER>
 
 #### Auth0
 
@@ -101,6 +96,14 @@ Run the migrations:
 "Seed" the database with anonymized voter records:
 
 	knex seed:run
+
+Load the ZIP lookup data:
+
+  	\copy catalist_raw FROM ./voter_data/FILENAME.csv with (format csv, header true, delimiter ',');
+
+Load the district data:
+
+ 	\copy districts(district_id, state, state_abbr, district_num, description, lat, long, coordinates, return_address, ra_city, ra_state, ra_zip) from './lookup_data/districts.csv' with (FORMAT csv, header true, delimiter ',');
 
 These voter records consist of randomized names and addresses.
 
@@ -133,4 +136,3 @@ Make sure to update SCSS files and not the compiled CSS files. Note that buildin
 To compile, run this script in a second tab in your terminal:
 
 	npm run scss-compile
-
