@@ -16,7 +16,7 @@ class DistrictCallToAction extends Component {
           href={'/dashboard/' + this.props.district.district_id}
           className="btn btn-primary btn-lg d-block"
         >
-          Write letters to {this.props.district.state} voters
+          Write letters to voters in {this.props.district.district_id}
         </a>
       </div>
     ) : (
@@ -39,10 +39,12 @@ class DistrictView extends Component {
         </div>
         <div className="row">
           <div className="col-6">
-            <h1 className="mb-0">Flip {this.props.district.district_id} Blue</h1>
-            <h4 className="u-quiet mb-4 font-weight-normal">{this.props.district.state}</h4>
+            <h1 className="mb-0">Flip {this.props.district.district_id} Blue!</h1>
+            <h4 className="u-quiet mb-4 font-weight-normal">{this.props.district.display_name}</h4>
             <p className="mb-4">{this.props.district.description}</p>
+            <p className="mb-4">{this.props.district.why_this_district}</p>
             <DistrictCallToAction auth={this.props.auth} district={this.props.district} />
+            <DistrictLinks district={this.props.district} />
           </div>
           <div className="col-6">
             <DistrictMap district={this.props.district} />
@@ -52,6 +54,46 @@ class DistrictView extends Component {
           <div className="col-12 pt-3 mt-3">
             <DistrictStats district={this.props.district} />
           </div>
+        </div>
+      </div>
+    )
+  }
+}
+
+class DistrictLinks extends Component {
+  render() {
+    return(
+      <div className="mt-2">
+        <div className="link">
+          <a href={this.props.district.url_ballotpedia}
+              target="_blank"
+              rel="noreferrer noopener">
+            Read about the race (Ballotpedia)
+          </a>
+        </div>
+
+        <div className="link">
+          <a href={this.props.district.url_wikipedia}
+              target="_blank"
+              rel="noreferrer noopener">
+            Read about the district (Wikipedia)
+          </a>
+        </div>
+
+        <div className="link">
+          <a href={this.props.district.url_swingleft + '?utm_source=votefwd'}
+              target="_blank"
+              rel="noreferrer noopener">
+            Help other ways (Swing Left)
+          </a>
+        </div>
+
+        <div className="link">
+          <a href={this.props.district.url_election_info}
+              target="_blank"
+              rel="noreferrer noopener">
+            Look up your polling place
+          </a>
         </div>
       </div>
     )
@@ -92,6 +134,7 @@ class DistrictMap extends Component {
     );
   }
 }
+
 class DistrictStats extends Component {
   render() {
     // Calculate total letters to prepare
@@ -119,6 +162,7 @@ class DistrictStats extends Component {
     );
   }
 }
+
 class District extends Component {
     constructor(props) {
       super(props);

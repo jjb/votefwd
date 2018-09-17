@@ -382,6 +382,12 @@ router.route('/lookup-district')
         districts.state_abbr,
         districts.district_num,
         districts.description,
+        districts.display_name,
+        districts.why_this_district,
+        districts.url_election_info,
+        districts.url_wikipedia,
+        districts.url_ballotpedia,
+        districts.url_swingleft,
         districts.lat,
         districts.long,
         districts.return_address,
@@ -426,7 +432,7 @@ router.route('/lookup-district')
         ) voters_agg
         on districts.district_id = voters_agg.district_id
         where districts.district_id = ?
-        group by voters_agg.voters_available, voters_agg.voters_adopted, voters_agg.letters_prepped, voters_agg.letters_sent, districts.district_id, districts.state, districts.state_abbr, districts.district_num, districts.description, districts.lat, districts.long, districts.return_address, districts.ra_city, districts.ra_state, districts.ra_zip;`,
+        group by voters_agg.voters_available, voters_agg.voters_adopted, voters_agg.letters_prepped, voters_agg.letters_sent, districts.district_id, districts.state, districts.state_abbr, districts.district_num, districts.description,districts.display_name,districts.why_this_district, districts.url_election_info, districts.url_wikipedia, districts.url_ballotpedia, districts.url_swingleft, districts.lat, districts.long, districts.return_address, districts.ra_city, districts.ra_state, districts.ra_zip;`,
         [req.query.district_id, req.query.district_id]
         )
       .then(function(result) {
