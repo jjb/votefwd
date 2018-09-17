@@ -15,7 +15,7 @@ var Promise = require('bluebird');
 var STATE = 'MN';
 // TODO(sjforman): Pad the district (or don't).
 var DISTRICT = '2';
-var EXPERIMENT_DESCRIPTION = 'Propensity 5-75, Dem partizanship > 90';
+var EXPERIMENT_DESCRIPTION = 'Propensity 5-75, Dem partisanship > 90';
 var CONTROL_HOLDOUT = 0.1;
 
 // TODO: Introduce stratified sampling.
