@@ -61,7 +61,7 @@ export class LandingDistricts extends Component {
             <div className="col-12 mb-3">
               <a href="/">
                 <i className="fa fa-arrow-left"></i>
-                <span className="pl-2">Back to home</span>
+                <span className="pl-2">View all districts</span>
               </a>
             </div>
           </div>
