@@ -10,7 +10,7 @@ import { Footer } from './Footer';
 
 class DistrictCallToAction extends Component {
   render() {
-    const buttonText = "Log in to send letters to " + this.props.district.district_id;
+    const buttonText = "Send letters to " + this.props.district.district_id;
     return ( this.props.auth.isAuthenticated() ? (
       <div>
         <a
@@ -28,6 +28,14 @@ class DistrictCallToAction extends Component {
 
 class DistrictView extends Component {
   render() {
+    let d = this.props.district;
+    let showResources;
+    if(!d.url_ballotpedia && !d.url_wikipedia && !d.url_swingleft && !d.url_election_info) {
+      showResources = false;
+    } else {
+      showResources = true;
+    }
+
     return (
       <div className="container pt-5 pb-5 mb-5">
         <div className="row">
@@ -42,10 +50,10 @@ class DistrictView extends Component {
           <div className="col-md mt-2">
             <h1 className="mb-0">Flip {this.props.district.district_id} Blue!</h1>
             <h4 className="u-quiet mb-4 font-weight-normal">{this.props.district.display_name}</h4>
-            <p className="mb-4">{this.props.district.description}</p>
-            <p className="mb-4">{this.props.district.why_this_district}</p>
+            <p className="mb-4"><strong>Where?</strong> {this.props.district.description}</p>
+            <p className="mb-4"><strong>Why this one?</strong> {this.props.district.why_this_district}</p>
+            <p className="mb-4"><strong>Which voters?</strong> We’re writing letters voters in the district who don’t always vote, but who are very likely to vote for Democrats when they do cast a ballot.</p>
             <DistrictCallToAction auth={this.props.auth} district={this.props.district} />
-            <DistrictLinks district={this.props.district} />
           </div>
           <div className="col-md mt-2">
             <DistrictMap district={this.props.district} />
@@ -56,6 +64,13 @@ class DistrictView extends Component {
             <DistrictStats district={this.props.district} />
           </div>
         </div>
+        { showResources &&
+          <div className="row">
+            <div className="col-12 pt-3 mt-3">
+              <DistrictLinks district={this.props.district} />
+            </div>
+          </div>
+        }
       </div>
     )
   }
@@ -64,38 +79,48 @@ class DistrictView extends Component {
 class DistrictLinks extends Component {
   render() {
     return(
-      <div className="mt-3">
-        <div className="link">
-          <a href={this.props.district.url_ballotpedia}
-              target="_blank"
-              rel="noreferrer noopener">
-            <i className="fa fa-external-link"></i> Read about the race (Ballotpedia)
-          </a>
-        </div>
+      <div>
+        <h4 className="u-quiet mb-4 font-weight-normal">Other resources</h4>
 
-        <div className="mt-1">
-          <a href={this.props.district.url_wikipedia}
-              target="_blank"
-              rel="noreferrer noopener">
-            <i className="fa fa-external-link"></i> Read about the district (Wikipedia)
-          </a>
-        </div>
+        {this.props.district.url_ballotpedia &&
+          <div className="mt-1">
+            <a href={this.props.district.url_ballotpedia}
+                target="_blank"
+                rel="noreferrer noopener">
+              <i className="fa fa-external-link"></i> Read about the race (Ballotpedia)
+            </a>
+          </div>
+        }
 
-        <div className="mt-1">
-          <a href={this.props.district.url_swingleft + '?utm_source=votefwd'}
-              target="_blank"
-              rel="noreferrer noopener">
-						<i className="fa fa-external-link"></i> Help in other ways (Swing Left)
-          </a>
-        </div>
+        {this.props.district.url_wikipedia &&
+          <div className="mt-1">
+            <a href={this.props.district.url_wikipedia}
+                target="_blank"
+                rel="noreferrer noopener">
+              <i className="fa fa-external-link"></i> Read about the district (Wikipedia)
+            </a>
+          </div>
+        }
 
-        <div className="mt-1">
-          <a href={this.props.district.url_election_info}
-              target="_blank"
-              rel="noreferrer noopener">
-            <i className="fa fa-external-link"></i> Look up a {this.props.district.state} polling place
-          </a>
-        </div>
+        {this.props.district.url_swingleft &&
+          <div className="mt-1">
+            <a href={this.props.district.url_swingleft + '?utm_source=votefwd'}
+                target="_blank"
+                rel="noreferrer noopener">
+              <i className="fa fa-external-link"></i> Help in other ways (Swing Left)
+            </a>
+          </div>
+        }
+
+        {this.props.district.url_election_info &&
+          <div className="mt-1">
+            <a href={this.props.district.url_election_info}
+                target="_blank"
+                rel="noreferrer noopener">
+              <i className="fa fa-external-link"></i> Look up {this.props.district.state} polling place
+            </a>
+          </div>
+        }
       </div>
     )
   }
@@ -156,8 +181,8 @@ class DistrictStats extends Component {
 
     return (
       <div className="pt-3 pb-3 bw-2">
-        <p>So far <strong>{this.props.district.num_users_using_district}</strong> volunteers are stockpiling letters to {this.props.district.district_id}. They’ve adopted {totalClaimed} voters, {percentComplete}% of the total available.</p>
         <h4 className="mb-3">{this.props.district.district_id} letter-writing progress</h4>
+        <p>So far <strong>{this.props.district.num_users_using_district}</strong> volunteers are stockpiling letters to {this.props.district.district_id}. They’ve adopted {totalClaimed} voters, {percentComplete}% of the total available.</p>
         <div className="p-statusBar mb-3">
           <div
             className="p-statusBar_bar"
