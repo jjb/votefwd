@@ -24,7 +24,7 @@ class SecretLogin extends Component {
               ) :
               (
                 <div className="text-center p-4">
-                  <Login auth={this.props.auth} buttonText="Sign Up Or Log In To Send Letters" />
+                  <Login auth={this.props.auth} buttonText="Sign up or log in to send letters" />
                 </div>
               )
             }

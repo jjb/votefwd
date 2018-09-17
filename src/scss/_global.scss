@@ -221,6 +221,10 @@ input + .btn {
   border-left: 1px solid rgba(0,0,0,0.3);
 }
 
+.btn-fat-border {
+  border: 5px solid $white;
+}
+
 // Form Inputs
 
 label {

@@ -198,6 +198,9 @@ input + .btn {
 .btn-group .btn + .btn {
   border-left: 1px solid rgba(0, 0, 0, 0.3); }
 
+.btn-fat-border {
+  border: 5px solid #fff; }
+
 label {
   font-weight: bold; }
 
