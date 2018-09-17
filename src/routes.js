@@ -15,6 +15,7 @@ import Privacy from './Privacy';
 import Terms from './Terms';
 import Faq from './Faq';
 import history from './history';
+import GA from './utils/GoogleAnalytics';
 
 const auth = new Auth();
 const { isAuthenticated } = auth;
@@ -41,6 +42,7 @@ export const makeMainRoutes = () => {
   return (
       <Router history={history}>
         <React.Fragment>
+          { GA.init() && <GA.RouteTracker /> }
           <Route exact path="/" render={(props) => <Home auth={auth} {...props} />} />
           <Route exact path="/callback" render={(props) => {
             handleAuthentication(props);
