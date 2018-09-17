@@ -82,7 +82,7 @@ db.transaction(function(trx) {
           var num_test = dwids.length - num_controls;
           console.log('Assigning ' + num_test + ' to TEST, and ' + num_controls + ' to CONTROL.');
           var experiment_voters = dwids.map(function (dwid, index) {
-          var cohort = index <= num_test ? 'TEST' : 'CONTROL';
+          var cohort = index < num_test ? 'TEST' : 'CONTROL';
           return {'experiment_id': experiment_id, 'voter_id': dwid, 'cohort': cohort};
         });
       db('experiment_voter').transacting(trx).insert(experiment_voters).then(function() {
