@@ -64,7 +64,7 @@ class DistrictView extends Component {
 class DistrictLinks extends Component {
   render() {
     return(
-      <div className="mt-2">
+      <div className="mt-3">
         <div className="link">
           <a href={this.props.district.url_ballotpedia}
               target="_blank"
