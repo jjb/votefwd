@@ -26,6 +26,10 @@ class DistrictItem extends Component {
             </div>
             <div className="p-3">
               <p className="small">{this.props.district.description}</p>
+
+              <p className="small text-primary">
+                Select district
+              </p>
             </div>
           </div>
         </a>
