@@ -109,7 +109,7 @@ class LandingCallouts extends Component {
             <div className="col-lg-6 my-auto showcase-text">
               <h2>Refined in Ohio</h2>
               <p className="lead mb-0">
-                Our volunteers wrote more than four thousand letters to infrequent Ohio voters to boost turnout in the special election for the House of Representatives in the 12th district on August 7. Although Danny O’Connor did not ultimately prevail, this election in a historically deep-red district was extremely close. We expect to have the necessary data to assess the impact our campaign in mid-September, and we’re continuing to stockpile letters for the rematch in November.
+                Vote Forward volunteers wrote more than four thousand letters to infrequent voters to boost turnout in the OH-12 special election on August 7. Although the Democratic candidate did not prevail, the election was extremely close. Our best estimate is that letters boosted turnout in this race by 1.44 percentage points — not as shockingly large as the effect we saw in Alabama, but still substantial, especially given the very high baseline turnout. Volunteers are continuing to stockpile letters for the rematch in November.
               </p>
             </div>
           </div>

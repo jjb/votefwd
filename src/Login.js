@@ -28,7 +28,7 @@ export class Login extends Component {
         <React.Fragment>
           {
             !isAuthenticated() && (
-              <button onClick={this.login.bind(this)} className="btn btn-primary btn-lg w-100">
+              <button onClick={this.login.bind(this)} className="btn btn-success btn-lg w-100">
                 {buttonText}
               </button>
             )
