@@ -256,6 +256,10 @@ class Dashboard extends Component {
     }
     this.getCurrentUser();
     this.getAdoptedVoters();
+    if (this.props.match.params.districtId) {
+      const districtToFetch = this.props.match.params.districtId.toUpperCase();
+      return this.updateDistrict(districtToFetch);
+    }
   }
 
   render() {
@@ -292,7 +296,7 @@ class Dashboard extends Component {
         </div>
       ) : (
           <div className="container">
-            <Login auth={this.props.auth} buttonText="Sign Up or Log In To Send Letters" />
+            <Login auth={this.props.auth} buttonText="Sign up or log in to send letters" />
           </div>
         )}
       <Footer />

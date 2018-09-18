@@ -3,12 +3,14 @@
 @import "mixins.scss";
 // Global CSS
 @import "global.scss";
-@import "utilities.scss";
 @import "font-awesome.scss";
+@import "utilities.scss";
 // Components
 @import "landing-page.scss";
 @import "dashboard.scss";
+@import "districts.scss";
 @import "footer.scss";
+@import "mapboxgl.scss";
 
 .profile-pic {
   border-radius: 50%;

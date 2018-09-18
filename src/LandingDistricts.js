@@ -6,14 +6,25 @@ import axios from 'axios';
 class DistrictItem extends Component {
   render() {
     return (
-      <div className="col-3">
-        <h3 className="display-4 text-primary">
-        {this.props.district.district_id}
-        </h3>
-        <p className="small">
-          {this.props.district.description}
-        </p>
-      </div>
+      <a
+        href={'/district/' + this.props.district.district_id}
+        className="d-flex col-sm-12 col-md-4 col-lg-3 p-3 reset-link hover-grow"
+      >
+        <div className="bg-light border rounded highlight-border-top">
+          <div className="bg-white pl-3 pr-3 pt-3 pb-2 rounded">
+            <h3>{this.props.district.state}</h3>
+            <h5 className="headline text-primary">
+                {this.props.district.district_id}
+            </h5>
+          </div>
+          <div className="p-3">
+            <p className="small">{this.props.district.description}</p>
+            <p className="small text-primary">
+              View district
+            </p>
+          </div>
+        </div>
+      </a>
     );
   }
 }
@@ -48,11 +59,14 @@ export class LandingDistricts extends Component {
 
   render() {
     return (
-      <div className="container">
-        <div className="row pt-5 text-center">
-          <div className="col-12">
-            <h3 className="mb-5">Target Districts</h3>
-          </div>
+      <div className="container pt-1 pb-5 mb-5">
+        <h1
+          id="target-districts"
+          className="pt-3 mb-4 text-center"
+        >
+          Target Districts
+        </h1>
+        <div className="row">
           {this.state.districts.map(district => (
             <DistrictItem key={district.id} district={district} />
           ))}

@@ -11,20 +11,29 @@ class DistrictItem extends Component {
 
   render() {
     return (
-      <div className="col-lg-3">
-        <div className="card district--card mb-3">
-          <div className="card-body">
-            <h3>{this.props.district.district_id}</h3>
-            <p className="small">{this.props.district.description}</p>
+      <React.Fragment>
+        <a 
+          href={'/dashboard/' + this.props.district.district_id}
+          className="d-flex col-sm-12 col-md-4 col-lg-3 p-3 reset-link hover-grow"
+          onClick={(e) => this.selectDistrictAndClose(this.props.district.district_id)}
+        >
+          <div className="bg-light border rounded highlight-border-top">
+            <div className="bg-white pl-3 pr-3 pt-3 pb-2 rounded">
+              <h3>{this.props.district.state}</h3>
+              <h5 className="headline text-primary">
+                  {this.props.district.district_id}
+              </h5>
+            </div>
+            <div className="p-3">
+              <p className="small">{this.props.district.description}</p>
+
+              <p className="small text-primary">
+                Select district
+              </p>
+            </div>
           </div>
-          <div className="card-footer">
-            <button className="btn btn-primary"
-                onClick={(e) => this.selectDistrictAndClose(this.props.district.district_id)}>
-              Select
-            </button>
-          </div>
-        </div>
-      </div>
+        </a>
+      </React.Fragment>
     )
   }
 }

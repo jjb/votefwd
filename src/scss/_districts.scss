@@ -1,0 +1,27 @@
+// District View Styles
+$statusBarHeight: 50px;
+$statusBarRadius: $statusBarHeight/2;
+
+.p-statusBar {
+  background: $gray-300;
+  border-radius: $statusBarRadius;
+  height: $statusBarHeight;
+  position: relative;
+
+  .p-statusBar_bar {
+    background: $vf-green;
+    border-radius: $statusBarRadius 0 0 $statusBarRadius;
+    height: 100%;
+    line-height: $statusBarHeight;
+    min-width: $statusBarRadius;
+    padding-right: 1em;
+    text-align: right;
+  }
+  .p-statusBar_status {
+    color: $gray-700;
+    position: absolute;
+    line-height: $statusBarHeight - 1;
+    right: 30px;
+    top: 0;
+  }
+}

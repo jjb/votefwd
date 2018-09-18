@@ -9,13 +9,13 @@ html, body, #root {
 }
 
 h1,
-h2 {
+h2,
+.headline {
   @include header-font;
   font-weight: normal;
   font-style: normal;
 }
 
-h3,
 h4,
 h5,
 h6 {
@@ -32,6 +32,7 @@ p {
 //  - Alerts
 //  - Backgrounds
 //  - Badges
+//  - Borders
 //  - Buttons
 //  - Form Inputs
 //  - Modals
@@ -113,6 +114,16 @@ p {
 // Badges
 .badge {
   padding: 0.5rem 0.75rem;
+}
+
+// Borders
+
+.bw-1 { border-width: 1px !important; }
+.bw-2 { border-width: 2px !important; }
+.bw-3 { border-width: 3px !important; }
+
+.highlight-border-top {
+  border-top: 8px solid $vf-purple !important;
 }
 
 // Buttons
@@ -208,6 +219,10 @@ input + .btn {
 
 .btn-group .btn + .btn {
   border-left: 1px solid rgba(0,0,0,0.3);
+}
+
+.btn-fat-border {
+  border: 5px solid $white;
 }
 
 // Form Inputs
