@@ -174,7 +174,7 @@ class DistrictStats extends Component {
 
     let percentComplete;
     if (totalAvailable > 0) {
-      percentComplete = (totalClaimed/totalAvailable) * 100;
+      percentComplete = Math.round((totalClaimed/totalAvailable) * 1000) / 10;
     } else {
       percentComplete = 0;
     }
@@ -182,7 +182,7 @@ class DistrictStats extends Component {
     return (
       <div className="pt-3 pb-3 bw-2">
         <h4 className="mb-3">{this.props.district.district_id} letter-writing progress</h4>
-        <p>So far <strong>{this.props.district.num_users_using_district}</strong> volunteers are stockpiling letters to {this.props.district.district_id}. They’ve adopted {totalClaimed} voters, {percentComplete}% of the total available.</p>
+        <p>Currently <strong>{this.props.district.num_users_using_district}</strong> volunteers are writing letters to {this.props.district.district_id}. They’ve adopted {totalClaimed} voters, {percentComplete}% of the targeted voters.</p>
         <div className="p-statusBar mb-3">
           <div
             className="p-statusBar_bar"
