@@ -181,7 +181,7 @@ class DistrictStats extends Component {
 
     return (
       <div className="pt-3 pb-3 bw-2">
-        <h4 className="mb-3">{this.props.district.district_id} letter-writing progress</h4>
+        <h4 className="mb-3">Letter-writing progress</h4>
         <p>Currently <strong>{this.props.district.num_users_using_district}</strong> volunteers are writing letters to {this.props.district.district_id}. They’ve adopted {totalClaimed} voters, {percentComplete}% of the targeted voters.</p>
         <div className="p-statusBar mb-3">
           <div

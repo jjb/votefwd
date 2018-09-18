@@ -79,7 +79,7 @@ class Dashboard extends Component {
           }
         })
         .then(res => {
-          if (res.data.length === 0) {
+          if (res.data.length === 0 || !res.data) {
             this.setState({ pickingDistrict: true })
           }
           else {
@@ -254,11 +254,15 @@ class Dashboard extends Component {
     if (!this.isLoggedIn()) {
       history.replace('/');
     }
-    this.getCurrentUser();
-    this.getAdoptedVoters();
     if (this.props.match.params.districtId) {
       const districtToFetch = this.props.match.params.districtId.toUpperCase();
-      return this.updateDistrict(districtToFetch);
+      this.updateDistrict(districtToFetch);
+      this.getAdoptedVoters();
+      this.getCurrentUser();
+    }
+    else {
+      this.getAdoptedVoters();
+      this.getCurrentUser();
     }
   }
 
