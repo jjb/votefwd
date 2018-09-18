@@ -254,12 +254,12 @@ class Dashboard extends Component {
     if (!this.isLoggedIn()) {
       history.replace('/');
     }
+    this.getCurrentUser();
+    this.getAdoptedVoters();
     if (this.props.match.params.districtId) {
       const districtToFetch = this.props.match.params.districtId.toUpperCase();
       return this.updateDistrict(districtToFetch);
     }
-    this.getCurrentUser();
-    this.getAdoptedVoters();
   }
 
   render() {
