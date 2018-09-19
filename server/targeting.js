@@ -65,6 +65,16 @@ function SelectVoters(dwids, experiment_id, control_holdout=0.1) {
   return experiment_voters;
 }
 
+function StratifiedSelectVoters(dwid_rows, experiment_id, control_holdout=0.1) {
+  var num_controls = Math.floor(dwid_rows.length * control_holdout);
+  var num_test = dwid_rows.length - num_controls;
+  var males = dwid_rows.filter(row => row['gender'] == 'm').map(row => row['dwid'])
+  var females = dwid_rows.filter(row=> row['gender'] == 'f').map(row => row['dwid'])
+  var male_experiment_voters = SelectVoters(males, experiment_id, control_holdout)
+  var female_experiment_voters = SelectVoters(females, experiment_id, control_holdout)
+  return male_experiment_voters.concat(female_experiment_voters)
+}
+
 /**
  * Runs targeting for the given district.
  */
@@ -88,7 +98,9 @@ function Target(state, district, description, control_holdout) {
         // in rare cases, a single voter might be in multiple districts.
         db.raw(`
           select
-            dwid
+            dwid,
+            gender,
+            race
           from catalist_raw
           left join experiment_voter
             on catalist_raw.dwid = experiment_voter.voter_id
@@ -97,9 +109,9 @@ function Target(state, district, description, control_holdout) {
             and catalist_raw.state = ?
             and catalist_raw.congressional_district= ?`,
           [state, district])
-          .then(function(dwids_result) {
-            var dwids = dwids_result.rows;
-            var experiment_voters = SelectVoters(dwids, experiment_id, control_holdout);
+          .then(function(query_result) {
+            var dwid_rows = query_result.rows;
+            var experiment_voters = StratifiedSelectVoters(dwid_rows, experiment_id, control_holdout);
             db('experiment_voter').transacting(trx).insert(experiment_voters).then(function() {
               console.log('Inserted experiment voters.');
               trx.commit();
@@ -130,6 +142,7 @@ function Target(state, district, description, control_holdout) {
 
 module.exports = {
   SelectVoters,
+  StratifiedSelectVoters,
   Target
 };
 
