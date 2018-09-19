@@ -65,11 +65,11 @@ function SelectVoters(dwids, experiment_id, control_holdout=0.1) {
   return experiment_voters;
 }
 
-function StratifiedSelectVoters(dwid_rows, experiment_id, control_holdout=0.1) {
+function StratifiedSelectVoters(dwid_rows, experiment_id, control_holdout) {
   var num_controls = Math.floor(dwid_rows.length * control_holdout);
   var num_test = dwid_rows.length - num_controls;
-  var males = dwid_rows.filter(row => row['gender'] == 'm').map(row => row['dwid'])
-  var females = dwid_rows.filter(row=> row['gender'] == 'f').map(row => row['dwid'])
+  var males = dwid_rows.filter(row => row['gender'] == 'male').map(row => row['dwid'])
+  var females = dwid_rows.filter(row=> row['gender'] == 'female').map(row => row['dwid'])
   var male_experiment_voters = SelectVoters(males, experiment_id, control_holdout)
   var female_experiment_voters = SelectVoters(females, experiment_id, control_holdout)
   return male_experiment_voters.concat(female_experiment_voters)
@@ -111,6 +111,7 @@ function Target(state, district, description, control_holdout) {
           [state, district])
           .then(function(query_result) {
             var dwid_rows = query_result.rows;
+            console.log(dwid_rows);
             var experiment_voters = StratifiedSelectVoters(dwid_rows, experiment_id, control_holdout);
             db('experiment_voter').transacting(trx).insert(experiment_voters).then(function() {
               console.log('Inserted experiment voters.');
