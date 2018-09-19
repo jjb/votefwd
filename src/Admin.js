@@ -1,4 +1,5 @@
-// src/Pledge.js
+// src/Admin.js
+// User Table
 
 import React, { Component } from 'react';
 import ReactTable from 'react-table';
@@ -6,6 +7,7 @@ import 'react-table/react-table.css';
 import axios from 'axios';
 import moment from 'moment';
 import { Header } from './Header';
+import { Footer } from './Footer';
 import { UserProfilePreview } from './admin/UserProfilePreview';
 
 class UserTable extends Component {
@@ -272,6 +274,7 @@ class Admin extends Component {
       <div className="position-relative">
         <Header auth={this.props.auth}/>
         <UserTable />
+        <Footer />
       </div>
     );
   }

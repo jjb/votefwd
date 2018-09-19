@@ -547,6 +547,17 @@ router.route('/s/users')
       .catch(err => {console.error(err);})
   });
 
+router.route('/s/user')
+  .get(checkJwt, checkAdmin, function(req, res) {
+    console.log(req.query.auth0_id);
+    db('users')
+      .where('auth0_id', req.query.auth0_id)
+      .then(function(result) {
+        res.json(result);
+      })
+      .catch(err => {console.error(err);})
+  })
+
 router.route('/s/stats')
   .get(checkJwt, checkAdmin, function(req, res) {
     voterService.getVoterSummaryByDistrict(function(error, summary) {
