@@ -1,4 +1,4 @@
-AdminUserimport axios from 'axios';
+import axios from 'axios';
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import Loading from './Loading';

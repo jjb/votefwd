@@ -9,22 +9,38 @@ class AdminUser extends Component {
   constructor(props) {
     super(props)
 
-    this.state = { user: undefined };
+    this.state = { user: '', city: '', state: ''};
   }
 
-  getUser(UserId) {
-    console.log(UserId);
+  getUser(auth0_id) {
     axios({
       method: 'GET',
       headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
-      url: `${process.env.REACT_APP_API_URL}/s/user`,
+      url: `${process.env.REACT_APP_API_URL}/user`,
       params: {
-        auth0_id: UserId 
+        auth0_id: auth0_id
       }
     })
     .then(res => {
-      console.log(res.data);
-      this.setState({ user: res.data });
+      this.setState({ user: res.data[0] })
+    })
+    .then(res => {
+      this.getAndSetLocation()
+    })
+    .catch(err => {
+      console.error(err);
+    });
+  }
+
+  getAndSetLocation() {
+    axios({
+      method: 'GET',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
+      url: `${process.env.REACT_APP_API_URL}/lookup-zip-details`,
+      params: { zip: this.state.user.zip }
+    })
+    .then(res => {
+      this.setState({city: res.data[0].city, state: res.data[0].state});
     })
     .catch(err => {
       console.error(err);
@@ -32,7 +48,6 @@ class AdminUser extends Component {
   }
 
   componentWillMount() {
-    console.log(this.props.match.params.id);
     this.getUser(this.props.match.params.id);
   }
 
@@ -108,11 +123,53 @@ class AdminUser extends Component {
   }
 
   render() {
+		let emailUrl = "mailto:" + this.state.user.email;
+		let twitterUrl = "https://www.twitter.com/" + this.state.user.twitter_profile_url;
+		let facebookUrl = "https://www.facebook.com/" + this.state.user.facebook_profile_url;
+		let linkedinUrl = "https://www.linkedin.com/in/" + this.state.user.linkedin_profile_url;
     return (
       <React.Fragment>
-        <Header auth={this.props.auth}/>
-        <div>foo</div>
-        <Footer />
+      <Header auth={this.props.auth}/>
+      <div>
+        <div>
+          <span>Email address: 
+            <a href={emailUrl}>{this.state.user.email}</a>
+          </span>
+        </div>
+
+        <div>
+          <span>Twitter profile: 
+            <a href={twitterUrl} target="_blank">{this.state.user.twitter_profile_url}</a>
+          </span>
+        </div>
+
+        <div>
+          <span>Facebook profile: 
+            <a href={facebookUrl} target="_blank">{this.state.user.facebook_profile_url}</a>
+          </span>
+        </div>
+
+        <div>
+          <span>LinkedIn profile: 
+            <a href={linkedinUrl} target="_blank">{this.state.user.linkedIn_profile_url}</a>
+          </span>
+        </div>
+
+        <div>
+          <span>Location: 
+            {this.state.city && <span>{this.state.city}, {this.state.state} </span>}
+            {this.state.user.zip}
+          </span>
+        </div>
+
+        <div>
+          <span>Why write letters: 
+            {this.state.user.why_write_letters}
+          </span>
+        </div>
+
+      </div>
+      <Footer />
       </React.Fragment>
     )}
 }
