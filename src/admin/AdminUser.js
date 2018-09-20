@@ -148,6 +148,7 @@ class AdminUser extends Component {
   }
 
   render() {
+    console.log(this.state.user);
 		let emailUrl = "mailto:" + this.state.user.email;
 		let twitterUrl = "https://www.twitter.com/" + this.state.user.twitter_profile_url;
 		let facebookUrl = "https://www.facebook.com/" + this.state.user.facebook_profile_url;
@@ -156,50 +157,95 @@ class AdminUser extends Component {
     return (
       <React.Fragment>
       <Header auth={this.props.auth}/>
-      <div className="mt-4 mb-4 ml-4 mr-4">
-        <div>
-          <span>Email address: 
-            <a href={emailUrl}>{this.state.user.email}</a>
-          </span>
-        </div>
+      <div className="container mb-4 mt-4">
+        <div className="mb-4">
+          <h4 className="mb-4">Basics</h4>
 
-        <div>
-          <span>Twitter profile: 
-            <a href={twitterUrl} target="_blank">{this.state.user.twitter_profile_url}</a>
-          </span>
-        </div>
+          <div>
+            <p>
+              <span className="mr-4">Full name:</span>
+              {this.state.user.full_name}
+            </p>
+          </div>
 
-        <div>
-          <span>Facebook profile: 
-            <a href={facebookUrl} target="_blank">{this.state.user.facebook_profile_url}</a>
-          </span>
-        </div>
+          <div>
+            <p>
+              <span className="mr-4">Current district:</span>
+              {this.state.user.current_district}
+            </p>
+          </div>
 
-        <div>
-          <span>LinkedIn profile: 
-            <a href={linkedinUrl} target="_blank">{this.state.user.linkedIn_profile_url}</a>
-          </span>
-        </div>
+          <div>
+            <p>
+              <span className="mr-4">Created at:</span>
+              {this.state.user.created_at}
+            </p>
+          </div>
 
-        <div>
-          <span>Location: 
-            {this.state.city && <span>{this.state.city}, {this.state.state} </span>}
-            {this.state.user.zip}
-          </span>
-        </div>
+          <div>
+            <p>
+              <span className="mr-4">Updated at:</span>
+              {this.state.user.updated_at}
+            </p>
+          </div>
 
-        <div>
-          <span>Why write letters: 
-            {this.state.user.why_write_letters}
-          </span>
+          <div>
+              <p>
+                <span className="mr-4">Email address:</span>
+                <a href={emailUrl}>{this.state.user.email}</a>
+              </p>
+          </div>
+
+          <div>
+            <p>
+              <span className="mr-3">Twitter profile link: </span>
+              <a href={twitterUrl} target="_blank">{this.state.user.twitter_profile_url}</a>
+            </p>
+          </div>
+
+          <div>
+              <p>
+            <span className="mr-3">Facebook profile link: 
+            </span>
+                <a href={facebookUrl} target="_blank">{this.state.user.facebook_profile_url}</a>
+              </p>
+          </div>
+
+          <div>
+              <p>
+            <span className="mr-4">LinkedIn profile: 
+            </span>
+                <a href={linkedinUrl} target="_blank">{this.state.user.linkedIn_profile_url}</a>
+              </p>
+          </div>
+
+          <div>
+              <p>
+            <span className="mr-4">Location: 
+            </span>
+                {this.state.city && <span>{this.state.city}, {this.state.state} </span>}
+                {this.state.user.zip}
+              </p>
+          </div>
+
+          <div>
+              <p>
+            <span className="mr-4">Why write letters: 
+            </span>
+                {this.state.user.why_write_letters}
+              </p>
+          </div>
         </div>
         
-        <div>
-          <p>Number of voters adopted but not yet marked prepped: {this.state.voters.length}</p>
-          <button className="" onClick={() => this.downloadBundleForUser(this.state.user.auth0_id)}>Generate bundle</button>
+        <div className="mb-4">
+          <h4 className="mb-4">Voter Stuff</h4>
+          <p>Adopted but not yet prepped: {this.state.voters.length}
+            <button className="btn btn-small btn-success ml-2" onClick={() => this.downloadBundleForUser(this.state.user.auth0_id)}>Generate bundle</button>
+          </p>
         </div>
 
-        <div>
+        <div className="mb-4">
+          <h4 className="mb-4">Qualification</h4>
           {statusButtons}
         </div>
 

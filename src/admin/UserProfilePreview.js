@@ -18,7 +18,6 @@ export class UserProfilePreview extends Component {
   }
 
   getAndSetLocation() {
-    console.log(this.props);
     axios({
       method: 'GET',
       headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
