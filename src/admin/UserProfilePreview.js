@@ -18,7 +18,6 @@ export class UserProfilePreview extends Component {
   }
 
   getAndSetLocation() {
-    console.log(this.props.user.zip);
     axios({
       method: 'GET',
       headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
@@ -45,7 +44,9 @@ export class UserProfilePreview extends Component {
   }
 
 	render() {
-		let emailUrl = "mailto:" + this.props.user.email;
+	  let emailBody = "&body=dear " + this.props.user.full_name;
+	  let emailSubject = "&subject=Letters to voters"
+		let emailUrl = "mailto:" + this.props.user.email + "?" + emailSubject + emailBody;
 		let twitterUrl = "https://www.twitter.com/" + this.props.user.twitter_profile_url;
 		let facebookUrl = "https://www.facebook.com/" + this.props.user.facebook_profile_url;
 		let linkedinUrl = "https://www.linkedin.com/in/" + this.props.user.linkedin_profile_url;

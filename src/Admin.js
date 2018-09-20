@@ -1,4 +1,5 @@
-// src/Pledge.js
+// src/Admin.js
+// User Table
 
 import React, { Component } from 'react';
 import ReactTable from 'react-table';
@@ -6,6 +7,7 @@ import 'react-table/react-table.css';
 import axios from 'axios';
 import moment from 'moment';
 import { Header } from './Header';
+import { Footer } from './Footer';
 import { UserProfilePreview } from './admin/UserProfilePreview';
 
 class UserTable extends Component {
@@ -143,6 +145,12 @@ class UserTable extends Component {
           .some(name => name.startsWith(filter.value.toLowerCase()));
       }
     }, {
+      id: 'l',
+      Header: 'auth0_id',
+      accessor: l => {
+        return (<a href={`admin/user/${l.auth0_id}`}>{l.auth0_id}</a>);
+      },
+    }, {
       Header: 'Email',
       accessor: 'email',
       filterable: true,
@@ -272,6 +280,7 @@ class Admin extends Component {
       <div className="position-relative">
         <Header auth={this.props.auth}/>
         <UserTable />
+        <Footer />
       </div>
     );
   }

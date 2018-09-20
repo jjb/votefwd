@@ -10,6 +10,7 @@ import Pledge from './Pledge';
 import Verify from './Verify';
 import AdminRoute from './AdminRoute';
 import Admin from './Admin';
+import AdminUser from './admin/AdminUser';
 import Districts from './Districts';
 import Privacy from './Privacy';
 import Terms from './Terms';
@@ -58,6 +59,7 @@ export const makeMainRoutes = () => {
           <Route exact path="/verify" render={(props) => <Verify auth={auth} {...props} />} />
           <AdminRoute exact path="/admin" component={Admin} auth={auth} />
           <AdminRoute exact path="/admin/districts" component={Districts} auth={auth} />
+          <AdminRoute path="/admin/user/:id" component={AdminUser} auth={auth} />
           <Route exact path="/privacy-policy" render={(props) => <Privacy auth={auth} {...props} />} />
           <Route exact path="/terms-of-use" render={(props) => <Terms auth={auth} {...props} />} />
           <Route exact path="/faq" render={(props) => <Faq auth={auth} {...props} />} />
