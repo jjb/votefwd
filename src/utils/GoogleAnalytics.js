@@ -38,6 +38,13 @@ class GoogleAnalytics extends Component {
   }
 }
 
+function trackEvent(category, action) {
+  ReactGA.event({
+    category: category,
+    action: action
+  });
+}
+
 GoogleAnalytics.propTypes = {
   location: PropTypes.shape({
     pathname: PropTypes.string,
@@ -66,5 +73,6 @@ const init = (options = {}) => {
 export default {
   GoogleAnalytics,
   RouteTracker,
+  trackEvent,
   init
 }

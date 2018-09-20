@@ -1,6 +1,7 @@
 // src/Login.js
 
 import React, { Component } from 'react';
+import GA from './utils/GoogleAnalytics';
 
 export class Login extends Component {
   goTo(route) {
@@ -8,10 +9,12 @@ export class Login extends Component {
   }
 
   login() {
+    GA.trackEvent('click', 'clickedLoginButton');
     this.props.auth.login()
   }
 
   logout() {
+    GA.trackEvent('click', 'clickedLogOutButton');
     this.props.auth.logout()
   }
 
