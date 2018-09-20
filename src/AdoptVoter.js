@@ -65,6 +65,10 @@ export class AdoptVoter extends Component {
                     className="btn btn-primary btn-lg w-100 mt-1">
                       Adopt <span className="reset-num">5</span> Voters
                   </button>
+                  <div className="small mt-1">
+                    <i className="fa fa-clock-o"></i>
+                    <span className="ml-1">5 letters: ~10 minutes to prepare</span>
+                  </div>
                 </div>
                 <div className="col-md">
                   <button
@@ -73,6 +77,10 @@ export class AdoptVoter extends Component {
                     className="btn btn-primary btn-lg w-100 mt-1">
                       Adopt <span className="reset-num">25</span> Voters
                   </button>
+                  <div className="small mt-1">
+                    <i className="fa fa-clock-o"></i>
+                    <span className="ml-1">25 letters: ~40 minutes to prepare</span>
+                  </div>
                 </div>
               </div>
             </div>
