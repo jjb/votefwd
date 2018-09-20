@@ -145,6 +145,12 @@ class UserTable extends Component {
           .some(name => name.startsWith(filter.value.toLowerCase()));
       }
     }, {
+      id: 'l',
+      Header: 'auth0_id',
+      accessor: l => {
+        return (<a href={`admin/user/${l.auth0_id}`}>{l.auth0_id}</a>);
+      },
+    }, {
       Header: 'Email',
       accessor: 'email',
       filterable: true,
