@@ -4,12 +4,13 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Header } from '../Header';
 import { Footer } from '../Footer';
+import download from 'js-file-download';
 
 class AdminUser extends Component {
   constructor(props) {
     super(props)
 
-    this.state = { user: '', city: '', state: ''};
+    this.state = { voters: [], user: '', city: '', state: ''};
   }
 
   getUser(auth0_id) {
@@ -47,8 +48,44 @@ class AdminUser extends Component {
     });
   }
 
+  getAdoptedVoters(auth0_id) {
+    let headers = {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))};
+    axios.get(
+      `${process.env.REACT_APP_API_URL}/voters`,
+      {
+        headers: headers,
+        params: {
+          user_id: auth0_id
+        }
+      })
+      .then(res => {
+        console.log(res);
+        this.setState( {voters: res.data} );
+      })
+      .catch(err => {
+        console.error(err)
+      });
+  }
+
+  downloadBundleForUser(auth0_id) {
+    axios({
+     method: 'GET',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
+      url: `${process.env.REACT_APP_API_URL}/voters/downloadAllLetters`,
+      params: { user_id: auth0_id },
+      responseType: "blob"
+    })
+    .then(res => {
+      download(res.data, res.headers.filename);
+    })
+    .catch(err => {
+      console.error(err);
+    });
+  }
+
   componentWillMount() {
     this.getUser(this.props.match.params.id);
+    this.getAdoptedVoters(this.props.match.params.id);
   }
 
   handleChangeStatus(user, newQualState, event) {
@@ -155,6 +192,11 @@ class AdminUser extends Component {
           <span>Why write letters: 
             {this.state.user.why_write_letters}
           </span>
+        </div>
+        
+        <div>
+          <p>Number of voters adopted but not yet marked prepped: {this.state.voters.length}</p>
+          <button className="" onClick={() => this.downloadBundleForUser(this.state.user.auth0_id)}>Generate bundle</button>
         </div>
 
         <div>
