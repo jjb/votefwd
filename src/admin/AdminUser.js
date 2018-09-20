@@ -53,7 +53,7 @@ class AdminUser extends Component {
 
   handleChangeStatus(user, newQualState, event) {
     event.preventDefault();
-    if (user.qual_state === newQualState) {
+    if (this.state.user.qual_state === newQualState) {
       return;
     }
     axios({
@@ -61,24 +61,12 @@ class AdminUser extends Component {
       headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
       url: `${process.env.REACT_APP_API_URL}/s/updateUserQualifiedState`,
       data: {
-        auth0_id: user.auth0_id,
+        auth0_id: this.state.user.auth0_id,
         qualState: newQualState
       }
     })
     .then(res => {
-      // setState calls are batched, so if you rely on the previous state, then
-      // the only way to guarantee you are reading it is to use this syntax.
-      // see: https://reactjs.org/docs/state-and-lifecycle.html#state-updates-may-be-asynchronous
-      this.setState((prevState, props) => {
-        return {
-          users: prevState.users.map(u => {
-            if (u.auth0_id === user.auth0_id) {
-              u.qual_state = newQualState;
-            }
-            return u;
-          })
-        }
-      });
+      this.getUser(this.state.user.auth0_id);
     })
     .catch(err => {
       console.error(err);
@@ -91,7 +79,7 @@ class AdminUser extends Component {
     };
 
     const user = props.original;
-    const qualState = user.qual_state;
+    const qualState = this.state.user.qual_state;
     return (
       <div className="btn-group btn-group-toggle w-100">
         <label
@@ -127,10 +115,11 @@ class AdminUser extends Component {
 		let twitterUrl = "https://www.twitter.com/" + this.state.user.twitter_profile_url;
 		let facebookUrl = "https://www.facebook.com/" + this.state.user.facebook_profile_url;
 		let linkedinUrl = "https://www.linkedin.com/in/" + this.state.user.linkedin_profile_url;
+		let statusButtons = this.renderStatus(this.props);
     return (
       <React.Fragment>
       <Header auth={this.props.auth}/>
-      <div>
+      <div className="mt-4 mb-4 ml-4 mr-4">
         <div>
           <span>Email address: 
             <a href={emailUrl}>{this.state.user.email}</a>
@@ -166,6 +155,10 @@ class AdminUser extends Component {
           <span>Why write letters: 
             {this.state.user.why_write_letters}
           </span>
+        </div>
+
+        <div>
+          {statusButtons}
         </div>
 
       </div>
