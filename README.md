@@ -83,6 +83,14 @@ default is 20, but you can override it to anything you want:
 
    	PDF_GEN_LIMIT=<AN INTEGER>
 
+Volunteers are limited to a adopting a certain number of voters when they are
+merely "qualified." They can adopt more when they become "super-qualified." By
+default these thresholds are 100 and 5000, respectively, but you can set them as
+follows:
+
+    REACT_APP_QUAL_NUM=<AN INTEGER>
+    REACT_APP_SUPERQUAL_NUM=<AN INTEGER>
+
 To send data to Google Analytics, set up
 
     REACT_APP_GA_TRACKING_ID=<A VALID GOOGLE TRACKING ID>

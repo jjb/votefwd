@@ -16,8 +16,8 @@ const QualStateEnum = {
 const AllowedVoterAdoption = {
   banned: 0,
   pre_qualified: 0,
-  qualified: 100,
-  super_qualified: 5000
+  qualified: parseInt(process.env.REACT_APP_QUAL_NUM || '100', 10),
+  super_qualified: parseInt(process.env.REACT_APP_SUPERQUAL_NUM || '5000', 10)
 };
 
 function isAdmin(auth0_id, callback) {

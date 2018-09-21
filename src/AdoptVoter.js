@@ -42,6 +42,12 @@ export class AdoptVoter extends Component {
   }
 
   render() {
+    let maxQual = parseInt(process.env.REACT_APP_QUAL_NUM || '100', 10);
+    let maxedOut = false;
+    if (this.props.user.qual_state === 'qualified' && this.props.voterCount >= maxQual)  {
+      maxedOut = true;
+    }
+
     return (
       <div className="container-fluid p-0">
         <div className="row no-gutters position-relative">
@@ -54,27 +60,41 @@ export class AdoptVoter extends Component {
               <p className="u-highlight mb-3">
                 {this.state.district.description}
               </p>
-              <p className="mt-4 mb-3 small">
-                Voters you adopt won‘t be assigned to anyone else, so by adopting them, you’re committing to send the letters.
-              </p>
+              <div className="mt-4 mb-3">
+                  <p className="small">Voters you adopt won‘t be assigned to anyone else, so by adopting them, <strong>you’re committing to send the letters.</strong></p>
+                  <p className="small">Instructions: You can <a href="https://storage.cloud.google.com/voteforward-production-static/vote-forward-instructions.pdf?_ga=2.37020132.-55278990.1513971056" target="_blank" rel="noopener noreferrer">download printable instructions</a>, or <a href="https://www.youtube.com/watch?v=UCPb-SFWYB4" target="_blank" rel="noopener noreferrer">watch a short video demo.</a></p>
+              </div>
               <div className="row">
                 <div className="col-md">
                   <button
-                    disabled={this.state.adopting ? true : false}
+                    disabled={this.state.adopting || maxedOut ? true : false}
                     onClick={() => this.adoptVoter(5, this.state.district.district_id)}
                     className="btn btn-primary btn-lg w-100 mt-1">
                       Adopt <span className="reset-num">5</span> Voters
                   </button>
+                  <div className="small mt-1">
+                    <i className="fa fa-clock-o"></i>
+                    <span className="ml-1">5 letters: ~10 minutes to prepare</span>
+                  </div>
                 </div>
                 <div className="col-md">
                   <button
-                    disabled={this.state.adopting ? true : false}
+                    disabled={this.state.adopting || maxedOut ? true : false}
                     onClick={() => this.adoptVoter(25, this.state.district.district_id)}
                     className="btn btn-primary btn-lg w-100 mt-1">
                       Adopt <span className="reset-num">25</span> Voters
                   </button>
+                  <div className="small mt-1">
+                    <i className="fa fa-clock-o"></i>
+                    <span className="ml-1">25 letters: ~40 minutes to prepare</span>
+                  </div>
                 </div>
               </div>
+              { maxedOut && (
+                <div className="mt-4 alert alert-info pr-4 pl-4">
+                  <p>You’ve adopted the maximum number of voters ({process.env.REACT_APP_QUAL_NUM}). Fantastic! To become a super-volunteer so you can adopt more, please <a href="mailto:scott@votefwd.org?subject=Please+approve+me+as+a+super-volunteer!&body=Hello!+Please+approve+me+to+adopt+more+than+100+voters+on+Vote+Forward." target="_blank" rel="noopener noreferrer">email scott@votefwd.org</a> to request approval.</p>
+                </div>
+              )}
             </div>
           </div>
         </div>
