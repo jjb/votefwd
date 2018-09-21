@@ -5,9 +5,9 @@
     <link href="https://fonts.googleapis.com/css?family=Merriweather+Sans" rel="stylesheet">
     <style>
       body { font-family: 'Merriweather Sans', sans-serif; }
-      .small { font-size: 0.7em; }
+      .small { font-size: 0.8em; }
       .pagebreak { page-break-before: always; }
-      .cover { font-family: sans-serif; margin-top: 4.5em; margin-right: 5em; margin-left: 5em; }
+      .cover { font-family: sans-serif; margin-top: 4.5em; margin-right: 2em; margin-left: 2em; }
     </style>
   </head>
   <body>
@@ -20,7 +20,7 @@
         <ul class="small">
           {{#each returnAddresses}}
           <li style="list-style-type: none;  margin-left:-3em; margin-bottom: 0.2em;">
-            YOUR NAME, {{this}}
+            YOUR FIRST NAME & LAST INITIAL, {{this}}
           </li>
           {{/each}}
         </ul>
@@ -29,7 +29,7 @@
       </p>
       <ul class="small">
         {{#each voters}}
-        <li style="list-style-type: none;  margin-left:-3em; margin-bottom: 0.2em;">
+        <li style="list-style-type: none;  margin-left:-3em; margin-bottom: 0.3em;">
           {{#if this.salutation}}[{{this.salutation}}]{{/if}} {{this.first_name}} {{this.last_name}}{{#if this.suffix}} {{this.suffix}}{{/if}},
           {{this.address}}, {{this.city}}, {{this.state}} {{this.zip}}</li>
         {{/each}}
