@@ -42,8 +42,9 @@ export class AdoptVoter extends Component {
   }
 
   render() {
+    let maxQual = parseInt(process.env.REACT_APP_QUAL_NUM || '100', 10);
     let maxedOut = false;
-    if (this.props.user.qual_state === 'qualified' && this.props.voterCount >= 100) {
+    if (this.props.user.qual_state === 'qualified' && this.props.voterCount >= maxQual)  {
       maxedOut = true;
     }
 
@@ -91,7 +92,7 @@ export class AdoptVoter extends Component {
               </div>
               { maxedOut && (
                 <div className="mt-4 alert alert-info pr-4 pl-4">
-                  <p>You’ve adopted the maximum allowed number of voters. Fantastic! To become a super-volunteer so you can adopt more, please <a href="mailto:scott@votefwd.org?subject=Please+approve+me+as+a+super-volunteer!&body=Hello!+Please+approve+me+to+adopt+more+than+100+voters+on+Vote+Forward." target="_blank" rel="noopener noreferrer">email scott@votefwd.org</a> to request approval.</p>
+                  <p>You’ve adopted the maximum number of voters ({process.env.REACT_APP_QUAL_NUM}). Fantastic! To become a super-volunteer so you can adopt more, please <a href="mailto:scott@votefwd.org?subject=Please+approve+me+as+a+super-volunteer!&body=Hello!+Please+approve+me+to+adopt+more+than+100+voters+on+Vote+Forward." target="_blank" rel="noopener noreferrer">email scott@votefwd.org</a> to request approval.</p>
                 </div>
               )}
             </div>
