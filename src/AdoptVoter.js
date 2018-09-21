@@ -55,7 +55,11 @@ export class AdoptVoter extends Component {
                 {this.state.district.description}
               </p>
               <p className="mt-4 mb-3 small">
-                Voters you adopt won‘t be assigned to anyone else, so by adopting them, you’re committing to send the letters.
+                Voters you adopt won‘t be assigned to anyone else, so by adopting them, <strong>you’re committing to send the letters.</strong>
+                  <br/>
+                  <p className="small">
+                    Instructions: You can <a href="https://storage.cloud.google.com/voteforward-production-static/vote-forward-instructions.pdf?_ga=2.37020132.-55278990.1513971056" target="_blank" rel="noopener noreferrer">download printable instructions</a>, or <a href="https://www.youtube.com/watch?v=UCPb-SFWYB4" target="_blank" rel="noopener noreferrer">watch a short video demo.</a>
+                  </p>
               </p>
               <div className="row">
                 <div className="col-md">
