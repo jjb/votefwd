@@ -279,6 +279,7 @@ class Dashboard extends Component {
                   handleAdoptedVoter={this.handleAdoptedVoter}
                   toggleDistrictPicker={this.toggleDistrictPicker}
                   user={this.state.user}
+                  voterCount={this.state.voters.length}
                 />
             </React.Fragment>
           ) : (
