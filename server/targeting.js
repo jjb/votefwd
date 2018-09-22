@@ -93,8 +93,7 @@ function Target(state, district, description, control_holdout) {
           left join experiment_voter
             on catalist_raw.dwid = experiment_voter.voter_id
           where
-            experiment_voter.voter_id is NULL
-            and catalist_raw.state = ?
+            catalist_raw.state = ?
             and catalist_raw.congressional_district= ?`,
           [state, district])
           .then(function(dwids_result) {
