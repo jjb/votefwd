@@ -6,6 +6,7 @@ import { Footer } from './Footer';
 import { Qualify } from './Qualify';
 import history from './history';
 import axios from 'axios';
+import GA from './utils/GoogleAnalytics';
 
 
 class Verify extends Component {
@@ -48,6 +49,7 @@ class Verify extends Component {
   }
 
   updateUser(key, value) {
+    GA.trackEvent('profile_update', key);
     let data = {}
     data['auth0_id'] = localStorage.getItem('user_id');
     data[key] = value;
