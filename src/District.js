@@ -52,7 +52,7 @@ class DistrictView extends Component {
             <h4 className="u-quiet mb-4 font-weight-normal">{this.props.district.display_name}</h4>
             <p className="mb-4"><strong>Where?</strong> {this.props.district.description}</p>
             <p className="mb-4"><strong>Why this one?</strong> {this.props.district.why_this_district}</p>
-            <p className="mb-4"><strong>Which voters?</strong> We’re writing letters voters in the district who don’t always vote, but who are very likely to vote for Democrats when they do cast a ballot.</p>
+            <p className="mb-4"><strong>Which voters?</strong> We’re writing letters to voters in the district who don’t always vote, but who are very likely to vote for Democrats when they do cast a ballot.</p>
             <DistrictCallToAction auth={this.props.auth} district={this.props.district} />
           </div>
           <div className="col-md mt-2">
