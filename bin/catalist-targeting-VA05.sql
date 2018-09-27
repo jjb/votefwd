@@ -26,7 +26,7 @@ BEGIN
   AND congressional_district='5'
   -- EXCLUDE DUPlICATE RECORDS 
   AND dwid NOT IN (
-    '111558015'
+    '174434395'
 );
 
 
@@ -97,7 +97,7 @@ BEGIN
   AND state='VA'
   AND congressional_district='5'
   AND dwid NOT IN (
-    '111558015'
+    '174434395'
 );
 
   RAISE NOTICE 'Populated voters table with new TEST voters.';
