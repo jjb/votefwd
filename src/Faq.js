@@ -25,7 +25,7 @@ class QsAndAs extends Component {
           <div className="mb-5">
             <h2>Are we sending letters to everyone, or just Democrats?</h2>
             <p>
-              We are carefully targeting letters to voters with the greatest influence on control of Congress. In most cases, voters are less than 75% likely to vote, if they do vote, are more than 90% likely to vote for the Democratic candidate.
+              We are carefully targeting letters to voters with the greatest influence on control of Congress. In most cases, voters are less than 75% likely to cast a ballot, but if they do vote, are more than 90% likely to vote for the Democratic candidate.
             </p>
           </div>
 
@@ -44,9 +44,16 @@ class QsAndAs extends Component {
           </div>
 
           <div className="mb-5">
-            <h2>With early voting, wouldn’t it be better to send the letters earlier?</h2>
+            <h2>Why wait to send the letters until October 30? Wouldn’t it be better to send them earlier?</h2>
             <p>
-              We’re pretty sure October 30 is the right choice, to get the letters in mailboxes as close as possible to the election without missing it. There's strong evidence that the effects of this kind of message fade very fast. So, there may be some benefit in sending letters earlier, because recipients have more time to act. But this benefit would almost certainly be outweighed by the downside — that many people would forget about the letter by the time election day arrives. The one exception is if you’re sending letters from Alaska, Hawaii, or somewhere else outside the continental US, in which case you should probably send them a few days earlier.
+              There’s convincing evidence that the effects of this kind of message fade very fast, so we’re pretty sure October 30 is the optimal sending date, getting letters in mailboxes as close as possible to the election without missing it. There may be some benefits to sending letters earlier, because recipients have more time to act. But those benefits would almost certainly be outweighed by the downside, that many people would forget about the letter by the time election day arrives. The one exception is if you’re sending letters from Alaska, Hawaii, or somewhere else outside the continental US, in which case you should probably send them a few days earlier.
+            </p>
+          </div>
+
+          <div className="mb-5">
+            <h2>Where does the data come from?</h2>
+            <p>
+              Ultimately the data we’re using originates with state elections boards. They make voter rolls and histories available to the public in the interest of electoral system transparency, and to facilitate campaigning by candidates and independent organizations like Vote Forward. In most cases, we purchase data from <a href="https://www.catalist.us/" target="_blank" rel="noopener noreferrer">Catalist</a>, which standardizes the data the states provide into a unified format. Our vote propensity and partisanship predictions also come from Catalist.
             </p>
           </div>
 
