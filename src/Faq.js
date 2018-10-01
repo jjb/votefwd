@@ -16,6 +16,13 @@ class QsAndAs extends Component {
           </div>
 
           <div className="mb-5">
+            <h2>What does the letter-writing process entail?</h2>
+            <p>
+              When you first sign up, you’ll be asked a few basic questions to make sure you’re a human being with good intentions. We review and approve new volunteers at least twice a day, so within 12 hours or so, you should receive a welcome email with detailed instructions. After clicking a button to “adopt” some voters, you’ll download and print a PDF, then hand-write a single sentence on each letter, address, stamp, and set it aside to send on October 30. <a href="https://www.youtube.com/watch?v=UCPb-SFWYB4" target="_blank" rel="noopener noreferrer">Link to a demo video on YouTube.</a>
+            </p>
+          </div>
+
+          <div className="mb-5">
             <h2>How is this different from #PostcardsToVoters?</h2>
             <p>
               Vote Forward letters are only partially handwritten, so they’re very fast to prepare (~90 seconds per letter). They are also evidently significantly more effective than postcards. The evidence we’ve seen suggests that postcards can yield a roughly 0.7 percentage point increase in turnout. By contrast, letters have been shown to increase turnout by as much as 3.4 percentage points. We hypothesize that recipients are more likely to take them seriously, because they’re a bit more formal.
