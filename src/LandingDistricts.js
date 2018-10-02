@@ -58,6 +58,16 @@ export class LandingDistricts extends Component {
   }
 
   render() {
+    let districts = this.state.districts;
+    districts.sort(function(a, b) {
+      if (a.district_id < b.district_id) {
+        return -1;
+      }
+      if (a.district_id > b.district_id) {
+        return 1;
+      }
+      return 0;
+    });
     return (
       <div className="container pt-1 pb-5 mb-5">
         <h1
@@ -67,7 +77,7 @@ export class LandingDistricts extends Component {
           Target Districts
         </h1>
         <div className="row">
-          {this.state.districts.map(district => (
+          {districts.map(district => (
             <DistrictItem key={district.id} district={district} />
           ))}
         </div>
