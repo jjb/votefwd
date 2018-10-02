@@ -234,6 +234,39 @@ class UserTable extends Component {
         return !row._original.is_admin;
       },
     }, {
+      id: 'r',
+      Header: 'Reason?',
+      accessor: r => {
+        if (r.why_write_letters) {
+          return 'present';
+        }
+        else {
+          return 'absent';
+        }
+      },
+      maxWidth: 120,
+      filterable: true,
+      Filter: ({ filter, onChange }) => (
+        <select
+          className="form-control"
+          onChange={ event => onChange(event.target.value) }
+          value={ filter ? filter.value : 'all' }
+        >
+          <option value="all">All</option>
+          <option value="present">Present</option>
+          <option value="absent">Absent</option>
+        </select>
+      ),
+      filterMethod: (filter, row, column) => {
+        if (filter.value === 'all') {
+          return true;
+        }
+        if (filter.value === 'present') {
+          return row._original.why_write_letters;
+        }
+        return !row._original.why_write_letters;
+      },
+    }, {
       width: 200,
       Header: 'Status',
       Cell: this.renderStatus,
