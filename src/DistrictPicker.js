@@ -64,13 +64,23 @@ export class DistrictPicker extends Component {
   }
 
   render() {
+    let districts = this.state.districts;
+    districts.sort(function(a, b) {
+      if (a.district_id < b.district_id) {
+        return -1;
+      }
+      if (a.district_id > b.district_id) {
+        return 1;
+      }
+      return 0;
+    });
     return (
       <div className="border">
         <div className="p-4">
           <h4 className="mb-3">Choose Your Target District</h4>
           <p>Most volunteers choose a district (relatively) close to home, but feel free to choose a different one if you prefer — perhaps to support a candidate you particularly admire, or a district near where you grew up.</p>
           <div className="row">
-            {this.state.districts.map(district =>
+            {districts.map(district =>
               <DistrictItem
                 key={district.id}
                 district={district}
