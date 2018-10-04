@@ -323,14 +323,16 @@ export class Qualify extends Component {
     let thankYou = (
       <div className="p-4">
         <h2>Thanks for signing up!</h2>
+        <p className="mt-4">
+          We’ll review and approve you to start sending letters as soon as we can. Expect an email within the next 24 hours with details on how to get started writing letters to voters in {district}.*</p>
         <p>
-          We‘ll send you an email soon with details on how to get started writing letters to infrequent voters in {district}.*
+          For now, please familiarize yourself with the process by reviewing the <a href="/vote-forward-instructions.pdf">printable</a> or <a href="https://www.youtube.com/watch?v=UCPb-SFWYB4" target="_blank" rel="noreferrer nooopener">video</a> instructions. If you’re planning to throw a letter-writing party, you can <a href="/vote-forward-party-kit.pdf">download a party-planning kit</a>. And for frequently asked questions, please visit the <a href="/faq">FAQ page</a>. 
         </p>
         <p>
           And seriously, <strong>thank you</strong>. We’re counting on folks like you to help turn the tide in November and we’re grateful for your help.
         </p>
         <p><strong>- Scott and the Vote Forward Team</strong></p>
-        <p>* {district} is our closest target district to your ZIP code. You can change this later if you’d prefer to write letters to voters in a different district.</p>
+        <p>* You can choose a different district via the <a href="/district">district selection page</a>, if there’s another one to which you feel a stronger connection.</p>
         <div className="text-center p-4">
           <img src="/images/bg-masthead.png" className="w-50" alt=""/>
         </div>
