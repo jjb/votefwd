@@ -8,7 +8,7 @@ class QsAndAs extends Component {
   render() {
     return(
       <div className="container">
-        <div className="p-5">  
+        <div className="p-5">
 
           <div className="mb-5">
             <h1>Frequently Asked Questions </h1>
@@ -19,6 +19,13 @@ class QsAndAs extends Component {
             <h2>What does the letter-writing process entail?</h2>
             <p>
               When you first sign up, you’ll be asked a few basic questions to make sure you’re a human being with good intentions. We review and approve new volunteers at least twice a day, so within 12 hours or so, you should receive a welcome email with detailed instructions. After clicking a button to “adopt” some voters, you’ll download and print a PDF, then hand-write a single sentence on each letter, address, stamp, and set it aside to send on October 30. <a href="https://www.youtube.com/watch?v=UCPb-SFWYB4" target="_blank" rel="noopener noreferrer">Link to a demo video on YouTube.</a>
+            </p>
+          </div>
+
+          <div className="mb-5">
+            <h2>What should I write?</h2>
+            <p>
+              Heartfelt personal messages are best. Some people mention civic responsibility (“it’s my duty as a citizen...”). Others talk about how hard-won the right to vote has been. You could also describe memories from childhood of going to the polls with your parents, or doing the same with your kids. It’s fine to mention specific issues, just be careful not to assume the recipient agrees with your policy preferences. And make sure not to mention candidates by name!
             </p>
           </div>
 
@@ -39,10 +46,10 @@ class QsAndAs extends Component {
           <div className="mb-5">
             <h2>How did you choose the districts?</h2>
             <p>
-              Starting from <a href="https://swingleft.org?utm_source=votefwd" target="_blank" rel="noopener noreferrer">Swing Left</a>’s list of 78 target districts, we’re focusing on the ones the <a href="https://projects.fivethirtyeight.com/2018-midterm-election-forecast/house?utm_source=votefwd" target="_blank" rel="noopener noreferrer">538 congressional model</a> projects will be closest. These are the districts most likely to determine control of the House. We also prioritize districts in states with important senate or gubernatorial races, and districts where we connections on the ground who can help kickstart volunteer efforts. 
+              Starting from <a href="https://swingleft.org?utm_source=votefwd" target="_blank" rel="noopener noreferrer">Swing Left</a>’s list of 78 target districts, we’re focusing on the ones the <a href="https://projects.fivethirtyeight.com/2018-midterm-election-forecast/house?utm_source=votefwd" target="_blank" rel="noopener noreferrer">538 congressional model</a> projects will be closest. These are the districts most likely to determine control of the House. We also prioritize districts in states with important senate or gubernatorial races, and districts where we connections on the ground who can help kickstart volunteer efforts.
             </p>
           </div>
-        
+
           <div className="mb-5">
             <h2>Do I have to use my full name and return address?</h2>
             <p>
