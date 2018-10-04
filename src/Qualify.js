@@ -222,7 +222,7 @@ export class Qualify extends Component {
         <div className="p-4">
           <h4 className="mb-3">Terms of Service</h4>
           <p>
-            Do you agree to the <a href="/terms-of-use" target="_blank">Terms of Use</a> and <a href="privacy-policy" target="_blank">Privacy Policy</a>, and specifically, do you promise to be respectful at all times in your communications with fellow citizens via Vote Forward?
+            Do you agree to the <a href="/terms-of-use" target="_blank" rel="noopener noreferrer">Terms of Use</a> and <a href="privacy-policy" target="_blank" rel="noopener noreferrer">Privacy Policy</a>, and specifically, do you promise to be respectful at all times in your communications with fellow citizens via Vote Forward?
           </p>
           <button className="btn btn-primary w-100" onClick={this.handleAgreedCode.bind(this)}>Yes</button>
         </div>
