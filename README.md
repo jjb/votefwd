@@ -106,17 +106,22 @@ Run the migrations:
 
 	knex migrate:latest
 
-"Seed" the database with anonymized voter records:
-
-	knex seed:run
-
 Load the ZIP lookup data:
 
-  	\copy catalist_raw FROM ./voter_data/FILENAME.csv with (format csv, header true, delimiter ',');
+  	\copy lu_zip FROM ./lookup_data/lu_zip.csv with (format csv, header true, delimiter ',');
+
+Load the catalist data:
+
+  	\copy catalist_raw FROM ./seed_data/catalist.csv with (format csv, header true, delimiter ',');
+
 
 Load the district data:
 
- 	\copy districts(district_id, state, state_abbr, district_num, description, lat, long, coordinates, return_address, ra_city, ra_state, ra_zip) from './lookup_data/districts.csv' with (FORMAT csv, header true, delimiter ',');
+ 	\copy districts(district_id, state, state_abbr, district_num, description, lat, long, coordinates, return_address, ra_city, ra_state, ra_zip, why_this_district, display_name, url_election_info, url_wikipedia, url_ballotpedia, url_swingleft) from './lookup_data/districts.csv' with (FORMAT csv, header true, delimiter ',');
+
+"Seed" the database with anonymized voter records:
+
+	knex seed:run
 
 These voter records consist of randomized names and addresses.
 
