@@ -235,13 +235,15 @@ export class Qualify extends Component {
         <form onSubmit={this.handleProfileSubmit} className="p-4">
           <h3 className="mb-3">One last step</h3>
           <p className="mb-4">
-            We need to be sure you're serious about sending letters to boost turnout among Democrats. If you have a public web presence, please share those profiles below.
+            We need to be sure you’re serious about sending letters to boost turnout among Democrats. Please provide a link to a profile if you have one. This is optional, but it helps us get you approved quickly!
           </p>
 
           {/* ///////////////////////////////////////////////////////////////// */}
 
           <div className="d-block d-sm-flex mb-3">
-            <label htmlFor="profileTwitter" className="col-12 col-sm-3 m-0 pl-0 d-flex align-self-center">Twitter:</label>
+            <label htmlFor="profileTwitter" className="col-12 col-sm-3 m-0 pl-0 d-flex align-self-center">
+              Twitter:
+            <span className="small text-info ml-1"> (optional)</span></label>
             <div className="input-group">
               <div className="input-group-prepend">
                 <span className="input-group-text pt-0">@</span>
@@ -257,7 +259,10 @@ export class Qualify extends Component {
           {/* ///////////////////////////////////////////////////////////////// */}
 
           <div className="d-block d-sm-flex mb-3">
-            <label htmlFor="profileFacebook" className="col-12 col-sm-3 m-0 pl-0 d-flex align-self-center">Facebook:</label>
+            <label htmlFor="profileFacebook" className="col-12 col-sm-3 m-0 pl-0 d-flex align-self-center">
+              Facebook:<br/ >
+              <span className="text-info small ml-1">(optional)</span>
+            </label>
             <div className="input-group">
               <div className="input-group-prepend">
                 <span className="input-group-text">facebook.com/</span>
@@ -273,7 +278,9 @@ export class Qualify extends Component {
           {/* ///////////////////////////////////////////////////////////////// */}
 
           <div className="d-block d-sm-flex mb-3">
-            <label htmlFor="profileLinkedin" className="col-12 col-sm-3 m-0 pl-0 d-flex align-self-center">LinkedIn:</label>
+            <label htmlFor="profileLinkedin" className="col-12 col-sm-3 m-0 pl-0 d-flex align-self-center">LinkedIn:
+            <span className="small text-info ml-1"> (optional)</span>
+            </label>
             <div className="input-group">
               <div className="input-group-prepend">
                 <span className="input-group-text">linkedin.com/in/</span>
@@ -326,7 +333,7 @@ export class Qualify extends Component {
         <p className="mt-4">
           We’ll review and approve you to start sending letters as soon as we can. Expect an email within the next 24 hours with details on how to get started writing letters to voters in {district}.*</p>
         <p>
-          For now, please familiarize yourself with the process by reviewing the <a href="/vote-forward-instructions.pdf">printable</a> or <a href="https://www.youtube.com/watch?v=UCPb-SFWYB4" target="_blank" rel="noreferrer nooopener">video</a> instructions. If you’re planning to throw a letter-writing party, you can <a href="/vote-forward-party-kit.pdf">download a party-planning kit</a>. And for frequently asked questions, please visit the <a href="/faq">FAQ page</a>. 
+          For now, please familiarize yourself with the process by reviewing the <a href="/vote-forward-instructions.pdf">printable</a> or <a href="https://www.youtube.com/watch?v=UCPb-SFWYB4" target="_blank" rel="noreferrer nooopener">video</a> instructions. If you’re planning to throw a letter-writing party, you can <a href="/vote-forward-party-kit.pdf">download a party-planning kit</a>. And for frequently asked questions, please visit the <a href="/faq">FAQ page</a>.
         </p>
         <p>
           And seriously, <strong>thank you</strong>. We’re counting on folks like you to help turn the tide in November and we’re grateful for your help.
