@@ -23,6 +23,20 @@ class QsAndAs extends Component {
           </div>
 
           <div className="mb-5">
+            <h2>How many letters do I have to complete?</h2>
+            <p>
+              The minimum commitment is five letters, but you can do as many as you like! 
+            </p>
+          </div>
+
+          <div className="mb-5">
+            <h2>Who pays for the stamps?</h2>
+            <p>
+              Vote Forward is a bring-your-own-stamps operation. We understand that the cost can add up. That’s part of why the minimum commitment is low (five letters).
+            </p>
+          </div>
+
+          <div className="mb-5">
             <h2>What should I write?</h2>
             <p>
               Heartfelt personal messages are best. Some people mention civic responsibility (“it’s my duty as a citizen...”). Others talk about how hard-won the right to vote has been. You could also describe memories from childhood of going to the polls with your parents, or doing the same with your kids. It’s fine to mention specific issues, just be careful not to assume the recipient agrees with your policy preferences. And make sure not to mention candidates by name!
