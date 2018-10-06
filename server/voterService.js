@@ -7,7 +7,8 @@ var emailService = require('./emailService');
 var letterService = require('./letterService');
 var slackService = require('./slackService');
 var userService = require('./userService');
-
+var districtService = require('./districtService');
+const errors = require('./errors');
 const allowedVoterBulkCount = [1, 5, 25, 50];
 let adoptionOrder = 'RANDOM()';
 
@@ -196,7 +197,41 @@ function undoConfirmSent(voterId, callback) {
       console.error(err)
     });
 }
-
+function voterInfoFromHash(hash) {
+  return new Promise((resolve, reject) => {
+    let voter;
+    db('voters')
+    .select('id', 'district_id')
+    .where('hashid', hash)
+    .then((results) => {
+      if (results.length === 0) {
+        reject(new errors.NotFoundError());
+      } else {
+        voter = results[0];
+        return districtService.getDistrict(voter.district_id)
+      }
+    })
+    .then((district) => {
+      resolve({voter, district, shouldRecordPledge: shouldRecordPledge()});
+    })
+    .catch(err => {
+      reject(err);
+    });
+  });
+}
+/**
+ * only record the pledge if today's date is after 
+ * the environment DATE_TO_ENABLE_PLEDGE (or '2018-10-30' by default)
+ */
+const pledgeStartString = process.env.DATE_TO_ENABLE_PLEDGE ? process.env.DATE_TO_ENABLE_PLEDGE : '2018-10-30';
+const pledgeStartDate = new Date(pledgeStartString);
+function shouldRecordPledge() {
+  const currentDate = new Date();
+  return currentDate >= pledgeStartDate;
+}
+/**
+ * code: hashid for the voter
+ */
 function makePledge(code, callback) {
   db('voters')
   .where('hashid', code)
@@ -210,6 +245,10 @@ function makePledge(code, callback) {
     if (result[0].pledge_made_at != null){
       // check if already pledge and exit early if yes
       callback('already pledged');
+      return;
+    }
+    if (!shouldRecordPledge()) {
+      callback('too soon');
       return;
     }
     // get the pledge row and update it with pledge time
@@ -390,5 +429,7 @@ module.exports = {
   makePledge,
   getAdoptedVoterSummary,
   getVoterSummaryByDistrict,
+  voterInfoFromHash,
+  shouldRecordPledge,
   _prepForTests
 }

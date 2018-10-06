@@ -4,6 +4,9 @@ var expect = require('chai').expect;
 
 var db = require('../server/db');
 var voterService = require('../server/voterService');
+var Hashids = require('hashids');
+var hashids = new Hashids(process.env.REACT_APP_HASHID_SALT, 6,
+  process.env.REACT_APP_HASHID_DICTIONARY);
 
 describe('voterService', function() {
   describe('adoptRandomVoter', function() {
@@ -59,6 +62,55 @@ describe('voterService', function() {
           total: 5
         });
         done(error);
+      });
+    });
+    describe('voterInfoFromHash', function() {
+      it('should produce not found error', (done) => {
+        voterService.voterInfoFromHash('asdf')
+        .then((info) =>{
+          throw new Error("We expected a NotFoundError, but didn't get one");
+          done();
+        })
+        .catch(err => {
+          expect(err.name).to.equal("NotFoundError");
+          done();
+        })
+      });
+    });
+    describe('voterInfoFromHash', function() {
+      let voter;
+      let hashId;
+      it('should get voter info', (done) => {
+        // find a voter, and manually update its hashid
+        db.select("*")
+          .table('voters')
+          .first()
+        .then((voterFromDB) => {
+          voter = voterFromDB;
+          hashId =  `${hashids.encode(voter.id)}`;
+          //manually update the hashid
+          return db('voters')
+          .where('id', voter.id)
+          .update({
+            hashid: hashId
+          })
+        })
+        .then(() => {
+          return voterService.voterInfoFromHash(hashId)
+        })
+        .then((voterInfo) => {
+          expect(voterInfo.voter.id).to.equal(voter.id);
+          expect(voterInfo.voter.district_id).to.equal(voterInfo.district.district_id);
+          done();
+        });
+      });
+      afterEach(() => {
+        // Set the voter hash back to what it was originally
+        return db('voters')
+        .where('id', voter.id)
+        .update({
+          hashid: voter.hashid
+        })
       });
     });
   });
