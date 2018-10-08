@@ -30,7 +30,7 @@ var router = express.Router();
 var port = process.env.REACT_APP_API_PORT || 3001;
 var corsOption = {
   origin: true,
-  moethods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
+  methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
   credentials: true,
 }
 
