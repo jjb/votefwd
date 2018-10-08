@@ -333,7 +333,7 @@ export class Qualify extends Component {
         <p className="mt-4">
           We’ll review and approve you to start sending letters as soon as we can. Expect an email within the next 24 hours with details on how to get started writing letters to voters in {district}.*</p>
         <p>
-          For now, please familiarize yourself with the process by reviewing the <a href="/vote-forward-instructions.pdf">printable</a> or <a href="https://www.youtube.com/watch?v=UCPb-SFWYB4" target="_blank" rel="noreferrer nooopener">video</a> instructions. If you’re planning to throw a letter-writing party, you can <a href="/vote-forward-party-kit.pdf">download a party-planning kit</a>. And for frequently asked questions, please visit the <a href="/faq">FAQ page</a>.
+          For now, please familiarize yourself with the process by reviewing the <a href="/vote-forward-instructions.pdf">printable</a> or <a href="https://www.youtube.com/watch?v=UCPb-SFWYB4" target="_blank" rel="noreferrer noopener">video</a> instructions. If you’re planning to throw a letter-writing party, you can <a href="/vote-forward-party-kit.pdf">download a party-planning kit</a>. And for frequently asked questions, please visit the <a href="/faq">FAQ page</a>.
         </p>
         <p>
           And seriously, <strong>thank you</strong>. We’re counting on folks like you to help turn the tide in November and we’re grateful for your help.
