@@ -1,4 +1,4 @@
-// src/Home.js
+// src/Faq.js
 
 import React, { Component } from 'react';
 import { Header } from './Header';
@@ -25,7 +25,7 @@ class QsAndAs extends Component {
           <div className="mb-5">
             <h2>How many letters do I have to complete?</h2>
             <p>
-              The minimum commitment is five letters, but you can do as many as you like! 
+              The minimum commitment is five letters, but you can do as many as you like!
             </p>
           </div>
 
@@ -33,6 +33,13 @@ class QsAndAs extends Component {
             <h2>Who pays for the stamps?</h2>
             <p>
               Vote Forward is a bring-your-own-stamps operation. We understand that the cost can add up. That’s part of why the minimum commitment is low (five letters).
+            </p>
+          </div>
+
+          <div className="mb-5">
+            <h2>How long does it take to get approved?</h2>
+            <p>
+              We review new volunteers twice each day, so on average, you can expect to be approved within about 12 hours of completing the signup process. Please be patient, we’re welcoming you all as fast as we can!
             </p>
           </div>
 
