@@ -3,7 +3,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import moment from 'moment';
-import download from 'js-file-download';
 
 class VoterRecord extends Component {
   constructor(props) {
@@ -13,14 +12,14 @@ class VoterRecord extends Component {
 
   downloadLetterForVoter(voter_id) {
     axios({
-     method: 'GET',
+      method: 'GET',
       headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
-      url: `${process.env.REACT_APP_API_URL}/voters/downloadLetter`,
+      url: `${process.env.REACT_APP_API_URL}/voters/letterUrl`,
       params: { voter_id: voter_id },
-      responseType: "blob"
+      responseType: "json"
     })
     .then(res => {
-      download(res.data, res.headers.filename);
+      window.open(`${process.env.REACT_APP_API_URL}/letters/${res.data.url}`);
     })
     .catch(err => {
       console.error(err);
@@ -111,13 +110,13 @@ export class VoterList extends Component {
     axios({
      method: 'GET',
       headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
-      url: `${process.env.REACT_APP_API_URL}/voters/downloadAllLetters`,
+      url: `${process.env.REACT_APP_API_URL}/voters/letterUrl`,
       params: { user_id: localStorage.getItem('user_id')},
-      responseType: "blob"
+      responseType: "json"
     })
     .then(res => {
-      download(res.data, res.headers.filename);
       this.setState({downloadingBundle: false});
+      window.open(`${process.env.REACT_APP_API_URL}/letters/${res.data.url}`);
     })
     .catch(err => {
       console.error(err);

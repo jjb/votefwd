@@ -7,6 +7,7 @@ var emailService = require('./emailService');
 var letterService = require('./letterService');
 var slackService = require('./slackService');
 var userService = require('./userService');
+const jwt = require('jsonwebtoken');
 
 const allowedVoterBulkCount = [1, 5, 25, 50];
 let adoptionOrder = 'RANDOM()';
@@ -104,10 +105,75 @@ function _adoptSomeVoters(adopterId, numVoters, districtId, callback) {
       callback(err);
     });
 }
+function getVoters(params) {
+  const query = db('voters');
+  if (!params.voterId && !params.userId) {
+    throw new Error("must pass either userId or voterId");
+  }
+  if (params.voterId) {
+    query.where('id', params.voterId);
+  }
+  if (params.userId) {
+    query.where('adopter_user_id', params.userId);
+  }
+  if (params.excludePrepped) {
+    query.where('confirmed_prepped_at', null);
+  }
+  return query;
+}
+function downloadLetterUrl(params) {
+  if (!params.userId) {
+    throw new Error("userId is required");
+  }
+  return new Promise((resolve, reject) => {
+    const token = jwt.sign(params,
+      process.env.REACT_APP_JWT_SECRET, 
+      { expiresIn: 60 }, 
+      function (err, token) {
+        if (err) {
+          console.log("error in downloadLetterUrl", err);
+          reject(err);
+        } else {
+          resolve(`${token}.pdf`);
+        }
+      });
+  });
+}
+/**
+ * Accepts the raw JWT from the pdf url, verifies it, and then either
+ *   downloads a single voter file (if there's a voterId in the JWT) 
+ *   otherwise downloads all voter files for user
+ * 
+ * @param {string} rawJwt - raw JWT created by downloadLetterUrl
+ * @param {function} callback - callback to be passed to eitherdownloadLetterToVoter or downloadAllLetters
+ */
+function downloadPdf(rawJwt, callback) {
+  return new Promise((resolve, reject) => {
+    jwt.verify(rawJwt, process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
+      if (err) {
+        console.log("error in downloadLetterUrl", err);
+        reject(err);
+      } else {
+        resolve(decoded);
+      }
+    });
+  })
+  .then((token) => {
+    if (token.voterId) {
+      downloadLetterToVoter(token.voterId, callback);
+    } else if (token.userId) {
+      downloadAllLetters(token.userId, callback);
+    } else {
+      reject("jwt doesn't contain enough info to download pdf");
+    }
+  })
+  .catch((err) => {
+    console.log(err);
+  });
+}
 
 function downloadLetterToVoter(voterId, callback) {
-  db('voters')
-    .where('id', voterId)
+  getVoters({ voterId })
     .then(function(voter) {
       letterService.generatePdfForVoters(voter, callback)
     })
@@ -118,9 +184,7 @@ function downloadLetterToVoter(voterId, callback) {
 
 function downloadAllLetters(userId, callback) {
   // Downloads all not-yet-prepped letters for a user
-  db('voters')
-    .where('adopter_user_id', userId)
-    .where('confirmed_prepped_at', null)
+  getVoters({ userId, excludePrepped: true })
     .then(function(voters) {
       letterService.generatePdfForVoters(voters, callback)
     })
@@ -390,5 +454,8 @@ module.exports = {
   makePledge,
   getAdoptedVoterSummary,
   getVoterSummaryByDistrict,
+  getVoters,
+  downloadLetterUrl,
+  downloadPdf,
   _prepForTests
 }
