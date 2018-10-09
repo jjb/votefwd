@@ -98,6 +98,7 @@ function downloadFileCallback(res) {
       return;
     }
     res.header('Access-Control-Expose-Headers', "Filename");
+    res.header('Content-Type', "application/pdf");
     res.header('Filename', downloadFileName);
     res.download(filepath, downloadFileName, function (err) {
         if (err) {

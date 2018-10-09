@@ -19,7 +19,12 @@ class VoterRecord extends Component {
       responseType: "json"
     })
     .then(res => {
-      window.open(`${process.env.REACT_APP_API_URL}/letters/${res.data.url}`);
+      // this is sort of poor form with React, but can't figure out a better
+      //   way to do it right now
+      var link = document.createElement('a');
+      link.href = `${process.env.REACT_APP_API_URL}/letters/${res.data.url}`;
+      document.body.appendChild(link);
+      link.click();
     })
     .catch(err => {
       console.error(err);
@@ -116,7 +121,12 @@ export class VoterList extends Component {
     })
     .then(res => {
       this.setState({downloadingBundle: false});
-      window.open(`${process.env.REACT_APP_API_URL}/letters/${res.data.url}`);
+      // this is sort of poor form with React, but can't figure out a better
+      //   way to do it right now
+      var link = document.createElement('a');
+      link.href = `${process.env.REACT_APP_API_URL}/letters/${res.data.url}`;
+      document.body.appendChild(link);
+      link.click();
     })
     .catch(err => {
       console.error(err);
