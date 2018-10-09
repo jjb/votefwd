@@ -85,31 +85,60 @@ router.route('/voter/adopt-random')
       res.json(response);
     });
   });
+
+/**
+ * returns callback function for downloadLetterToVoter and downloadAllLetters
+ */
+function downloadFileCallback(res) {
+  return (err, filepath, downloadFileName) => {
+    if (err) {
+      res.status(500).send('Error generating file');
+      console.error('Error generating file for voter(s)');
+      console.error(err);
+      return;
+    }
+    res.header('Access-Control-Expose-Headers', "Filename");
+    res.header('Filename', downloadFileName);
+    res.download(filepath, downloadFileName, function (err) {
+        if (err) {
+          console.log("Error downloading letter(s).");
+          console.log(err);
+        } else {
+          console.log("Success downloading letter(s).");
+        }
+    });
+  };
+}
+// Keep /downloadLetter route so that after deployment
+//   people who don't refresh their browser won't get
+//   errors. 
+router.route('/voters/downloadLetter')
+  .get(checkJwt, function(req, res) {
+    const params = { userId: req.user.sub, voterId: req.query.voter_id };
+    voterService.getVoters(params)
+    .then((voters) => {
+      if (voters.length === 0) {
+        res.status(500).send('No voters found');
+      } else {
+        voterService.downloadLetterToVoter(req.query.voter_id, downloadFileCallback(res));
+      }
+    });
+  });
+
+// Keep /downloadAllLetters route so that after deployment
+//   people who don't refresh their browser won't get
+//   errors. 
+router.route('/voters/downloadAllLetters')
+  .get(checkJwt, function(req, res) {
+    voterService.downloadAllLetters(req.user.sub, downloadFileCallback(res));
+  });
 /**
  * If the JWT contains a "voterId" value, then this is a letter to a single voter.
  * Otherwise it's a letter to all voters for that user.
  */
 router.route('/letters/:letterJwt.pdf')
   .get(function(req, res) {
-    voterService.downloadPdf(req.params.letterJwt,
-      function(err, filepath, downloadFileName) {
-        if (err) {
-          res.status(500).send('Error generating file');
-          console.error('Error generating file for voter(s)');
-          console.error(err);
-          return;
-        }
-        res.header('Access-Control-Expose-Headers', "Filename");
-        res.header('Filename', downloadFileName);
-        res.download(filepath, downloadFileName, function (err) {
-           if (err) {
-              console.log("Error downloading letter(s).");
-              console.log(err);
-           } else {
-              console.log("Success downloading letter(s).");
-           }
-        });
-      });
+    voterService.downloadPdf(req.params.letterJwt, downloadFileCallback(res));
   });
 
 
