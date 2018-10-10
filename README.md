@@ -63,6 +63,7 @@ variables:
 	REACT_APP_RECAPTCHA_SITE_KEY=6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
 	REACT_APP_RECAPTCHA_SECRET_KEY=6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
 	REACT_APP_SLACK_WEBHOOK_URL=<LEAVEBLANK>
+	REACT_APP_JWT_SECRET=eXB62QzaWp54hrjHtyfYJVgwr5NJNZ5dCRf43wEj
 
 You might notice we have a REACT_APP_RECAPTCHA_SECRET but that is the [default google test one](https://developers.google.com/recaptcha/docs/faq), so this is not actually sensitive.
 

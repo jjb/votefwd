@@ -65,12 +65,12 @@ router.get('/', function(req, res) {
 });
 
 router.route('/voters')
-  .get(checkJwt, function(req, res) {
-    voterService.getUsersAdoptedVoters(req.query.user_id,
-      function(result) {
-          res.json(result)
-      });
-  });
+.get(checkJwt, function(req, res) {
+  voterService.getUsersAdoptedVoters(req.query.user_id,
+    function(result) {
+      res.json(result)
+    });
+});
 
 router.route('/voter/adopt-random')
   .post(checkJwt, function(req, res) {
@@ -86,50 +86,91 @@ router.route('/voter/adopt-random')
     });
   });
 
+/**
+ * returns callback function for downloadLetterToVoter and downloadAllLetters
+ */
+function downloadFileCallback(res) {
+  return (err, filepath, downloadFileName) => {
+    if (err) {
+      res.status(500).send('Error generating file');
+      console.error('Error generating file for voter(s)');
+      console.error(err);
+      return;
+    }
+    res.header('Access-Control-Expose-Headers', "Filename");
+    res.header('Content-Type', "application/pdf");
+    res.header('Filename', downloadFileName);
+    res.download(filepath, downloadFileName, function (err) {
+        if (err) {
+          console.log("Error downloading letter(s).");
+          console.log(err);
+        } else {
+          console.log("Success downloading letter(s).");
+        }
+    });
+  };
+}
+// Keep /downloadLetter route so that after deployment
+//   people who don't refresh their browser won't get
+//   errors. 
 router.route('/voters/downloadLetter')
   .get(checkJwt, function(req, res) {
-    voterService.downloadLetterToVoter(req.query.voter_id,
-      function(err, filepath, downloadFileName) {
-        if (err) {
-          res.status(500).send('Error generating file');
-          console.error('Error generating file for one voter');
-          console.error(err);
-          return;
-        }
-        res.header('Access-Control-Expose-Headers', "Filename");
-        res.header('Filename', downloadFileName);
-        res.download(filepath, downloadFileName, function (err) {
-           if (err) {
-              console.log("Error downloading letter.");
-              console.log(err);
-           } else {
-              console.log("Success downloading letter.");
-           }
-        });
-      });
+    const params = { userId: req.user.sub, voterId: req.query.voter_id };
+    voterService.getVoters(params)
+    .then((voters) => {
+      if (voters.length === 0) {
+        res.status(500).send('No voters found');
+      } else {
+        voterService.downloadLetterToVoter(req.query.voter_id, downloadFileCallback(res));
+      }
+    });
   });
 
+// Keep /downloadAllLetters route so that after deployment
+//   people who don't refresh their browser won't get
+//   errors. 
 router.route('/voters/downloadAllLetters')
   .get(checkJwt, function(req, res) {
-    voterService.downloadAllLetters(req.query.user_id,
-      function(err, filepath, downloadFileName) {
-        if (err) {
-          res.status(500).send('Error generating file');
-          console.error('Error generating file for multiple voters');
-          console.error(err);
-          return;
-        }
-        res.header('Access-Control-Expose-Headers', "Filename");
-        res.header('Filename', downloadFileName);
-        res.download(filepath, downloadFileName, function (err) {
-           if (err) {
-              console.log("Error downloading all letters.");
-              console.log(err);
-           } else {
-              console.log("Success downloading all letters.");
-           }
-        });
-      });
+    voterService.downloadAllLetters(req.user.sub, downloadFileCallback(res));
+  });
+/**
+ * If the JWT contains a "voterId" value, then this is a letter to a single voter.
+ * Otherwise it's a letter to all voters for that user.
+ */
+router.route('/letters/:letterJwt.pdf')
+  .get(function(req, res) {
+    voterService.downloadPdf(req.params.letterJwt, downloadFileCallback(res));
+  });
+
+
+/**
+ * This route creates a secure url that can be used to download the pdf.  It 
+ * creates a one-minute-long JWT that gets included in the url 
+ * that contains either userId and voterId to download a single voter's pdf,
+ * or just the userId to download all voters for that user.
+ */
+router.route('/voters/letterUrl')
+  .get(checkJwt, function(req, res) {
+    // include the userId from the JWT to make sure the user 
+    //  has access to that voter
+    const params = { userId: req.user.sub };
+    if (req.query.voter_id) {
+      params.voterId = req.query.voter_id;
+    }
+    voterService.getVoters(params)
+    .then((voters) => {
+      if (voters.length === 0) {
+        res.status(500).send('No voters found');
+      } else {
+        voterService.downloadLetterUrl(params)
+          .then((url) => {
+            res.json({ url });
+          })
+          .catch((err) => {
+            res.status(500).send('error getting url');
+          });
+      }
+    })
   });
 
 router.route('/voter/confirm-prepped')
