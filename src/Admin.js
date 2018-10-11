@@ -19,6 +19,7 @@ class UserTable extends Component {
     this.renderStatus = this.renderStatus.bind(this);
     this.renderNameAndProfile = this.renderNameAndProfile.bind(this);
     this.handleChangeStatus = this.handleChangeStatus.bind(this);
+    this.handleBatchApprovePending = this.handleBatchApprovePending.bind(this);
     this.hideUserInformation = this.hideUserInformation.bind(this);
   }
 
@@ -68,6 +69,26 @@ class UserTable extends Component {
           })
         }
       });
+    })
+    .catch(err => {
+      console.error(err);
+    });
+  }
+
+  handleBatchApprovePending(users, event) {
+    event.preventDefault();
+    const auth0_ids = users.map(user => user.auth0_id)
+    console.log("Handling batch approve pending for auth0_ids: ", auth0_ids);
+    axios({
+      method: 'POST',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
+      url: `${process.env.REACT_APP_API_URL}/s/batchApprovePending`,
+      data: {
+        auth0_ids: auth0_ids,
+      }
+    })
+    .then(res => {
+      window.location.reload();
     })
     .catch(err => {
       console.error(err);
@@ -302,6 +323,11 @@ class UserTable extends Component {
             closeModal={this.hideUserInformation}
           />
         )}
+        <form>
+          <input type="submit" value="Batch Approve Pending"
+          onClick={this.handleBatchApprovePending.bind(this, users)}
+          />
+        </form>
         <ReactTable data={users} columns={columns} className="-striped -highlight" />
       </React.Fragment>
     )}

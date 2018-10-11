@@ -86,11 +86,37 @@ function updateUserQualifiedState(auth0_id, qualState, callback){
   });
 }
 
+function batchApprovePending(auth0_ids, callback){
+  console.log("Service batch approving pending for auth0_ids: ", auth0_ids);
+  // takes a list of auth0_ids of users and approves them.
+  // This function should only be called by admins and verified through
+  // a middleware.
+
+  // get the user for email sending and then update that state for the user
+  db('users')
+  .whereIn('auth0_id', auth0_ids)
+  .andWhere({qual_state: QualStateEnum.pre_qualified})
+  .update({qual_state: QualStateEnum.qualified})
+  .returning(['email', 'qual_state'])
+  .then(function(users) {
+    users.forEach(function(user) {
+      notifyUserOfNewQualifiedState(user, QualStateEnum.qualified);
+    });
+    callback(null, QualStateEnum.qualified);
+    return;
+  })
+  .catch(err => {
+      console.error(err);
+      callback(err);
+  });
+}
+
 function notifyUserOfNewQualifiedState(user, newState){
   // this function takes a user right before their qualified state is changed and compares
   // their old state to their new state.  Depending on what changed we might want to send them
   // an email so they are aware of this change.
   // Note that user['qual_state'] is their *previous* state and newState is their just set current state.
+  console.log("Notifying user of updated status.", user);
   if (user['qual_state'] == QualStateEnum.pre_qualified && newState == QualStateEnum.qualified) {
     //notify users when promoted to qualified
     if (process.env.NODE_ENV !== 'test') {
@@ -159,6 +185,7 @@ function _prepForTests() {
 }
 
 module.exports = {
+  batchApprovePending,
   canAdoptMoreVoters,
   isAdmin,
   updateEmail,
