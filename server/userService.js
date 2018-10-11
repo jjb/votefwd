@@ -91,7 +91,6 @@ function batchApprovePending(auth0_ids, callback){
   //
   // This function should only be called by admins and verified through
   // a middleware.
-
   db('users')
   .whereIn('auth0_id', auth0_ids)
   .andWhere({qual_state: QualStateEnum.pre_qualified})
@@ -99,7 +98,7 @@ function batchApprovePending(auth0_ids, callback){
   .returning(['email', 'qual_state'])
   .then(function(users) {
     users.forEach(function(user) {
-      notifyUserOfNewQualifiedState(user, QualStateEnum.qualified);
+      notifyUserOfBasicQualifiedState(user);
     });
     callback(null, QualStateEnum.qualified);
     return;
@@ -118,10 +117,7 @@ function notifyUserOfNewQualifiedState(user, newState){
   console.log("Notifying user of updated status.", user);
   if (user['qual_state'] == QualStateEnum.pre_qualified && newState == QualStateEnum.qualified) {
     //notify users when promoted to qualified
-    if (process.env.NODE_ENV !== 'test') {
-      emailService.sendEmail('qualified', user, 'You\'re approved to send letters on Vote Forward');
-    }
-    return 'sent qualified email';
+    return notifyUserOfBasicQualifiedState(user);
   } else if ((user['qual_state'] == QualStateEnum.pre_qualified || user['qual_state'] == QualStateEnum.qualified) && newState == QualStateEnum.super_qualified) {
     if (process.env.NODE_ENV !== 'test') {
       //notify users when promoted to super_qualified
@@ -132,6 +128,14 @@ function notifyUserOfNewQualifiedState(user, newState){
 
   return 'not sending an email';
 
+}
+
+function notifyUserOfBasicQualifiedState(user) {
+  if (process.env.NODE_ENV !== 'test') {
+    console.log("Notifing user of basic approval.", user.email);
+    emailService.sendEmail('qualified', user, 'You\'re approved to send letters on Vote Forward');
+  }
+  return 'sent qualified email';
 }
 
 /**
