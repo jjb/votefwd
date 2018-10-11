@@ -194,5 +194,6 @@ module.exports = {
   updateEmail,
   updateUserQualifiedState,
   notifyUserOfNewQualifiedState,
+  notifyUserOfBasicQualifiedState,
   _prepForTests
 }
