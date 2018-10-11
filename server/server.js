@@ -544,6 +544,25 @@ router.route('/s/updateUserQualifiedState')
     });
   });
 
+router.route('/s/batchApprovePending')
+  .post(checkJwt, checkAdmin, function(req, res) {
+    const auth0_ids = req.body.auth0_ids;
+    if (!auth0_ids) {
+      res.status(400).end();
+      return;
+    }
+    console.log("Batch approving pending for auth0_ids: ", auth0_ids);
+    userService.batchApprovePending(auth0_ids, function (error, newState){
+      if (error) {
+        console.error(error);
+        res.status(500).end();
+        return;
+      }
+      res.status(200).send('Batch approved pending.').end();
+      return;
+    });
+  });
+
 // Check that a user is an admin.  You have to be an admin to do so, but you can
 // check on another user.
 router.route('/s/isAdmin')
