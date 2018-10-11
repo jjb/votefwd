@@ -114,7 +114,7 @@ function notifyUserOfNewQualifiedState(user, newState){
   // their old state to their new state.  Depending on what changed we might want to send them
   // an email so they are aware of this change.
   // Note that user['qual_state'] is their *previous* state and newState is their just set current state.
-  console.log("Notifying user of updated status.", user);
+  console.log("Notifying user of updated status.");
   if (user['qual_state'] == QualStateEnum.pre_qualified && newState == QualStateEnum.qualified) {
     //notify users when promoted to qualified
     return notifyUserOfBasicQualifiedState(user);
@@ -132,7 +132,7 @@ function notifyUserOfNewQualifiedState(user, newState){
 
 function notifyUserOfBasicQualifiedState(user) {
   if (process.env.NODE_ENV !== 'test') {
-    console.log("Notifing user of basic approval.", user.email);
+    console.log("Notifing user of basic approval.");
     emailService.sendEmail('qualified', user, 'You\'re approved to send letters on Vote Forward');
   }
   return 'sent qualified email';
