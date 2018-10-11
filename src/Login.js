@@ -8,9 +8,14 @@ export class Login extends Component {
     this.props.history.replace(`/${route}`)
   }
 
+  signup() {
+    GA.trackEvent('click', 'clickedSignupButton');
+    this.props.auth.login(false)
+  }
+
   login() {
     GA.trackEvent('click', 'clickedLoginButton');
-    this.props.auth.login()
+    this.props.auth.login(true)
   }
 
   logout() {
@@ -19,9 +24,9 @@ export class Login extends Component {
   }
 
   render() {
-    let buttonText = 'Log In';
-    if (this.props.buttonText) {
-      buttonText = this.props.buttonText;
+    let signUpText = 'Sign Up';
+    if (this.props.signUpText) {
+      signUpText = this.props.signUpText;
     }
     const { isAuthenticated } = this.props.auth;
     const pictureUrl = localStorage.getItem('picture_url');
@@ -31,9 +36,14 @@ export class Login extends Component {
         <React.Fragment>
           {
             !isAuthenticated() && (
-              <button onClick={this.login.bind(this)} className="btn btn-success btn-lg w-100">
-                {buttonText}
-              </button>
+              <div>
+                <button onClick={this.signup.bind(this)} style={{ marginBottom:"10px"}} className="btn btn-success btn-lg w-100">
+                  {signUpText}
+                </button>
+                <button onClick={this.login.bind(this)} className="btn btn-primary w-100">
+                  Already have an account? Login
+                </button>
+              </div>
             )
           }
           {

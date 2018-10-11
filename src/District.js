@@ -10,7 +10,7 @@ import { Footer } from './Footer';
 
 class DistrictCallToAction extends Component {
   render() {
-    const buttonText = "Send letters to " + this.props.district.district_id;
+    const signUpText = "Sign up to send letters to " + this.props.district.district_id;
     return ( this.props.auth.isAuthenticated() ? (
       <div>
         <a
@@ -21,7 +21,7 @@ class DistrictCallToAction extends Component {
         </a>
       </div>
     ) : (
-      <Login auth={this.props.auth} buttonText={buttonText} />
+      <Login auth={this.props.auth} signUpText={signUpText} />
     ));
   }
 }
