@@ -93,8 +93,8 @@ function batchApprovePending(auth0_ids, callback){
   // a middleware.
   db('users')
   .whereIn('auth0_id', auth0_ids)
+  .whereRaw('length(why_write_letters) > 0')
   .andWhere({qual_state: QualStateEnum.pre_qualified})
-  .andWhereNotNull({why_write_letters})
   .update({qual_state: QualStateEnum.qualified})
   .returning(['email', 'qual_state'])
   .then(function(users) {
