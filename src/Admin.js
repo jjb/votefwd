@@ -347,12 +347,14 @@ class UserTable extends Component {
         <div className="text-center mt-2 mb-2">
           {!this.state.batchApproving && batchApproveButton}
           {this.state.batchApproving &&
-          <form>
+          <div>
             <p className="mr-4 ml-4 small">Are you sure you want to batch approve all pending volunteers? This cannot be undone.</p>
-            <input className="btn btn-danger btn-small" type="submit" value="Batch Approve Pending"
-            onClick={this.handleBatchApprovePending.bind(this, users)}
-            />
-          </form>
+            <button className="btn btn-info btn-small mr-2" type="cancel"
+            onClick={() => {this.cancelBatchApproval()}}>Cancel</button>
+
+            <button className="btn btn-danger btn-small ml-2" type="submit"
+            onClick={this.handleBatchApprovePending.bind(this, users)}>Batch Approve Users</button>
+          </div>
           }
         </div>
         <ReactTable data={users} columns={columns} className="-striped -highlight" />
