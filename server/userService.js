@@ -87,12 +87,11 @@ function updateUserQualifiedState(auth0_id, qualState, callback){
 }
 
 function batchApprovePending(auth0_ids, callback){
-  console.log("Service batch approving pending for auth0_ids: ", auth0_ids);
-  // takes a list of auth0_ids of users and approves them.
+  // Takes a list of auth0_ids of users and approves them.
+  //
   // This function should only be called by admins and verified through
   // a middleware.
 
-  // get the user for email sending and then update that state for the user
   db('users')
   .whereIn('auth0_id', auth0_ids)
   .andWhere({qual_state: QualStateEnum.pre_qualified})
