@@ -157,7 +157,7 @@ describe('userService', function() {
 
   describe('batchApprovePending', function() {
     it('should succeed on setting pre_qualified state to qualified', function(done) {
-      userService.batchApprovePending([this.users.regular.auth0_id], function(error, newState) {
+      userService.batchApprovePending(function(error, newState) {
         if (error) {
           return done(error);
         }
