@@ -81,7 +81,7 @@ export default class Auth {
     return new Date().getTime() < expiresAt;
   }
 
-  login() {
-    this.webAuth.authorize();
+  login(showLoginPage) {
+    this.webAuth.authorize({ login_hint: showLoginPage ? "login" : "signup" });
   }
 }

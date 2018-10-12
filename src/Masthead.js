@@ -75,7 +75,7 @@ export class Masthead extends Component {
                   <React.Fragment>
                     <div className="p-2">
                       <div className="rounded p-2 bg-white">
-                        <Login auth={this.props.auth} buttonText="Log in and send letters" />
+                        <Login auth={this.props.auth} signUpText="Sign up to send letters" />
                       </div>
                       <p className="mt-3 small text-white">
                         <a href="#privacy-notice" onClick={this.showPrivacyNotice}>
