@@ -58,7 +58,6 @@ export const makeMainRoutes = () => {
           <Route exact path="/vote" render={(props) => <Pledge auth={auth} {...props} />} />
           <Route exact path="/verify" render={(props) => <Verify auth={auth} {...props} />} />
           <AdminRoute exact path="/admin" component={Admin} auth={auth} />
-          <AdminRoute exact path="/batch_approve_pending" component={Admin} auth={auth} />
           <AdminRoute exact path="/admin/districts" component={Districts} auth={auth} />
           <AdminRoute path="/admin/user/:id" component={AdminUser} auth={auth} />
           <Route exact path="/privacy-policy" render={(props) => <Privacy auth={auth} {...props} />} />

@@ -77,15 +77,12 @@ class UserTable extends Component {
 
   handleBatchApprovePending(users, event) {
     event.preventDefault();
-    const auth0_ids = users.map(user => user.auth0_id)
-    console.log("Handling batch approve pending for auth0_ids: ", auth0_ids);
+    console.log("Handling batch approve pending.");
     axios({
       method: 'POST',
       headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
       url: `${process.env.REACT_APP_API_URL}/s/batchApprovePending`,
-      data: {
-        auth0_ids: auth0_ids,
-      }
+      data: {}
     })
     .then(res => {
       window.location.reload();

@@ -86,14 +86,12 @@ function updateUserQualifiedState(auth0_id, qualState, callback){
   });
 }
 
-function batchApprovePending(auth0_ids, callback){
-  // Takes a list of auth0_ids of users and approves them.
-  //
+function batchApprovePending(callback){
   // This function should only be called by admins and verified through
   // a middleware.
   db('users')
-  .whereIn('auth0_id', auth0_ids)
-  .andWhere({qual_state: QualStateEnum.pre_qualified})
+  .whereRaw("created_at < NOW() - interval '2 hour'")
+  .where({qual_state: QualStateEnum.pre_qualified})
   .update({qual_state: QualStateEnum.qualified})
   .returning(['email', 'qual_state'])
   .then(function(users) {
