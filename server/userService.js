@@ -90,8 +90,7 @@ function batchApprovePending(callback){
   // This function should only be called by admins and verified through
   // a middleware.
   db('users')
-  .whereRaw("created_at < NOW() - interval '2 hour'")
-  .where({qual_state: QualStateEnum.pre_qualified})
+  .whereRaw("qual_state = 'prequalified' and created_at < NOW() - interval '2 hour' and length(why_write_letters) > 0")
   .update({qual_state: QualStateEnum.qualified})
   .returning(['email', 'qual_state'])
   .then(function(users) {
