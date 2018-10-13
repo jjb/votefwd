@@ -26,7 +26,7 @@ function getVoterById(voterId, callback) {
 
 function getUsersAdoptedVoters(userId, callback) {
   db('voters')
-    .where('adopter_user_id', userId).orderBy('adopted_at', 'asc').orderBy('id','asc')
+    .where('adopter_user_id', userId).orderBy('adopted_at', 'asc').orderBy('first_name','asc')
     .then(function(result) {
       callback(result);
     })
@@ -114,7 +114,7 @@ function getVoters(params) {
     query.where('id', params.voterId);
   }
   if (params.userId) {
-    query.where('adopter_user_id', params.userId).orderBy('adopted_at', 'asc').orderBy('id','asc');
+    query.where('adopter_user_id', params.userId).orderBy('adopted_at', 'asc').orderBy('first_name','asc');
   }
   if (params.excludePrepped) {
     query.where('confirmed_prepped_at', null);
