@@ -12,7 +12,10 @@ var os = require('os');
 var URL = require('url');
 var util = require('./util');
 var semaphore = require('semaphore');
+const { splitEvery } = require('ramda');
 
+const VOTERS_PER_COVER_PAGE = 25;
+const PAGE_BREAK = '<div class="pagebreak"> </div>'
 function dateStamp() {
   var newDate = new Date();
   var DateString;
@@ -25,25 +28,34 @@ function dateStamp() {
 var hashids = new Hashids(process.env.REACT_APP_HASHID_SALT, 6,
   process.env.REACT_APP_HASHID_DICTIONARY);
 
-function generatePdfForVoters(voters, callback) {
+function generateHtmlForGroup(voters, callback) {
   generateCoverPageHtmlForVoters(voters, function (err, html) {
     if (err) {
       callback(err);
       return;
     }
-    // Chose to limit parallel queries to 5 just to lighten the load on the db
+    // Limit parallel queries to 5 just to lighten the load on the db
     async.mapLimit(voters, 5, generateHtmlForVoter, function (err, results) {
       if (err) {
         callback(err);
         return;
       }
       html = html + results.join('');
-      generatePdfFromHtml(html, voters, function(err, response, downloadFileName) {
-        var filename = (response && response.filename) ? response.filename : '';
-        callback(err, filename, downloadFileName);
-      });
+      callback(null, html);
     });
   });
+}
+
+function generatePdfForVoters(voters, callback) {
+  const groups = splitEvery(VOTERS_PER_COVER_PAGE, voters);
+
+  async.mapLimit(groups, 5, generateHtmlForGroup, function(err, results) {
+    const html = results.join(PAGE_BREAK);
+    generatePdfFromHtml(html, voters, function(err, response, downloadFileName) {
+      const filename = (response && response.filename) ? response.filename : '';
+      callback(err, filename, downloadFileName);
+    });
+  })
 }
 
 function generateCoverPageHtmlForVoters(voters, callback) {
