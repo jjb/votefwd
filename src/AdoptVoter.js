@@ -47,6 +47,10 @@ export class AdoptVoter extends Component {
     if (this.props.user.qual_state === 'qualified' && this.props.voterCount >= maxQual)  {
       maxedOut = true;
     }
+    let allClaimed = false;
+    if (parseInt(this.props.currentDistrict.voters_available, 10) === 0) {
+      allClaimed = true;
+    }
 
     return (
       <div className="container-fluid p-0">
@@ -67,7 +71,7 @@ export class AdoptVoter extends Component {
               <div className="row">
                 <div className="col-md">
                   <button
-                    disabled={this.state.adopting || maxedOut ? true : false}
+                    disabled={this.state.adopting || maxedOut || allClaimed ? true : false}
                     onClick={() => this.adoptVoter(5, this.state.district.district_id)}
                     className="btn btn-primary btn-lg w-100 mt-1">
                       Adopt <span className="reset-num">5</span> Voters
@@ -79,7 +83,7 @@ export class AdoptVoter extends Component {
                 </div>
                 <div className="col-md">
                   <button
-                    disabled={this.state.adopting || maxedOut ? true : false}
+                    disabled={this.state.adopting || maxedOut || allClaimed ? true : false}
                     onClick={() => this.adoptVoter(25, this.state.district.district_id)}
                     className="btn btn-primary btn-lg w-100 mt-1">
                       Adopt <span className="reset-num">25</span> Voters
@@ -92,7 +96,14 @@ export class AdoptVoter extends Component {
               </div>
               { maxedOut && (
                 <div className="mt-4 alert alert-info pr-4 pl-4">
-                  <p>You’ve adopted the maximum number of voters ({process.env.REACT_APP_QUAL_NUM}). Fantastic! To become a super-volunteer so you can adopt more, please <a href="mailto:scott@votefwd.org?subject=Please+approve+me+as+a+super-volunteer!&body=Hello!+Please+approve+me+to+adopt+more+than+100+voters+on+Vote+Forward." target="_blank" rel="noopener noreferrer">email scott@votefwd.org</a> to request approval.</p>
+                  <p>You’ve adopted the maximum number of voters ({process.env.REACT_APP_QUAL_NUM}). Fantastic! To become a super-volunteer so you can adopt more, please <a href="mailto:help@votefwd.org?subject=Please approve me as a super-volunteer!&body=Hello! Please approve me to adopt more than 100 voters on Vote Forward. (Letter writer: replace this text with a short message to the admins and if you can, attach a photo of some of your completed letters)." target="_blank" rel="noopener noreferrer">email help@votefwd.org</a> to request approval.</p>
+                </div>
+              )}
+              { allClaimed && (
+                <div className="mt-4 alert alert-warning pr-4 pl-4">
+                  <p>
+                    All targeted {this.props.currentDistrict.district_id} voters have been adopted! Please choose a different district.
+                  </p>
                 </div>
               )}
             </div>

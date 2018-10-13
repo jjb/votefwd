@@ -14,11 +14,17 @@ class UserTable extends Component {
   constructor(props) {
     super(props)
 
-    this.state = { users: [], activeUserProfile: null };
+    this.state = {
+      users: [],
+      activeUserProfile: null,
+      batchApproving: false
+    };
     this.getAllUsers = this.getAllUsers.bind(this);
     this.renderStatus = this.renderStatus.bind(this);
     this.renderNameAndProfile = this.renderNameAndProfile.bind(this);
     this.handleChangeStatus = this.handleChangeStatus.bind(this);
+    this.handleBatchApprovePending = this.handleBatchApprovePending.bind(this);
+    this.cancelBatchApproval = this.cancelBatchApproval.bind(this);
     this.hideUserInformation = this.hideUserInformation.bind(this);
   }
 
@@ -72,6 +78,28 @@ class UserTable extends Component {
     .catch(err => {
       console.error(err);
     });
+  }
+
+  handleBatchApprovePending(users, event) {
+    event.preventDefault();
+    console.log("Handling batch approve pending.");
+    axios({
+      method: 'POST',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
+      url: `${process.env.REACT_APP_API_URL}/s/batchApprovePending`,
+      data: {}
+    })
+    .then(res => {
+      window.location.reload();
+      this.cancelBatchApproval();
+    })
+    .catch(err => {
+      console.error(err);
+    });
+  }
+
+  cancelBatchApproval() {
+    this.setState({batchApproving: false});
   }
 
   renderStatus(props) {
@@ -294,6 +322,17 @@ class UserTable extends Component {
       sortable: false
     }];
 
+
+    let batchApproveButton;
+    if(!this.state.batchApproving) {
+      batchApproveButton = (
+        <button className="btn btn-warning btn-sm"
+          onClick={() => {this.setState({batchApproving: true})}}>
+          Dangerously Batch Approve Users
+        </button>
+      )
+    }
+
     return (
       <React.Fragment>
         {this.state.activeUserProfile && (
@@ -302,9 +341,23 @@ class UserTable extends Component {
             closeModal={this.hideUserInformation}
           />
         )}
+        <div className="text-center mt-2 mb-2">
+          {!this.state.batchApproving && batchApproveButton}
+          {this.state.batchApproving &&
+          <div>
+            <p className="mr-4 ml-4 small">Are you sure you want to batch approve all pending volunteers? This cannot be undone.</p>
+            <button className="btn btn-info btn-small mr-2" type="cancel"
+            onClick={() => {this.cancelBatchApproval()}}>Cancel</button>
+
+            <button className="btn btn-danger btn-small ml-2" type="submit"
+            onClick={this.handleBatchApprovePending.bind(this, users)}>Batch Approve Users</button>
+          </div>
+          }
+        </div>
         <ReactTable data={users} columns={columns} className="-striped -highlight" />
       </React.Fragment>
-    )}
+    );
+  }
 }
 
 class Admin extends Component {

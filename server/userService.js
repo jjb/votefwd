@@ -86,17 +86,35 @@ function updateUserQualifiedState(auth0_id, qualState, callback){
   });
 }
 
+function batchApprovePending(callback){
+  // This function should only be called by admins and verified through
+  // a middleware.
+  db('users')
+  .whereRaw("qual_state = 'pre_qualified' and created_at < NOW() - interval '1 hour' and length(why_write_letters) > 0")
+  .update({qual_state: QualStateEnum.qualified})
+  .returning(['email', 'qual_state'])
+  .then(function(users) {
+    users.forEach(function(user) {
+      notifyUserOfBasicQualifiedState(user);
+    });
+    callback(null, QualStateEnum.qualified);
+    return;
+  })
+  .catch(err => {
+      console.error(err);
+      callback(err);
+  });
+}
+
 function notifyUserOfNewQualifiedState(user, newState){
   // this function takes a user right before their qualified state is changed and compares
   // their old state to their new state.  Depending on what changed we might want to send them
   // an email so they are aware of this change.
   // Note that user['qual_state'] is their *previous* state and newState is their just set current state.
+  console.log("Notifying user of updated status.");
   if (user['qual_state'] == QualStateEnum.pre_qualified && newState == QualStateEnum.qualified) {
     //notify users when promoted to qualified
-    if (process.env.NODE_ENV !== 'test') {
-      emailService.sendEmail('qualified', user, 'You\'re approved to send letters on Vote Forward');
-    }
-    return 'sent qualified email';
+    return notifyUserOfBasicQualifiedState(user);
   } else if ((user['qual_state'] == QualStateEnum.pre_qualified || user['qual_state'] == QualStateEnum.qualified) && newState == QualStateEnum.super_qualified) {
     if (process.env.NODE_ENV !== 'test') {
       //notify users when promoted to super_qualified
@@ -107,6 +125,14 @@ function notifyUserOfNewQualifiedState(user, newState){
 
   return 'not sending an email';
 
+}
+
+function notifyUserOfBasicQualifiedState(user) {
+  if (process.env.NODE_ENV !== 'test') {
+    console.log("Notifing user of basic approval.");
+    emailService.sendEmail('qualified', user, 'You\'re approved to send letters on Vote Forward');
+  }
+  return 'sent qualified email';
 }
 
 /**
@@ -159,10 +185,12 @@ function _prepForTests() {
 }
 
 module.exports = {
+  batchApprovePending,
   canAdoptMoreVoters,
   isAdmin,
   updateEmail,
   updateUserQualifiedState,
   notifyUserOfNewQualifiedState,
+  notifyUserOfBasicQualifiedState,
   _prepForTests
 }

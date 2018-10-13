@@ -155,28 +155,22 @@ describe('userService', function() {
     });
   });
 
-  describe('notifyUserOfNewQualifiedState', function() {
+  describe('batchApprovePending', function() {
+    it('should succeed on setting pre_qualified state to qualified', function(done) {
+      userService.batchApprovePending(function(error, newState) {
+        if (error) {
+          return done(error);
+        }
+        expect(newState).to.be.eql('qualified', 'incorrect or missing newState for test. Expected: qualified. Got: ' + newState);
+        done();
+      });
+    });
+  });
+
+  describe('notifyUserOfBasicQualifiedState', function() {
     it('should send a qualified email on promotion of pre_qualified to qualified', function(done) {
-      var result = userService.notifyUserOfNewQualifiedState(this.users.prequal, 'qualified');
+      var result = userService.notifyUserOfBasicQualifiedState(this.users.prequal);
       expect(result).to.be.eql('sent qualified email');
-      done();
-    });
-
-    it('should send a super_qualified email on promotion of pre_qualified to super_qualified', function(done) {
-      var result = userService.notifyUserOfNewQualifiedState(this.users.prequal, 'super_qualified');
-      expect(result).to.be.eql('sent super_qualified email');
-      done();
-    });
-
-    it('should send a super_qualified email on promotion of pre_qualified to super_qualified', function(done) {
-      var result = userService.notifyUserOfNewQualifiedState(this.users.qual, 'super_qualified');
-      expect(result).to.be.eql('sent super_qualified email');
-      done();
-    });
-
-    it('should not send an email on banned', function(done) {
-      var result = userService.notifyUserOfNewQualifiedState(this.users.qual, 'banned');
-      expect(result).to.be.eql('not sending an email');
       done();
     });
 
