@@ -14,7 +14,7 @@ var util = require('./util');
 var semaphore = require('semaphore');
 const { splitEvery } = require('ramda');
 
-const VOTERS_PER_COVER_PAGE = 25;
+const VOTERS_PER_COVER_PAGE = 20;
 const PAGE_BREAK = '<div class="pagebreak"> </div>'
 function dateStamp() {
   var newDate = new Date();
@@ -34,7 +34,7 @@ function generateHtmlForGroup(voters, callback) {
       callback(err);
       return;
     }
-    // Limit parallel queries to 5 just to lighten the load on the db
+    // Limit parallel queries to 5 to lighten the load on the db
     async.mapLimit(voters, 5, generateHtmlForVoter, function (err, results) {
       if (err) {
         callback(err);
