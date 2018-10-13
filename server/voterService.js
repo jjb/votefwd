@@ -26,7 +26,7 @@ function getVoterById(voterId, callback) {
 
 function getUsersAdoptedVoters(userId, callback) {
   db('voters')
-    .where('adopter_user_id', userId)
+    .where('adopter_user_id', userId).orderBy('adopted_at', 'asc').orderBy('first_name','asc')
     .then(function(result) {
       callback(result);
     })
@@ -114,7 +114,7 @@ function getVoters(params) {
     query.where('id', params.voterId);
   }
   if (params.userId) {
-    query.where('adopter_user_id', params.userId);
+    query.where('adopter_user_id', params.userId).orderBy('adopted_at', 'asc').orderBy('first_name','asc');
   }
   if (params.excludePrepped) {
     query.where('confirmed_prepped_at', null);
@@ -127,8 +127,8 @@ function downloadLetterUrl(params) {
   }
   return new Promise((resolve, reject) => {
     const token = jwt.sign(params,
-      process.env.REACT_APP_JWT_SECRET, 
-      { expiresIn: 60 }, 
+      process.env.REACT_APP_JWT_SECRET,
+      { expiresIn: 60 },
       function (err, token) {
         if (err) {
           console.log("error in downloadLetterUrl", err);
@@ -141,9 +141,9 @@ function downloadLetterUrl(params) {
 }
 /**
  * Accepts the raw JWT from the pdf url, verifies it, and then either
- *   downloads a single voter file (if there's a voterId in the JWT) 
+ *   downloads a single voter file (if there's a voterId in the JWT)
  *   otherwise downloads all voter files for user
- * 
+ *
  * @param {string} rawJwt - raw JWT created by downloadLetterUrl
  * @param {function} callback - callback to be passed to eitherdownloadLetterToVoter or downloadAllLetters
  */
