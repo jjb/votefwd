@@ -112,7 +112,7 @@ function downloadFileCallback(res) {
 }
 // Keep /downloadLetter route so that after deployment
 //   people who don't refresh their browser won't get
-//   errors. 
+//   errors.
 router.route('/voters/downloadLetter')
   .get(checkJwt, function(req, res) {
     const params = { userId: req.user.sub, voterId: req.query.voter_id };
@@ -128,7 +128,7 @@ router.route('/voters/downloadLetter')
 
 // Keep /downloadAllLetters route so that after deployment
 //   people who don't refresh their browser won't get
-//   errors. 
+//   errors.
 router.route('/voters/downloadAllLetters')
   .get(checkJwt, function(req, res) {
     voterService.downloadAllLetters(req.user.sub, downloadFileCallback(res));
@@ -144,14 +144,14 @@ router.route('/letters/:letterJwt.pdf')
 
 
 /**
- * This route creates a secure url that can be used to download the pdf.  It 
- * creates a one-minute-long JWT that gets included in the url 
+ * This route creates a secure url that can be used to download the pdf.  It
+ * creates a one-minute-long JWT that gets included in the url
  * that contains either userId and voterId to download a single voter's pdf,
  * or just the userId to download all voters for that user.
  */
 router.route('/voters/letterUrl')
   .get(checkJwt, function(req, res) {
-    // include the userId from the JWT to make sure the user 
+    // include the userId from the JWT to make sure the user
     //  has access to that voter
     const params = { userId: req.user.sub };
     if (req.query.voter_id) {
@@ -399,7 +399,7 @@ router.route('/lookup-zip')
  */
 router.route('/get-districts')
   .get(function(req, res) {
-    db('districts')
+    db('districts_with_stats')
       .then(function(result) {
           res.json(result);
         })
