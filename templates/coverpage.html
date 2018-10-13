@@ -13,19 +13,17 @@
   <body>
     <div class="cover">
       <h1>Vote Forward Voter List</h1>
-      <p>Thank you for writing letters to help flip Congress blue!</p>
-      <p>Use these return address(es) for the letters in this file:<br>
-        <span class="small">(Also in small print at bottom of each letter for easy reference.)</span>
+      <p>Thank you for writing letters to help flip Congress blue! Here's some information about the {{voters.length}} voters in this batch. The addresses are also in small print at the bottom of each letter for easy reference.</p>
+      <p>Return address(es): your FIRST NAME AND LAST INITIAL, plus:<br>
       </p>
         <ul class="small">
           {{#each returnAddresses}}
           <li style="list-style-type: none;  margin-left:-3em; margin-bottom: 0.2em;">
-            YOUR FIRST NAME & LAST INITIAL, {{this}}
+            {{this}}
           </li>
           {{/each}}
         </ul>
-      <p>Names and addresses of the {{voters.length}} voters in this file:<br>
-        <span class="small">(Also in small print at bottom of each letter for easy reference.)</span>
+      <p>Voter names and addresses:<br>
       </p>
       <ul class="small">
         {{#each voters}}
