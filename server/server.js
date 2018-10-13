@@ -400,7 +400,7 @@ router.route('/lookup-zip')
  */
 router.route('/get-districts')
   .get(function(req, res) {
-    db('districts')
+    db('districts_with_stats')
       .then(function(result) {
           res.json(result);
         })
