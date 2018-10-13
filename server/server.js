@@ -112,7 +112,7 @@ function downloadFileCallback(res) {
 }
 // Keep /downloadLetter route so that after deployment
 //   people who don't refresh their browser won't get
-//   errors. 
+//   errors.
 router.route('/voters/downloadLetter')
   .get(checkJwt, function(req, res) {
     const params = { userId: req.user.sub, voterId: req.query.voter_id };
@@ -128,7 +128,7 @@ router.route('/voters/downloadLetter')
 
 // Keep /downloadAllLetters route so that after deployment
 //   people who don't refresh their browser won't get
-//   errors. 
+//   errors.
 router.route('/voters/downloadAllLetters')
   .get(checkJwt, function(req, res) {
     voterService.downloadAllLetters(req.user.sub, downloadFileCallback(res));
@@ -144,14 +144,14 @@ router.route('/letters/:letterJwt.pdf')
 
 
 /**
- * This route creates a secure url that can be used to download the pdf.  It 
- * creates a one-minute-long JWT that gets included in the url 
+ * This route creates a secure url that can be used to download the pdf.  It
+ * creates a one-minute-long JWT that gets included in the url
  * that contains either userId and voterId to download a single voter's pdf,
  * or just the userId to download all voters for that user.
  */
 router.route('/voters/letterUrl')
   .get(checkJwt, function(req, res) {
-    // include the userId from the JWT to make sure the user 
+    // include the userId from the JWT to make sure the user
     //  has access to that voter
     const params = { userId: req.user.sub };
     if (req.query.voter_id) {
@@ -378,9 +378,10 @@ router.route('/lookup-zip')
         } else {
           const ziplat = result[0].lat;
           const ziplong = result[0].long;
-          const distanceString = `point(${ziplat}, ${ziplong}) <-> point(districts.coordinates) as distance`;
+          const table = 'districts_with_unclaimed_voters'
+          const distanceString = `point(${ziplat}, ${ziplong}) <-> point(${table}.coordinates) as distance`;
           let nearestDistrict;
-          db('districts')
+          db(table)
             .select('district_id', db.raw(distanceString))
             .orderBy('distance', 'asc')
             .limit(1)
