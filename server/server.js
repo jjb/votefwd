@@ -408,6 +408,18 @@ router.route('/get-districts')
   });
 
 /**
+ * Get all the districts Vote Forward is targeting...but with stats!
+ */
+router.route('/get-districts-with-stats')
+  .get(function(req, res) {
+    db('districts_with_stats')
+      .then(function(result) {
+          res.json(result);
+        })
+      .catch(err => {console.error(err);})
+  });
+
+/**
  * Look up a district.
  */
 router.route('/lookup-district')
