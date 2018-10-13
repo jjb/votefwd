@@ -378,7 +378,7 @@ router.route('/lookup-zip')
         } else {
           const ziplat = result[0].lat;
           const ziplong = result[0].long;
-          const table = 'districts_with_voters'
+          const table = 'districts_with_unclaimed_voters'
           const distanceString = `point(${ziplat}, ${ziplong}) <-> point(${table}.coordinates) as distance`;
           let nearestDistrict;
           db(table)
@@ -387,7 +387,6 @@ router.route('/lookup-zip')
             .limit(1)
           .then(function(result) {
             nearestDistrict = result[0].district_id;
-            console.log(`nearestDistrict:`, nearestDistrict)
             res.json(nearestDistrict);
           })
           .catch(err => {console.error(err);});
