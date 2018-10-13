@@ -35,12 +35,7 @@ class VoterRecord extends Component {
     let voter = this.props.voter;
     let voterActions;
     let voterDownloadButton;
-
-    let today = moment();
-    let electionDate = moment('2018-11-06');
-    let sendDate = electionDate.subtract(7, "days");
-    let readyToSend;
-    today < sendDate ? readyToSend = false : readyToSend = true;
+    let readyToSend = this.props.readyToSend;
 
     if (!voter.confirmed_prepped_at) {
       voterDownloadButton = (
@@ -269,6 +264,7 @@ export class VoterList extends Component {
                 <VoterRecord
                   key={voter.id}
                   voter={voter}
+                  readyToSend={readyToSend}
                   confirmSent={this.props.confirmSent}
                   undoConfirmPrepped={this.props.undoConfirmPrepped}
                 />)}
