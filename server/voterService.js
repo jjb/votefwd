@@ -65,8 +65,8 @@ function _adoptSomeVoters(adopterId, numVoters, districtId, callback) {
     .where('district_id', districtId)
     .then(function(results) {
       let availableVoterCount = results[0].count;
-      if (availableVoterCount < numVoters) {
-        console.error("not enough available voters.");
+      if (availableVoterCount === 0) {
+        console.error(`no voters available in ${districtId}.`);
         callback(null, []);
         return;
       }
@@ -105,6 +105,7 @@ function _adoptSomeVoters(adopterId, numVoters, districtId, callback) {
       callback(err);
     });
 }
+
 function getVoters(params) {
   const query = db('voters');
   if (!params.voterId && !params.userId) {
@@ -121,6 +122,7 @@ function getVoters(params) {
   }
   return query;
 }
+
 function downloadLetterUrl(params) {
   if (!params.userId) {
     throw new Error("userId is required");
@@ -139,6 +141,7 @@ function downloadLetterUrl(params) {
       });
   });
 }
+
 /**
  * Accepts the raw JWT from the pdf url, verifies it, and then either
  *   downloads a single voter file (if there's a voterId in the JWT)
@@ -359,7 +362,6 @@ function getVoterSummaryByDistrict(callback) {
     callback(err);
   });
 }
-
 
 function getAdoptedVoterSummary(callback) {
   db('voters')
