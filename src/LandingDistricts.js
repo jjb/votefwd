@@ -43,7 +43,7 @@ export class LandingDistricts extends Component {
         Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))
       },
       method: 'GET',
-      url: `${process.env.REACT_APP_API_URL}/get-districts`
+      url: `${process.env.REACT_APP_API_URL}/get-districts-with-stats`
     })
       .then(res => {
         this.setState({ districts: res.data });

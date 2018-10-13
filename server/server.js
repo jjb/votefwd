@@ -399,6 +399,18 @@ router.route('/lookup-zip')
  */
 router.route('/get-districts')
   .get(function(req, res) {
+    db('districts')
+      .then(function(result) {
+          res.json(result);
+        })
+      .catch(err => {console.error(err);})
+  });
+
+/**
+ * Get all the districts Vote Forward is targeting.
+ */
+router.route('/get-districts-with-stats')
+  .get(function(req, res) {
     db('districts_with_stats')
       .then(function(result) {
           res.json(result);
