@@ -59,9 +59,22 @@ const checkJwt = jwt({
   algorithms: ['RS256']
 });
 
-
 router.get('/', function(req, res) {
   res.json('API initialized.');
+});
+
+router.route('/bundles')
+.get(checkJwt, function(req, res) {
+  db('bundles')
+    .where('adopter_user_id', req.query.user_id).orderBy('district_id', 'asc').orderBy('adopted_at', 'asc')
+    .then(function(result) {
+      res.json(result)
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).end();
+      return;
+    });
 });
 
 router.route('/voters')
