@@ -9,31 +9,31 @@ class PledgeForm extends Component {
   constructor(props) {
     super(props);
     this.state = {value: '', pledgeError: false};
-
     this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.getVoterInfo = this.getVoterInfo.bind(this);
   }
 
   handleChange(event) {
     this.setState({value: event.target.value});
   }
-
-  handleSubmit(event) {
+  getVoterInfo(event) {
     event.preventDefault();
     axios({
       method: 'POST',
-      url: `${process.env.REACT_APP_API_URL}/voter/pledge`,
+      url: `${process.env.REACT_APP_API_URL}/voter/info`,
       data: { code: this.state.value }
     })
     .then(res => {
-      if (res.data === 0) {
-        this.setState( {pledgeError: true});
-      }
-      else {
-        this.props.handlePledge();
-      }
+      this.props.handleVoterInfo({
+        urlElectionInfo: res.data.urlElectionInfo,
+        voterState: res.data.voterState,
+        shouldRecordPledge: res.data.shouldRecordPledge,
+        code: this.state.value,
+        codeSubmitted: true
+      });
     })
     .catch(err => {
+      this.setState({ pledgeError: true });
       console.error(err);
     });
   }
@@ -41,14 +41,19 @@ class PledgeForm extends Component {
   render() {
     return (
       <div className="bg-white px-3 px-md-5 py-3 py-md-4 align-self-center text-center">
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.getVoterInfo}>
           <label className="w-100">
-            <h3 className="mb-4">
-              Enter your voter pledge code here:
-            </h3>
+            <p className="lead">
+              Welcome, fellow citizen!
+              Check out the letter you received. It should have a code at the bottom, like this:
+            </p>
+            <img src="/images/letter-code-sample.png" className="w-100" alt=""/>
+            <p className="mb-3">
+              For more info about the election, enter the code from <i>your</i> letter here...
+            </p>
             <input className="form-control form-control-lg text-center mb-2 w-100" type="text" value={this.state.value} onChange={this.handleChange} />
           </label>
-          <input className="btn btn-primary btn-lg w-100 " type="submit" value="Pledge to be a voter." />
+          <input className="btn btn-primary btn-lg w-100 " type="submit" value="Submit" />
         </form>
       { this.state.pledgeError &&
         <div className="alert alert-danger mt-3" role="alert">
@@ -59,10 +64,68 @@ class PledgeForm extends Component {
     )
   }
 }
-
+class PledgeInfo extends Component {
+  constructor(props) {
+    super(props);
+    this.handleVotePledge = this.handleVotePledge.bind(this);
+  }
+  handleVotePledge(event) {
+    event.preventDefault();
+    axios({
+      method: 'POST',
+      url: `${process.env.REACT_APP_API_URL}/voter/pledge`,
+      data: { code: this.props.code }
+    })
+    .then(res => {
+      this.props.handlePledgeThanks();
+    })
+    .catch(err => {
+      // No matter what happens on the server, show the user the "Thanks" message
+      this.props.handlePledgeThanks();
+      console.error(err);
+    });
+  }
+ 
+  render() {
+    return (
+        <div className="bg-white px-3 px-md-5 py-3 py-md-4 align-self-center">
+          <form onSubmit={this.handleVotePledge}>
+            <p>
+              Congratulations! Our records show that you are registered to vote in {this.props.voterState}.
+            </p>
+            <div className="mt-2">
+            <h2>
+              Find your polling place
+            </h2>
+            <p>
+              Open the official {this.props.voterState} election site to find your 
+              polling place and other relevant election info:
+            </p>
+            <a
+                href={this.props.urlElectionInfo}
+                target="_blank"
+                className="btn btn-info btn-lg w-100"
+              >Find Election Info
+              </a>
+            </div>
+              <div className="mt-4">
+                <h2>
+                  Will you be voting in the election?
+                </h2>
+                <p><i>If you say “yes,” Vote Forward will anonymously inform the sender of your letter that one of their sendees pledged to vote. It will mean a lot to them!</i></p>
+                <input className="btn btn-primary btn-lg w-100 " type="submit" value="Yes, I'll be Voting!" />
+                { !this.props.shouldRecordPledge && (
+                  <p><i>Note: this page is currently running in sample mode, so pledge aren’t yet being recorded. This page will switch to “active” mode after all the letters are sent.</i></p>
+                ) }
+              </div>
+          </form>
+        </div>
+    );
+  }
+}
 class PledgeThanks extends Component {
   render() {
-    let tweetIntentText = "A fellow citizen sent me a letter asking me to be a voter, so I’m pledging to vote this year. Want to encourage voter participation? Visit www.votefwd.org to send letters of your own. @votefwd"
+    let tweetIntentText = "A fellow citizen sent me a letter asking me to be a voter, so I’m pledging to vote this year. Want to encourage voter participation? Visit votefwd.org to send letters of your own. @votefwd"
     let encodedTweetIntentText = encodeURIComponent(tweetIntentText);
     return (
         <div className="bg-white px-3 px-md-5 py-3 py-md-4 align-self-center">
@@ -78,14 +141,12 @@ class PledgeThanks extends Component {
             >
                 Share your pledge on Twitter.
             </a>
-          </p>
-          <p>Want to send letters like the one you received to encourage others to vote?</p>
-          <p>
+          </p><p>
             <a
-              href="/dashboard"
-              className="pl2 link underline blue"
-            >
-              Send letters
+              href={this.props.urlElectionInfo}
+              target="_blank"
+              className="btn btn-info btn-lg w-100"
+            >Find Election Info
             </a>
           </p>
         </div>
@@ -96,26 +157,51 @@ class PledgeThanks extends Component {
 class Pledge extends Component {
   constructor(props) {
     super(props);
-    this.state = {pledgeStatus: false};
+    this.state = {
+      pledgeStatus: '', //possible values '' and 'thanks'
+      voterState: '',
+      code: '',
+      shouldRecordPledge: true,
+      urlElectionInfo: ''
+    };
 
-    this.handlePledge = this.handlePledge.bind(this);
+    this.handlePledgeThanks = this.handlePledgeThanks.bind(this);
   }
-
-  handlePledge() {
-    this.setState({ pledgeStatus: true });
+  handlePledgeThanks() {
+    this.setState({ pledgeStatus: 'thanks' });
+  }
+  handleVoterInfo(payload) {
+    this.setState(payload);
   }
 
   render() {
     return (
-      <div className="h-100 d-md-flex flex-column">
+      <div className="h-200 d-md-flex flex-column">
       <Header auth={this.props.auth} />
       <div className="container-fluid h-75 bg-pattern d-flex justify-content-center">
         <div className="d-flex">
-        { !this.state.pledgeStatus ?
+        { !this.state.codeSubmitted &&
           (
-            <PledgeForm handlePledge={this.handlePledge.bind(this)}/>
-          ) : (
-            <PledgeThanks />
+            <PledgeForm handleVoterInfo={this.handleVoterInfo.bind(this)}/>
+          )
+        }
+        { this.state.codeSubmitted && this.state.pledgeStatus !== 'thanks' &&
+          (
+            <PledgeInfo 
+              handlePledgeThanks={this.handlePledgeThanks.bind(this)}
+              pledgeStatus={this.state.pledgeStatus}
+              voterState={this.state.voterState}
+              code={this.state.code}
+              shouldRecordPledge={this.state.shouldRecordPledge}
+              urlElectionInfo={this.state.urlElectionInfo}
+            />
+          )
+        }
+        {this.state.pledgeStatus === 'thanks' && (
+            <PledgeThanks
+              voterState={this.state.voterState}
+              urlElectionInfo={this.state.urlElectionInfo}
+            />
           )
         }
         </div>

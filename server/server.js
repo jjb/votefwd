@@ -208,6 +208,22 @@ router.route('/voter/pledge')
     });
   });
 
+router.route('/voter/info')
+  .post((req, res) => {
+    voterService.voterInfoFromHash(req.body.code)
+    .then((voterInfo) => {
+      res.json({
+        urlElectionInfo: voterInfo.district.url_election_info,
+        voterState: voterInfo.district.state,
+        shouldRecordPledge: voterInfo.shouldRecordPledge
+      });
+    })
+    .catch((err) => {
+      if (err.name === 'NotFoundError') {
+        res.status(400).send('hashid not found');
+      }
+    });
+  });
 router.route('/voter/signed-letter-url')
   .get(checkJwt, function(req, res) {
     letterService.getSignedUrl(req.query.url, function(result) {

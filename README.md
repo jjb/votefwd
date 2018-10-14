@@ -107,11 +107,11 @@ Run the migrations:
 
 	knex migrate:latest
 
-Load the ZIP lookup data:
+Load the ZIP lookup data. From the `psql` command prompt:
 
   	\copy lu_zip FROM ./lookup_data/lu_zip.csv with (format csv, header true, delimiter ',');
 
-Load the catalist data:
+Load the catalist data. From the `psql` command prompt:
 
   	\copy catalist_raw FROM ./seed_data/catalist.csv with (format csv, header true, delimiter ',');
 
@@ -136,9 +136,6 @@ These voter records consist of randomized names and addresses.
 
 	npm run start-dev
 
-#### Run client-side tests
-
-	npm test
 
 #### Run server-side tests
 
