@@ -44,8 +44,8 @@ class PledgeForm extends Component {
         <form onSubmit={this.getVoterInfo}>
           <label className="w-100">
             <p className="lead">
-              Welcome, fellow citizen! 
-              Check out the the letter you received.  See how it has a code like this at the bottom?...
+              Welcome, fellow citizen!
+              Check out the letter you received. It should have a code at the bottom, like this:
             </p>
             <img src="/images/letter-code-sample.png" className="w-100" alt=""/>
             <p className="mb-3">
@@ -91,10 +91,15 @@ class PledgeInfo extends Component {
         <div className="bg-white px-3 px-md-5 py-3 py-md-4 align-self-center">
           <form onSubmit={this.handleVotePledge}>
             <p>
-              Congratulations! We found your record which shows you are registered to vote in {this.props.voterState}.
+              Congratulations! Our records show that you are registered to vote in {this.props.voterState}.
             </p>
+            <div className="mt-2">
+            <h2>
+              Find your polling place
+            </h2>
             <p>
-              Click below to open the official {this.props.voterState} election site where you can find your polling location and other relevant information.
+              Open the official {this.props.voterState} election site to find your 
+              polling place and other relevant election info:
             </p>
             <a
                 href={this.props.urlElectionInfo}
@@ -102,14 +107,15 @@ class PledgeInfo extends Component {
                 className="btn btn-info btn-lg w-100"
               >Find Election Info
               </a>
-              <div>
-                <p>
+            </div>
+              <div className="mt-4">
+                <h2>
                   Will you be voting in the election?
-                </p>
+                </h2>
+                <p><i>If you say “yes,” Vote Forward will anonymously inform the sender of your letter that one of their sendees pledged to vote. It will mean a lot to them!</i></p>
                 <input className="btn btn-primary btn-lg w-100 " type="submit" value="Yes, I'll be Voting!" />
-                <p><i>If you say yes, we will anonymously inform the sender of the letter you were sent that one of their sendees pledged to vote.</i></p>
                 { !this.props.shouldRecordPledge && (
-                  <p><i>Note: this page is currently running in sample mode, so the pledge won't actually be recorded when pressing the "Yes, I'll be Voting" button.  Once letters are mailed closer to election day, the page will switch to active mode.</i></p>
+                  <p><i>Note: this page is currently running in sample mode, so pledge aren’t yet being recorded. This page will switch to “active” mode after all the letters are sent.</i></p>
                 ) }
               </div>
           </form>
@@ -119,7 +125,7 @@ class PledgeInfo extends Component {
 }
 class PledgeThanks extends Component {
   render() {
-    let tweetIntentText = "A fellow citizen sent me a letter asking me to be a voter, so I’m pledging to vote this year. Want to encourage voter participation? Visit www.votefwd.org to send letters of your own. @votefwd"
+    let tweetIntentText = "A fellow citizen sent me a letter asking me to be a voter, so I’m pledging to vote this year. Want to encourage voter participation? Visit votefwd.org to send letters of your own. @votefwd"
     let encodedTweetIntentText = encodeURIComponent(tweetIntentText);
     return (
         <div className="bg-white px-3 px-md-5 py-3 py-md-4 align-self-center">
