@@ -18,6 +18,7 @@ class Dashboard extends Component {
     this.handleConfirmSent = this.handleConfirmSent.bind(this);
     this.handleConfirmPrepped = this.handleConfirmPrepped.bind(this);
     this.handleConfirmAllPrepped = this.handleConfirmAllPrepped.bind(this);
+    this.handleConfirmAllSent = this.handleConfirmAllSent.bind(this);
     this.handleUndoConfirmPrepped = this.handleUndoConfirmPrepped.bind(this);
     this.handleUndoConfirmSent = this.handleUndoConfirmSent.bind(this);
     this.getCurrentUser = this.getCurrentUser.bind(this);
@@ -228,6 +229,14 @@ class Dashboard extends Component {
     })
   }
 
+  handleConfirmAllSent() {
+    for (var i = 0; i < this.state.voters.length; i++){
+      if (this.state.voters[i].confirmed_prepped_at){
+        this.handleConfirmSent(this.state.voters[i]);
+      }
+    }
+  }
+
   handleUndoConfirmSent(voter) {
     axios({
       method: 'PUT',
@@ -294,8 +303,9 @@ class Dashboard extends Component {
               markAllPrepped={this.handleConfirmAllPrepped}
               confirmPrepped={this.handleConfirmPrepped}
               undoConfirmPrepped={this.handleUndoConfirmPrepped}
-              undoConfirmSent={this.handleUndoConfirmSent}
+              markAllSent={this.handleConfirmAllSent}
               confirmSent={this.handleConfirmSent}
+              undoConfirmSent={this.handleUndoConfirmSent}
             />
           </div>
         </div>

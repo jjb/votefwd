@@ -35,12 +35,7 @@ class VoterRecord extends Component {
     let voter = this.props.voter;
     let voterActions;
     let voterDownloadButton;
-
-    let today = moment();
-    let electionDate = moment('2018-11-06');
-    let sendDate = electionDate.subtract(7, "days");
-    let readyToSend;
-    today < sendDate ? readyToSend = false : readyToSend = true;
+    let readyToSend = this.props.readyToSend;
 
     if (!voter.confirmed_prepped_at) {
       voterDownloadButton = (
@@ -102,11 +97,13 @@ export class VoterList extends Component {
     super(props)
 
     this.downloadBundle = this.downloadBundle.bind(this);
-    this.markAllPrepped= this.markAllPrepped.bind(this);
+    this.markAllPrepped = this.markAllPrepped.bind(this);
+    this.markAllSent    = this.markAllSent.bind(this);
     this.cancelMarkAllPrepped = this.cancelMarkAllPrepped.bind(this);
-    this.state= { 
+    this.state= {
       downloadingBundle: false,
-      markingAllPrepped: false
+      markingAllPrepped: false,
+      markingAllSent:    false
     };
   }
 
@@ -142,6 +139,15 @@ export class VoterList extends Component {
     this.setState({markingAllPrepped: false});
   }
 
+  markAllSent() {
+    this.props.markAllSent();
+    this.cancelMarkAllSent();
+  }
+
+  cancelMarkAllSent() {
+    this.setState({markingAllSent: false});
+  }
+
   render() {
     let toPrep = this.props.voters.filter(voter => !voter.confirmed_prepped_at);
     let toSend = this.props.voters.filter(voter => voter.confirmed_prepped_at && !voter.confirmed_sent_at);
@@ -156,7 +162,7 @@ export class VoterList extends Component {
     if (!this.state.markingAllPrepped) {
       allPreppedButton = (
         <button disabled={this.state.downloadingBundle ? true : false} className="btn btn-light btn-sm ml-2" onClick={() => this.setState({markingAllPrepped: true})}>
-          <i className="fa fa-check"></i> All prepared 
+          <i className="fa fa-check"></i> All prepared
         </button>
       )
     }
@@ -173,6 +179,42 @@ export class VoterList extends Component {
         </div>
       )
     }
+
+    let today = moment();
+    let electionDate = moment('2018-11-06');
+    let sendDate = electionDate.subtract(7, "days");
+    let readyToSend;
+    today < sendDate ? readyToSend = false : readyToSend = true;
+
+    let allSentButton;
+    if (!this.state.markingAllSent) {
+      if (readyToSend) {
+        allSentButton = (
+          <button className="btn btn-light btn-sm ml-2" onClick={() => this.setState({markingAllSent: true})}>
+            <i className="fa fa-check"></i> All sent
+          </button>
+        )
+      }
+      else {
+        allSentButton = (
+          <span className="badge badge-warning ml-2">Mail on Tuesday, October 30!</span>
+        )
+      }
+    }
+    else {
+      allSentButton = (
+        <div className="alert alert-warning ml-3" role="alert">
+          <p>Are you sure?</p>
+          <button className="btn btn-success btn-sm mr-2" onClick={this.markAllSent}>
+            <i className="fa fa-check"></i> Yes!
+          </button>
+          <button className="btn btn-danger btn-sm" onClick={this.cancelMarkAllSent}>
+            <i className="fa fa-times"></i> Cancel
+          </button>
+        </div>
+      )
+    }
+
     return (
       <div className="px-5 pb-5">
         <h2 className="pt-2 mb-4">Your letters</h2>
@@ -210,7 +252,7 @@ export class VoterList extends Component {
           <div className="col mx-2">
             <div className="d-flex justify-content-between align-items-center mb-3">
               <span><strong>Letters Prepared</strong> ({toSend.length})</span>
-              <span className="badge badge-warning ml-2">Mail on Tuesday, October 30!</span>
+              {allSentButton}
             </div>
             <ul className="list-group">
               {toSend.length < 1 &&
@@ -222,6 +264,7 @@ export class VoterList extends Component {
                 <VoterRecord
                   key={voter.id}
                   voter={voter}
+                  readyToSend={readyToSend}
                   confirmSent={this.props.confirmSent}
                   undoConfirmPrepped={this.props.undoConfirmPrepped}
                 />)}
