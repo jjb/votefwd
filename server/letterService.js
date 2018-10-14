@@ -15,7 +15,7 @@ var semaphore = require('semaphore');
 const { splitEvery } = require('ramda');
 
 const VOTERS_PER_COVER_PAGE = 20;
-const PAGE_BREAK = '<div class="pagebreak"> </div>'
+const PAGE_BREAK = '<!DOCTYPE html>\n<html>\n<body>\n<div class="pagebreak">&nbsp;\n</div></body>\n</html>\n'
 function dateStamp() {
   var newDate = new Date();
   var DateString;
