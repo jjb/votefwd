@@ -37,6 +37,27 @@ function getUsersAdoptedVoters(userId, callback) {
     });
 }
 
+function relinquishVoters(adopterId, adoptedAt, districtId, callback) {
+  console.log(`relinquishVoters adopterId, adoptedAt, districtId:`, adopterId, adoptedAt, districtId)
+  db('voters')
+    .where('adopter_user_id', adopterId)
+    .where('adopted_at', adoptedAt)
+    .where('district_id', districtId)
+    .update({
+      adopter_user_id: null,
+      adopted_at: null,
+      updated_at: db.fn.now()
+    })
+    .then(function(results) {
+      console.log(`relinquishVoters results:`, results)
+      callback(null, results)
+    })
+    .catch(err => {
+      console.error(err);
+      callback(err);
+    });
+}
+
 function adoptRandomVoter(adopterId, numVoters, districtId, callback) {
   if (allowedVoterBulkCount.includes(numVoters) !== true){
     //user requested a weird number of voters, deny!
@@ -288,7 +309,7 @@ function voterInfoFromHash(hash) {
   });
 }
 /**
- * only record the pledge if today's date is after 
+ * only record the pledge if today's date is after
  * the environment DATE_TO_ENABLE_PLEDGE (or '2018-10-30' by default)
  */
 const pledgeStartString = process.env.DATE_TO_ENABLE_PLEDGE ? process.env.DATE_TO_ENABLE_PLEDGE : '2018-10-30';
@@ -488,6 +509,7 @@ module.exports = {
   getUsersAdoptedVoters,
   downloadLetterToVoter,
   downloadAllLetters,
+  relinquishVoters,
   adoptRandomVoter,
   confirmSent,
   undoConfirmSent,

@@ -85,6 +85,15 @@ router.route('/voters')
     });
 });
 
+router.route('/voters/relinquish')
+.get(checkJwt, function(req, res) {
+  const { user_id, adopted_at, district_id } = req.query
+  voterService.relinquishVoters(user_id, adopted_at, district_id,
+    function(result) {
+      res.json(result)
+    });
+});
+
 router.route('/voter/adopt-random')
   .post(checkJwt, function(req, res) {
     voterService.adoptRandomVoter(req.body.adopterId, req.body.numVoters, req.body.districtId, function(error, voters) {
