@@ -11,7 +11,10 @@ class DistrictItem extends Component {
     let districtMarkup;
     if (allDone) {
       districtMarkup = (
-        <div className="d-flex col-sm-12 col-md-4 col-lg-3 p-3">
+        <a
+          href={'/district/' + this.props.district.district_id}
+          className="d-flex col-sm-12 col-md-4 col-lg-3 p-3 reset-link hover-grow"
+        >
           <div className="bg-light border rounded highlight-border-top">
             <div className="bg-white pl-3 pr-3 pt-3 pb-2 rounded">
               <h3>{this.props.district.state}</h3>
@@ -24,14 +27,13 @@ class DistrictItem extends Component {
               <p className="small">{this.props.district.description}</p>
             </div>
           </div>
-        </div>
+        </a>
       );
     } else {
       districtMarkup= (
         <a
-          href={'/dashboard/' + this.props.district.district_id}
+          href={'/district/' + this.props.district.district_id}
           className="d-flex col-sm-12 col-md-4 col-lg-3 p-3 reset-link hover-grow"
-          onClick={(e) => this.selectDistrictAndClose(this.props.district.district_id)}
         >
           <div className="bg-light border rounded highlight-border-top">
             <div className="bg-white pl-3 pr-3 pt-3 pb-2 rounded">
