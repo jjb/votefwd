@@ -47,7 +47,7 @@ class VoterRecord extends Component {
         <div>
           <span className="small u-quiet mr-2">Prepared?</span>
           <button className="btn btn-sm btn-success" onClick={() => {this.props.confirmPrepped(voter)}}>
-            <i className="fa fa-check" aria-hidden="true"></i>
+            <i className="fa fa-arrow-right" aria-hidden="true"></i>
           </button>
         </div>
       );

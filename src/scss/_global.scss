@@ -225,6 +225,11 @@ input + .btn {
   border: 5px solid $white;
 }
 
+.btn-success .fa-arrow-right {
+  position: relative;
+  top: -1px;
+}
+ 
 // Form Inputs
 
 label {
