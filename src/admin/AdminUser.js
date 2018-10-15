@@ -81,7 +81,6 @@ class AdminUser extends Component {
       })
       .then(res => {
         console.log(res);
-        console.log(`res.data =============>:`, JSON.stringify(res.data, null, 2))
         this.setState( {bundles: res.data} );
       })
       .catch(err => {
@@ -170,7 +169,7 @@ class AdminUser extends Component {
     );
   }
 
-  relinquish(adoptedAt, adopter, district) {
+  relinquish(adoptedAtEpoch, adopter, district) {
     let headers = {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))};
     axios.get(
       `${process.env.REACT_APP_API_URL}/voters/relinquish`,
@@ -178,7 +177,7 @@ class AdminUser extends Component {
         headers: headers,
         params: {
           user_id: adopter,
-          adopted_at: adoptedAt,
+          adopted_at: adoptedAtEpoch,
           district_id: district
         }
       })
@@ -216,6 +215,7 @@ class AdminUser extends Component {
       accessor: "createdAt",
       Cell: props => {
         const { adopted_at,
+                epoch,
                 adopter_user_id,
                 district_id,
                 prepped_count,
@@ -227,7 +227,7 @@ class AdminUser extends Component {
         if (!show) return null;
         return <button
           className="btn btn-small btn-success ml-2"
-          onClick={this.relinquish.bind(this, adopted_at, adopter_user_id, district_id)}
+          onClick={this.relinquish.bind(this, epoch, adopter_user_id, district_id)}
         >
           Relinquish
         </button>

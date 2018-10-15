@@ -37,12 +37,15 @@ function getUsersAdoptedVoters(userId, callback) {
     });
 }
 
-function relinquishVoters(adopterId, adoptedAt, districtId, callback) {
-  console.log(`relinquishVoters adopterId, adoptedAt, districtId:`, adopterId, adoptedAt, districtId)
+function relinquishVoters(adopterId, adoptedAtEpoch, districtId, callback) {
+  const epochLow = (parseFloat(adoptedAtEpoch) - 0.00001).toString()
+  const epochHigh = (parseFloat(adoptedAtEpoch) + 0.00001).toString()
+  const whereClause = `adopter_user_id = '${adopterId}'
+  and   extract(epoch from adopted_at) between ${epochLow} and ${epochHigh}
+  and   district_id = '${districtId}'`
+
   db('voters')
-    .where('adopter_user_id', adopterId)
-    .where('adopted_at', adoptedAt)
-    .where('district_id', districtId)
+    .whereRaw(whereClause)
     .update({
       adopter_user_id: null,
       adopted_at: null,

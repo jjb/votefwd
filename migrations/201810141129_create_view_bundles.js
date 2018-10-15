@@ -4,7 +4,10 @@ const view = 'bundles'
 exports.up = function(knex, Promise) {
   const createView =
   `create or replace view ${view} as
-   select x.adopter_user_id, x.adopted_at, x.district_id,
+   select x.adopter_user_id,
+          x.adopted_at,
+          extract(epoch from x.adopted_at) as epoch,
+          x.district_id,
           sum(x.prepped::int) - sum(x.sent::int) as prepped_count,
           sum(x.sent::int) as sent_count,
           sum(x.count) - sum(x.prepped::int) - sum(x.sent::int) as unprepped_count
