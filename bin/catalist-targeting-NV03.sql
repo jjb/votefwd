@@ -26,7 +26,9 @@ BEGIN
   AND congressional_district='3'
   AND dwid !='1008957535'
   AND dwid !='96555189'
-  AND dwid !='103741042';
+  AND dwid !='103741042'
+  AND dwid !='144666779'
+  AND dwid !='146988500';
 
 
   -- COUNT HOW MANY NEWLY ELIGIBLE VOTERS WE ADDED --
@@ -97,7 +99,9 @@ BEGIN
   AND congressional_district='3'
   AND dwid !='1008957535'
   AND dwid !='96555189'
-  AND dwid !='103741042';
+  AND dwid !='103741042'
+  AND dwid !='144666779'
+  AND dwid !='146988500';
 
   RAISE NOTICE 'Populated voters table with new TEST voters.';
 
