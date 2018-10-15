@@ -41,12 +41,14 @@ class DistrictItem extends Component {
               <h5 className="headline text-primary">
                   {this.props.district.district_id}
               </h5>
+            {/* Commenting out temporarily to try to address 10/15 performance problems
                 <p className="small">
                   <span className="mr-2 text-info">
                     {voterCount.toLocaleString()}
                   </span>
                   addresses available
                 </p>
+            */}
             </div>
             <div className="p-3">
               <p className="small">{this.props.district.description}</p>
@@ -81,7 +83,7 @@ export class LandingDistricts extends Component {
         Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))
       },
       method: 'GET',
-      url: `${process.env.REACT_APP_API_URL}/get-districts-with-stats`
+      url: `${process.env.REACT_APP_API_URL}/get-districts`
     })
       .then(res => {
         this.setState({ districts: res.data });
