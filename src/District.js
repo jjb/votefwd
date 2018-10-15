@@ -187,8 +187,10 @@ class DistrictStats extends Component {
     return (
       <div className="pt-3 pb-3 bw-2">
         <h4 className="mb-3">Letter-writing progress</h4>
-        <p>Currently <strong>{this.props.district.num_users_using_district}</strong> volunteers are writing letters to {this.props.district.district_id}. They’ve adopted {totalClaimed} voters, {percentComplete}% of the targeted voters.</p>
-        { allDone && <h4 className="mb-3">All of the target voters in this district have been adopted! Great work, volunteers.</h4> }
+        { !allDone &&
+          <p>Currently <strong>{this.props.district.num_users_using_district}</strong> volunteers are writing letters to {this.props.district.district_id}. They’ve adopted {totalClaimed} voters, {percentComplete}% of the targeted voters.</p>
+        }
+        { allDone && <p className="mb-3">All {totalClaimed} target voters in {this.props.district.district_id} have been adopted! <span className="font-weight-bold font-weight-italic">Great work, volunteers.</span></p> }
         <div className="p-statusBar mb-3">
           <div
             className="p-statusBar_bar"
