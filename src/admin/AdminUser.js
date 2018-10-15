@@ -182,6 +182,7 @@ class AdminUser extends Component {
         }
       })
       .then(res => {
+        this.getBundles(this.props.match.params.id);
         console.log(res);
       })
       .catch(err => {
@@ -214,8 +215,7 @@ class AdminUser extends Component {
       Header: 'Actions',
       accessor: "createdAt",
       Cell: props => {
-        const { adopted_at,
-                epoch,
+        const { epoch,
                 adopter_user_id,
                 district_id,
                 prepped_count,
