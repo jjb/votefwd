@@ -2,15 +2,18 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
+import moment from 'moment';
 import { Header } from '../Header';
 import { Footer } from '../Footer';
 import download from 'js-file-download';
+import ReactTable from 'react-table';
+import 'react-table/react-table.css';
 
 class AdminUser extends Component {
   constructor(props) {
     super(props)
 
-    this.state = { voters: [], user: '', city: '', state: ''};
+    this.state = { voters: [], bundles: [], user: '', city: '', state: ''};
   }
 
   getUser(auth0_id) {
@@ -59,8 +62,25 @@ class AdminUser extends Component {
         }
       })
       .then(res => {
-        console.log(res);
         this.setState( {voters: res.data} );
+      })
+      .catch(err => {
+        console.error(err)
+      });
+  }
+
+  getBundles(auth0_id) {
+    let headers = {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))};
+    axios.get(
+      `${process.env.REACT_APP_API_URL}/bundles`,
+      {
+        headers: headers,
+        params: {
+          user_id: auth0_id
+        }
+      })
+      .then(res => {
+        this.setState( {bundles: res.data} );
       })
       .catch(err => {
         console.error(err)
@@ -86,6 +106,7 @@ class AdminUser extends Component {
   componentWillMount() {
     this.getUser(this.props.match.params.id);
     this.getAdoptedVoters(this.props.match.params.id);
+    this.getBundles(this.props.match.params.id);
   }
 
   handleChangeStatus(user, newQualState, event) {
@@ -147,13 +168,97 @@ class AdminUser extends Component {
     );
   }
 
+  relinquish(adoptedAtEpoch, adopter, district) {
+    let headers = {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))};
+    axios.get(
+      `${process.env.REACT_APP_API_URL}/voters/relinquish`,
+      {
+        headers: headers,
+        params: {
+          user_id: adopter,
+          adopted_at: adoptedAtEpoch,
+          district_id: district
+        }
+      })
+      .then(res => {
+        this.getBundles(this.props.match.params.id);
+      })
+      .catch(err => {
+        console.error(err)
+      });
+  }
+
+  renderBundleTable(bundles) {
+    const columns = [{
+      Header: 'District',
+      accessor: 'district_id',
+    },
+    {
+      id: 'aa',
+      Header: 'Adopted At',
+      accessor: aa => {
+        return moment(aa.adopted_at)
+          .local()
+          .format("MM/DD, hh:mm a")
+      }
+    },
+    {
+      Header: 'Unprepped',
+      accessor: 'unprepped_count',
+    },
+    {
+      Header: 'Prepped',
+      accessor: 'prepped_count',
+    },
+    {
+      Header: 'Sent',
+      accessor: 'sent_count',
+    },
+    {
+      Header: 'Actions',
+      accessor: "createdAt",
+      Cell: props => {
+        const { epoch,
+                adopter_user_id,
+                district_id,
+                prepped_count,
+                sent_count,
+                unprepped_count} = props.original
+        const show = parseInt(prepped_count, 10) === 0
+                  && parseInt(sent_count, 10) === 0
+                  && parseInt(unprepped_count, 10) > 0;
+        if (!show) return null;
+        return <button
+          className="btn btn-small btn-success ml-2"
+          onClick={this.relinquish.bind(this, epoch, adopter_user_id, district_id)}
+        >
+          Relinquish
+        </button>
+      },
+    }]
+    return (
+      <div>
+        <ReactTable
+          minRows={0}
+          showPagination={false}
+          sortable={false}
+          resizable={false}
+          filterable={false}
+          data={bundles}
+          columns={columns}
+          className="-striped -highlight"
+        />
+      </div>
+    );
+  }
+
   render() {
-    console.log(this.state.user);
 		let emailUrl = "mailto:" + this.state.user.email;
 		let twitterUrl = "https://www.twitter.com/" + this.state.user.twitter_profile_url;
 		let facebookUrl = "https://www.facebook.com/" + this.state.user.facebook_profile_url;
 		let linkedinUrl = "https://www.linkedin.com/in/" + this.state.user.linkedin_profile_url;
 		let statusButtons = this.renderStatus(this.props);
+    const bundleRows = this.renderBundleTable(this.state.bundles);
     return (
       <React.Fragment>
       <Header auth={this.props.auth}/>
@@ -177,15 +282,24 @@ class AdminUser extends Component {
 
           <div>
             <p>
+              <span className="mr-4">auth0 Id:</span>
+              {this.state.user.auth0_id}
+            </p>
+          </div>
+
+          <div>
+            <p>
               <span className="mr-4">Created at:</span>
-              {this.state.user.created_at}
+              <span>{moment(this.state.user.created_at).local().format("MM/DD, hh:mm a")}</span>
+              <span className="ml-2">({moment(this.state.user.created_at).fromNow()})</span>
             </p>
           </div>
 
           <div>
             <p>
               <span className="mr-4">Updated at:</span>
-              {this.state.user.updated_at}
+              <span>{moment(this.state.user.updated_at).local().format("MM/DD, hh:mm a")}</span>
+              <span className="ml-2">({moment(this.state.user.updated_at).fromNow()})</span>
             </p>
           </div>
 
@@ -205,7 +319,7 @@ class AdminUser extends Component {
 
           <div>
               <p>
-            <span className="mr-3">Facebook profile link: 
+            <span className="mr-3">Facebook profile link:
             </span>
                 <a href={facebookUrl} target="_blank">{this.state.user.facebook_profile_url}</a>
               </p>
@@ -213,7 +327,7 @@ class AdminUser extends Component {
 
           <div>
               <p>
-            <span className="mr-4">LinkedIn profile: 
+            <span className="mr-4">LinkedIn profile:
             </span>
                 <a href={linkedinUrl} target="_blank">{this.state.user.linkedIn_profile_url}</a>
               </p>
@@ -221,7 +335,7 @@ class AdminUser extends Component {
 
           <div>
               <p>
-            <span className="mr-4">Location: 
+            <span className="mr-4">Location:
             </span>
                 {this.state.city && <span>{this.state.city}, {this.state.state} </span>}
                 {this.state.user.zip}
@@ -230,13 +344,18 @@ class AdminUser extends Component {
 
           <div>
               <p>
-            <span className="mr-4">Why write letters: 
+            <span className="mr-4">Why write letters:
             </span>
                 {this.state.user.why_write_letters}
               </p>
           </div>
         </div>
-        
+
+        <div className="mb-4">
+          <h4 className="mb-4">Bundles</h4>
+          {bundleRows}
+        </div>
+
         <div className="mb-4">
           <h4 className="mb-4">Voter Stuff</h4>
           <p>Adopted but not yet prepped: {this.state.voters.length}

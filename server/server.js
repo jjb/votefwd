@@ -59,14 +59,36 @@ const checkJwt = jwt({
   algorithms: ['RS256']
 });
 
-
 router.get('/', function(req, res) {
   res.json('API initialized.');
+});
+
+router.route('/bundles')
+.get(checkJwt, function(req, res) {
+  db('bundles')
+    .where('adopter_user_id', req.query.user_id).orderBy('district_id', 'asc').orderBy('adopted_at', 'asc')
+    .then(function(result) {
+      res.json(result)
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).end();
+      return;
+    });
 });
 
 router.route('/voters')
 .get(checkJwt, function(req, res) {
   voterService.getUsersAdoptedVoters(req.query.user_id,
+    function(result) {
+      res.json(result)
+    });
+});
+
+router.route('/voters/relinquish')
+.get(checkJwt, function(req, res) {
+  const { user_id, adopted_at, district_id } = req.query
+  voterService.relinquishVoters(user_id, adopted_at, district_id,
     function(result) {
       res.json(result)
     });
