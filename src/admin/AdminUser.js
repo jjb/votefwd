@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
+import moment from 'moment';
 import { Header } from '../Header';
 import { Footer } from '../Footer';
 import download from 'js-file-download';
@@ -61,7 +62,6 @@ class AdminUser extends Component {
         }
       })
       .then(res => {
-        console.log(res);
         this.setState( {voters: res.data} );
       })
       .catch(err => {
@@ -80,7 +80,6 @@ class AdminUser extends Component {
         }
       })
       .then(res => {
-        console.log(res);
         this.setState( {bundles: res.data} );
       })
       .catch(err => {
@@ -183,7 +182,6 @@ class AdminUser extends Component {
       })
       .then(res => {
         this.getBundles(this.props.match.params.id);
-        console.log(res);
       })
       .catch(err => {
         console.error(err)
@@ -196,8 +194,17 @@ class AdminUser extends Component {
       accessor: 'district_id',
     },
     {
-      Header: 'Created',
-      accessor: 'adopted_at',
+      id: 'aa',
+      Header: 'Adopted At',
+      accessor: aa => {
+        return moment(aa.adopted_at)
+          .local()
+          .format("MM/DD, hh:mm a")
+      }
+    },
+    {
+      Header: 'Unprepped',
+      accessor: 'unprepped_count',
     },
     {
       Header: 'Prepped',
@@ -206,10 +213,6 @@ class AdminUser extends Component {
     {
       Header: 'Sent',
       accessor: 'sent_count',
-    },
-    {
-      Header: 'Available',
-      accessor: 'unprepped_count',
     },
     {
       Header: 'Actions',
@@ -250,7 +253,6 @@ class AdminUser extends Component {
   }
 
   render() {
-    console.log(this.state.user);
 		let emailUrl = "mailto:" + this.state.user.email;
 		let twitterUrl = "https://www.twitter.com/" + this.state.user.twitter_profile_url;
 		let facebookUrl = "https://www.facebook.com/" + this.state.user.facebook_profile_url;
@@ -280,15 +282,24 @@ class AdminUser extends Component {
 
           <div>
             <p>
+              <span className="mr-4">auth0 Id:</span>
+              {this.state.user.auth0_id}
+            </p>
+          </div>
+
+          <div>
+            <p>
               <span className="mr-4">Created at:</span>
-              {this.state.user.created_at}
+              <span>{moment(this.state.user.created_at).local().format("MM/DD, hh:mm a")}</span>
+              <span className="ml-2">({moment(this.state.user.created_at).fromNow()})</span>
             </p>
           </div>
 
           <div>
             <p>
               <span className="mr-4">Updated at:</span>
-              {this.state.user.updated_at}
+              <span>{moment(this.state.user.updated_at).local().format("MM/DD, hh:mm a")}</span>
+              <span className="ml-2">({moment(this.state.user.updated_at).fromNow()})</span>
             </p>
           </div>
 
