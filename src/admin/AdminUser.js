@@ -71,7 +71,7 @@ class AdminUser extends Component {
     axios({
      method: 'GET',
       headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
-      url: `${process.env.REACT_APP_API_URL}/voters/downloadAllLetters`,
+      url: `${process.env.REACT_APP_API_URL}/voters/downloadAllLettersForUser`,
       params: { user_id: auth0_id },
       responseType: "blob"
     })
@@ -205,7 +205,7 @@ class AdminUser extends Component {
 
           <div>
               <p>
-            <span className="mr-3">Facebook profile link: 
+            <span className="mr-3">Facebook profile link:
             </span>
                 <a href={facebookUrl} target="_blank">{this.state.user.facebook_profile_url}</a>
               </p>
@@ -213,7 +213,7 @@ class AdminUser extends Component {
 
           <div>
               <p>
-            <span className="mr-4">LinkedIn profile: 
+            <span className="mr-4">LinkedIn profile:
             </span>
                 <a href={linkedinUrl} target="_blank">{this.state.user.linkedIn_profile_url}</a>
               </p>
@@ -221,7 +221,7 @@ class AdminUser extends Component {
 
           <div>
               <p>
-            <span className="mr-4">Location: 
+            <span className="mr-4">Location:
             </span>
                 {this.state.city && <span>{this.state.city}, {this.state.state} </span>}
                 {this.state.user.zip}
@@ -230,13 +230,13 @@ class AdminUser extends Component {
 
           <div>
               <p>
-            <span className="mr-4">Why write letters: 
+            <span className="mr-4">Why write letters:
             </span>
                 {this.state.user.why_write_letters}
               </p>
           </div>
         </div>
-        
+
         <div className="mb-4">
           <h4 className="mb-4">Voter Stuff</h4>
           <p>Adopted but not yet prepped: {this.state.voters.length}
