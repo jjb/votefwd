@@ -148,8 +148,10 @@ To compile, run this script in a second tab in your terminal:
 
 	npm run scss-compile
 
-#### How to make a new database migration (if you need it...not part of initial setup)
+#### How to make a new database migration
 
-	`knex migrate:make <migration_file_name>`.  Naming examples in the /migrations folder.  Note you dont need the datestring or the .js, so you can do a name like `add_index_on_qual_state_for_users`.
+	`knex migrate:make <migration_file_name>`. You can find examples of how migrations are named in the `/migrations` folder.
 
-	`knex migrate:latest` to apply it and `knex migrate:rollback` to go back.
+	Note you dont need the datestring or the .js, so you can do a name like `add_index_on_qual_state_for_users`.
+
+	After creating your migration, run `knex migrate:latest` to apply it and `knex migrate:rollback` to go back.
