@@ -126,13 +126,8 @@ Load the district data:
 
 These voter records consist of randomized names and addresses.
 
-#### Make a new database migration
 
-`knex migrate:make <migration_file_name>`.  Naming examples in the /migrations folder.  Note you dont need the datestring or the .js, so you can do a name like `add_index_on_qual_state_for_users`.
-
-`knex migrate:latest` to apply it and `knex migrate:rollback` to go back.
-
-#### Start devloping
+#### Start developing
 
 	npm run start-dev
 
@@ -152,3 +147,11 @@ Make sure to update SCSS files and not the compiled CSS files. Note that buildin
 To compile, run this script in a second tab in your terminal:
 
 	npm run scss-compile
+
+#### How to make a new database migration
+
+	`knex migrate:make <migration_file_name>`. You can find examples of how migrations are named in the `/migrations` folder.
+
+	Note you dont need the datestring or the .js, so you can do a name like `add_index_on_qual_state_for_users`.
+
+	After creating your migration, run `knex migrate:latest` to apply it and `knex migrate:rollback` to go back.
