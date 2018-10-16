@@ -131,7 +131,7 @@ router.route('/voters/downloadLetter')
 //   errors.
 router.route('/voters/downloadAllLetters')
   .get(checkJwt, function(req, res) {
-    voterService.downloadAllLetters(req.user.sub, downloadFileCallback(res));
+    voterService.downloadAllLetters(req.query.user_id, downloadFileCallback(res));
   });
 /**
  * If the JWT contains a "voterId" value, then this is a letter to a single voter.
