@@ -253,6 +253,7 @@ class AdminUser extends Component {
   }
 
   render() {
+    let unpreppedCount = this.state.voters.filter((voter) => voter.confirmed_prepped_at === null).length;
 		let emailUrl = "mailto:" + this.state.user.email;
 		let twitterUrl = "https://www.twitter.com/" + this.state.user.twitter_profile_url;
 		let facebookUrl = "https://www.facebook.com/" + this.state.user.facebook_profile_url;
@@ -358,8 +359,13 @@ class AdminUser extends Component {
 
         <div className="mb-4">
           <h4 className="mb-4">Voter Stuff</h4>
-          <p>Adopted but not yet prepped: {this.state.voters.length}
-            <button className="btn btn-small btn-success ml-2" onClick={() => this.downloadBundleForUser(this.state.user.auth0_id)}>Generate bundle</button>
+          <p>Adopted but not yet prepped: {unpreppedCount}
+            <button
+              disabled={unpreppedCount === 0 ? true : false}
+              className="btn btn-small btn-success ml-2"
+              onClick={() => this.downloadBundleForUser(this.state.user.auth0_id)}>
+                Generate bundle
+            </button>
           </p>
         </div>
 
