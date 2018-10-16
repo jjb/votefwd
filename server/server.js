@@ -152,7 +152,7 @@ router.route('/voters/downloadLetter')
 //   people who don't refresh their browser won't get
 //   errors.
 router.route('/voters/downloadAllLetters')
-  .get(checkJwt, function(req, res) {
+  .get(checkJwt, checkAdmin, function(req, res) {
     voterService.downloadAllLetters(req.user.sub, downloadFileCallback(res));
   });
 
