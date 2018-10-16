@@ -148,16 +148,8 @@ router.route('/voters/downloadLetter')
     });
   });
 
-// Keep /downloadAllLetters route so that after deployment
-//   people who don't refresh their browser won't get
-//   errors.
-router.route('/voters/downloadAllLetters')
-  .get(checkJwt, checkAdmin, function(req, res) {
-    voterService.downloadAllLetters(req.user.sub, downloadFileCallback(res));
-  });
-
 router.route('/voters/downloadAllLettersForUser')
-  .get(checkJwt, function(req, res) {
+  .get(checkJwt, checkAdmin, function(req, res) {
     voterService.downloadAllLetters(req.query.user_id, downloadFileCallback(res));
   });
 
