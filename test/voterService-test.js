@@ -1,9 +1,10 @@
 'use strict';
 
 var expect = require('chai').expect;
+const rewire = require('rewire');
 
 var db = require('../server/db');
-var voterService = require('../server/voterService');
+var voterService = rewire('../server/voterService');
 var Hashids = require('hashids');
 var hashids = new Hashids(process.env.REACT_APP_HASHID_SALT, 6,
   process.env.REACT_APP_HASHID_DICTIONARY);
@@ -24,7 +25,8 @@ describe('voterService', function() {
 
     it('should do nothing if not enough voters left', function(done) {
       voterService.adoptRandomVoter(this.users.regular.auth0_id, 256, 'GA06', function(error, adoptees) {
-        expect(adoptees.length).to.eql(0);
+        const adopteeCount = adoptees ? adoptees.length : 0;
+        expect(adopteeCount).to.eql(0);
         done();
       });
     });
@@ -110,6 +112,58 @@ describe('voterService', function() {
         .where('id', voter.id)
         .update({
           hashid: voter.hashid
+        })
+      });
+    });
+    describe('denormalizeVoterCount', function() {
+      it('should update voter count', (done) => {
+        let originalCount;
+        let districtId;
+        let voterId;
+        const denormalizeVoterCount = voterService.__get__('denormalizeVoterCount');
+
+        db.select("*")
+          .table("voters")
+          .where("voters.adopter_user_id", null)
+          .first()
+        .then((voter) => {
+          districtId = voter.district_id;
+          voterId = voter.id;
+          return denormalizeVoterCount(districtId);
+        })
+        .then(() => {
+          return db.select("*")
+            .table("districts")
+            .where("district_id", districtId)
+            .first()
+        })
+        .then((district) => {
+          originalCount = district.available_voter_count;
+          return db('voters')
+          .where('id', voterId)
+          .update('adopter_user_id', 'test-auth0-id-6')
+        })
+        .then(() => {
+          return denormalizeVoterCount(districtId);
+        })
+        .then(() => {
+          return db.select("*")
+            .table("districts")
+            .where("district_id", districtId)
+            .first()
+        })
+        .then((district) => {
+          expect(district.available_voter_count).to.equal(originalCount - 1);
+          // set the adopter_user_id back to null
+          return db('voters')
+          .where('id', voterId)
+          .update('adopter_user_id', null)
+        })
+        .then(() => {
+          done();
+        })
+        .catch(err => {
+          done(err);
         })
       });
     });

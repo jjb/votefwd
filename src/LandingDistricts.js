@@ -41,14 +41,12 @@ class DistrictItem extends Component {
               <h5 className="headline text-primary">
                   {this.props.district.district_id}
               </h5>
-            {/* Commenting out temporarily to try to address 10/15 performance problems
-                <p className="small">
-                  <span className="mr-2 text-info">
-                    {voterCount.toLocaleString()}
-                  </span>
-                  addresses available
-                </p>
-            */}
+              <p className="small">
+                <span className="mr-2 text-info">
+                  {voterCount.toLocaleString()}
+                </span>
+                addresses available
+              </p>
             </div>
             <div className="p-3">
               <p className="small">{this.props.district.description}</p>

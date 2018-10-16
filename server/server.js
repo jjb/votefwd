@@ -448,7 +448,7 @@ router.route('/get-districts')
  */
 router.route('/get-districts-with-stats')
   .get(function(req, res) {
-    db('districts_with_stats')
+    db('districts')
       .then(function(result) {
           res.json(result);
         })
