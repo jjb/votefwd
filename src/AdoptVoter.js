@@ -110,6 +110,11 @@ export class AdoptVoter extends Component {
                   </p>
                 </div>
               )}
+              { !maxedOut && this.props.voterCount > 0 && (
+                <div className="mt-4 alert alert-info pr-4 pl-4">
+                  <p>You’ve adopted {this.props.voterCount} voters. Fantastic!</p>
+                </div>
+              )}
             </div>
           </div>
         </div>

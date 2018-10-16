@@ -297,7 +297,7 @@ class Dashboard extends Component {
               toggleDistrictPicker={this.toggleDistrictPicker}
             />
           )}
-          <div className="container-fluid py-5">
+          <div className="container-fluid py-3">
             <VoterList
               voters={this.state.voters}
               markAllPrepped={this.handleConfirmAllPrepped}
