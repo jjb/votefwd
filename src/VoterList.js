@@ -100,6 +100,7 @@ export class VoterList extends Component {
     this.markAllPrepped = this.markAllPrepped.bind(this);
     this.markAllSent    = this.markAllSent.bind(this);
     this.cancelMarkAllPrepped = this.cancelMarkAllPrepped.bind(this);
+    this.cancelMarkAllSent = this.cancelMarkAllSent.bind(this);
     this.state= {
       downloadingBundle: false,
       markingAllPrepped: false,
