@@ -239,6 +239,40 @@ function confirmPrepped(voterId, callback) {
     });
 }
 
+function confirmAllPrepped(userId, callback) {
+  let first_voter = null
+  return db.transaction(trx => {
+    const queries =[]
+    getVoters({ userId, excludePrepped: true })
+      .then((voters) => {
+        voters.forEach(voter => {
+          if (!first_voter){
+            first_voter = voter.id
+          }
+          const query = db('voters')
+            .where('id', voter.id)
+            .update({
+              confirmed_prepped_at: db.fn.now(),
+              updated_at: db.fn.now()
+            })
+            .transacting(trx)
+          queries.push(query)
+        })
+        Promise.all(queries)
+          .then(trx.commit)
+          .catch(trx.rollback)
+      })
+  })
+  .then(function(result) {
+    getVoterById(first_voter, function(voter) {
+      callback(voter);
+    })
+  })
+  .catch(err => {
+    console.error(err)
+  });
+}
+
 function undoConfirmPrepped(voterId, callback) {
   db('voters')
     .where('id', voterId)
@@ -517,6 +551,7 @@ module.exports = {
   confirmSent,
   undoConfirmSent,
   confirmPrepped,
+  confirmAllPrepped,
   undoConfirmPrepped,
   makePledge,
   getAdoptedVoterSummary,
