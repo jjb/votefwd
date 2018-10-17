@@ -221,15 +221,15 @@ export class VoterList extends Component {
         <div className="row">
           <div className="col">
             <div>
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <span><strong>Letters to Prepare</strong> ({toPrep.length})</span>
+              <div className="d-flex justify-content-between align-items-top mb-3">
+                <div>
+                  <strong>Letters to Prepare</strong> ({toPrep.length})
+                  {toPrep.length > 1 && <button disabled={this.state.downloadingBundle ? true : false} className="btn btn-light btn-sm mt-1" onClick={this.downloadBundle}>
+                    <i className="icon-arrow-down-circle icons"></i> Download all
+                  </button>}
+                </div>
                 {toPrep.length > 1 &&
-                  <React.Fragment>
-                    <button disabled={this.state.downloadingBundle ? true : false} className="btn btn-light btn-sm" onClick={this.downloadBundle}>
-                      <i className="icon-arrow-down-circle icons"></i> Download all
-                    </button>
-                    {allPreppedButton}
-                  </React.Fragment>
+                  allPreppedButton
                 }
               </div>
               {alertContent}
