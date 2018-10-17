@@ -176,4 +176,29 @@ describe('userService', function() {
 
   });
 
+  describe('findUserByAuth0Id', function() {
+    it('should return nothing when not found', function(done) {
+      userService.findUserByAuth0Id(this.users.regular.auth0_id + '-NOT-FOUND', function(error, user) {
+        if (error) {
+          return done(error);
+        }
+        expect(user).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return the user when found', function(done) {
+      var expectedUser = this.users.regular;
+      userService.findUserByAuth0Id(expectedUser.auth0_id, function(error, user) {
+        if (error) {
+          return done(error);
+        }
+        expect(user).not.to.be.undefined;
+        expect(user).not.to.be.null;
+        expect(user.auth0_id).to.eql(expectedUser.auth0_id);
+        done();
+      });
+    });
+  });
+
 });
