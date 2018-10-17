@@ -182,7 +182,7 @@ export class VoterList extends Component {
 
     let today = moment();
     let electionDate = moment('2018-11-06');
-    let sendDate = electionDate.subtract(7, "days");
+    let sendDate = electionDate.subtract(77, "days");
     let readyToSend;
     today < sendDate ? readyToSend = false : readyToSend = true;
 
@@ -252,7 +252,7 @@ export class VoterList extends Component {
           <div className="col mx-2">
             <div className="d-flex justify-content-between align-items-center mb-3">
               <span><strong>Letters Prepared</strong> ({toSend.length})</span>
-              {allSentButton}
+              {toSend.length > 1 && allSentButton}
             </div>
             <ul className="list-group">
               {toSend.length < 1 &&
