@@ -40,13 +40,24 @@ function isAdmin(auth0_id, callback) {
     });
 }
 
-function updateEmail(auth0_id, newEmail) {
+function updateEmail(auth0_id, newEmail, callback) {
   db('users')
-  .where({auth0_id: auth0_id})
-  .update({email: newEmail})
-  .then(function(result) {
-    return;
-  });
+    .where({auth0_id: auth0_id})
+    .update({email: newEmail})
+    .then(function(result) {
+      callback(null, result);
+    })
+    .catch(callback);
+}
+
+function findUserByAuth0Id(auth0Id, callback) {
+  db('users')
+    .first()
+    .where('auth0_id', auth0Id)
+    .then(function(result) {
+      callback(null, result);
+    })
+    .catch(callback);
 }
 
 function updateUserQualifiedState(auth0_id, qualState, callback){
@@ -187,6 +198,7 @@ function _prepForTests() {
 module.exports = {
   batchApprovePending,
   canAdoptMoreVoters,
+  findUserByAuth0Id,
   isAdmin,
   updateEmail,
   updateUserQualifiedState,
