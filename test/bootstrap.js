@@ -47,6 +47,14 @@ before('Adding user data to the database', function() {
       auth0_id: 'test-auth0-id-7',
       full_name: 'Fullup Francis',
       qual_state: 'test_qualified' // only valid for tests
+    }, {
+      auth0_id: 'test-auth0-id-8',
+      full_name: 'Duplicate Dan',
+      email: 'dan@dups.com'
+    }, {
+      auth0_id: 'test-auth0-id-9',
+      full_name: 'Duplicate Dan 2',
+      email: 'dan@dups.com'
     }])
     .returning('*')
     .tap(function(result) {
@@ -59,7 +67,9 @@ before('Adding user data to the database', function() {
         qual: result[4],
         superqual: result[5],
         testqual: result[6],
-        full: result[7]
+        full: result[7],
+        dup1: result[8],
+        dup2: result[9]
       };
     });
 });

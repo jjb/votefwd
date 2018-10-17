@@ -193,12 +193,35 @@ describe('userService', function() {
         if (error) {
           return done(error);
         }
-        expect(user).not.to.be.undefined;
-        expect(user).not.to.be.null;
+        expect(user).exist;
         expect(user.auth0_id).to.eql(expectedUser.auth0_id);
         done();
       });
     });
   });
 
+  describe('findDuplicateUserByEmail', function() {
+    it('should return nothing when no dupicate found', function(done) {
+      userService.findDuplicateUserByEmail(this.users.regular.auth0_id, this.users.regular.email, function(error, user) {
+        if (error) {
+          return done(error);
+        }
+        expect(user).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return the duplicate', function(done) {
+      var dup1 = this.users.dup1;
+      var dup2 = this.users.dup2;
+      userService.findDuplicateUserByEmail(dup1.auth0_id, dup1.email, function (error, user) {
+        if (error) {
+          return done(error);
+        }
+        expect(user).to.exist;
+        expect(user.auth0_id).to.eql(dup2.auth0_id);
+        done();
+      })
+    });
+  });
 });

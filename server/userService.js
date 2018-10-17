@@ -60,6 +60,18 @@ function findUserByAuth0Id(auth0Id, callback) {
     .catch(callback);
 }
 
+// Looks for a user with the same email address but a different auth0_id
+function findDuplicateUserByEmail(auth0Id, email, callback) {
+  db('users')
+    .first()
+    .where('email', email)
+    .whereNot('auth0_id', auth0Id)
+    .then(function(result) {
+      callback(null, result);
+    })
+    .catch(callback);
+}
+
 function updateUserQualifiedState(auth0_id, qualState, callback){
   // takes an auth0_id of a user and a qualStateValue from QualStateEnum
   // and gives the user that state.
@@ -198,6 +210,7 @@ function _prepForTests() {
 module.exports = {
   batchApprovePending,
   canAdoptMoreVoters,
+  findDuplicateUserByEmail,
   findUserByAuth0Id,
   isAdmin,
   updateEmail,
