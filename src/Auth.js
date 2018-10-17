@@ -25,8 +25,25 @@ export default class Auth {
     this.webAuth.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
-        this.persistUser(authResult, () => {
-          history.replace('/dashboard');
+        this.persistUser(authResult, (err, response) => {
+          if (err) {
+            console.error(err);
+            history.replace('/');
+          }
+          else if (response.data.duplicateEmail) {
+            console.log('duplicate email; render some better view', response.data);
+            // TODO: Implement some UI that tells the user about a duplicate
+            // account.  `response.data.provider` and
+            // `response.data.duplicateProvider` hold the types of accounts that
+            // may exist.  Current options are:
+            //   * auth0
+            //   * facebook
+            //   * google-oauth2
+            // That is probably useful information to show in the UI.
+          }
+          else {
+            history.replace('/dashboard');
+          }
         });
       } else if (err) {
         history.replace('/');
@@ -45,7 +62,9 @@ export default class Auth {
         email: authResult.idTokenPayload.email
       }
     })
-    .then(callback)
+    .then(function(response) {
+      callback(null, response);
+    })
     .catch(function(error) {
       console.error(error)
     })

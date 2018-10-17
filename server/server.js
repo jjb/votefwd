@@ -253,32 +253,82 @@ router.route('/voter/signed-letter-url')
 
 router.route('/user/new')
   .post(checkJwt, function(req, res) {
-    if (req.body.auth0_id) {
-      db('users').where('auth0_id', req.body.auth0_id)
-        .then(function(result) {
-          if (result.length != 0) {
-            if (result[0].email != req.body.email) {
-              userService.updateEmail(req.body.auth0_id, req.body.email);
-            }
-            res.status(200).send('User already exists.');
+    if (!req.body.auth0_id) {
+      res.status(400).send('Missing auth0_id');
+      return;
+    }
+
+    userService.findUserByAuth0Id(req.body.auth0_id, function (err, authUser) {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Error finding user by auth id');
+        return;
+      }
+      if (req.body.email) {
+        userService.findDuplicateUserByEmail(req.body.auth0_id, req.body.email, function (err, emailUser) {
+          if (err) {
+            console.error(err);
+            res.status(500).send('Error finding user by email');
+            return;
           }
-          else {
-            db('users').insert({
+          // If there is a user with the same email address, let the user know
+          if (emailUser) {
+            res.send({
+              duplicateEmail: true,
+              provider: req.body.auth0_id.split('|')[0],
+              duplicateProvider: emailUser.auth0_id.split('|')[0]
+            });
+            return;
+          }
+          // If there is not a duplicate, but the email address needs to be
+          // updated (most likely because it was empty before), then update it
+          if (authUser && !emailUser && authUser.email !== req.body.email) {
+            userService.updateEmail(authUser.auth0_id, req.body.email, function (err) {
+              if (err) {
+                console.error(err);
+                res.status(500).send('Error updating email');
+                return;
+              }
+              res.status(200).send('User already exists.');
+            });
+          }
+          // If there was not an auth user to begin with, insert it
+          if (!authUser) {
+            userService.createUser({
               auth0_id: req.body.auth0_id,
               email: req.body.email
-            })
-              .then(function(result) {
-              res.status(201).send(result);
-            })
-            .then(function() {
-              slackService.publishToSlack('A new user signed up.');
-            })
-            .catch(err => {console.error(err)});
+            }, function (err, user) {
+              if (err) {
+                console.error(err);
+                res.status(500).send('Error creating user');
+                return;
+              }
+              res.status(201).send(user);
+            });
           }
-        })
-        .catch(err => {console.error(err)});
-    }
-  })
+          else {
+            res.status(200).send('User already exists.');
+          }
+        });
+      }
+      else if (!authUser) {
+        userService.createUser({
+          auth0_id: req.body.auth0_id,
+          email: req.body.email
+        }, function (err, user) {
+          if (err) {
+            console.error(err);
+            res.status(500).send('Error creating user');
+            return;
+          }
+          res.status(201).send(user);
+        });
+      }
+      else {
+        res.status(500).send('Error creating user');
+      }
+    });
+  });
 
 function verifyHumanity(req, callback) {
   const recaptchaResponse = req.body.recaptchaResponse;
