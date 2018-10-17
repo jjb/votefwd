@@ -182,7 +182,7 @@ export class VoterList extends Component {
 
     let today = moment();
     let electionDate = moment('2018-11-06');
-    let sendDate = electionDate.subtract(77, "days");
+    let sendDate = electionDate.subtract(7, "days");
     let readyToSend;
     today < sendDate ? readyToSend = false : readyToSend = true;
 
