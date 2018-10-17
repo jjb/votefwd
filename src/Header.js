@@ -12,7 +12,6 @@ class Navbar extends Component {
         <a className="logo" href="/">
             <Logo />
         </a>
-        <a className="text-white" href="/vote-forward-party-kit.pdf" target="_blank" rel="noopener noreferrer">Throw a letter party!</a>
         { this.props.auth.isAuthenticated() &&
           <Login auth={this.props.auth} />
         }

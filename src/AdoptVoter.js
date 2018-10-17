@@ -58,19 +58,15 @@ export class AdoptVoter extends Component {
           <div className="col-12 fixed-top position-absolute">
           </div>
           <div className="col-lg-6 order-lg-2 dashboard--call-to-action px-3 py-4" />
-          <div className="col-lg-6 order-lg-1 showcase-text bg-light p-5">
+          <div className="col-lg-6 order-lg-1 showcase-text bg-light p-sm-5 p-2">
             <div className="p-2 p-5-m">
               <h3>You’re helping flip <a href={'/district/' + this.state.district.district_id}><strong>{this.state.district.district_id}</strong></a> blue <button className="btn btn-link" onClick={this.props.toggleDistrictPicker}>Switch District</button></h3>
               <p className="u-highlight mb-3 d-none d-sm-block">
                 {this.state.district.description}
               </p>
               <div className="mt-4 mb-3">
-                  <p className="small">Voters you adopt won‘t be assigned to anyone else, so by adopting them, <strong>you’re committing to send the letters.</strong></p>
-                  <p className="small">
-                    <a href="/vote-forward-instructions.pdf" target="_blank" rel="noopener noreferrer">Printable Instructions</a> |
-                    <a href="https://www.youtube.com/watch?v=UCPb-SFWYB4" className="ml-2" target="_blank" rel="noopener noreferrer">Video Demo</a> |
-                    <a href="/vote-forward-party-kit.pdf" className="ml-2" target="_blank" rel="noopener noreferrer">Party Kit</a>
-                  </p>
+                <p className="small">Voters you adopt won‘t be assigned to anyone else, so when you adopt them, <strong>you’re committing to send the letters</strong>. For details on how this works, <a href="/vote-forward-instructions.pdf" target="_blank" rel="noopener noreferrer">download printable instructions</a> or <a href="https://www.youtube.com/watch?v=UCPb-SFWYB4" target="_blank" rel="noopener noreferrer">watch the video demo</a>. Hosting a letter-writing party? <a href="/vote-forward-party-kit.pdf" target="_blank" rel="noopener noreferrer">Download the party kit</a>.
+                </p>
               </div>
               <div className="row">
                 <div className="col-md">
@@ -82,7 +78,7 @@ export class AdoptVoter extends Component {
                   </button>
                   <div className="small mt-1">
                     <i className="fa fa-clock-o"></i>
-                    <span className="ml-1">~10 min to prep</span>
+                    <span className="ml-1">5 letters: ~10 min to prepare</span>
                   </div>
                 </div>
                 <div className="col-md">
@@ -94,7 +90,7 @@ export class AdoptVoter extends Component {
                   </button>
                   <div className="small mt-1">
                     <i className="fa fa-clock-o"></i>
-                    <span className="ml-1">~40 min to prep</span>
+                    <span className="ml-1">25 letters: ~40 min to prepare</span>
                   </div>
                 </div>
               </div>
@@ -112,7 +108,7 @@ export class AdoptVoter extends Component {
               )}
               { !maxedOut && this.props.voterCount > 0 && (
                 <div className="mt-4 alert alert-info pr-4 pl-4">
-                  <p>You’ve adopted {this.props.voterCount} voters. Fantastic!</p>
+                  <p>You’ve adopted <span className="text-success">{this.props.voterCount}</span> voters. Fantastic!</p>
                 </div>
               )}
             </div>
