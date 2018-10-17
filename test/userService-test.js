@@ -224,4 +224,29 @@ describe('userService', function() {
       })
     });
   });
+
+  describe('createUser', function() {
+    var auth0Id = 'AUTH0-ID-USER-CREATION';
+    after(function() {
+      return db('users')
+        .where('auth0_id', auth0Id)
+        .del();
+    });
+
+    it('should create a user', function(done) {
+      var email = 'auth0@test.com';
+      userService.createUser({
+        auth0_id: auth0Id,
+        email: email
+      }, function (error, user) {
+        if (error) {
+          return done(error);
+        }
+        expect(user).to.exist;
+        expect(user.auth0_id).to.eql(auth0Id);
+        expect(user.email).to.eql(email);
+        done();
+      });
+    });
+  });
 });

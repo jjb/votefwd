@@ -72,6 +72,21 @@ function findDuplicateUserByEmail(auth0Id, email, callback) {
     .catch(callback);
 }
 
+function createUser({ auth0_id, email }, callback) {
+  db('users')
+    .insert({ auth0_id, email })
+    .returning('*')
+    .then(function(results) {
+      if (results && results.length) {
+        callback(null, results[0]);
+      }
+      else {
+        callback(null, null);
+      }
+    })
+    .catch(callback);
+}
+
 function updateUserQualifiedState(auth0_id, qualState, callback){
   // takes an auth0_id of a user and a qualStateValue from QualStateEnum
   // and gives the user that state.
@@ -210,6 +225,7 @@ function _prepForTests() {
 module.exports = {
   batchApprovePending,
   canAdoptMoreVoters,
+  createUser,
   findDuplicateUserByEmail,
   findUserByAuth0Id,
   isAdmin,
