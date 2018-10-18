@@ -15,6 +15,8 @@ import Districts from './Districts';
 import Privacy from './Privacy';
 import Terms from './Terms';
 import Faq from './Faq';
+import Contact from './Contact';
+import Support from './Support';
 import history from './history';
 import GA from './utils/GoogleAnalytics';
 
@@ -63,6 +65,8 @@ export const makeMainRoutes = () => {
           <Route exact path="/privacy-policy" render={(props) => <Privacy auth={auth} {...props} />} />
           <Route exact path="/terms-of-use" render={(props) => <Terms auth={auth} {...props} />} />
           <Route exact path="/faq" render={(props) => <Faq auth={auth} {...props} />} />
+          <Route exact path="/contact" render={(props) => <Contact auth={auth} {...props} />} />
+          <Route exact path="/support" render={(props) => <Support auth={auth} {...props} />} />
         </React.Fragment>
       </Router>
   );

@@ -12,13 +12,16 @@ class QsAndAs extends Component {
 
           <div className="mb-5">
             <h1>Frequently Asked Questions </h1>
-            <p>If you have a question not addressed here, please send an email to <a href="mailto:help@votefwd.org">help@votefwd.org</a>.</p>
+            <p>Already signed up but need help? Try our <a href="/support">support page</a>.</p>
           </div>
 
           <div className="mb-5">
             <h2>What does the letter-writing process entail?</h2>
             <p>
-              When you first sign up, you’ll be asked a few basic questions to make sure you’re a human being with good intentions. We review and approve new volunteers at least twice a day, so within 12 hours or so, you should receive a welcome email with detailed instructions. After clicking a button to “adopt” some voters, you’ll download and print a PDF, then hand-write a single sentence on each letter, address, stamp, and set it aside to send on October 30. <a href="https://www.youtube.com/watch?v=UCPb-SFWYB4" target="_blank" rel="noopener noreferrer">Link to a demo video on YouTube.</a>
+              When you first sign up, you’ll be asked a few basic questions to make sure you’re a human being with good intentions. We review and approve new volunteers at least twice a day, so within 12 hours or so, you should receive a welcome email with detailed instructions. After clicking a button to “adopt” some voters, you’ll download and print a PDF, then hand-write a single sentence on each letter, address, stamp, and set it aside to send on October 30.</p>
+              
+            <p>
+              Want to see the process in action? Here’s a <a href="/vote-forward-instructions.pdf" target="_blank" rel="noopener noreferrer">printed overview</a> and <a href="https://www.youtube.com/watch?v=UCPb-SFWYB4" target="_blank" rel="noopener noreferrer">a video</a>.
             </p>
           </div>
 

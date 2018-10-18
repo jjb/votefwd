@@ -58,8 +58,11 @@ h6 {
   font-family: 'Raleway', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-weight: 700; }
 
-p {
+p, ul, ol, blockquote {
   font-size: 1.2rem; }
+
+li {
+  margin-bottom: 0.5rem; }
 
 .alert {
   background: white;
