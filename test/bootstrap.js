@@ -140,9 +140,14 @@ after('Deleting user data from the database', function() {
   var context = this;
   var users = context.users;
   if (users && users.all && users.all.length) {
-    return db('users')
+    return db('voters')
+      .where("adopter_user_id", "like",'test%')
+      .update('adopter_user_id', null)
+    .then(() => {
+      return db('users')
       .whereIn('id', users.all.map(u => u.id))
       .del();
+    })
   }
   return Promise.resolve(true);
 });

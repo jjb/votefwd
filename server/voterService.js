@@ -55,6 +55,10 @@ function relinquishVoters(adopterId, adoptedAtEpoch, districtId, callback) {
       console.log(`relinquishVoters results:`, results)
       callback(null, results)
     })
+    .then(function() {
+      // update available_voter_count
+      return denormalizeVoterCount(districtId);
+    })
     .catch(err => {
       console.error(err);
       callback(err);
@@ -81,6 +85,15 @@ function adoptRandomVoter(adopterId, numVoters, districtId, callback) {
 
     let numToAdopt = Math.min(numVoters, numCanAdopt);
     _adoptSomeVoters(adopterId, numToAdopt, districtId, callback);
+  });
+}
+
+function denormalizeVoterCount(districtId) {
+  return db('districts')
+  .where('district_id', districtId)
+  .update({
+    available_voter_count:
+      db.raw("(select count(1) from voters where voters.district_id=? and voters.adopter_user_id is null)", districtId)
   });
 }
 
@@ -112,6 +125,9 @@ function _adoptSomeVoters(adopterId, numVoters, districtId, callback) {
             })
             .then(function() {
               callback(null, voters)
+            })
+            .then(function() {
+              return denormalizeVoterCount(districtId);
             })
             .then(function() {
               slackService.publishToSlack('A user adopted ' + numVoters + ' voters in ' + districtId + '.')
