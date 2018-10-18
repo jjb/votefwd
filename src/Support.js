@@ -98,7 +98,7 @@ class Support extends Component {
               <div className="mb-5">
                 <h2>Why is the voter’s name and address, and a special code, in the letter?</h2>
                 <p>
-                The code is unique to each voter, and should stay. It lets them use the website to get detailed information about their own ballot, and confirm their pledge to vote.
+                The code is unique to each voter, and should stay. Each recipient gets their own “unique code” that they can use to get more information about the election in their district, and to pledge that they will vote. They do this by visiting <a href="https://votefwd.org/vote">https://votefwd.org/vote</a> and entering their unique code. You as the letter writer should not use the unique code for anything. (By the way, the “election info” promised by the letter is not yet available, but will be by the time you mail out the letters.)
                 </p>                
               </div>              
 
