@@ -100,6 +100,7 @@ export class VoterList extends Component {
     this.markAllPrepped = this.markAllPrepped.bind(this);
     this.markAllSent    = this.markAllSent.bind(this);
     this.cancelMarkAllPrepped = this.cancelMarkAllPrepped.bind(this);
+    this.cancelMarkAllSent = this.cancelMarkAllSent.bind(this);
     this.state= {
       downloadingBundle: false,
       markingAllPrepped: false,
@@ -252,7 +253,7 @@ export class VoterList extends Component {
           <div className="col mx-2">
             <div className="d-flex justify-content-between align-items-center mb-3">
               <span><strong>Letters Prepared</strong> ({toSend.length})</span>
-              {allSentButton}
+              {toSend.length > 1 && allSentButton}
             </div>
             <ul className="list-group">
               {toSend.length < 1 &&

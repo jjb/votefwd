@@ -146,6 +146,9 @@ function getVoters(params) {
   if (params.excludePrepped) {
     query.where('confirmed_prepped_at', null);
   }
+  if (params.onlyPrepped) {
+    query.whereNotNull('confirmed_prepped_at').andWhere('confirmed_sent_at',null);
+  }
   return query;
 }
 
@@ -239,6 +242,40 @@ function confirmPrepped(voterId, callback) {
     });
 }
 
+function confirmAllPrepped(userId, callback) {
+  let first_voter = null
+  return db.transaction(trx => {
+    const queries =[]
+    getVoters({ userId, excludePrepped: true })
+      .then((voters) => {
+        voters.forEach(voter => {
+          if (!first_voter){
+            first_voter = voter.id
+          }
+          const query = db('voters')
+            .where('id', voter.id)
+            .update({
+              confirmed_prepped_at: db.fn.now(),
+              updated_at: db.fn.now()
+            })
+            .transacting(trx)
+          queries.push(query)
+        })
+        Promise.all(queries)
+          .then(trx.commit)
+          .catch(trx.rollback)
+      })
+  })
+  .then(function(result) {
+    getVoterById(first_voter, function(voter) {
+      callback(voter);
+    })
+  })
+  .catch(err => {
+    console.error(err)
+  });
+}
+
 function undoConfirmPrepped(voterId, callback) {
   db('voters')
     .where('id', voterId)
@@ -271,6 +308,41 @@ function confirmSent(voterId, callback) {
     .catch(err => {
       console.error(err)
     });
+}
+
+
+function confirmAllSent(userId, callback) {
+  let first_voter = null
+  return db.transaction(trx => {
+    const queries =[]
+    getVoters({ userId, onlyPrepped: true })
+      .then((voters) => {
+        voters.forEach(voter => {
+          if (!first_voter){
+            first_voter = voter.id
+          }
+          const query = db('voters')
+            .where('id', voter.id)
+            .update({
+              confirmed_sent_at: db.fn.now(),
+              updated_at: db.fn.now()
+            })
+            .transacting(trx)
+          queries.push(query)
+        })
+        Promise.all(queries)
+          .then(trx.commit)
+          .catch(trx.rollback)
+      })
+  })
+  .then(function(result) {
+    getVoterById(first_voter, function(voter) {
+      callback(voter);
+    })
+  })
+  .catch(err => {
+    console.error(err)
+  });
 }
 
 function undoConfirmSent(voterId, callback) {
@@ -515,8 +587,10 @@ module.exports = {
   relinquishVoters,
   adoptRandomVoter,
   confirmSent,
+  confirmAllSent,
   undoConfirmSent,
   confirmPrepped,
+  confirmAllPrepped,
   undoConfirmPrepped,
   makePledge,
   getAdoptedVoterSummary,

@@ -200,6 +200,14 @@ router.route('/voter/confirm-prepped')
     });
   });
 
+router.route('/voter/confirm-all-prepped')
+  .put(checkJwt, function(req, res) {
+    voterService.confirmAllPrepped(req.query.user_id, function(result) {
+      res.json(result);
+    });
+  });
+
+
 router.route('/voter/undo-confirm-prepped')
   .put(checkJwt, function(req, res) {
     voterService.undoConfirmPrepped(req.body.id, function(result) {
@@ -210,6 +218,13 @@ router.route('/voter/undo-confirm-prepped')
 router.route('/voter/confirm-sent')
   .put(checkJwt, function(req, res) {
     voterService.confirmSent(req.body.id, function(result) {
+      res.json(result);
+    });
+  });
+
+router.route('/voter/confirm-all-sent')
+  .put(checkJwt, function(req, res) {
+    voterService.confirmAllSent(req.query.user_id, function(result) {
       res.json(result);
     });
   });

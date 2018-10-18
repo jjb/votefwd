@@ -180,9 +180,26 @@ class Dashboard extends Component {
   }
 
   handleConfirmAllPrepped() {
-    for (var i = 0; i < this.state.voters.length; i++){
-      this.handleConfirmPrepped(this.state.voters[i]);
-    }
+    axios({
+      method: 'PUT',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
+      url: `${process.env.REACT_APP_API_URL}/voter/confirm-all-prepped`,
+      params: { user_id: localStorage.getItem('user_id')},
+      })
+      .then(res => {
+        if (res.data[0].confirmed_prepped_at) {
+          let voters = this.state.voters;
+          voters.map(function(voter) {
+            if (!voter.confirmed_prepped_at)
+              voter.confirmed_prepped_at = res.data[0].confirmed_prepped_at
+            return voter
+          })
+          this.setState({ voters: voters });
+        }
+      })
+      .catch(err => {
+        console.error(err);
+    })
   }
 
   handleUndoConfirmPrepped(voter) {
@@ -230,11 +247,26 @@ class Dashboard extends Component {
   }
 
   handleConfirmAllSent() {
-    for (var i = 0; i < this.state.voters.length; i++){
-      if (this.state.voters[i].confirmed_prepped_at){
-        this.handleConfirmSent(this.state.voters[i]);
-      }
-    }
+    axios({
+      method: 'PUT',
+      headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
+      url: `${process.env.REACT_APP_API_URL}/voter/confirm-all-sent`,
+      params: { user_id: localStorage.getItem('user_id')},
+      })
+      .then(res => {
+        if (res.data[0].confirmed_sent_at) {
+          let voters = this.state.voters;
+          voters.map(function(voter) {
+            if (!voter.confirmed_sent_at && voter.confirmed_prepped_at)
+              voter.confirmed_sent_at = res.data[0].confirmed_sent_at
+            return voter
+          })
+          this.setState({ voters: voters });
+        }
+      })
+      .catch(err => {
+        console.error(err);
+    })
   }
 
   handleUndoConfirmSent(voter) {
