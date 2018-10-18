@@ -1,4 +1,4 @@
-// src/Privacy.js
+// src/Contact.js
 
 import React, { Component } from 'react';
 import { Header } from './Header';
@@ -23,7 +23,7 @@ class Contact extends Component {
         <div className="container">
         <div className="row col-lg-8 m-auto">
           <div className="text-body h-100 mt-4 mb-4 text-lg-left">
-            <p>Vote Forward is an independent organization that encourages voter turnout and helps volunteers elect candidates who reflect our values through a variety of activities aimed at influencing the outcome of the next election.</p>
+            <p>Vote Forward is an independent 527 nonprofit organization that connects citizens to one another to increase voter turnout, especially among Democrats.</p>
             <h4>Mailing Address</h4>
             <p>P.O. Box 28522<br />
             Oakland, CA 94604</p>
