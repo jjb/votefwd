@@ -40,6 +40,13 @@ export default class Auth {
             //   * facebook
             //   * google-oauth2
             // That is probably useful information to show in the UI.
+            history.replace({
+              pathname: '/auth-error',
+              state: {
+                provider: response.data.provider,
+                duplicate: response.data.duplicateProvider
+              }
+            });
           }
           else {
             history.replace('/dashboard');
@@ -79,7 +86,6 @@ export default class Auth {
     this.webAuth.client.userInfo(authResult.accessToken, (err, profile) => {
       localStorage.setItem('picture_url', profile.picture);
     })
-    history.replace('/');
   }
 
   logout() {
