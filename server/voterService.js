@@ -143,7 +143,7 @@ function _adoptSomeVoters(adopterId, numVoters, districtId, callback) {
         });
     })
     .catch(err => {
-      console.error(err);
+      console.error(err)
       callback(err);
     });
 }
