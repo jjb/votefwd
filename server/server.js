@@ -286,8 +286,9 @@ router.route('/user/new')
             res.status(500).send('Error finding user by email');
             return;
           }
-          // If there is a user with the same email address, let the user know
-          if (emailUser) {
+          // If there is a user with the same email address, and the user is
+          // trying to create a new account, let the user know.
+          if (emailUser && !authUser) {
             res.send({
               duplicateEmail: true,
               provider: req.body.auth0_id.split('|')[0],

@@ -31,15 +31,7 @@ export default class Auth {
             history.replace('/');
           }
           else if (response.data.duplicateEmail) {
-            console.log('duplicate email; render some better view', response.data);
-            // TODO: Implement some UI that tells the user about a duplicate
-            // account.  `response.data.provider` and
-            // `response.data.duplicateProvider` hold the types of accounts that
-            // may exist.  Current options are:
-            //   * auth0
-            //   * facebook
-            //   * google-oauth2
-            // That is probably useful information to show in the UI.
+            this.nullifySession();
             history.replace({
               pathname: '/auth-error',
               state: {
@@ -88,14 +80,17 @@ export default class Auth {
     })
   }
 
-  logout() {
+  nullifySession() {
     // Clear Access Token and ID Token from local storage
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
     localStorage.removeItem('user_id');
     localStorage.removeItem('picture_url');
-    // navigate to the home route
+  }
+
+  logout() {
+    this.nullifySession();
     history.replace('/');
   }
 
