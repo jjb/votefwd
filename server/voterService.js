@@ -215,7 +215,8 @@ function downloadPdf(rawJwt, callback) {
       reject("jwt doesn't contain enough info to download pdf");
     }
   })
-  .catch((err) => {
+  .catch(err => {
+    reject(err);
     console.log(err);
   });
 }
@@ -226,6 +227,7 @@ function downloadLetterToVoter(voterId, callback) {
       letterService.generatePdfForVoters(voter, callback)
     })
     .catch(err => {
+      callback(err);
       console.error(err);
     });
 }
