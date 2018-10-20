@@ -162,7 +162,6 @@ router.route('/letters/:letterJwt.pdf')
     voterService.downloadPdf(req.params.letterJwt, downloadFileCallback(res));
   });
 
-
 /**
  * This route creates a secure url that can be used to download the pdf.  It
  * creates a one-minute-long JWT that gets included in the url
@@ -206,7 +205,6 @@ router.route('/voter/confirm-all-prepped')
       res.json(result);
     });
   });
-
 
 router.route('/voter/undo-confirm-prepped')
   .put(checkJwt, function(req, res) {
@@ -259,6 +257,7 @@ router.route('/voter/info')
       }
     });
   });
+
 router.route('/voter/signed-letter-url')
   .get(checkJwt, function(req, res) {
     letterService.getSignedUrl(req.query.url, function(result) {
@@ -282,7 +281,7 @@ router.route('/user/new')
               auth0_id: req.body.auth0_id,
               email: req.body.email
             })
-              .then(function(result) {
+            .then(function(result) {
               res.status(201).send(result);
             })
             .then(function() {
@@ -339,7 +338,10 @@ router.route('/user')
       .then(function(result) {
         res.json(result);
       })
-      .catch(err => {console.error(err);})
+      .catch(err => {
+        console.error(err);
+        res.status(500).send(String(err)).end();
+      })
   })
   .post(checkJwt, function(req, res) {
     let query = db('users')
@@ -413,7 +415,10 @@ router.route('/lookup-zip-details')
       .then(function(result) {
         res.json(result);
       })
-      .catch(err => {console.error(err);});
+      .catch(err => {
+        console.error(err);
+        res.status(500).send(String(err)).end();
+      })
   });
 
 /**
@@ -440,10 +445,16 @@ router.route('/lookup-zip')
             nearestDistrict = result[0].district_id;
             res.json(nearestDistrict);
           })
-          .catch(err => {console.error(err);});
+          .catch(err => {
+            console.error(err);
+            res.status(500).send(String(err)).end();
+          })
         }
       })
-      .catch(err => {console.error(err);})
+      .catch(err => {
+        console.error(err);
+        res.status(500).send(String(err)).end();
+      })
   });
 
 /**
@@ -455,7 +466,10 @@ router.route('/get-districts')
       .then(function(result) {
           res.json(result);
         })
-      .catch(err => {console.error(err);})
+      .catch(err => {
+        console.error(err);
+        res.status(500).send(String(err)).end();
+      })
   });
 
 /**
@@ -467,7 +481,10 @@ router.route('/get-districts-with-stats')
       .then(function(result) {
           res.json(result);
         })
-      .catch(err => {console.error(err);})
+      .catch(err => {
+        console.error(err);
+        res.status(500).send(String(err)).end();
+      })
   });
 
 /**
@@ -547,7 +564,10 @@ router.route('/lookup-district')
           res.json(result['rows']);
         }
       })
-      .catch(err => {console.error(err);})
+      .catch(err => {
+        console.error(err);
+        res.status(500).send(String(err)).end();
+      })
     } else {
       db('districts')
         .where({ district_id: req.query.district_id })
@@ -558,7 +578,10 @@ router.route('/lookup-district')
             res.json(result);
           }
         })
-        .catch(err => {console.error(err);})
+        .catch(err => {
+          console.error(err);
+          res.status(500).send(String(err)).end();
+        })
     }
   });
 
@@ -663,7 +686,10 @@ router.route('/s/users')
           res.json(users)
         });
       })
-      .catch(err => {console.error(err);})
+      .catch(err => {
+        console.error(err);
+        res.status(500).send(String(err)).end();
+      })
   });
 
 router.route('/s/stats')
