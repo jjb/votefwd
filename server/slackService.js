@@ -6,18 +6,11 @@ var SlackUrl = process.env.REACT_APP_SLACK_WEBHOOK_URL;
 var slack = require('slack-notify')(SlackUrl);
 var cron = require('node-cron');
 var db = require('./db');
-// var n = 30;
-var n = 2;
-var today = new Date();
-var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-var time = today.getHours() + ":" + (today.getMinutes() - n) + ":" + today.getSeconds()
-var dateTime = date+' '+time;
+var n = 30;
 
 cron.schedule('*/n * * * *', () => {
-//   console.log('running a task every thirty minutes');
-  console.log('running a task every two minutes');
-  // publishToSlack('You are old, Father William, the Young Man said');
-  nbrNewUsers(n, dateTime, publishToSlack);
+  console.log(`running a task every ${n} minutes`);
+  nbrNewUsers(n, publishToSlack);
 });
 
 
@@ -28,20 +21,14 @@ function publishToSlack(message) {
   })
 }
 
-function nbrNewUsers(n, dateTime, callback) {
+function nbrNewUsers(n, callback) {
   db('users')
     .count()
-    .where('created_at' >= dateTime)
-    .then(function(results) {
-      let newUserCount = results.count;
-      if (newUserCount === 0) {
-        console.error(`no new users joined in last ${n} minutes.`);
-        callback(`no new users joined in last ${n} minutes.`);
-        return;
-      } else {
+    .whereRaw("created_at >= current_timestamp + interval '30 minutes'")
+    .then((results) => {
+      let newUserCount = results[0].count;
         callback(`number of new users in the last ${n} minutes is ${newUserCount}`);
         return;
-      }
     })
     .catch(err => {
       console.error(err);
