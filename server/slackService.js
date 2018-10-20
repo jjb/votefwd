@@ -27,6 +27,10 @@ function publishToSlack(message) {
   })
 }
 
+/* Must change interval in .whereRaw clause as well as in var n above
+   because Postgresql 10 has no easy way to subtract a variable interval from the current current_timestamp
+*/   
+
 function nbrNewUsers(n, callback) {
   db('users')
     .count()
