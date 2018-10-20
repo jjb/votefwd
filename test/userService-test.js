@@ -176,4 +176,77 @@ describe('userService', function() {
 
   });
 
+  describe('findUserByAuth0Id', function() {
+    it('should return nothing when not found', function(done) {
+      userService.findUserByAuth0Id(this.users.regular.auth0_id + '-NOT-FOUND', function(error, user) {
+        if (error) {
+          return done(error);
+        }
+        expect(user).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return the user when found', function(done) {
+      var expectedUser = this.users.regular;
+      userService.findUserByAuth0Id(expectedUser.auth0_id, function(error, user) {
+        if (error) {
+          return done(error);
+        }
+        expect(user).exist;
+        expect(user.auth0_id).to.eql(expectedUser.auth0_id);
+        done();
+      });
+    });
+  });
+
+  describe('findDuplicateUserByEmail', function() {
+    it('should return nothing when no dupicate found', function(done) {
+      userService.findDuplicateUserByEmail(this.users.regular.auth0_id, this.users.regular.email, function(error, user) {
+        if (error) {
+          return done(error);
+        }
+        expect(user).to.be.undefined;
+        done();
+      });
+    });
+
+    it('should return the duplicate', function(done) {
+      var dup1 = this.users.dup1;
+      var dup2 = this.users.dup2;
+      userService.findDuplicateUserByEmail(dup1.auth0_id, dup1.email, function (error, user) {
+        if (error) {
+          return done(error);
+        }
+        expect(user).to.exist;
+        expect(user.auth0_id).to.eql(dup2.auth0_id);
+        done();
+      })
+    });
+  });
+
+  describe('createUser', function() {
+    var auth0Id = 'AUTH0-ID-USER-CREATION';
+    after(function() {
+      return db('users')
+        .where('auth0_id', auth0Id)
+        .del();
+    });
+
+    it('should create a user', function(done) {
+      var email = 'auth0@test.com';
+      userService.createUser({
+        auth0_id: auth0Id,
+        email: email
+      }, function (error, user) {
+        if (error) {
+          return done(error);
+        }
+        expect(user).to.exist;
+        expect(user.auth0_id).to.eql(auth0Id);
+        expect(user.email).to.eql(email);
+        done();
+      });
+    });
+  });
 });

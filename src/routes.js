@@ -6,6 +6,7 @@ import District from './District';
 import Loading from './Loading';
 import Login from './SecretLogin';
 import Auth from './Auth';
+import AuthError from './AuthError';
 import Pledge from './Pledge';
 import Verify from './Verify';
 import AdminRoute from './AdminRoute';
@@ -51,6 +52,7 @@ export const makeMainRoutes = () => {
             handleAuthentication(props);
             return <Loading {...props} />;
           }}/>
+          <Route exact path="/auth-error" render={(props) => <AuthError auth={auth} {...props} />} />
           <LoggedInRoute exact path="/dashboard" component={Dashboard} />
           <LoggedInRoute path="/dashboard/:districtId" component={Dashboard} />
           <Route exact path="/district" render={(props) => <District auth={auth} {...props} />} />

@@ -40,13 +40,51 @@ function isAdmin(auth0_id, callback) {
     });
 }
 
-function updateEmail(auth0_id, newEmail) {
+function updateEmail(auth0_id, newEmail, callback) {
   db('users')
-  .where({auth0_id: auth0_id})
-  .update({email: newEmail})
-  .then(function(result) {
-    return;
-  });
+    .where({auth0_id: auth0_id})
+    .update({email: newEmail})
+    .then(function(result) {
+      callback(null, result);
+    })
+    .catch(callback);
+}
+
+function findUserByAuth0Id(auth0Id, callback) {
+  db('users')
+    .first()
+    .where('auth0_id', auth0Id)
+    .then(function(result) {
+      callback(null, result);
+    })
+    .catch(callback);
+}
+
+// Looks for a user with the same email address but a different auth0_id
+function findDuplicateUserByEmail(auth0Id, email, callback) {
+  db('users')
+    .first()
+    .where('email', email)
+    .whereNot('auth0_id', auth0Id)
+    .then(function(result) {
+      callback(null, result);
+    })
+    .catch(callback);
+}
+
+function createUser({ auth0_id, email }, callback) {
+  db('users')
+    .insert({ auth0_id, email })
+    .returning('*')
+    .then(function(results) {
+      if (results && results.length) {
+        callback(null, results[0]);
+      }
+      else {
+        callback(null, null);
+      }
+    })
+    .catch(callback);
 }
 
 function updateUserQualifiedState(auth0_id, qualState, callback){
@@ -187,6 +225,9 @@ function _prepForTests() {
 module.exports = {
   batchApprovePending,
   canAdoptMoreVoters,
+  createUser,
+  findDuplicateUserByEmail,
+  findUserByAuth0Id,
   isAdmin,
   updateEmail,
   updateUserQualifiedState,
