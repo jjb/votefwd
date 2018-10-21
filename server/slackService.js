@@ -120,5 +120,10 @@ function nbrPledges(n, callback) {
 }
 
 module.exports = {
-  publishToSlack
+  publishToSlack,
+  nbrNewUsers,
+  nbrVotersAdopted,
+  nbrLettersPrepped,
+  nbrLettersSent,
+  nbrPledges
 }
