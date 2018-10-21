@@ -31,7 +31,7 @@ function publishToSlack(message) {
   })
 }
 
-/* Must change interval in .whereRaw clause as well as in var n above
+/* To change interval, must modify interval in .whereRaw clause as well as in var n above
    because Postgresql 10 has no easy way to subtract a variable interval from the current current_timestamp
 */
 
@@ -52,6 +52,11 @@ function nbrNewUsers(n, callback) {
     });
 }
 
+/* To change interval, must modify interval in .whereRaw clause as well as in var n above
+   because Postgresql 10 has no easy way to subtract a variable interval from the current current_timestamp
+*/
+
+
 function nbrVotersAdopted(n, callback) {
   db('voters')
     .count()
@@ -68,6 +73,10 @@ function nbrVotersAdopted(n, callback) {
       callback(err);
     });
 }
+
+/* To change interval, must modify interval in .whereRaw clause as well as in var n above
+   because Postgresql 10 has no easy way to subtract a variable interval from the current current_timestamp
+*/
 
 function nbrLettersPrepped(n, callback) {
   db('voters')
@@ -86,6 +95,10 @@ function nbrLettersPrepped(n, callback) {
     });
 }
 
+/* To change interval, must modify interval in .whereRaw clause as well as in var n above
+   because Postgresql 10 has no easy way to subtract a variable interval from the current current_timestamp
+*/
+
 function nbrLettersSent(n, callback) {
   db('voters')
     .count()
@@ -102,6 +115,11 @@ function nbrLettersSent(n, callback) {
       callback(err);
     });
 }
+
+/* To change interval, must modify interval in .whereRaw clause as well as in var n above
+   because Postgresql 10 has no easy way to subtract a variable interval from the current current_timestamp
+*/
+
 function nbrPledges(n, callback) {
   db('voters')
     .count()
