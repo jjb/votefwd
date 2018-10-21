@@ -19,7 +19,7 @@ cron.schedule('*/n * * * *', () => {
   nbrNewUsers(n, publishToSlack);
   nbrVotersAdopted(n, publishToSlack);
   nbrLettersPrepped(n, publishToSlack);
-  nbrLetterSent(n, publishToSlack);
+  nbrLettersSent(n, publishToSlack);
 });
 
 
