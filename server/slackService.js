@@ -15,7 +15,7 @@ var db = require('./db');
 var n = 30;
 
 cron.schedule('*/n * * * *', () => {
-  console.log(`running a task every ${n} minutes`);
+
   nbrNewUsers(n, publishToSlack);
   nbrVotersAdopted(n, publishToSlack);
   nbrLettersPrepped(n, publishToSlack);
