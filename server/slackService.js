@@ -19,6 +19,7 @@ cron.schedule('*/n * * * *', () => {
   nbrNewUsers(n, publishToSlack);
   nbrVotersAdopted(n, publishToSlack);
   nbrLettersPrepped(n, publishToSlack);
+  nbrLetterSent(n, publishToSlack);
 });
 
 
@@ -76,6 +77,23 @@ function nbrLettersPrepped(n, callback) {
         (preppedLetterCount == 1) ?
         callback(`${preppedLetterCount} letter prepped in the last ${n} minutes`) :
         callback(`${preppedLetterCount} letters prepped in the last ${n} minutes`);
+        return;
+    })
+    .catch(err => {
+      console.error(err);
+      callback(err);
+    });
+}
+
+function nbrLettersSent(n, callback) {
+  db('voters')
+    .count()
+    .whereRaw("confirmed_sent_at >= current_timestamp - interval '30 minutes'")
+    .then((results) => {
+      let sentLetterCount = results[0].count;
+        (sentLetterCount == 1) ?
+        callback(`${sentLetterCount} letter sent in the last ${n} minutes`) :
+        callback(`${sentLetterCount} letters sent in the last ${n} minutes`);
         return;
     })
     .catch(err => {
