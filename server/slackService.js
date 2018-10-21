@@ -7,9 +7,9 @@ var slack = require('slack-notify')(SlackUrl);
 var cron = require('node-cron');
 var db = require('./db');
 
-/*Must set minutes between reports here and also hard code in the .whereRaw in functions
-  nbrNewUsers, nbrVotersAdopted
-  Postgresql has no easy way to subtract a number of minutes from the current timestamp
+/* Must set minutes between reports here and also hard code in the .whereRaw in functions
+   nbrNewUsers, nbrVotersAdopted, nbrLettersPrepped, nbrLettersSent, nbrPledges
+   Postgresql has no easy way to subtract a number of minutes from the current timestamp
 */
 
 var n = 30;
