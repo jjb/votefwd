@@ -20,6 +20,7 @@ cron.schedule('*/n * * * *', () => {
   nbrVotersAdopted(n, publishToSlack);
   nbrLettersPrepped(n, publishToSlack);
   nbrLettersSent(n, publishToSlack);
+  nbrPledges(n, publishToSlack);
 });
 
 
@@ -94,6 +95,22 @@ function nbrLettersSent(n, callback) {
         (sentLetterCount == 1) ?
         callback(`${sentLetterCount} letter sent in the last ${n} minutes`) :
         callback(`${sentLetterCount} letters sent in the last ${n} minutes`);
+        return;
+    })
+    .catch(err => {
+      console.error(err);
+      callback(err);
+    });
+}
+function nbrPledges(n, callback) {
+  db('voters')
+    .count()
+    .whereRaw("pledge_made_at >= current_timestamp - interval '30 minutes'")
+    .then((results) => {
+      let pledgeCount = results[0].count;
+        (pledgeCount == 1) ?
+        callback(`${pledgeCount} pledge recorded in the last ${n} minutes`) :
+        callback(`${pledgesLetterCount} pledges recorded in the last ${n} minutes`);
         return;
     })
     .catch(err => {
