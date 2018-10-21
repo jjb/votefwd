@@ -18,6 +18,7 @@ cron.schedule('*/n * * * *', () => {
   console.log(`running a task every ${n} minutes`);
   nbrNewUsers(n, publishToSlack);
   nbrVotersAdopted(n, publishToSlack);
+  nbrLettersPrepped(n, publishToSlack);
 });
 
 
@@ -58,6 +59,23 @@ function nbrVotersAdopted(n, callback) {
         (adoptedVoterCount == 1) ?
         callback(`${adoptedVoterCount} voter adopted in the last ${n} minutes`) :
         callback(`${adoptedVoterCount} voters adopted in the last ${n} minutes`);
+        return;
+    })
+    .catch(err => {
+      console.error(err);
+      callback(err);
+    });
+}
+
+function nbrLettersPrepped(n, callback) {
+  db('voters')
+    .count()
+    .whereRaw("prepped_at >= current_timestamp - interval '30 minutes'")
+    .then((results) => {
+      let preppedLetterCount = results[0].count;
+        (preppedLetterCount == 1) ?
+        callback(`${preppedLetterCount} letter prepped in the last ${n} minutes`) :
+        callback(`${preppedLetterCount} letters adopted in the last ${n} minutes`);
         return;
     })
     .catch(err => {
