@@ -110,7 +110,7 @@ function nbrPledges(n, callback) {
       let pledgeCount = results[0].count;
         (pledgeCount == 1) ?
         callback(`${pledgeCount} pledge recorded in the last ${n} minutes`) :
-        callback(`${pledgesLetterCount} pledges recorded in the last ${n} minutes`);
+        callback(`${pledgeCount} pledges recorded in the last ${n} minutes`);
         return;
     })
     .catch(err => {
