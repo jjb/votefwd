@@ -83,6 +83,9 @@ li {
   border: 2px solid #FF4B4B;
   color: #FF4B4B; }
 
+.alert p:last-of-type {
+  margin-bottom: 0; }
+
 .bg-light {
   background-color: #eee; }
 
@@ -212,6 +215,14 @@ input + .btn {
 .btn-success .fa-arrow-right {
   position: relative;
   top: -1px; }
+
+.btn-link-underline {
+  appearance: none;
+  background-color: transparent;
+  padding: 0;
+  color: inherit;
+  border: 0;
+  text-decoration: underline; }
 
 label {
   font-weight: bold; }
