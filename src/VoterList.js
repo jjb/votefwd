@@ -46,7 +46,7 @@ class VoterRecord extends Component {
       voterActions = (
         <div>
           <span className="small u-quiet mr-2">Prepared?</span>
-          <button className="btn btn-sm btn-success" onClick={() => {this.props.confirmPrepped(voter)}}>
+          <button className="btn btn-sm btn-sm-icon btn-success" onClick={() => {this.props.confirmPrepped(voter)}}>
             <i className="fa fa-chevron-right" aria-hidden="true"></i>
           </button>
         </div>
@@ -55,10 +55,10 @@ class VoterRecord extends Component {
     else if (voter.confirmed_prepped_at && !voter.confirmed_sent_at) {
       voterActions = (
         <div className="btn-group">
-          <button className="btn btn-success btn-sm" onClick={() => {this.props.undoConfirmPrepped(voter)}}>
+          <button className="btn btn-success btn-sm btn-sm-icon" onClick={() => {this.props.undoConfirmPrepped(voter)}}>
             <i className="fa fa-chevron-left" aria-hidden="true"></i>
           </button>
-          <button disabled={!readyToSend} className="btn btn-success btn-sm" onClick={() => {this.props.confirmSent(voter)}}>
+          <button disabled={!readyToSend} className="btn btn-success btn-sm btn-sm-icon" onClick={() => {this.props.confirmSent(voter)}}>
             <span>Sent</span>
             <i className="fa fa-chevron-right ml-2" aria-hidden="true"></i>
           </button>
@@ -68,7 +68,7 @@ class VoterRecord extends Component {
     else {
       voterActions = (
         <div className="btn-group">
-          <button className="btn btn-success btn-sm" onClick={() => {this.props.undoConfirmSent(voter)}}>
+          <button className="btn btn-success btn-sm btn-sm-icon" onClick={() => {this.props.undoConfirmSent(voter)}}>
             <i className="fa fa-chevron-left" aria-hidden="true"></i>
           </button>
         </div>
@@ -162,8 +162,8 @@ export class VoterList extends Component {
     let allPreppedButton;
     if (!this.state.markingAllPrepped) {
       allPreppedButton = (
-        <div className="text-right">
-          <button disabled={this.state.downloadingBundle ? true : false} className="btn btn-light btn-sm mt-1" onClick={() => this.setState({markingAllPrepped: true})}>
+        <div className="text-right mt-2">
+          <button disabled={this.state.downloadingBundle ? true : false} className="btn btn-light btn-sm" onClick={() => this.setState({markingAllPrepped: true})}>
             Finished? Mark all letters as prepared <small><i className="fa fa-chevron-right"></i></small>
           </button>
         </div>
@@ -244,7 +244,7 @@ export class VoterList extends Component {
             <ul className="list-group">
               {toPrep.length < 1 &&
                 <li className="list-group-item disabled text-center py-5 bg-light">
-                  There are no letters to prepare.
+                  You haven’t adopted any voters yet.
                 </li>
               }
               {toPrep.map(voter =>
@@ -264,7 +264,7 @@ export class VoterList extends Component {
             <ul className="list-group">
               {toSend.length < 1 &&
                 <li className="list-group-item disabled text-center py-5 bg-light">
-                  There are no letters to mail.
+                  You haven’t prepared any letters yet.
                 </li>
               }
               {toSend.map(voter =>
@@ -285,7 +285,7 @@ export class VoterList extends Component {
             <ul className="list-group">
               {alreadySent.length < 1 &&
                 <li className="list-group-item disabled text-center py-5 bg-light">
-                  You haven’t sent any letters yet.<br />(Wait until October 30!)
+                  You haven’t mailed any letters yet.<br />(Wait until October 30)
                 </li>
               }
               {alreadySent.map(voter =>
