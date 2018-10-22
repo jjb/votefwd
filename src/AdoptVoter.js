@@ -73,8 +73,8 @@ export class AdoptVoter extends Component {
                   <button
                     disabled={this.state.adopting || maxedOut || allClaimed ? true : false}
                     onClick={() => this.adoptVoter(5, this.state.district.district_id)}
-                    className="btn btn-primary btn-lg w-100 mt-1">
-                      Adopt <span className="reset-num">5</span> Voters
+                    className={'btn btn-lg w-100 mt-1 ' + ( this.props.voterCount === 0 ? 'btn-primary' : 'btn-outline-primary' ) }>
+                      Adopt <span className="reset-num">5</span> {(this.props.voterCount > 1) ? "More" : "" } Voters
                   </button>
                   <div className="small mt-1">
                     <i className="fa fa-clock-o"></i>
@@ -85,8 +85,8 @@ export class AdoptVoter extends Component {
                   <button
                     disabled={this.state.adopting || maxedOut || allClaimed ? true : false}
                     onClick={() => this.adoptVoter(25, this.state.district.district_id)}
-                    className="btn btn-primary btn-lg w-100 mt-1">
-                      Adopt <span className="reset-num">25</span> Voters
+                    className={'btn btn-lg w-100 mt-1 ' + ( this.props.voterCount === 0 ? 'btn-primary' : 'btn-outline-primary' ) }>
+                      Adopt <span className="reset-num">25</span> {(this.props.voterCount > 1) ? "More" : "" } Voters
                   </button>
                   <div className="small mt-1">
                     <i className="fa fa-clock-o"></i>
