@@ -29,7 +29,7 @@ class LandingIcons extends Component {
                   alt="A piece of paper and a pencil"
                 />
                 <h3>Easy and Fast</h3>
-                <p className="lead mb-0 px-4">We give you a template. Just print, complete, and sign. Then mail all your letters 10 days before the election. (We’ll remind you).</p>
+                <p className="lead mb-0 px-4">We give you a template. Just print, complete, and sign. Then mail all your letters on Tuesday, October 30. (We’ll remind you).</p>
               </div>
             </div>
             <div className="col-lg-4">
