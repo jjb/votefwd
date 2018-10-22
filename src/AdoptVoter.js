@@ -51,7 +51,7 @@ export class AdoptVoter extends Component {
     if (parseInt(this.props.currentDistrict.voters_available, 10) === 0) {
       allClaimed = true;
     }
-
+    
     return (
       <div className="container-fluid p-0">
         <div className="row no-gutters position-relative">
@@ -108,7 +108,7 @@ export class AdoptVoter extends Component {
               )}
               { !maxedOut && this.props.voterCount > 0 && (
                 <div className="mt-4 alert alert-info pr-4 pl-4">
-                  <p>You’ve adopted <span className="text-success">{this.props.voterCount}</span> voters. Fantastic!</p>
+                  <p className="mb-0">You’ve adopted <span className="text-success">{this.props.voterCount}</span> voters. Fantastic!</p>
                 </div>
               )}
             </div>

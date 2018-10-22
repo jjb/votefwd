@@ -39,7 +39,7 @@ class VoterRecord extends Component {
 
     if (!voter.confirmed_prepped_at) {
       voterDownloadButton = (
-        <button className="btn btn-sm btn-link" onClick={() => {this.downloadLetterForVoter(voter.id)}}>
+        <button className="btn btn-sm btn-link pl-0" onClick={() => {this.downloadLetterForVoter(voter.id)}}>
           <i className="icon-arrow-down-circle icons"></i> Download letter
         </button>
       );
@@ -47,7 +47,7 @@ class VoterRecord extends Component {
         <div>
           <span className="small u-quiet mr-2">Prepared?</span>
           <button className="btn btn-sm btn-success" onClick={() => {this.props.confirmPrepped(voter)}}>
-            <i className="fa fa-arrow-right" aria-hidden="true"></i>
+            <i className="fa fa-chevron-right" aria-hidden="true"></i>
           </button>
         </div>
       );
@@ -162,9 +162,11 @@ export class VoterList extends Component {
     let allPreppedButton;
     if (!this.state.markingAllPrepped) {
       allPreppedButton = (
-        <button disabled={this.state.downloadingBundle ? true : false} className="btn btn-light btn-sm ml-2" onClick={() => this.setState({markingAllPrepped: true})}>
-          <i className="fa fa-check"></i> All prepared
-        </button>
+        <div className="text-right">
+          <button disabled={this.state.downloadingBundle ? true : false} className="btn btn-light btn-sm mt-1" onClick={() => this.setState({markingAllPrepped: true})}>
+            Finished? Mark all letters as prepared <small><i className="fa fa-chevron-right"></i></small>
+          </button>
+        </div>
       )
     }
     else {
@@ -192,7 +194,7 @@ export class VoterList extends Component {
       if (readyToSend) {
         allSentButton = (
           <button className="btn btn-light btn-sm ml-2" onClick={() => this.setState({markingAllSent: true})}>
-            <i className="fa fa-check"></i> All sent
+            Mark all letters as sent <small><i className="fa fa-chevron-right"></i></small>
           </button>
         )
       }
@@ -222,16 +224,20 @@ export class VoterList extends Component {
         <div className="row">
           <div className="col">
             <div>
-              <div className="d-flex justify-content-between align-items-top mb-3">
+              <div className="mb-3">
                 <div>
-                  <strong>Letters to Prepare</strong> ({toPrep.length})
-                  {toPrep.length > 1 && <button disabled={this.state.downloadingBundle ? true : false} className="btn btn-light btn-sm mt-1" onClick={this.downloadBundle}>
-                    <i className="icon-arrow-down-circle icons"></i> Download all
-                  </button>}
+                  <strong>Letters to Print and Prepare</strong> ({toPrep.length})
+                  
+                  <div className="w-100">
+
+                    {toPrep.length > 1 && <button disabled={this.state.downloadingBundle ? true : false} className="btn btn-primary w-100 mt-1" onClick={this.downloadBundle}>
+                      <i className="icon-arrow-down-circle icons"></i> Download and print these letters
+                    </button>}
+                    {toPrep.length > 1 &&
+                      allPreppedButton
+                    }
+                  </div>
                 </div>
-                {toPrep.length > 1 &&
-                  allPreppedButton
-                }
               </div>
               {alertContent}
             </div>
@@ -252,13 +258,13 @@ export class VoterList extends Component {
 
           <div className="col mx-2">
             <div className="d-flex justify-content-between align-items-center mb-3">
-              <span><strong>Letters Prepared</strong> ({toSend.length})</span>
+              <span><strong>Letters You Have Prepared</strong> ({toSend.length})</span>
               {toSend.length > 1 && allSentButton}
             </div>
             <ul className="list-group">
               {toSend.length < 1 &&
                 <li className="list-group-item disabled text-center py-5 bg-light">
-                  There are no letters to send.
+                  There are no letters to mail.
                 </li>
               }
               {toSend.map(voter =>
@@ -274,12 +280,12 @@ export class VoterList extends Component {
 
           <div className="col">
             <div className="d-flex justify-content-between align-items-center mb-3">
-              <span><strong>Letters Sent</strong> ({alreadySent.length})</span>
+              <span><strong>Letters You Have Sent</strong> ({alreadySent.length})</span>
             </div>
             <ul className="list-group">
               {alreadySent.length < 1 &&
                 <li className="list-group-item disabled text-center py-5 bg-light">
-                  You haven’t sent any letters yet.
+                  You haven’t sent any letters yet.<br />(Wait until October 30!)
                 </li>
               }
               {alreadySent.map(voter =>
