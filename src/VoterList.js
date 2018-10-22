@@ -171,8 +171,8 @@ export class VoterList extends Component {
     }
     else {
       allPreppedButton = (
-        <div className="alert alert-warning ml-3" role="alert">
-          <p>Are you sure?</p>
+        <div className="alert alert-warning mt-2" role="alert">
+          <p>Have all these letters been prepared?<br/><small>(Or will they be?)</small></p>
           <button className="btn btn-success btn-sm mr-2" onClick={this.markAllPrepped}>
             <i className="fa fa-check"></i> Yes!
           </button>
@@ -194,7 +194,7 @@ export class VoterList extends Component {
       if (readyToSend) {
         allSentButton = (
           <button className="btn btn-light btn-sm ml-2" onClick={() => this.setState({markingAllSent: true})}>
-            Mark all letters as sent <small><i className="fa fa-chevron-right"></i></small>
+            Have all these letters been sent <small><i className="fa fa-chevron-right"></i></small>
           </button>
         )
       }
@@ -207,7 +207,7 @@ export class VoterList extends Component {
     else {
       allSentButton = (
         <div className="alert alert-warning ml-3" role="alert">
-          <p>Are you sure?</p>
+          <p>All these letters have been mailed?</p>
           <button className="btn btn-success btn-sm mr-2" onClick={this.markAllSent}>
             <i className="fa fa-check"></i> Yes!
           </button>
