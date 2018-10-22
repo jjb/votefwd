@@ -285,7 +285,7 @@ export class VoterList extends Component {
             <ul className="list-group">
               {alreadySent.length < 1 &&
                 <li className="list-group-item disabled text-center py-5 bg-light">
-                  You haven’t mailed any letters yet.<br />(Wait until October 30)
+                  You haven’t mailed any letters yet.<br /><small>(Wait until October 30!)</small>
                 </li>
               }
               {alreadySent.map(voter =>
