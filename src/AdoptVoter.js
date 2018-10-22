@@ -51,7 +51,7 @@ export class AdoptVoter extends Component {
     if (parseInt(this.props.currentDistrict.voters_available, 10) === 0) {
       allClaimed = true;
     }
-
+    
     return (
       <div className="container-fluid p-0">
         <div className="row no-gutters position-relative">
@@ -73,8 +73,8 @@ export class AdoptVoter extends Component {
                   <button
                     disabled={this.state.adopting || maxedOut || allClaimed ? true : false}
                     onClick={() => this.adoptVoter(5, this.state.district.district_id)}
-                    className="btn btn-primary btn-lg w-100 mt-1">
-                      Adopt <span className="reset-num">5</span> Voters
+                    className={'btn btn-lg w-100 mt-1 ' + ( this.props.voterCount === 0 ? 'btn-primary' : 'btn-outline-primary' ) }>
+                      Adopt <span className="reset-num">5</span> {(this.props.voterCount > 1) ? "More" : "" } Voters
                   </button>
                   <div className="small mt-1">
                     <i className="fa fa-clock-o"></i>
@@ -85,8 +85,8 @@ export class AdoptVoter extends Component {
                   <button
                     disabled={this.state.adopting || maxedOut || allClaimed ? true : false}
                     onClick={() => this.adoptVoter(25, this.state.district.district_id)}
-                    className="btn btn-primary btn-lg w-100 mt-1">
-                      Adopt <span className="reset-num">25</span> Voters
+                    className={'btn btn-lg w-100 mt-1 ' + ( this.props.voterCount === 0 ? 'btn-primary' : 'btn-outline-primary' ) }>
+                      Adopt <span className="reset-num">25</span> {(this.props.voterCount > 1) ? "More" : "" } Voters
                   </button>
                   <div className="small mt-1">
                     <i className="fa fa-clock-o"></i>
@@ -96,7 +96,7 @@ export class AdoptVoter extends Component {
               </div>
               { maxedOut && (
                 <div className="mt-4 alert alert-info pr-4 pl-4">
-                  <p>You’ve adopted the maximum number of voters ({process.env.REACT_APP_QUAL_NUM}). Fantastic! To become a super-volunteer so you can adopt more, please <a href="mailto:super@votefwd.org?subject=Please approve me as a super-volunteer!&body=Hello! Please approve me to adopt more than 100 voters on Vote Forward. (Letter writer: replace this text with a short message to the admins and if you can, attach a photo of some of your completed letters)." target="_blank" rel="noopener noreferrer">email super@votefwd.org</a> to request approval.</p>
+                  <p>You’ve adopted the maximum number of voters ({process.env.REACT_APP_QUAL_NUM}). Fantastic! To become a super-volunteer so you can adopt more, please <a href="mailto:super@votefwd.org?subject=Please%20approve%20me%20as%20a%20super-volunteer!&amp;body=Hello!%20Please%20approve%20me%20to%20adopt%20more%20than%20100%20voters%20on%20Vote%20Forward.%20(Letter%20writer%3A%20replace%20this%20text%20with%20a%20short%20message%20to%20the%20admins%20and%2C%20for%20verification%2C%20attach%20a%20photo%20of%20some%20of%20your%20completed%20letters)." target="_blank" rel="noopener noreferrer">email super@votefwd.org</a> to request approval.</p>
                 </div>
               )}
               { allClaimed && (
@@ -108,7 +108,7 @@ export class AdoptVoter extends Component {
               )}
               { !maxedOut && this.props.voterCount > 0 && (
                 <div className="mt-4 alert alert-info pr-4 pl-4">
-                  <p>You’ve adopted <span className="text-success">{this.props.voterCount}</span> voters. Fantastic!</p>
+                  <p className="mb-0">You’ve adopted <span className="text-success">{this.props.voterCount}</span> voters. Fantastic!</p>
                 </div>
               )}
             </div>
