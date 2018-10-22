@@ -96,7 +96,7 @@ export class AdoptVoter extends Component {
               </div>
               { maxedOut && (
                 <div className="mt-4 alert alert-info pr-4 pl-4">
-                  <p>You’ve adopted the maximum number of voters ({process.env.REACT_APP_QUAL_NUM}). Fantastic! To become a super-volunteer so you can adopt more, please <a href="mailto:super@votefwd.org?subject=Please%20approve%20me%20as%20a%20super-volunteer!&amp;body=Hello!%20Please%20approve%20me%20to%20adopt%20more%20than%20100%20voters%20on%20Vote%20Forward.%20(Letter%20writer%3A%20replace%20this%20text%20with%20a%20short%20message%20to%20the%20admins%20and%20if%20you%20can%2C%20attach%20a%20photo%20of%20some%20of%20your%20completed%20letters)." target="_blank" rel="noopener noreferrer">email super@votefwd.org</a> to request approval.</p>
+                  <p>You’ve adopted the maximum number of voters ({process.env.REACT_APP_QUAL_NUM}). Fantastic! To become a super-volunteer so you can adopt more, please <a href="mailto:super@votefwd.org?subject=Please%20approve%20me%20as%20a%20super-volunteer!&amp;body=Hello!%20Please%20approve%20me%20to%20adopt%20more%20than%20100%20voters%20on%20Vote%20Forward.%20(Letter%20writer%3A%20replace%20this%20text%20with%20a%20short%20message%20to%20the%20admins%20and%2C%20for%20verification%2C%20attach%20a%20photo%20of%20some%20of%20your%20completed%20letters)." target="_blank" rel="noopener noreferrer">email super@votefwd.org</a> to request approval.</p>
                 </div>
               )}
               { allClaimed && (
