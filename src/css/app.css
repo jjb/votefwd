@@ -2756,6 +2756,8 @@ table.table tr:first-child td {
     min-width: 25px;
     padding-right: 1em;
     text-align: right; }
+  .p-statusBar .p-statusBar_bar.complete {
+    border-radius: 25px; }
   .p-statusBar .p-statusBar_status {
     color: #495057;
     position: absolute;
