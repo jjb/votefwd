@@ -25,8 +25,24 @@ export default class Auth {
     this.webAuth.parseHash((err, authResult) => {
       if (authResult && authResult.accessToken && authResult.idToken) {
         this.setSession(authResult);
-        this.persistUser(authResult, () => {
-          history.replace('/dashboard');
+        this.persistUser(authResult, (err, response) => {
+          if (err) {
+            console.error(err);
+            history.replace('/');
+          }
+          else if (response.data.duplicateEmail) {
+            this.nullifySession();
+            history.replace({
+              pathname: '/auth-error',
+              state: {
+                provider: response.data.provider,
+                duplicate: response.data.duplicateProvider
+              }
+            });
+          }
+          else {
+            history.replace('/dashboard');
+          }
         });
       } else if (err) {
         history.replace('/');
@@ -45,7 +61,9 @@ export default class Auth {
         email: authResult.idTokenPayload.email
       }
     })
-    .then(callback)
+    .then(function(response) {
+      callback(null, response);
+    })
     .catch(function(error) {
       console.error(error)
     })
@@ -60,17 +78,19 @@ export default class Auth {
     this.webAuth.client.userInfo(authResult.accessToken, (err, profile) => {
       localStorage.setItem('picture_url', profile.picture);
     })
-    history.replace('/');
   }
 
-  logout() {
+  nullifySession() {
     // Clear Access Token and ID Token from local storage
     localStorage.removeItem('access_token');
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
     localStorage.removeItem('user_id');
     localStorage.removeItem('picture_url');
-    // navigate to the home route
+  }
+
+  logout() {
+    this.nullifySession();
     history.replace('/');
   }
 

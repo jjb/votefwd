@@ -11,6 +11,7 @@ var Hashids = require('hashids');
 var uuidv4 = require('uuid/v4');
 var request = require('request');
 var compileSass = require('express-compile-sass');
+var json2csv = require('json2csv');
 
 var rateLimits = require('./rateLimits')
 var userService = require('./userService');
@@ -33,6 +34,19 @@ var corsOption = {
   methods: 'GET, HEAD, PUT, PATCH, POST, DELETE',
   credentials: true,
 }
+
+// Force https unless we're in development (e.g. REACT_APP_API_URI starts with http:)
+app.use ((req, res, next) => {
+  if (req.secure || req.headers["x-forwarded-proto"] === "https" 
+    || process.env.REACT_APP_API_URL.match(/^http\:/)
+  ) {
+    // request was via https, so do no special handling
+    next();
+  } else {
+    // request was via http, so redirect to https
+    res.redirect('https://' + req.headers.host + req.url);
+  }
+});
 
 var hashids = new Hashids(process.env.REACT_APP_HASHID_SALT, 6,
   process.env.REACT_APP_HASHID_DICTIONARY);
@@ -267,32 +281,83 @@ router.route('/voter/signed-letter-url')
 
 router.route('/user/new')
   .post(checkJwt, function(req, res) {
-    if (req.body.auth0_id) {
-      db('users').where('auth0_id', req.body.auth0_id)
-        .then(function(result) {
-          if (result.length != 0) {
-            if (result[0].email != req.body.email) {
-              userService.updateEmail(req.body.auth0_id, req.body.email);
-            }
-            res.status(200).send('User already exists.');
+    if (!req.body.auth0_id) {
+      res.status(400).send('Missing auth0_id');
+      return;
+    }
+
+    userService.findUserByAuth0Id(req.body.auth0_id, function (err, authUser) {
+      if (err) {
+        console.error(err);
+        res.status(500).send('Error finding user by auth id');
+        return;
+      }
+      if (req.body.email) {
+        userService.findDuplicateUserByEmail(req.body.auth0_id, req.body.email, function (err, emailUser) {
+          if (err) {
+            console.error(err);
+            res.status(500).send('Error finding user by email');
+            return;
           }
-          else {
-            db('users').insert({
+          // If there is a user with the same email address, and the user is
+          // trying to create a new account, let the user know.
+          if (emailUser && !authUser) {
+            res.send({
+              duplicateEmail: true,
+              provider: req.body.auth0_id.split('|')[0],
+              duplicateProvider: emailUser.auth0_id.split('|')[0]
+            });
+            return;
+          }
+          // If there is not a duplicate, but the email address needs to be
+          // updated (most likely because it was empty before), then update it
+          if (authUser && !emailUser && authUser.email !== req.body.email) {
+            userService.updateEmail(authUser.auth0_id, req.body.email, function (err) {
+              if (err) {
+                console.error(err);
+                res.status(500).send('Error updating email');
+                return;
+              }
+              res.status(200).send('User already exists.');
+            });
+          }
+          // If there was not an auth user to begin with, insert it
+          if (!authUser) {
+            userService.createUser({
               auth0_id: req.body.auth0_id,
               email: req.body.email
-            })
-            .then(function(result) {
-              res.status(201).send(result);
-            })
-            .then(function() {
-              slackService.publishToSlack('A new user signed up.');
-            })
-            .catch(err => {console.error(err)});
+            }, function (err, user) {
+              if (err) {
+                console.error(err);
+                res.status(500).send('Error creating user');
+                return;
+              }
+              res.status(201).send(user);
+            });
           }
-        })
-        .catch(err => {console.error(err)});
-    }
-  })
+          else {
+            res.status(200).send('User already exists.');
+          }
+        });
+      }
+      else if (!authUser) {
+        userService.createUser({
+          auth0_id: req.body.auth0_id,
+          email: req.body.email
+        }, function (err, user) {
+          if (err) {
+            console.error(err);
+            res.status(500).send('Error creating user');
+            return;
+          }
+          res.status(201).send(user);
+        });
+      }
+      else {
+        res.status(500).send('Error creating user');
+      }
+    });
+  });
 
 function verifyHumanity(req, callback) {
   const recaptchaResponse = req.body.recaptchaResponse;
@@ -692,6 +757,41 @@ router.route('/s/users')
       })
   });
 
+router.route('/admin/users')
+  .get(checkJwt, checkAdmin, (req, res) => {
+    let promise;
+    if (req.query.count) {
+      promise = Promise.all([
+        userService.getUsers({ count: true, preppedLetters: 'NONE'}),
+        userService.getUsers({ count: true, preppedLetters: 'SOME'}),
+        userService.getUsers({ count: true, preppedLetters: 'NOTSENT'})
+      ])
+      .then((results) => {
+        res.json(results);
+      })
+    } else if (['NONE','SOME', 'NOTSENT'].indexOf(req.query.preppedLetters) >=0) {
+      let dupUsers = {};
+      promise = userService.findDuplicateUserEmails()
+      .then((results) => {
+        results.rows.map((dupUser) => { dupUsers[dupUser.email] = true });
+        return userService.getUsers({preppedLetters: req.query.preppedLetters, count: false})
+      })
+      .then((users) => {
+        // add a "dup_user" field to each user record
+        users = users.map((user) => {user.dup_user = dupUsers[user.email] ? 't' : 'f'; return user;});
+        const csv = json2csv.parse(users, { fields: ["id", "email", "dup_user", "auth0_id", "full_name", "count"] });
+        res.header('Access-Control-Expose-Headers', "Filename");
+        res.header('Content-Type', "text/csv");
+        res.header('Filename', `${req.query.preppedLetters}.csv`);
+        res.status(200).send(csv);
+      });
+    }
+    promise.catch((err) => {
+      console.error(err);
+      res.status(500);
+    });
+  });
+  
 router.route('/s/stats')
   .get(checkJwt, checkAdmin, function(req, res) {
     voterService.getVoterSummaryByDistrict(function(error, summary) {
