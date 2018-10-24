@@ -113,7 +113,9 @@ export class DistrictPicker extends Component {
           <h4 className="mb-3">Choose Your Target District</h4>
           <p>Most volunteers choose a district (relatively) close to home, but feel free to choose a different one if you prefer — perhaps to support a candidate you particularly admire, or a district near where you grew up.</p>
           <div className="row">
-            {districts.map(district =>
+            {districts
+              .filter(district => parseInt(district.available_voter_count, 10) > 0)
+              .map(district =>
               <DistrictItem
                 key={district.id}
                 district={district}
@@ -122,6 +124,23 @@ export class DistrictPicker extends Component {
               />
             )}
           </div>
+          
+          <h5 className="mt-3 mb-3">Unavailable Districts</h5>
+          <p>All voters have been adopted in these districts.</p>
+          
+          <div className="row">
+            {districts
+              .filter(district => parseInt(district.available_voter_count, 10) === 0)
+              .map(district =>
+              <DistrictItem
+                key={district.id}
+                district={district}
+                updateDistrict={this.props.updateDistrict}
+                toggleDistrictPicker={this.props.toggleDistrictPicker}
+              />
+            )}
+          </div>
+          
         </div>
       </div>
     );

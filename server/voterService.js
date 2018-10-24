@@ -12,6 +12,7 @@ const errors = require('./errors');
 const jwt = require('jsonwebtoken');
 
 const allowedVoterBulkCount = [1, 5, 25, 50];
+const pledgeCountThreshold = 200; // Stop recording pledge activity after this number of hits
 let adoptionOrder = 'RANDOM()';
 
 function getVoterById(voterId, callback) {
@@ -97,6 +98,27 @@ function denormalizeVoterCount(districtId) {
   });
 }
 
+function recordPledgeActivity({ voterId, realVoter, type, pledgeCount }) {
+  if (pledgeCount > pledgeCountThreshold) {
+    return;
+  } else {
+    return db('pledges')
+      .insert({ voter_id: voterId, type, real_voter: realVoter })
+      .then(() => {
+        return db('voters')
+        .where('id', voterId)
+        // The purpose of this pledge count on the voters table is to 
+        //   prevent someone from overwhelming the database with writes using a single
+        //   hashid.  After the pledge_count exceeds a certain threshold, we'll stop recording
+        //   for that voter
+        .update({
+          pledge_count:
+            db.raw("(select count(1) from pledges where pledges.voter_id=?)", voterId)
+        });
+      });
+  }
+}
+
 function _adoptSomeVoters(adopterId, numVoters, districtId, callback) {
   db('voters')
     .count()
@@ -128,9 +150,6 @@ function _adoptSomeVoters(adopterId, numVoters, districtId, callback) {
             })
             .then(function() {
               return denormalizeVoterCount(districtId);
-            })
-            .then(function() {
-              slackService.publishToSlack('A user adopted ' + numVoters + ' voters in ' + districtId + '.')
             })
             .catch(err => {
               console.error(err);
@@ -381,7 +400,7 @@ function voterInfoFromHash(hash) {
   return new Promise((resolve, reject) => {
     let voter;
     db('voters')
-    .select('id', 'district_id')
+    .select('id', 'district_id', 'pledge_count')
     .where('hashid', hash)
     .then((results) => {
       if (results.length === 0) {
@@ -393,6 +412,14 @@ function voterInfoFromHash(hash) {
     })
     .then((district) => {
       resolve({voter, district, shouldRecordPledge: shouldRecordPledge()});
+    })
+    .then(() => {
+      return recordPledgeActivity({
+        voterId: voter.id,
+        pledgeCount: voter.pledge_count,
+        realVoter: shouldRecordPledge(), 
+        type: 'VIEW'
+      });
     })
     .catch(err => {
       reject(err);
@@ -427,28 +454,38 @@ function makePledge(code, callback) {
       callback('already pledged');
       return;
     }
+    let postPledgePromise;
     if (!shouldRecordPledge()) {
+      postPledgePromise = Promise.resolve();
       callback('too soon');
-      return;
-    }
-    // get the pledge row and update it with pledge time
-    db('voters')
-    .where('hashid', code)
-    .update({
-      pledge_made_at: db.fn.now(),
-      updated_at: db.fn.now()
-    })
-    // send an email to the person who wrote the letter telling them a pledge was made
-    .then(getLetterWritingUserFromPledge(code)
-      .then(function(user){
-        emailService.sendEmail('pledge', user, 'One of your unlikely voters pledged to vote!');
+    } else {
+      // get the pledge row and update it with pledge time
+      postPledgePromise = db('voters')
+      .where('hashid', code)
+      .update({
+        pledge_made_at: db.fn.now(),
+        updated_at: db.fn.now()
       })
-    )
-    .then(function() {
-      slackService.publishToSlack('A recipient made a vote pledge.');
-    })
-    .then(function() {
-      callback('successful pledge');
+      // send an email to the person who wrote the letter telling them a pledge was made
+      .then(getLetterWritingUserFromPledge(code)
+        .then(function(user){
+          emailService.sendEmail('pledge', user, 'One of your unlikely voters pledged to vote!');
+        })
+      )
+      .then(function() {
+        callback('successful pledge');
+      })
+    }
+
+    postPledgePromise
+    .then(() => {
+      // Record pledge activity
+      recordPledgeActivity({
+        voterId: result[0].id,
+        pledgeCount: result[0].pledge_count,
+        realVoter: shouldRecordPledge(),
+        type: 'COMMIT'
+      });
     })
     .catch(err => {
       console.error(err)

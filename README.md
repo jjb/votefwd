@@ -97,6 +97,10 @@ To send data to Google Analytics, set up
     REACT_APP_GA_TRACKING_ID=<A VALID GOOGLE TRACKING ID>
     REACT_APP_GA_DEBUG=<true | false>
 
+To adjust the interval for Slack alerts about app activity, adjust
+
+    SLACK_REPORT_INTERVAL_MINUTES=<AN INTEGER>
+
 #### Auth0
 
 We use [Auth0](https://auth0.com/) for user authentication and management. You shouldn't need anything other than the (non-sensitive) `CLIENTID` in your `.env` file to make authentication work with your locally-running app. If you need access to the auth0 console, email `scott@votefwd.org`.
@@ -150,8 +154,10 @@ To compile, run this script in a second tab in your terminal:
 
 #### How to make a new database migration
 
-	`knex migrate:make <migration_file_name>`. You can find examples of how migrations are named in the `/migrations` folder.
+	`knex migrate:make <migration_file_name>`
 
-	Note you dont need the datestring or the .js, so you can do a name like `add_index_on_qual_state_for_users`.
+You can find examples of how migrations are named in the `/migrations` folder.
 
-	After creating your migration, run `knex migrate:latest` to apply it and `knex migrate:rollback` to go back.
+Note you dont need the datestring or the .js, so you can do a name like `add_index_on_qual_state_for_users`.
+
+After creating your migration, run `knex migrate:latest` to apply it and `knex migrate:rollback` to go back.

@@ -68,6 +68,10 @@ li {
   color: $vf-red;
 }
 
+.alert p:last-of-type {
+  margin-bottom: 0;
+}
+
 // Backgrounds
 
 .bg-light {
@@ -239,6 +243,15 @@ input + .btn {
 .btn-success .fa-arrow-right {
   position: relative;
   top: -1px;
+}
+
+.btn-link-underline {
+  appearance: none;
+  background-color: transparent;
+  padding: 0;
+  color: inherit;
+  border: 0;
+  text-decoration: underline;
 }
  
 // Form Inputs

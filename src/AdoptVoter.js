@@ -102,7 +102,7 @@ export class AdoptVoter extends Component {
               { allClaimed && (
                 <div className="mt-4 alert alert-warning pr-4 pl-4">
                   <p>
-                    All targeted {this.props.currentDistrict.district_id} voters have been adopted! Please choose a different district.
+                    All targeted {this.props.currentDistrict.district_id} voters have been adopted! Please <button className="btn-link-underline" onClick={this.props.toggleDistrictPicker}>choose a different district.</button>
                   </p>
                 </div>
               )}

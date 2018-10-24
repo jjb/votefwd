@@ -8,13 +8,17 @@ import { Footer } from './Footer';
 class PledgeForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {value: '', pledgeError: false};
+    this.state = {
+      value: '', 
+      pledgeError: false,
+      placeholderCode: 'A1B2C3D'
+    };
     this.handleChange = this.handleChange.bind(this);
     this.getVoterInfo = this.getVoterInfo.bind(this);
   }
 
   handleChange(event) {
-    this.setState({value: event.target.value});
+    this.setState({value: event.target.value, pledgeError: false});
   }
   getVoterInfo(event) {
     event.preventDefault();
@@ -51,13 +55,16 @@ class PledgeForm extends Component {
             <p className="lead mb-3">
               For more info about the election, enter the code from your letter here...
             </p>
-            <input className="form-control form-control-lg text-center mb-2 w-100" type="text" placeholder="A1B2C3D" value={this.state.value} onChange={this.handleChange} />
+            <input className="form-control form-control-lg text-center mb-2 w-100" type="text" placeholder={this.state.placeholderCode} value={this.state.value} onChange={this.handleChange} />
           </label>
           <input className="btn btn-primary btn-lg w-100" type="submit" value="Submit" />
         </form>
       { this.state.pledgeError &&
         <div className="alert alert-danger mt-3" role="alert">
-          Sorry, we didn’t recognize that code. Please try again!
+          {this.state.value === this.state.placeholderCode ?
+            <div>Whoops, you've entered the sample code!  Please enter the code from <i>your</i> letter.</div> :
+            <div>Sorry, we didn’t recognize that code. Please try again!</div>
+          }
         </div>
       }
       </div>
@@ -100,9 +107,8 @@ class PledgeInfo extends Component {
                 </h2>
                 <p>Will you be voting in the election on Tuesday, November 6?</p>
                 <input className="btn btn-primary btn-lg w-100" type="submit" value="Yes, I'll be Voting!" />
-                <p className="mt-2">We will <strong>anonymously</strong> inform the volunteer who wrote to you that one of their addressees is planning to vote. It will mean a lot to them!</p>
-                { !this.props.shouldRecordPledge && (
-                  <p className="mt-2 small"><i>Note: this page is running in “sandbox” mode, because letters have not yet been sent. It will switch to “active” mode and begin recording pledges on October 30.</i></p>
+                { this.props.shouldRecordPledge && (
+                  <p className="mt-2">We will <strong>anonymously</strong> inform the volunteer who wrote to you that one of their addressees is planning to vote. It will mean a lot to them!</p>
                 ) }
               </div>
             <div className="mt-4">
@@ -193,7 +199,7 @@ class Pledge extends Component {
         }
         { this.state.codeSubmitted && this.state.pledgeStatus !== 'thanks' &&
           (
-            <PledgeInfo 
+            <PledgeInfo
               handlePledgeThanks={this.handlePledgeThanks.bind(this)}
               pledgeStatus={this.state.pledgeStatus}
               voterState={this.state.voterState}
