@@ -129,9 +129,6 @@ function _adoptSomeVoters(adopterId, numVoters, districtId, callback) {
             .then(function() {
               return denormalizeVoterCount(districtId);
             })
-            .then(function() {
-              slackService.publishToSlack('A user adopted ' + numVoters + ' voters in ' + districtId + '.')
-            })
             .catch(err => {
               console.error(err);
               callback(err);
@@ -444,9 +441,6 @@ function makePledge(code, callback) {
         emailService.sendEmail('pledge', user, 'One of your unlikely voters pledged to vote!');
       })
     )
-    .then(function() {
-      slackService.publishToSlack('A recipient made a vote pledge.');
-    })
     .then(function() {
       callback('successful pledge');
     })
