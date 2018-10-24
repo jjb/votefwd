@@ -34,6 +34,19 @@ var corsOption = {
   credentials: true,
 }
 
+// Force https unless we're in development (e.g. REACT_APP_API_URI starts with http:)
+app.use ((req, res, next) => {
+  if (req.secure || req.headers["x-forwarded-proto"] === "https" 
+    || process.env.REACT_APP_API_URL.match(/^http\:/)
+  ) {
+    // request was via https, so do no special handling
+    next();
+  } else {
+    // request was via http, so redirect to https
+    res.redirect('https://' + req.headers.host + req.url);
+  }
+});
+
 var hashids = new Hashids(process.env.REACT_APP_HASHID_SALT, 6,
   process.env.REACT_APP_HASHID_DICTIONARY);
 
