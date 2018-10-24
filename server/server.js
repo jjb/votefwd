@@ -11,6 +11,7 @@ var Hashids = require('hashids');
 var uuidv4 = require('uuid/v4');
 var request = require('request');
 var compileSass = require('express-compile-sass');
+var json2csv = require('json2csv');
 
 var rateLimits = require('./rateLimits')
 var userService = require('./userService');
@@ -730,6 +731,41 @@ router.route('/s/users')
       .catch(err => {console.error(err);})
   });
 
+router.route('/admin/users')
+  .get(checkJwt, checkAdmin, (req, res) => {
+    let promise;
+    if (req.query.count) {
+      promise = Promise.all([
+        userService.getUsers({ count: true, preppedLetters: 'NONE'}),
+        userService.getUsers({ count: true, preppedLetters: 'SOME'}),
+        userService.getUsers({ count: true, preppedLetters: 'NOTSENT'})
+      ])
+      .then((results) => {
+        res.json(results);
+      })
+    } else if (['NONE','SOME', 'NOTSENT'].indexOf(req.query.preppedLetters) >=0) {
+      let dupUsers = {};
+      promise = userService.findDuplicateUserEmails()
+      .then((results) => {
+        results.rows.map((dupUser) => { dupUsers[dupUser.email] = true });
+        return userService.getUsers({preppedLetters: req.query.preppedLetters, count: false})
+      })
+      .then((users) => {
+        // add a "dup_user" field to each user record
+        users = users.map((user) => {user.dup_user = dupUsers[user.email] ? 't' : 'f'; return user;});
+        const csv = json2csv.parse(users, { fields: ["id", "email", "dup_user", "auth0_id", "full_name", "count"] });
+        res.header('Access-Control-Expose-Headers', "Filename");
+        res.header('Content-Type', "text/csv");
+        res.header('Filename', `${req.query.preppedLetters}.csv`);
+        res.status(200).send(csv);
+      });
+    }
+    promise.catch((err) => {
+      console.error(err);
+      res.status(500);
+    });
+  });
+  
 router.route('/s/stats')
   .get(checkJwt, checkAdmin, function(req, res) {
     voterService.getVoterSummaryByDistrict(function(error, summary) {
