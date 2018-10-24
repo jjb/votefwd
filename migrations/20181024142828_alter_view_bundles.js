@@ -26,9 +26,10 @@ exports.up = function(knex, Promise) {
 
 };
 
-exports.down = function(knex, Promise) {
+exports.down = function(knex, Promise) {   
    const createView =
-  `create or replace view ${view} as
+  `drop view ${view};
+   create view ${view} as
    select x.adopter_user_id,
           x.adopted_at,
           extract(epoch from x.adopted_at) as epoch,
