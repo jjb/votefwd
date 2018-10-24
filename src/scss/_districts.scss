@@ -17,6 +17,10 @@ $statusBarRadius: $statusBarHeight/2;
     padding-right: 1em;
     text-align: right;
   }
+  
+  .p-statusBar_bar.complete {
+    border-radius: $statusBarRadius;
+  }
   .p-statusBar_status {
     color: $gray-700;
     position: absolute;

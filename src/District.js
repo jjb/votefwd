@@ -10,18 +10,46 @@ import { Footer } from './Footer';
 
 class DistrictCallToAction extends Component {
   render() {
-    const signUpText = "Sign up to send letters to " + this.props.district.district_id;
+    
     return ( this.props.auth.isAuthenticated() ? (
       <div>
+      
+      {!this.props.district.all_done &&
         <a
           href={'/dashboard/' + this.props.district.district_id}
           className="btn btn-primary btn-lg d-block"
         >
           Write letters to voters in {this.props.district.district_id}
         </a>
+      }
+      
+      {this.props.district.all_done &&
+        <a
+          href='/#target-districts'
+          className="btn btn-primary btn-lg d-block"
+        >
+          All voters adopted! Find another district
+        </a>
+      }
+      
       </div>
     ) : (
-      <Login auth={this.props.auth} signUpText={signUpText} />
+      <div>
+      
+      {!this.props.district.all_done &&
+        <Login auth={this.props.auth} signUpText={"Sign up to send letters to " + this.props.district.district_id} />
+      }
+      
+      {this.props.district.all_done &&
+        <a
+          href='/#target-districts'
+          className="btn btn-primary btn-lg d-block"
+        >
+          All voters adopted! Find another district
+        </a>
+      }
+      
+      </div>
     ));
   }
 }
@@ -34,6 +62,28 @@ class DistrictView extends Component {
       showResources = false;
     } else {
       showResources = true;
+    }
+
+    // handle null stats, treating them as "0";
+    const numAdopted = this.props.district.voters_adopted ? parseInt(this.props.district.voters_adopted, 10) : 0;
+    const numPrepped = this.props.district.letters_prepped ? parseInt(this.props.district.letters_prepped, 10) : 0;
+    const numSent = this.props.district.letters_sent ? parseInt(this.props.district.letters_sent, 10) : 0;
+    this.props.district.total_claimed = numAdopted + numPrepped + numSent;
+    
+    const numAvailable = this.props.district.voters_available ? parseInt(this.props.district.voters_available, 10) : 0;
+    
+    // Calculate total letters to prepare
+    const totalAvailable = this.props.district.total_claimed + numAvailable
+          
+    if (totalAvailable > 0) {
+      this.props.district.percent_complete = Math.round((this.props.district.total_claimed/totalAvailable) * 1000) / 10;
+    } else {
+      this.props.district.percent_complete = 0;
+    }
+    
+    this.props.district.all_done = false;
+    if (this.props.district.percent_complete === 100) {
+      this.props.district.all_done = true;
     }
 
     return (
@@ -163,43 +213,22 @@ class DistrictMap extends Component {
 
 class DistrictStats extends Component {
   render() {
-    // handle null stats, treating them as "0";
-    const numAdopted = this.props.district.voters_adopted ? parseInt(this.props.district.voters_adopted, 10) : 0;
-    const numPrepped = this.props.district.letters_prepped ? parseInt(this.props.district.letters_prepped, 10) : 0;
-    const numSent = this.props.district.letters_sent ? parseInt(this.props.district.letters_sent, 10) : 0;
-    const totalClaimed = numAdopted + numPrepped + numSent;
-    const numAvailable = this.props.district.voters_available ? parseInt(this.props.district.voters_available, 10) : 0;
-    // Calculate total letters to prepare
-    const totalAvailable = totalClaimed + numAvailable
-
-    let percentComplete;
-    if (totalAvailable > 0) {
-      percentComplete = Math.round((totalClaimed/totalAvailable) * 1000) / 10;
-    } else {
-      percentComplete = 0;
-    }
-
-    let allDone = false;
-    if (percentComplete === 100) {
-      allDone = true;
-    }
-
     return (
       <div className="pt-3 pb-3 bw-2">
         <h4 className="mb-3">Letter-writing progress</h4>
-        { !allDone &&
-          <p>Currently <strong>{this.props.district.num_users_using_district}</strong> volunteers are writing letters to {this.props.district.district_id}. They’ve adopted {totalClaimed} voters, {percentComplete}% of the targeted voters.</p>
+        { !this.props.district.all_done &&
+          <p>Currently <strong>{this.props.district.num_users_using_district}</strong> volunteers are writing letters to {this.props.district.district_id}. They’ve adopted {this.props.district.total_claimed} voters, {this.props.district.percent_complete}% of the targeted voters.</p>
         }
-        { allDone && <p className="mb-3">All {totalClaimed} target voters in {this.props.district.district_id} have been adopted! <span className="font-weight-bold font-weight-italic">Great work, volunteers.</span></p> }
+        { this.props.district.all_done && <p className="mb-3">All {this.props.district.total_claimed} target voters in {this.props.district.district_id} have been adopted! <span className="font-weight-bold font-weight-italic">Great work, volunteers.</span></p> }
         <div className="p-statusBar mb-3">
           <div
-            className="p-statusBar_bar"
+            className={'p-statusBar_bar ' + (this.props.district.all_done ? ' complete' : '' )}
             style={{
-              "width":percentComplete + '%'
+              "width":this.props.district.percent_complete + '%'
             }}
           ></div>
           <div className="p-statusBar_status">
-            <strong>{totalClaimed}</strong> voters adopted
+            <strong>{this.props.district.total_claimed}</strong> voters adopted
           </div>
         </div>
       </div>

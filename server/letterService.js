@@ -29,6 +29,9 @@ var hashids = new Hashids(process.env.REACT_APP_HASHID_SALT, 6,
   process.env.REACT_APP_HASHID_DICTIONARY);
 
 function generateHtmlForGroup(voters, callback) {
+  var context = {
+    num_voters: this.num_voters
+  }
   generateCoverPageHtmlForVoters(voters, function (err, html) {
     if (err) {
       callback(err);
@@ -43,13 +46,16 @@ function generateHtmlForGroup(voters, callback) {
       html = html + results.join('');
       callback(null, html);
     });
-  });
+  }, context);
 }
 
 function generatePdfForVoters(voters, callback) {
   const groups = splitEvery(VOTERS_PER_COVER_PAGE, voters);
-
-  async.mapLimit(groups, 5, generateHtmlForGroup, function(err, results) {
+  var context = {
+    num_voters: voters.length
+  };
+  
+  async.mapLimit(groups, 5, generateHtmlForGroup.bind(context), function(err, results) {
     const html = results.join(PAGE_BREAK);
     generatePdfFromHtml(html, voters, function(err, response, downloadFileName) {
       const filename = (response && response.filename) ? response.filename : '';
@@ -58,7 +64,7 @@ function generatePdfForVoters(voters, callback) {
   })
 }
 
-function generateCoverPageHtmlForVoters(voters, callback) {
+function generateCoverPageHtmlForVoters(voters, callback, context) {
   // Return an empty string so that no cover page is generated. This function is
   // meant to be called whether we need a cover page or not, and it gets to be
   // the decider.
@@ -66,7 +72,6 @@ function generateCoverPageHtmlForVoters(voters, callback) {
     callback(null, '');
     return;
   }
-
   // given a list of voters from the db, make a cover page that has their names and addresses.
   var template = fs.readFileSync('./templates/coverpage.html', 'utf8');
   var uncompiledTemplate = Handlebars.compile(template);
@@ -92,11 +97,13 @@ function generateCoverPageHtmlForVoters(voters, callback) {
         returnAddresses.push(returnAddress);
       }
     });
-    var context = {
+    var template_vars = {
       voters: processedVoters,
-      returnAddresses: returnAddresses
+      returnAddresses: returnAddresses,
+      total_voters: context.num_voters,
+      multiple_batches : context.num_voters > processedVoters.length ? true : false
     };
-    var html = uncompiledTemplate(context);
+    var html = uncompiledTemplate(template_vars);
     callback(null, html);
   });
 }

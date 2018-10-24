@@ -3,6 +3,7 @@ import { Redirect, Route, Router } from 'react-router-dom';
 import Home from './Home';
 import Dashboard from './Dashboard';
 import District from './District';
+import Users from './Users';
 import Loading from './Loading';
 import Login from './SecretLogin';
 import Auth from './Auth';
@@ -64,6 +65,7 @@ export const makeMainRoutes = () => {
           <AdminRoute exact path="/admin" component={Admin} auth={auth} />
           <AdminRoute exact path="/admin/districts" component={Districts} auth={auth} />
           <AdminRoute path="/admin/user/:id" component={AdminUser} auth={auth} />
+          <AdminRoute path="/admin/users" component={Users} auth={auth} />
           <Route exact path="/privacy-policy" render={(props) => <Privacy auth={auth} {...props} />} />
           <Route exact path="/terms-of-use" render={(props) => <Terms auth={auth} {...props} />} />
           <Route exact path="/faq" render={(props) => <Faq auth={auth} {...props} />} />

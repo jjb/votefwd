@@ -242,11 +242,18 @@ export class VoterList extends Component {
               {alertContent}
             </div>
             <ul className="list-group">
-              {toPrep.length < 1 &&
+              {toPrep.length < 1 && toSend.length < 1 &&
                 <li className="list-group-item disabled text-center py-5 bg-light">
                   You haven’t adopted any voters yet.
                 </li>
               }
+              
+              {toPrep.length < 1 && toSend.length > 0 &&
+                <li className="list-group-item disabled text-center py-5 bg-light">
+                  You have no more letters to prepare. 
+                </li>
+              }
+                            
               {toPrep.map(voter =>
                 <VoterRecord
                   key={voter.id}
