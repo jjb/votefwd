@@ -103,7 +103,7 @@ function recordPledgeActivity({ voterId, realVoter, type, pledgeCount }) {
     return;
   } else {
     return db('pledges')
-      .insert({ voter_id: voter.id, type, real_voter: realVoter })
+      .insert({ voter_id: voterId, type, real_voter: realVoter })
       .then(() => {
         return db('voters')
         .where('id', voterId)
@@ -403,7 +403,7 @@ function voterInfoFromHash(hash) {
   return new Promise((resolve, reject) => {
     let voter;
     db('voters')
-    .select('id', 'district_id')
+    .select('id', 'district_id', 'pledge_count')
     .where('hashid', hash)
     .then((results) => {
       if (results.length === 0) {
@@ -457,37 +457,41 @@ function makePledge(code, callback) {
       callback('already pledged');
       return;
     }
+    let postPledgePromise;
     if (!shouldRecordPledge()) {
+      postPledgePromise = Promise.resolve();
       callback('too soon');
-      return;
-    }
-    // get the pledge row and update it with pledge time
-    db('voters')
-    .where('hashid', code)
-    .update({
-      pledge_made_at: db.fn.now(),
-      updated_at: db.fn.now()
-    })
-    // send an email to the person who wrote the letter telling them a pledge was made
-    .then(getLetterWritingUserFromPledge(code)
-      .then(function(user){
-        emailService.sendEmail('pledge', user, 'One of your unlikely voters pledged to vote!');
+    } else {
+      // get the pledge row and update it with pledge time
+      postPledgePromise = db('voters')
+      .where('hashid', code)
+      .update({
+        pledge_made_at: db.fn.now(),
+        updated_at: db.fn.now()
       })
-    )
-    .then(function() {
-      slackService.publishToSlack('A recipient made a vote pledge.');
-    })
+      // send an email to the person who wrote the letter telling them a pledge was made
+      .then(getLetterWritingUserFromPledge(code)
+        .then(function(user){
+          emailService.sendEmail('pledge', user, 'One of your unlikely voters pledged to vote!');
+        })
+      )
+      .then(function() {
+        slackService.publishToSlack('A recipient made a vote pledge.');
+      })
+      .then(function() {
+        callback('successful pledge');
+      })
+    }
+
+    postPledgePromise
     .then(() => {
       // Record pledge activity
       recordPledgeActivity({
         voterId: result[0].id,
         pledgeCount: result[0].pledge_count,
-        realVoter: shouldRecordPledge(), 
+        realVoter: shouldRecordPledge(),
         type: 'COMMIT'
       });  
-    })
-    .then(function() {
-      callback('successful pledge');
     })
     .catch(err => {
       console.error(err)
