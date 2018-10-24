@@ -8,7 +8,7 @@ var db = require('./db');
 
 var interval = process.env.SLACK_REPORT_INTERVAL_MINUTES || 30;
 
-cron.schedule('*/interval * * * *', () => {
+cron.schedule('*/' + interval + ' * * * *', () => {
   Promise.all([
     getStats('users', 'created_at'),
     getStats('voters', 'adopted_at'),
