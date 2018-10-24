@@ -151,9 +151,6 @@ function _adoptSomeVoters(adopterId, numVoters, districtId, callback) {
             .then(function() {
               return denormalizeVoterCount(districtId);
             })
-            .then(function() {
-              slackService.publishToSlack('A user adopted ' + numVoters + ' voters in ' + districtId + '.')
-            })
             .catch(err => {
               console.error(err);
               callback(err);
@@ -476,9 +473,6 @@ function makePledge(code, callback) {
         })
       )
       .then(function() {
-        slackService.publishToSlack('A recipient made a vote pledge.');
-      })
-      .then(function() {
         callback('successful pledge');
       })
     }
@@ -491,7 +485,7 @@ function makePledge(code, callback) {
         pledgeCount: result[0].pledge_count,
         realVoter: shouldRecordPledge(),
         type: 'COMMIT'
-      });  
+      });
     })
     .catch(err => {
       console.error(err)
