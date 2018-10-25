@@ -19,6 +19,7 @@ import Terms from './Terms';
 import Faq from './Faq';
 import Contact from './Contact';
 import Support from './Support';
+import CheckPreQual from './CheckPreQual';
 import history from './history';
 import GA from './utils/GoogleAnalytics';
 
@@ -38,7 +39,8 @@ const handleAuthentication = ({location}) => {
 const LoggedInRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={(props) => (
     isAuthenticated() === true
-      ? <Component auth={auth} {...props} />
+      ? (<CheckPreQual />
+         <Component auth={auth} {...props} />)
       : <Redirect to={{ pathname: '/' }} />
   )} />
 );
