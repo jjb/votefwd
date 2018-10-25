@@ -2,6 +2,7 @@
 
 import React, { Component } from 'react';
 import axios from 'axios';
+import Verify from './Verify';
 
 class CheckPreQual extends Component {
   constructor(props) {
@@ -49,14 +50,17 @@ class CheckPreQual extends Component {
 
   render() {
     let component = this.props.component;
-    if (isPreQualified) {
-      component={Verify}
-    }
-    return (
-      <div>
-         {component}
-         </div>
+    let user = this.state.user;
 
+      return (
+      this.isPreQualified(user) ?
+        <div>
+           {Verify}
+        </div>
+      :
+         <div>
+           {component}
+         </div>
     );
   }
 }
