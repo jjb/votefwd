@@ -5,7 +5,7 @@ const Hashids = require('hashids');
 const { REACT_APP_HASHID_SALT, REACT_APP_HASHID_DICTIONARY } = process.env
 const hashids = new Hashids(REACT_APP_HASHID_SALT, 6, REACT_APP_HASHID_DICTIONARY);
 
-const setHashIdForVoter = knex => async obj => {
+const setHashIdForVoter = async (knex, obj) => {
   const voterId = obj.id
   const hashId = hashids.encode(voterId);
 
@@ -21,8 +21,9 @@ exports.up = function(knex, Promise) {
   return knex.select('id').table('voters')
     .where('hashid', null)
     .then(function(ids) {
-      const promises = ids.map(setHashIdForVoter(knex))
-      return Promise.all(promises)
+      return ids.reduce((p, id) => {
+         return p.then(() => setHashIdForVoter(knex, id));
+      }, Promise.resolve());
     })
 }
 
