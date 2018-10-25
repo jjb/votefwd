@@ -32,6 +32,13 @@ const handleAuthentication = ({location}) => {
   }
 }
 
+const PreQual = ({ component: Component, ...rest }) => (
+      <CheckPreQual />
+      <Route {...rest} render={(props) => (
+        <Component auth={auth} {...props} />
+      )} />
+);
+
 // This higher-order component pattern taken from
 // https://tylermcginnis.com/react-router-protected-routes-authentication/
 //
@@ -39,8 +46,7 @@ const handleAuthentication = ({location}) => {
 const LoggedInRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={(props) => (
     isAuthenticated() === true
-      ? (<CheckPreQual />
-         <Component auth={auth} {...props} />)
+      ? <PreQual component={component}/>
       : <Redirect to={{ pathname: '/' }} />
   )} />
 );

@@ -30,7 +30,6 @@ class CheckPreQual extends Component {
       .catch(err => {
         console.error(err)
       });
-    })
   }
 
 
@@ -42,7 +41,6 @@ class CheckPreQual extends Component {
     }
   }
 
-
   componentWillMount(){
 
       this.getCurrentUser();
@@ -50,11 +48,12 @@ class CheckPreQual extends Component {
   }
 
   render() {
+    if (isPreQualified) {
+      component={Verify}
+    }
     return (
       <div>
-       {isPreQualified
-         <div>
-           component={Verify}
+         {component}
          </div>
 
     );
