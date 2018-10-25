@@ -156,11 +156,22 @@ class UserTable extends Component {
     );
   }
 
-  render() {
+  render() { 
     const users = this.state.users;
-    const numberWithCommas = (x) => {
+    const formatWithCommas = (x) => {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
+  
+    const sumUserStatistic = function (users, property) {
+      var sum = 0;
+      for ( let user of users ) {
+        if ( user.hasOwnProperty('stats') && user.stats.hasOwnProperty(property) ) {
+          sum += parseInt(user.stats[property], 10);
+        }
+      }
+      return sum;
+    }
+    
     
     const columns = [{
       Header: 'Full Name',
@@ -178,7 +189,7 @@ class UserTable extends Component {
       Footer: (
         <span>
           <strong>Total users:</strong>{" "}
-          {numberWithCommas(users.length)}
+          {formatWithCommas(users.length)}
         </span>
       )
     }, {
@@ -230,7 +241,7 @@ class UserTable extends Component {
       Footer: (
         <span>
           <strong>A:</strong>{" "}
-          {numberWithCommas(users.reduce((acc, u) => acc + u.stats.adopted, 0))}
+          {formatWithCommas(sumUserStatistic(users, 'adopted'))}
         </span>
       )
     }, {
@@ -240,7 +251,7 @@ class UserTable extends Component {
       Footer: (
         <span>
           <strong>P:</strong>{" "}
-          {numberWithCommas(users.reduce((acc, u) => acc + u.stats.prepped, 0))}
+          {formatWithCommas(sumUserStatistic(users, 'prepped'))}
         </span>
       )
     }, {
@@ -250,7 +261,7 @@ class UserTable extends Component {
       Footer: (
         <span>
           <strong>S:</strong>{" "}
-          {numberWithCommas(users.reduce((acc, u) => acc + u.stats.sent, 0))}
+          {formatWithCommas(sumUserStatistic(users, 'sent'))}
         </span>
       )
     }, {
@@ -260,7 +271,7 @@ class UserTable extends Component {
       Footer: (
         <span>
           <strong>T:</strong>{" "}
-          {numberWithCommas(users.reduce((acc, u) => acc + u.stats.total, 0))}
+          {formatWithCommas(sumUserStatistic(users, 'total'))}
         </span>
       )
     }, {
