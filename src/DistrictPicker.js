@@ -84,7 +84,6 @@ export class DistrictPicker extends Component {
       url: `${process.env.REACT_APP_API_URL}/get-districts-with-stats`
       })
       .then(res => {
-        console.log(res.data);
         this.setState({districts: res.data});
       })
       .catch(err => {
