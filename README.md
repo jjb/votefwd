@@ -64,7 +64,9 @@ variables:
 	REACT_APP_RECAPTCHA_SECRET_KEY=6LeIxAcTAAAAAGG-vFI1TnRWxMZNFuojJ4WifJWe
 	REACT_APP_SLACK_WEBHOOK_URL=<LEAVEBLANK>
 	REACT_APP_JWT_SECRET=eXB62QzaWp54hrjHtyfYJVgwr5NJNZ5dCRf43wEj
-
+	REACT_APP_DATE_TO_ENABLE_PLEDGE=2018-10-30
+	REACT_APP_DATE_TO_SEND_LETTERS=2018-10-30
+	
 You might notice we have a REACT_APP_RECAPTCHA_SECRET but that is the [default google test one](https://developers.google.com/recaptcha/docs/faq), so this is not actually sensitive.
 
 You can leave the slack webhook URL blank unless you are working on the Slack
@@ -100,6 +102,11 @@ To send data to Google Analytics, set up
 To adjust the interval for Slack alerts about app activity, adjust
 
     SLACK_REPORT_INTERVAL_MINUTES=<AN INTEGER>
+		
+To change the dates at which pledges can be collected and letters are allowed to be sent (for testing) adjust:
+
+		REACT_APP_DATE_TO_ENABLE_PLEDGE
+		REACT_APP_DATE_TO_SEND_LETTERS
 
 #### Auth0
 
