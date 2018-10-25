@@ -48,6 +48,7 @@ class CheckPreQual extends Component {
   }
 
   render() {
+    let component = this.props.component;
     if (isPreQualified) {
       component={Verify}
     }
