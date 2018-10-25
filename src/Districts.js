@@ -36,21 +36,59 @@ class DistrictTable extends Component {
   render() {
     const districts = this.state.districts;
 
+    const formatWithCommas = (x) => {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+  
+    const sumDistrictStatistic = function (districts, property) {
+      var sum = 0;
+      for ( let district of districts ) {
+        if ( district.hasOwnProperty(property) ) {
+          sum += parseInt(district[property], 10);
+        }
+      }
+      return sum;
+    }
+
     const columns = [{
       Header: 'District',
       accessor: 'district_id'
     }, {
       Header: 'Available',
       accessor: 'available',
+      Footer: (
+        <span>
+          <strong>Available:</strong>{" "}
+          {formatWithCommas(sumDistrictStatistic(districts, 'available'))}
+        </span>
+      )
     }, {
       Header: 'Adopted',
-      accessor: 'adopted'
+      accessor: 'adopted',
+      Footer: (
+        <span>
+          <strong>Adopted:</strong>{" "}
+          {formatWithCommas(sumDistrictStatistic(districts, 'adopted'))}
+        </span>
+      )
     }, {
       Header: 'Prepped',
-      accessor: 'prepped'
+      accessor: 'prepped',
+      Footer: (
+        <span>
+          <strong>Prepped:</strong>{" "}
+          {formatWithCommas(sumDistrictStatistic(districts, 'prepped'))}
+        </span>
+      )
     }, {
       Header: 'Sent',
-      accessor: 'sent'
+      accessor: 'sent',
+      Footer: (
+        <span>
+          <strong>Sent:</strong>{" "}
+          {formatWithCommas(sumDistrictStatistic(districts, 'sent'))}
+        </span>
+      )
     }]
 
     return(
