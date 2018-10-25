@@ -20,7 +20,7 @@ class AuthError extends Component {
 
       if (duplicateContext.duplicate === 'google-oauth2') {
         duplicateText = "clicking 'Log in with Google'";
-      } else if (duplicateContext.provider === 'facebook') {
+      } else if (duplicateContext.duplicate === 'facebook') {
         duplicateText = "clicking 'Log in with Facebook'";
       } else {
         duplicateText = "providing your email address and password";
