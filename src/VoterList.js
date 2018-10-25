@@ -3,6 +3,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import moment from 'moment';
+import { readyToSendLetters } from './utils/DateConfig';
+import { getLetterSendDate } from './utils/DateConfig';
 
 class VoterRecord extends Component {
   constructor(props) {
@@ -35,7 +37,7 @@ class VoterRecord extends Component {
     let voter = this.props.voter;
     let voterActions;
     let voterDownloadButton;
-    let readyToSend = this.props.readyToSend;
+    const readyToSend = readyToSendLetters();
 
     if (!voter.confirmed_prepped_at) {
       voterDownloadButton = (
@@ -106,6 +108,7 @@ export class VoterList extends Component {
       markingAllPrepped: false,
       markingAllSent:    false
     };
+    
   }
 
   downloadBundle() {
@@ -148,11 +151,14 @@ export class VoterList extends Component {
   cancelMarkAllSent() {
     this.setState({markingAllSent: false});
   }
-
+  
   render() {
     let toPrep = this.props.voters.filter(voter => !voter.confirmed_prepped_at);
     let toSend = this.props.voters.filter(voter => voter.confirmed_prepped_at && !voter.confirmed_sent_at);
     let alreadySent = this.props.voters.filter(voter => voter.confirmed_sent_at);
+    const readyToSend = readyToSendLetters();
+    const sendDate = ( !readyToSendLetters() ) ? moment(getLetterSendDate()).format('dddd, MMMM Do') : '';
+    
     let alertContent;
     if (this.state.downloadingBundle) {
       alertContent = (
@@ -183,13 +189,8 @@ export class VoterList extends Component {
       )
     }
 
-    let today = moment();
-    let electionDate = moment('2018-11-06');
-    let sendDate = electionDate.subtract(7, "days");
-    let readyToSend;
-    today < sendDate ? readyToSend = false : readyToSend = true;
-
     let allSentButton;
+    
     if (!this.state.markingAllSent) {
       if (readyToSend) {
         allSentButton = (
@@ -200,7 +201,7 @@ export class VoterList extends Component {
       }
       else {
         allSentButton = (
-          <span className="badge badge-warning ml-2">Mail on Tuesday, October 30!</span>
+          <span className="badge badge-warning ml-2">Mail on {sendDate}!</span>
         )
       }
     }
