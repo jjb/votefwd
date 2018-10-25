@@ -428,9 +428,9 @@ function voterInfoFromHash(hash) {
 }
 /**
  * only record the pledge if today's date is after
- * the environment DATE_TO_ENABLE_PLEDGE (or '2018-10-30' by default)
+ * the environment REACT_APP_DATE_TO_ENABLE_PLEDGE (or '2018-10-30' by default)
  */
-const pledgeStartString = process.env.DATE_TO_ENABLE_PLEDGE ? process.env.DATE_TO_ENABLE_PLEDGE : '2018-10-30';
+const pledgeStartString = process.env.REACT_APP_DATE_TO_ENABLE_PLEDGE ? process.env.REACT_APP_DATE_TO_ENABLE_PLEDGE : '2018-10-30';
 const pledgeStartDate = new Date(pledgeStartString);
 function shouldRecordPledge() {
   const currentDate = new Date();
