@@ -16,6 +16,7 @@ class CheckPreQual extends Component {
 
 
   getCurrentUser() {
+    console.log('in getCurrentUser');
     axios({
       method: 'GET',
       headers: {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))},
@@ -23,7 +24,9 @@ class CheckPreQual extends Component {
       params: { auth0_id: localStorage.getItem('user_id')}
       })
       .then(res => {
+        console.log('in then clause of axios');
         let user = res.data[0];
+        console.log(`res.data[0] is ${res.data[0]}`);
         this.setState(
           { user: user }
         )
@@ -44,6 +47,7 @@ class CheckPreQual extends Component {
 
   componentWillMount(){
 
+      console.log('In componentWillMount');
       this.getCurrentUser();
 
   }
@@ -51,6 +55,10 @@ class CheckPreQual extends Component {
   render() {
     let component = this.props.component;
     let user = this.state.user;
+    console.log(`component in CheckPreQual is ${component}`);
+    console.log(`user is ${Object.entries(user)}`);
+    console.log(`isQualified is ${this.isPreQualified(user)}`);
+
 
       return (
       this.isPreQualified(user) ?

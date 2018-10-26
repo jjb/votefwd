@@ -13,10 +13,11 @@ class PreQual extends Component {
   render() {
 
     let component = this.props.component;
+    console.log(`component in PreQual is ${this.props.component}`);
 
     return (
       <div>
-        <CheckPreQual  />
+        <CheckPreQual component={component} />
          {component}
          </div>
 
