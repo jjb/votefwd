@@ -151,14 +151,28 @@ class UserTable extends Component {
     let user = props.original;
     return (
       <button onClick={this.showUserInformation.bind(this, user)} className="w-100">
-        View Profile
+        View
       </button>
     );
   }
 
-  render() {
+  render() { 
     const users = this.state.users;
-
+    const formatWithCommas = (x) => {
+      return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+  
+    const sumUserStatistic = function (users, property) {
+      var sum = 0;
+      for ( let user of users ) {
+        if ( user.hasOwnProperty('stats') && user.stats.hasOwnProperty(property) ) {
+          sum += parseInt(user.stats[property], 10);
+        }
+      }
+      return sum;
+    }
+    
+    
     const columns = [{
       Header: 'Full Name',
       accessor: 'full_name',
@@ -171,13 +185,20 @@ class UserTable extends Component {
           .toLowerCase()
           .split(/\W+/)
           .some(name => name.startsWith(filter.value.toLowerCase()));
-      }
+      },
+      Footer: (
+        <span>
+          <strong>Total users:</strong>{" "}
+          {formatWithCommas(users.length)}
+        </span>
+      )
     }, {
       id: 'l',
       Header: 'auth0_id',
       accessor: l => {
         return (<a href={`/admin/user/${l.auth0_id}`}>{l.auth0_id}</a>);
       },
+      maxWidth: 100
     }, {
       Header: 'Email',
       accessor: 'email',
@@ -195,7 +216,8 @@ class UserTable extends Component {
           .toLowerCase()
           .split(/\W+/)
           .some(current_district => current_district.startsWith(filter.value.toLowerCase()));
-      }
+      },
+      maxWidth: 80
     }, {
       id: 's',
       Header: 'Signup date',
@@ -215,19 +237,48 @@ class UserTable extends Component {
     }, {
       Header: 'Adopted',
       accessor: 'stats.adopted',
+      maxWidth: 120,
+      Footer: (
+        <span>
+          <strong>A:</strong>{" "}
+          {formatWithCommas(sumUserStatistic(users, 'adopted'))}
+        </span>
+      )
     }, {
       Header: 'Prepped',
       accessor: 'stats.prepped',
+      maxWidth: 120,
+      Footer: (
+        <span>
+          <strong>P:</strong>{" "}
+          {formatWithCommas(sumUserStatistic(users, 'prepped'))}
+        </span>
+      )
     }, {
       Header: 'Sent',
       accessor: 'stats.sent',
+      maxWidth: 120,
+      Footer: (
+        <span>
+          <strong>S:</strong>{" "}
+          {formatWithCommas(sumUserStatistic(users, 'sent'))}
+        </span>
+      )
     }, {
       Header: 'Total',
       accessor: 'stats.total',
+      maxWidth: 120,
+      Footer: (
+        <span>
+          <strong>T:</strong>{" "}
+          {formatWithCommas(sumUserStatistic(users, 'total'))}
+        </span>
+      )
     }, {
       id: 'd',
       Header: 'Profile',
       Cell: this.renderNameAndProfile,
+      maxWidth: 80
     }, {
       id: 'a',
       Header: 'Admin?',
@@ -239,7 +290,7 @@ class UserTable extends Component {
           return null;
         }
       },
-      maxWidth: 120,
+      maxWidth: 80,
       filterable: true,
       Filter: ({ filter, onChange }) => (
         <select
@@ -272,7 +323,7 @@ class UserTable extends Component {
           return 'absent';
         }
       },
-      maxWidth: 120,
+      maxWidth: 80,
       filterable: true,
       Filter: ({ filter, onChange }) => (
         <select
