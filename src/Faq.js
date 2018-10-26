@@ -91,7 +91,7 @@ class QsAndAs extends Component {
           <div className="mb-5">
             <h2>Where do the addresses come from?</h2>
             <p>
-              Ultimately all the addresses originate with state election boards. They make voter rolls and histories available to the public in the interest of electoral system transparency, and to facilitate campaigning by candidates and organizations like Vote Forward. In most cases, we purchase data from <a href="https://www.catalist.us/" target="_blank" rel="noopener noreferrer">Catalist</a>, which standardizes the data into a unified format. Catalist also provides vote propensity and partisanship predictions.
+              Ultimately all the addresses originate with state election boards. They make voter rolls and histories available to the public in the interest of electoral system transparency, and to facilitate campaigning by candidates and organizations like Vote Forward. We typically purchase data from a third party company that standardizes it into a consistent format, making it easier for us to load.
             </p>
           </div>
 
