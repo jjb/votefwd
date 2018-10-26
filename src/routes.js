@@ -19,8 +19,6 @@ import Terms from './Terms';
 import Faq from './Faq';
 import Contact from './Contact';
 import Support from './Support';
-// import CheckPreQual from './CheckPreQual';
-import PreQual from './PreQual';
 import history from './history';
 import GA from './utils/GoogleAnalytics';
 
@@ -33,12 +31,6 @@ const handleAuthentication = ({location}) => {
   }
 }
 
-// const PreQual = ({ component: Component, ...rest }) => (
-//       <CheckPreQual />
-//       <Route {...rest} render={(props) => (
-//         <Component auth={auth} {...props} />
-//       )} />
-// );
 
 // This higher-order component pattern taken from
 // https://tylermcginnis.com/react-router-protected-routes-authentication/
