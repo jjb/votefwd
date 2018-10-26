@@ -178,7 +178,7 @@ export class VoterList extends Component {
     else {
       allPreppedButton = (
         <div className="alert alert-warning mt-2" role="alert">
-          <p>Have all these letters been prepared?<br/><small>(Or will they be?)</small></p>
+          <p className="mb-1">Have all these letters been prepared?<br/><small>(Or will they be?)</small></p>
           <button className="btn btn-success btn-sm mr-2" onClick={this.markAllPrepped}>
             <i className="fa fa-check"></i> Yes!
           </button>
@@ -194,21 +194,27 @@ export class VoterList extends Component {
     if (!this.state.markingAllSent) {
       if (readyToSend) {
         allSentButton = (
-          <button className="btn btn-light btn-sm ml-2" onClick={() => this.setState({markingAllSent: true})}>
-            Have all these letters been sent <small><i className="fa fa-chevron-right"></i></small>
-          </button>
+          <div className="text-right mt-2">
+            <button className="btn btn-primary w-100 mt-1" onClick={() => this.setState({markingAllSent: true})}>
+              In the mail? Mark all letters as sent <small><i className="fa fa-chevron-right"></i></small>
+            </button>
+          </div>
+          
         )
       }
       else {
         allSentButton = (
-          <span className="badge badge-warning ml-2">Mail on {sendDate}!</span>
+          <div className="text-right mt-2">
+            <span className="badge badge-warning ml-2">Mail on {sendDate}!</span>
+          </div>
+
         )
       }
     }
     else {
       allSentButton = (
-        <div className="alert alert-warning ml-3" role="alert">
-          <p>All these letters have been mailed?</p>
+        <div className="alert alert-warning mt-2" role="alert">
+          <p className="mb-1">Have all these letters been mailed?</p>
           <button className="btn btn-success btn-sm mr-2" onClick={this.markAllSent}>
             <i className="fa fa-check"></i> Yes!
           </button>
@@ -265,7 +271,7 @@ export class VoterList extends Component {
           </div>
 
           <div className="col mx-2">
-            <div className="d-flex justify-content-between align-items-center mb-3">
+            <div className="mb-3">
               <span><strong>Letters You Have Prepared</strong> ({toSend.length})</span>
               {toSend.length > 1 && allSentButton}
             </div>
