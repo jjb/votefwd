@@ -1,5 +1,4 @@
 //src/CheckPreQual.js
-
 import React, { Component } from 'react';
 import axios from 'axios';
 import Verify from './Verify';
@@ -8,6 +7,7 @@ class CheckPreQual extends Component {
   constructor(props) {
     super(props);
     this.getCurrentUser = this.getCurrentUser.bind(this);
+    this.handleComponentChange = this.handleComponentChange.bind(this);
     this.state =
       { user: {},
         isPreQualified: false
@@ -45,30 +45,33 @@ class CheckPreQual extends Component {
     }
   }
 
+  handleComponentChange() => {
+
+    let user = this.state.user;
+
+    if (this.isPreQualified(user)) {
+      let verify = 'Verify';
+      this.props.component(verify);
+    }
+  }
+
   componentWillMount(){
 
       console.log('In componentWillMount');
       this.getCurrentUser();
+      handleComponentChange();
 
   }
 
   render() {
     let component = this.props.component;
-    let user = this.state.user;
+
     console.log(`component in CheckPreQual is ${component}`);
     console.log(`user is ${Object.entries(user)}`);
     console.log(`isQualified is ${this.isPreQualified(user)}`);
 
 
       return (
-      this.isPreQualified(user) ?
-        <div>
-           {Verify}
-        </div>
-      :
-         <div>
-           {component}
-         </div>
     );
   }
 }
