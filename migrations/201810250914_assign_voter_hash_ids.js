@@ -20,6 +20,7 @@ const setHashIdForVoter = async (knex, obj) => {
 exports.up = function(knex, Promise) {
   return knex.select('id').table('voters')
     .where('hashid', null)
+    .andWhereRaw('adopter_user_id is not null')
     .then(function(ids) {
       return ids.reduce((p, id) => {
          return p.then(() => setHashIdForVoter(knex, id));
