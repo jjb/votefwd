@@ -15,8 +15,8 @@ function getDistrictFromDB(district_id) {
 const getDistrict = mem(getDistrictFromDB);
 
 function getDistrictWithStats(district_id) {
-  return
-    db.raw(`select
+  return db.raw(
+    `select
       count(users.id) as num_users_using_district,
       voters_agg.voters_available,
       voters_agg.voters_adopted,
