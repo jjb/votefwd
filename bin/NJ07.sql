@@ -11,7 +11,7 @@ BEGIN
   -- DESCRIBE THE EXPERIMENT
 
   INSERT INTO experiment VALUES
-    (DEFAULT, '$DISTID$', 'Propensity 5-75, Dem partisanship > 95.5.')
+    (DEFAULT, 'NJ07', 'Propensity 5-75, Dem partisanship > 86.')
     RETURNING id INTO experimentid;
 
   RAISE NOTICE 'Registered experiment as id: %', experimentid;
@@ -22,12 +22,10 @@ BEGIN
   SELECT dwid, experimentid
   FROM catalist_raw
   WHERE registration_address_line_1 = mail_address_line_1
-  AND state='$STATE$'
-  AND congressional_district='$CDNUM$'
+  AND state='NJ'
+  AND congressional_district='7'
   -- EXCLUDE DUPLICATES ALREADY IN A VOTE FORWARD EXPERIMENT
-  AND dwid NOT IN ('')
-  -- EXCLUDE DUPLICATES ALREADY IN THE VOTERS TABLE
-  AND dwid NOT IN ('');
+  AND dwid NOT IN ('1002378295', '1002378362', '1002378651', '1002383500', '100719293', '1009128776', '1010351383', '1010352392', '1010580357', '1013409262', '103083512', '110096793', '112056972', '121325510', '233232359', '285754451', '300505088', '31343917', '32476423', '329360160', '33296913', '33891619', '342403651', '34710350', '36362035', '36412875', '382254502', '541586343', '89996107', '932102943', '987921931', '99594408');
 
   -- COUNT HOW MANY NEWLY ELIGIBLE VOTERS WE ADDED --
 
@@ -88,17 +86,15 @@ BEGIN
     mail_address_zip,
     age::text::int,
     gender,
-    '$DISTID$'
+    'NJ07'
   FROM catalist_raw
   JOIN experiment_voter
   ON experiment_voter.voter_id = catalist_raw.dwid
   WHERE experiment_voter.cohort = 'TEST'
-  AND state='$STATE$'
-  AND congressional_district='$CDNUM$'
+  AND state='NJ'
+  AND congressional_district='7'
   -- EXCLUDE DUPLICATES ALREADY IN A VOTE FORWARD EXPERIMENT
-  AND dwid NOT IN ('')
-  -- EXCLUDE DUPLICATES ALREADY IN THE VOTERS TABLE
-  AND dwid NOT IN ('');
+  AND dwid NOT IN ('1002378295', '1002378362', '1002378651', '1002383500', '100719293', '1009128776', '1010351383', '1010352392', '1010580357', '1013409262', '103083512', '110096793', '112056972', '121325510', '233232359', '285754451', '300505088', '31343917', '32476423', '329360160', '33296913', '33891619', '342403651', '34710350', '36362035', '36412875', '382254502', '541586343', '89996107', '932102943', '987921931', '99594408');
 
   RAISE NOTICE 'Populated voters table with new TEST voters.';
 

@@ -11,7 +11,7 @@ BEGIN
   -- DESCRIBE THE EXPERIMENT
 
   INSERT INTO experiment VALUES
-    (DEFAULT, '$DISTID$', 'Propensity 5-75, Dem partisanship > 95.5.')
+    (DEFAULT, 'MT0', 'Propensity 5-75, Dem partisanship > 88.5.')
     RETURNING id INTO experimentid;
 
   RAISE NOTICE 'Registered experiment as id: %', experimentid;
@@ -21,13 +21,16 @@ BEGIN
   INSERT INTO experiment_voter (voter_id, experiment_id)
   SELECT dwid, experimentid
   FROM catalist_raw
-  WHERE registration_address_line_1 = mail_address_line_1
-  AND state='$STATE$'
-  AND congressional_district='$CDNUM$'
+  WHERE mail_address_line_1 is not null
+  AND mail_address_city is not null
+  AND mail_address_state is not null
+  AND mail_address_zip is not null
+  AND mail_address_state='MT'
+  AND state='MT'
+  -- Catalist designates the at-large district '1' rather than '0'
+  AND congressional_district='1'
   -- EXCLUDE DUPLICATES ALREADY IN A VOTE FORWARD EXPERIMENT
-  AND dwid NOT IN ('')
-  -- EXCLUDE DUPLICATES ALREADY IN THE VOTERS TABLE
-  AND dwid NOT IN ('');
+  AND dwid NOT IN ('100626234', '1008612563', '1010849360', '10811442', '11888741', '123156558', '146107085', '146144229', '146546345', '147276849', '15044737', '228967593', '250980624', '25147322', '26502161', '27124276', '274369933', '274389122', '27639799', '27646110', '276498054', '318132690', '324872669', '324876109', '330485293', '347904759', '404570067', '43126224', '56612088', '8449548', '86464703', '90523778', '90583009', '90585704', '90645749', '90661506', '90661507', '92941696', '93037919', '93052343', '93099748', '93099874', '93116101', '93178923', '93204717', '93325766', '93335667', '93356690', '93356691', '989900270', '989912031', '989973709');
 
   -- COUNT HOW MANY NEWLY ELIGIBLE VOTERS WE ADDED --
 
@@ -88,17 +91,15 @@ BEGIN
     mail_address_zip,
     age::text::int,
     gender,
-    '$DISTID$'
+    'MT0'
   FROM catalist_raw
   JOIN experiment_voter
   ON experiment_voter.voter_id = catalist_raw.dwid
   WHERE experiment_voter.cohort = 'TEST'
-  AND state='$STATE$'
-  AND congressional_district='$CDNUM$'
+  AND state='MT'
+  AND congressional_district='1'
   -- EXCLUDE DUPLICATES ALREADY IN A VOTE FORWARD EXPERIMENT
-  AND dwid NOT IN ('')
-  -- EXCLUDE DUPLICATES ALREADY IN THE VOTERS TABLE
-  AND dwid NOT IN ('');
+  AND dwid NOT IN ('100626234', '1008612563', '1010849360', '10811442', '11888741', '123156558', '146107085', '146144229', '146546345', '147276849', '15044737', '228967593', '250980624', '25147322', '26502161', '27124276', '274369933', '274389122', '27639799', '27646110', '276498054', '318132690', '324872669', '324876109', '330485293', '347904759', '404570067', '43126224', '56612088', '8449548', '86464703', '90523778', '90583009', '90585704', '90645749', '90661506', '90661507', '92941696', '93037919', '93052343', '93099748', '93099874', '93116101', '93178923', '93204717', '93325766', '93335667', '93356690', '93356691', '989900270', '989912031', '989973709');
 
   RAISE NOTICE 'Populated voters table with new TEST voters.';
 
