@@ -66,6 +66,28 @@ function relinquishVoters(adopterId, adoptedAtEpoch, districtId, callback) {
     });
 }
 
+function relinquishUnpreppedVoters(adopterId, callback) {
+  db('voters')
+    .where('adopter_user_id', adopterId)
+    .update({
+      adopter_user_id: null,
+      adopted_at: null,
+      updated_at: db.fn.now()
+    })
+    .then(function(results) {
+      console.log(`relinquishUnpreppedVoters results:`, results)
+      callback(null, results)
+    })
+    .then(function() {
+      // update available_voter_count
+      return denormalizeVoterCount(districtId);
+    })
+    .catch(err => {
+      console.error(err);
+      callback(err);
+    });
+}
+
 function adoptRandomVoter(adopterId, numVoters, districtId, callback) {
   if (allowedVoterBulkCount.includes(numVoters) !== true){
     //user requested a weird number of voters, deny!
@@ -107,7 +129,7 @@ function recordPledgeActivity({ voterId, realVoter, type, pledgeCount }) {
       .then(() => {
         return db('voters')
         .where('id', voterId)
-        // The purpose of this pledge count on the voters table is to 
+        // The purpose of this pledge count on the voters table is to
         //   prevent someone from overwhelming the database with writes using a single
         //   hashid.  After the pledge_count exceeds a certain threshold, we'll stop recording
         //   for that voter
@@ -417,7 +439,7 @@ function voterInfoFromHash(hash) {
       return recordPledgeActivity({
         voterId: voter.id,
         pledgeCount: voter.pledge_count,
-        realVoter: shouldRecordPledge(), 
+        realVoter: shouldRecordPledge(),
         type: 'VIEW'
       });
     })
@@ -638,6 +660,7 @@ module.exports = {
   downloadLetterToVoter,
   downloadAllLetters,
   relinquishVoters,
+  relinquishUnpreppedVoters,
   adoptRandomVoter,
   confirmSent,
   confirmAllSent,

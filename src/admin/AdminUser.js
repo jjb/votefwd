@@ -188,6 +188,24 @@ class AdminUser extends Component {
       });
   }
 
+  relinquishUnprepped(adopter) {
+    let headers = {Authorization: 'Bearer '.concat(localStorage.getItem('access_token'))};
+    axios.get(
+      `${process.env.REACT_APP_API_URL}/voters/relinquish-unprepped`,
+      {
+        headers: headers,
+        params: {
+          user_id: adopter,
+        }
+      })
+      .then(res => {
+        this.getBundles(this.props.match.params.id);
+      })
+      .catch(err => {
+        console.error(err)
+      });
+  }
+
   renderBundleTable(bundles) {
     const columns = [{
       Header: 'District',

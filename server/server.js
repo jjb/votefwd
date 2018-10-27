@@ -37,7 +37,7 @@ var corsOption = {
 
 // Force https unless we're in development (e.g. REACT_APP_API_URI starts with http:)
 app.use ((req, res, next) => {
-  if (req.secure || req.headers["x-forwarded-proto"] === "https" 
+  if (req.secure || req.headers["x-forwarded-proto"] === "https"
     || process.env.REACT_APP_API_URL.match(/^http\:/)
   ) {
     // request was via https, so do no special handling
@@ -103,6 +103,15 @@ router.route('/voters/relinquish')
 .get(checkJwt, function(req, res) {
   const { user_id, adopted_at, district_id } = req.query
   voterService.relinquishVoters(user_id, adopted_at, district_id,
+    function(result) {
+      res.json(result)
+    });
+});
+
+router.route('/voters/relinquish-unprepped')
+.get(checkJwt, checkAdmin, function(req, res) {
+  const { user_id, adopted_at, district_id } = req.query
+  voterService.relinquishUnpreppedVoters(user_id,
     function(result) {
       res.json(result)
     });
@@ -779,14 +788,14 @@ router.route('/admin/users')
         // add a "dup_user" field to each user record
         users = users.map((user) => {user.dup_user = dupUsers[user.email] ? 't' : 'f'; return user;});
         const fields = [
-          "id", 
-          "email", 
-          "dup_user", 
+          "id",
+          "email",
+          "dup_user",
           "qual_state",
           "zip",
           "created_at",
-          "auth0_id", 
-          "full_name", 
+          "auth0_id",
+          "full_name",
           "identity_provider",
           "adopted_count",
           "remaining_count",
@@ -805,7 +814,7 @@ router.route('/admin/users')
       res.status(500);
     });
   });
-  
+
 router.route('/s/stats')
   .get(checkJwt, checkAdmin, function(req, res) {
     voterService.getVoterSummaryByDistrict(function(error, summary) {
