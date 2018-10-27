@@ -11,7 +11,7 @@ BEGIN
   -- DESCRIBE THE EXPERIMENT
 
   INSERT INTO experiment VALUES
-    (DEFAULT, '$DISTID$', 'Propensity 5-75, Dem partisanship > 95.5.')
+    (DEFAULT, 'UT04', 'Propensity 5-75, Dem partisanship > 86.')
     RETURNING id INTO experimentid;
 
   RAISE NOTICE 'Registered experiment as id: %', experimentid;
@@ -22,12 +22,10 @@ BEGIN
   SELECT dwid, experimentid
   FROM catalist_raw
   WHERE registration_address_line_1 = mail_address_line_1
-  AND state='$STATE$'
-  AND congressional_district='$CDNUM$'
+  AND state='UT'
+  AND congressional_district='4'
   -- EXCLUDE DUPLICATES ALREADY IN A VOTE FORWARD EXPERIMENT
-  AND dwid NOT IN ('')
-  -- EXCLUDE DUPLICATES ALREADY IN THE VOTERS TABLE
-  AND dwid NOT IN ('');
+  AND dwid NOT IN ('1010849360', '1011161250', '1011188588', '110097121', '122211275', '122723102', '122729375', '123156558', '13877101', '204697003', '27290793', '27667270', '281829830', '281832079', '281839385', '281877333', '357008079', '368280946', '371649662', '400217906', '404570067', '8967500', '89906172', '988526905', '988707025', '989092467');
 
   -- COUNT HOW MANY NEWLY ELIGIBLE VOTERS WE ADDED --
 
@@ -88,17 +86,15 @@ BEGIN
     mail_address_zip,
     age::text::int,
     gender,
-    '$DISTID$'
+    'UT04'
   FROM catalist_raw
   JOIN experiment_voter
   ON experiment_voter.voter_id = catalist_raw.dwid
   WHERE experiment_voter.cohort = 'TEST'
-  AND state='$STATE$'
-  AND congressional_district='$CDNUM$'
+  AND state='UT'
+  AND congressional_district='4'
   -- EXCLUDE DUPLICATES ALREADY IN A VOTE FORWARD EXPERIMENT
-  AND dwid NOT IN ('')
-  -- EXCLUDE DUPLICATES ALREADY IN THE VOTERS TABLE
-  AND dwid NOT IN ('');
+  AND dwid NOT IN ('1010849360', '1011161250', '1011188588', '110097121', '122211275', '122723102', '122729375', '123156558', '13877101', '204697003', '27290793', '27667270', '281829830', '281832079', '281839385', '281877333', '357008079', '368280946', '371649662', '400217906', '404570067', '8967500', '89906172', '988526905', '988707025', '989092467');
 
   RAISE NOTICE 'Populated voters table with new TEST voters.';
 
