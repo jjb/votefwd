@@ -13,6 +13,7 @@ var request = require('request');
 var compileSass = require('express-compile-sass');
 var json2csv = require('json2csv');
 
+var districtService = require('./districtService');
 var rateLimits = require('./rateLimits')
 var userService = require('./userService');
 var voterService = require('./voterService');
@@ -558,70 +559,7 @@ router.route('/get-districts-with-stats')
 router.route('/lookup-district')
   .get(rateLimits.lookupDistrictRateLimit, function(req, res) {
     if (JSON.parse(req.query.get_adoption_details) == true){
-      db.raw(`select
-        count(users.id) as num_users_using_district,
-        voters_agg.voters_available,
-        voters_agg.voters_adopted,
-        voters_agg.letters_prepped,
-        voters_agg.letters_sent,
-        districts.district_id,
-        districts.state,
-        districts.state_abbr,
-        districts.district_num,
-        districts.description,
-        districts.display_name,
-        districts.why_this_district,
-        districts.url_election_info,
-        districts.url_wikipedia,
-        districts.url_ballotpedia,
-        districts.url_swingleft,
-        districts.lat,
-        districts.long,
-        districts.return_address,
-        districts.ra_city,
-        districts.ra_state,
-        districts.ra_zip
-        from districts
-        left join users
-        on districts.district_id = users.current_district
-        left join (
-            select
-            sum(available) voters_available,
-            sum(adopted) voters_adopted,
-            sum(prepped) letters_prepped,
-            sum(sent) letters_sent,
-            district_id
-            from (
-                select
-                district_id,
-                case when adopted_at is null
-                    and confirmed_prepped_at is null
-                    and confirmed_sent_at is null then 1
-                    else 0
-                end as available,
-                case when adopted_at is not null
-                    and confirmed_prepped_at is null
-                    and confirmed_sent_at is null then 1
-                    else 0
-                end as adopted,
-                case when confirmed_prepped_at is not null
-                    and confirmed_sent_at is null then 1
-                    else 0
-                end as prepped,
-                case when confirmed_prepped_at is not null
-                    and confirmed_sent_at is not null then 1
-                    else 0
-                end as sent
-                from voters
-                where district_id = ?
-            ) voters_case
-            group by district_id
-        ) voters_agg
-        on districts.district_id = voters_agg.district_id
-        where districts.district_id = ?
-        group by voters_agg.voters_available, voters_agg.voters_adopted, voters_agg.letters_prepped, voters_agg.letters_sent, districts.district_id, districts.state, districts.state_abbr, districts.district_num, districts.description,districts.display_name,districts.why_this_district, districts.url_election_info, districts.url_wikipedia, districts.url_ballotpedia, districts.url_swingleft, districts.lat, districts.long, districts.return_address, districts.ra_city, districts.ra_state, districts.ra_zip;`,
-        [req.query.district_id, req.query.district_id]
-        )
+      districtService.getDistrictWithStats(req.query.district_id)
       .then(function(result) {
       if (result['rows'].length === 0) {
           res.json(false);
