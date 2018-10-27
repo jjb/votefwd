@@ -253,21 +253,20 @@ describe('userService', function() {
     it('should update prepped correctly', (done) => {
       let voter;
       let originalVoters;
-      let originalNoneCount;
-      let originalSomeCount;
-      let originalNone;
-      let originalSome;
+      let originalNotpreppedCount;
+      let originalNotprepped;
       let userId;
 
-      db.select("*")
+      db.select("voters.*")
         .table("voters")
         .whereNotNull("voters.adopter_user_id", null)
         .whereRaw("voters.adopter_user_id like ?", 'test-%')
         .first()
       .then((voterFromDb) => {
         voter = voterFromDb;
+        console.log({voter});
         userId = voter.adopter_user_id;
-        return db.select("*")
+        return db.select("voters.*")
           .table("voters")
           .where("voters.adopter_user_id", userId)
       })
@@ -277,23 +276,23 @@ describe('userService', function() {
         .where('voters.adopter_user_id', userId)
         .update('confirmed_prepped_at', null)
       })
-      .then(() => {
+      .then(() =>{
+        return db.select("users.*")
+          .table("users")
+          .where('users.auth0_id', userId)
+      })
+      .then((user) => {
+        console.log({ user });
         return Promise.all([
-          userService.getUsers({preppedLetters: 'NONE'}),
-          userService.getUsers({preppedLetters: 'SOME'}),
-          userService.getUsers({preppedLetters: 'NONE', count: true}),
-          userService.getUsers({preppedLetters: 'SOME', count: true}),
+          userService.getUsers({preppedLetters: 'NOTPREPPED'}),
+          userService.getUsers({preppedLetters: 'NOTPREPPED', count: true}),
         ])
       })
       .then((results) => {
-        // Make sure the user with no prepped voters shows up in the 'NONE' array
+        console.log({results: JSON.stringify(results)});
         expect(results[0].filter((user) => user.auth0_id === userId).length).to.be.equal(1);
-        // but not the 'SOME' array
-        expect(results[1].filter((user) => user.auth0_id === userId).length).to.be.equal(0);
-        originalNoneCount = parseInt(results[2].count);
-        originalSomeCount = parseInt(results[3].count);
-        originalNone = results[0];
-        originalSome = results[1];
+        originalNotpreppedCount = parseInt(results[1].count);
+        originalNotprepped = results[0];
         return db('voters')
           .where('id', voter.id)
           .update({
@@ -303,23 +302,17 @@ describe('userService', function() {
       })
       .then(() => {
         return Promise.all([
-          userService.getUsers({preppedLetters: 'NONE'}),
-          userService.getUsers({preppedLetters: 'SOME'}),
-          userService.getUsers({preppedLetters: 'NONE', count: true}),
-          userService.getUsers({preppedLetters: 'SOME', count: true}),
+          userService.getUsers({preppedLetters: 'NOTPREPPED'}),
+          userService.getUsers({preppedLetters: 'NOTPREPPED', count: true}),
         ])
       })
       .then((results) => {
-        // expect user to no longer be in the 'none' category
-        expect(results[0].filter((user) => user.auth0_id === userId).length).to.be.equal(0);
-        // but to now be in the 'SOME' array
-        expect(results[1].filter((user) => user.auth0_id === userId).length).to.be.equal(1);
-        expect(originalNoneCount-1).to.be.equal(parseInt(results[2].count));
-        expect(originalSomeCount+1).to.be.equal(parseInt(results[3].count));
-        const originalUser = originalNone.filter((user) => user.auth0_id === userId)[0];
-        const modifiedUser = results[1].filter((user) => user.auth0_id === userId)[0]
+        expect(results[0].filter((user) => user.auth0_id === userId && parseInt(user.remaining_count>1)).length).to.be.equal(0);
+        expect(originalNotpreppedCount).to.be.equal(parseInt(results[1].count));
+        const originalUser = originalNotprepped.filter((user) => user.auth0_id === userId)[0];
+        const modifiedUser = results[0].filter((user) => user.auth0_id === userId)[0]
         // We've removed one of the letters from the user's bucket, so it should be 1 less
-        expect(parseInt(modifiedUser.count)+1).to.be.equal(parseInt(originalUser.count));
+        expect(parseInt(modifiedUser.remaining_count)+1).to.be.equal(parseInt(originalUser.remaining_count));
 
         // now finish all the user's voters
         return db('voters')
@@ -328,19 +321,13 @@ describe('userService', function() {
       })
       .then(() => {
         return Promise.all([
-          userService.getUsers({preppedLetters: 'NONE'}),
-          userService.getUsers({preppedLetters: 'SOME'}),
-          userService.getUsers({preppedLetters: 'NONE', count: true}),
-          userService.getUsers({preppedLetters: 'SOME', count: true}),
+          userService.getUsers({preppedLetters: 'NOTPREPPED'}),
+          userService.getUsers({preppedLetters: 'NOTPREPPED', count: true}),
         ])
       })
       .then((results) => {
-        // expect user to no longer be in the 'none' category
-        expect(results[0].filter((user) => user.auth0_id === userId).length).to.be.equal(0);
-        // and no longer to be in the 'SOME' array
-        expect(results[1].filter((user) => user.auth0_id === userId).length).to.be.equal(0);
-        expect(originalNoneCount-1).to.be.equal(parseInt(results[2].count));
-        expect(originalSomeCount).to.be.equal(parseInt(results[3].count));
+        expect(results[0].filter((user) => user.auth0_id === userId && parseInt(user.remaining_count)>0).length).to.be.equal(0);
+        expect(originalNotpreppedCount-1).to.be.equal(parseInt(results[1].count));
 
         return Promise.all(
           originalVoters.map((voter) => db('voters')
