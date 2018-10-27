@@ -762,14 +762,13 @@ router.route('/admin/users')
     let promise;
     if (req.query.count) {
       promise = Promise.all([
-        userService.getUsers({ count: true, preppedLetters: 'NONE'}),
-        userService.getUsers({ count: true, preppedLetters: 'SOME'}),
+        userService.getUsers({ count: true, preppedLetters: 'NOTPREPPED'}),
         userService.getUsers({ count: true, preppedLetters: 'NOTSENT'})
       ])
       .then((results) => {
         res.json(results);
       })
-    } else if (['NONE','SOME', 'NOTSENT'].indexOf(req.query.preppedLetters) >=0) {
+    } else if (['NOTPREPPED', 'NOTSENT'].indexOf(req.query.preppedLetters) >=0) {
       let dupUsers = {};
       promise = userService.findDuplicateUserEmails()
       .then((results) => {
@@ -779,7 +778,22 @@ router.route('/admin/users')
       .then((users) => {
         // add a "dup_user" field to each user record
         users = users.map((user) => {user.dup_user = dupUsers[user.email] ? 't' : 'f'; return user;});
-        const csv = json2csv.parse(users, { fields: ["id", "email", "dup_user", "auth0_id", "full_name", "count"] });
+        const fields = [
+          "id", 
+          "email", 
+          "dup_user", 
+          "qual_state",
+          "zip",
+          "created_at",
+          "auth0_id", 
+          "full_name", 
+          "identity_provider",
+          "adopted_count",
+          "remaining_count",
+          "to_send_count",
+          "prepped_count",
+        ];
+        const csv = json2csv.parse(users, { fields });
         res.header('Access-Control-Expose-Headers', "Filename");
         res.header('Content-Type', "text/csv");
         res.header('Filename', `${req.query.preppedLetters}.csv`);

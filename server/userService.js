@@ -189,14 +189,13 @@ function notifyUserOfBasicQualifiedState(user) {
  * 
  * @param {Object} params 
  * @param {Boolean} params.count - boolean to indicate whether to return user counts vs. user records
- * @param {String} params.preppedLetters - Set to 'SOME' to return users who have some but not all voters prepped,
- *                                       - or 'NONE' to return users who have no voters prepped
+ * @param {String} params.preppedLetters - Set to 'NOTPREPPED' to return users who have some voters not prepped
  *                                       - or 'NOTSENT' to return users who haven't sent the letters yet
  *  
  */
 function getUsers(params) {
   let columnToCheck;
-  if (['NONE', 'SOME'].indexOf(params.preppedLetters) >= 0) {
+  if (['NOTPREPPED'].indexOf(params.preppedLetters) >= 0) {
     columnToCheck = 'voters.confirmed_prepped_at';
   } else if (params.preppedLetters === 'NOTSENT') {
     columnToCheck = 'voters.confirmed_sent_at';
@@ -206,37 +205,41 @@ function getUsers(params) {
       this.select('id')
         .from('voters')
         .whereRaw('users.auth0_id = voters.adopter_user_id')
-        .where(columnToCheck, null)
     });
   if (params.count) {
     query.count("id").as('user_count');
-    query.first();
-  } else {
-    query
-      .select("users.id", "users.email", "users.auth0_id", "users.full_name")
-      .count("users.id").as("voters_to_prep")
-      .innerJoin("voters", "users.auth0_id", "voters.adopter_user_id")
-      .where(columnToCheck, null)
-      .groupBy("users.id", "users.email", "users.auth0_id", "users.full_name");
-    }
-  if (params.preppedLetters === 'NONE') {
-    query.select(db.raw(`'None Prepped' as prep_status`));
-    query.select(db.raw(`'NONE' as prepped_letters`));
-    query.whereNotExists(function() {
-      this.select('id')
-        .from('voters')
-        .whereRaw('users.auth0_id = voters.adopter_user_id')
-        .whereNotNull('voters.confirmed_prepped_at')
-    });
-  } else if (params.preppedLetters === 'SOME') {
-    query.select(db.raw(`'Some Prepped' as prep_status`));
-    query.select(db.raw(`'SOME' as prepped_letters`));
     query.whereExists(function() {
       this.select('id')
         .from('voters')
         .whereRaw('users.auth0_id = voters.adopter_user_id')
-        .whereNotNull('voters.confirmed_prepped_at')
+        .whereNull(columnToCheck)
     });
+
+    query.first();
+  } else {
+    query
+      .select(
+        "users.id", 
+        "users.email", 
+        "users.auth0_id", 
+        "users.full_name", 
+        "users.qual_state",
+        "users.zip",
+        "users.created_at",
+        "users.full_name"
+      )
+      .select(db.raw("split_part(users.auth0_id,'|',1) as identity_provider"))
+      .select(db.raw("sum(case when voters.confirmed_prepped_at is null then 0 else 1 end) as prepped_count"))
+      .select(db.raw("sum(case when voters.confirmed_prepped_at is null then 1 else 0 end) as remaining_count"))
+      .select(db.raw("sum(case when voters.confirmed_sent_at is null then 1 else 0 end) as to_send_count"))
+      .select(db.raw("count(voters.id) as adopted_count"))
+      .count("users.id").as("voters_to_prep")
+      .innerJoin("voters", "users.auth0_id", "voters.adopter_user_id")
+      .groupBy("users.id", "users.email", "users.auth0_id", "users.full_name",db.raw("split_part(users.auth0_id,'|',1)"));
+    }
+  if (params.preppedLetters === 'NOTPREPPED') {
+    query.select(db.raw(`'Not Prepped' as prep_status`));
+    query.select(db.raw(`'NOTPREPPED' as prepped_letters`));
   } else if (params.preppedLetters === 'NOTSENT') {
     query.select(db.raw(`'Some Not Sent' as prep_status`));
     query.select(db.raw(`'NOTSENT' as prepped_letters`));
