@@ -6,6 +6,30 @@ If you want to help build the software, it's a React app with a Node server and 
 
 ### Getting Started
 
+You may use either Homebrew on a mac or Vagrant on any platform.
+
+#### Vagrant
+
+Vagrant uses a very simple port forwarding setup for easy and intuitive
+development. The urls used to access running servers will be the same as those
+used if Vagrant was not being used. When the Vagrant VM is started, it will forward
+ports 3000 and 3001 from your host machine (your "real computer") to the same
+ports on the guest machine. If those ports are currently in use on your host machine,
+this might cause problems. The output from Vagrant will probably be pretty informative.
+
+* install vagrant: https://vagrantup.com
+* install virtualbox: https://www.virtualbox.org/
+* `git clone https://github.com/sjforman/votefwd.git`
+* `cd votefwd`
+* `vagrant up` - this will take quite a while if you are downloading the base
+  Ubuntu 18 box for the first time. After that is downloaded, the VM is created
+  and provisioned, which takes a few minutes as well. So this command will take
+  anywhere from 5-20 mintutes to complete. The good news is it does a lot of
+  setup for you automagically.
+* `vagrant ssh`
+* Jump down to "Set up your database" in this document and continue there.
+  Use psql as such: `psql -d votefwd`
+
 #### Install Homebrew
 
 	ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"

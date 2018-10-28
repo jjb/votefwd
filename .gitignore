@@ -2,7 +2,7 @@ _site/
 .sass-cache/
 .jekyll-metadata
 node_modules/
-*.env*
+.env
 build/
 voter_data/
 results/
@@ -10,3 +10,5 @@ googleappcreds*.json
 .DS_Store
 cloud_sql_proxy
 app.*.yaml
+*cloudimg-console.log
+.vagrant
