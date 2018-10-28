@@ -40,7 +40,7 @@ const handleAuthentication = ({location}) => {
 const LoggedInRoute = ({ component: Component, ...rest }) => (
   <Route {...rest} render={(props) => (
     isAuthenticated() === true
-      ? <PreQual component={Component}/>
+      ? <PreQual component={Component} auth={auth}/>
       : <Redirect to={{ pathname: '/' }} />
   )} />
 );

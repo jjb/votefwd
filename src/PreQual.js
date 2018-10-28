@@ -1,21 +1,19 @@
 //src/PreQual.js
-
 import React, { Component } from 'react';
 import CheckPreQual from './CheckPreQual';
 
 class PreQual extends Component {
-  // eslint-disable-next-line
+
   constructor(props) {
     super(props)
-
     this.state = {
       component: this.props.component
     };
-    this.passComponent = this.bind.passComponent(this);
+    this.passComponent = this.passComponent.bind(this);
   }
 
   passComponent(component) {
-    this.setState({component: component});
+    this.setState({component: this.props.component});
   }
 
   render() {

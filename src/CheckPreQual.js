@@ -6,12 +6,13 @@ import Verify from './Verify';
 class CheckPreQual extends Component {
   constructor(props) {
     super(props);
+
+    this.state =
+    { user: {},
+        isPreQualified: false
+    };
     this.getCurrentUser = this.getCurrentUser.bind(this);
     this.checkComponentChange = this.checkComponentChange.bind(this);
-    this.state =
-      { user: {},
-        isPreQualified: false
-      }
   }
 
 
