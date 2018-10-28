@@ -14,7 +14,7 @@ class PreQual extends Component {
     this.passComponent = this.bind.passComponent(this);
   }
 
-  passComponent() = (componentValue) => {
+  passComponent(componentValue) {
     this.setState({component: componentValue});
   }
 
