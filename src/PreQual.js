@@ -6,14 +6,15 @@ import CheckPreQual from './CheckPreQual';
 class PreQual extends Component {
   // eslint-disable-next-line
   constructor(props) {
-    super(props);
+    super(props)
+
     this.state = {
-      component = this.props.component;
-    }
-  this.handleComponent = this.bind.handleComponent(this);
+      component: this.props.component
+    };
+    this.passComponent = this.bind.passComponent(this);
   }
 
-  handleComponent() = (componentValue) => {
+  passComponent() = (componentValue) => {
     this.setState({component: componentValue});
   }
 
@@ -24,7 +25,7 @@ class PreQual extends Component {
 
     return (
       <div>
-        <CheckPreQual component={this.handleComponent} />
+        <CheckPreQual component={this.passComponent} />
          {component}
          </div>
 

@@ -19,6 +19,7 @@ import Terms from './Terms';
 import Faq from './Faq';
 import Contact from './Contact';
 import Support from './Support';
+import PreQual from './PreQual';
 import history from './history';
 import GA from './utils/GoogleAnalytics';
 

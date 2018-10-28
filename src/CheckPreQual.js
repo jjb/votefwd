@@ -7,7 +7,7 @@ class CheckPreQual extends Component {
   constructor(props) {
     super(props);
     this.getCurrentUser = this.getCurrentUser.bind(this);
-    this.handleComponentChange = this.handleComponentChange.bind(this);
+    this.checkComponentChange = this.checkComponentChange.bind(this);
     this.state =
       { user: {},
         isPreQualified: false
@@ -45,13 +45,13 @@ class CheckPreQual extends Component {
     }
   }
 
-  handleComponentChange() => {
+  checkComponentChange() => {
 
     let user = this.state.user;
 
     if (this.isPreQualified(user)) {
       let verify = 'Verify';
-      this.props.component(verify);
+      this.props.passComponent(verify);
     }
   }
 
@@ -59,7 +59,7 @@ class CheckPreQual extends Component {
 
       console.log('In componentWillMount');
       this.getCurrentUser();
-      handleComponentChange();
+      checkComponentChange();
 
   }
 
